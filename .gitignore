@@ -1,0 +1,103 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+
+# specific items
+
+# 1.auto_setup
+# im_server
+/auto_setup/im_server/im-server*
+# im_web
+/auto_setup/im_web/tt/
+/auto_setup/im_web/tt.zip
+
+
+
+# 2.server_cmake_auto_gen
+**/CMakeFiles/
+**/cmake_install.cmake
+**/CMakeCache.txt
+**/Makefile
+
+# base
+/server/src/base/pb/google/
+/server/src/base/pb/lib/
+/server/src/base/slog/lib/
+
+# db_proxy_server
+/server/src/db_proxy_server/db_proxy_server
+
+# etcd_login_server
+/server/src/etcd_login_server/etcd_login_server
+
+# file_server
+/server/src/file_server/file_server
+
+# http_msg_server
+/server/src/http_msg_server/http_msg_server
+
+# login_server
+/server/src/login_server/login_server
+
+# msfs
+/server/src/msfs/msfs
+
+# msg_server
+/server/src/msg_server/msg_server
+
+# push_server
+/server/src/push_server/push_server
+
+# route_server
+/server/src/route_server/route_server
+
+# log4cxx
+/server/src/log4cxx/apache-log4cxx-0.10.0.0voice/
+/server/src/log4cxx/include/
+/server/src/log4cxx/lib/
+
+# protobuf
+/server/src/protobuf/bin/
+/server/src/protobuf/include/
+/server/src/protobuf/lib/
+/server/src/protobuf/protobuf-2.6.1/
+
+# slog
+/server/src/slog/inlcude/
+/server/src/slog/lib/
+
+server/im-server-1.0.tar.gz
+
+# 3.Folders
+tt/*
+tt.zip
