@@ -22,13 +22,3 @@
 	slog:
 	slog:
 	slog:
-
-
-
-/server/src/slog/CMakeFiles/
-
-/server/src/slog/cmake_install.cmake
-
-/server/src/slog/CMakeCache.txt
-
-/server/src/slog/Makefile
