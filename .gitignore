@@ -37,13 +37,9 @@
 # 1.auto_setup
 # im_server
 /auto_setup/im_server/im-server*
-# im_web
-/auto_setup/im_web/tt/
-/auto_setup/im_web/tt.zip
 
 
-
-# 2.server_cmake_auto_gen
+# 2.server/src
 
 # base===
 /server/src/base/pb/google/
@@ -192,6 +188,3 @@
 
 server/im-server-1.0.tar.gz
 
-# 3.Folders
-tt/*
-tt.zip
