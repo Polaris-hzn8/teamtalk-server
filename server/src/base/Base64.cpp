@@ -1,10 +1,10 @@
-//
-//  base64.cpp
-//  pushservice
-//
-//  Created by yunfan on 14/12/18.
-//  Copyright (c) 2014年 yunfan. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ Update Time: Sun 11 Jun 2023 11:02:43 CST
+ brief: pushservice
+    
+*/
 
 #include <stdio.h>
 #include <iostream>
@@ -89,3 +89,4 @@ string base64_decode(const string &ascdata)
     }
     return retval;
 }
+

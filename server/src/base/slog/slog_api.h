@@ -1,10 +1,10 @@
-//
-//  slog_api.h
-//  slog
-//
-//  Created by luoning on 15-1-6.
-//  Copyright (c) 2015年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: slog_api.h
+ Update Time: Sun 11 Jun 2023 10:37:53 CST
+ brief: SLog模块依赖于log4cxx，实际是对log4cxx的进一步封装
+*/
 
 #ifndef __slog__slog_api__
 #define __slog__slog_api__
@@ -15,8 +15,7 @@
 
 class CSLogObject;
 
-class CSLog
-{
+class CSLog {
 public:
     CSLog(const char* module_name, int delay = WATCH_DELAY_TIME);
     virtual ~CSLog();
@@ -32,5 +31,4 @@ private:
 };
 
 
-
-#endif /* defined(__slog__slog_api__) */
+#endif
