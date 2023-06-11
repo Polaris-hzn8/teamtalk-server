@@ -49,8 +49,10 @@ typedef unsigned char	uchar_t;
 extern "C" {
 #endif
 
-
+// 在编译过程中根据条件选择性地包含或排除特定的代码块
 #ifdef __ANDROID__
+    // 如果定义了__ANDROID__宏那么以下三行代码将被包含在编译过程中
+    // 定义了三个函数原型 的Java方法关联 用于在 Android 平台上执行消息加密和解密操作的本地方法
     jstring Java_com_mogujie_im_security_EncryptMsg(JNIEnv* env, jobject obj, jstring jstr);
     jstring Java_com_mogujie_im_security_DecryptMsg(JNIEnv* env, jobject obj, jstring jstr);
     jstring Java_com_mogujie_im_security_EncryptPass(JNIEnv* env, jobject obj, jstring jstr, jstring jkey);
