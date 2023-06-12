@@ -29,6 +29,4 @@ private:
     string m_config_file;
 };
 
-
-
 #endif /* CONFIGFILEREADER_H_ */

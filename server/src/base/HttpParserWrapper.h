@@ -3,7 +3,7 @@
 //  http_msg_server
 //
 //  Created by jianqing.du on 13-9-29.
-//  Copyright (c) 2013骞� ziteng. All rights reserved.
+//  Copyright (c) 2013楠烇拷 ziteng. All rights reserved.
 //
 
 #ifndef http_msg_server_HttpParserWrapper_h

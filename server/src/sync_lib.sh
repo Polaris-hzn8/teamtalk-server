@@ -1,6 +1,4 @@
 #!/bin/bash
-# author: luoning
-# date: 03/24/2015
 
 cp slog/log4cxx.properties ../run/login_server/
 cp slog/libslog.so  ../run/login_server/
@@ -33,3 +31,5 @@ cp slog/lib/liblog4cxx.so.* ../run/db_proxy_server/
 cp slog/log4cxx.properties ../run/msfs/
 cp slog/libslog.so  ../run/msfs/
 cp slog/lib/liblog4cxx.so.* ../run/msfs/
+
+

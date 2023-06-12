@@ -1,10 +1,10 @@
-//
-//  base64.cpp
-//  pushservice
-//
-//  Created by yunfan on 14/12/18.
-//  Copyright (c) 2014年 yunfan. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: base64.cpp
+ Update Time: Mon 12 Jun 2023 12:48:16 CST
+ brief: 
+*/
 
 #include <stdio.h>
 #include <iostream>
@@ -29,8 +29,7 @@ static const char reverse_table[128] = {
     41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 64, 64, 64, 64, 64
 };
 
-string base64_encode(const string &bindata)
-{
+string base64_encode(const string &bindata) {
     using std::numeric_limits;
     
     if (bindata.size() > (numeric_limits<string::size_type>::max() / 4u) * 3u) {
@@ -64,8 +63,7 @@ string base64_encode(const string &bindata)
     return retval;
 }
 
-string base64_decode(const string &ascdata)
-{
+string base64_decode(const string &ascdata) {
     string retval;
     const string::const_iterator last = ascdata.end();
     int bits_collected = 0;

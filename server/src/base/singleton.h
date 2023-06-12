@@ -10,7 +10,7 @@
 #define BASE_SINGLETON_H_
 
 template<typename T>
-class Singleton  {
+class Singleton {
 public:
     static T& Instance() {
         if(Singleton::s_instance==0) {

@@ -38,10 +38,14 @@ build() {
         echo "make slog failed";
         exit;
     fi
+
+    # 文件拷贝
     mkdir ../base/slog/lib
     cp slog_api.h ../base/slog/
     cp libslog.so ../base/slog/lib/
     cp -a lib/liblog4cxx* ../base/slog/lib/
+
+
 
     cd ../login_server
     cmake .
@@ -178,6 +182,7 @@ build() {
     mkdir -p ../$build_version/db_proxy_server
     mkdir -p ../$build_version/lib
 
+    # 文件拷贝
     cp login_server/loginserver.conf ../$build_version/login_server/
     cp login_server/login_server ../$build_version/login_server/
 
@@ -263,3 +268,4 @@ case $1 in
 		print_help
 		;;
 esac
+

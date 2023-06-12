@@ -1,4 +1,11 @@
-// OS dependant type definition
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: ostype.h
+ Update Time: Mon 12 Jun 2023 08:34:19 CST
+ brief: OS dependant type definition
+*/
+
 #ifndef __OS_TYPE_H__
 #define __OS_TYPE_H__
 
@@ -15,6 +22,7 @@
     #else
         #include <sys/epoll.h>
     #endif
+
     #include <pthread.h>
     #include <sys/types.h>
     #include <sys/socket.h>
@@ -71,9 +79,11 @@
     const int INVALID_SOCKET = -1;
 #endif
 
+
 typedef unsigned char	uchar_t;
 typedef int				net_handle_t;
 typedef int				conn_handle_t;
+
 
 enum {
 	NETLIB_OK		= 0,
@@ -82,8 +92,7 @@ enum {
 
 #define NETLIB_INVALID_HANDLE	-1
 
-enum
-{
+enum {
 	NETLIB_MSG_CONNECT = 1,
 	NETLIB_MSG_CONFIRM,
 	NETLIB_MSG_READ,
@@ -99,3 +108,5 @@ const uint32_t INVALID_VALUE = 0;
 typedef void (*callback_t)(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
 
 #endif
+
+

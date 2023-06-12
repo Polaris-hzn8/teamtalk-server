@@ -1,6 +1,4 @@
 #!/bin/bash
-# author: luoning
-# date: 03/24/2015
 
 HIREDIS=hiredis-master
 CUR_DIR=

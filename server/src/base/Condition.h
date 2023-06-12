@@ -1,22 +1,18 @@
-/*================================================================
-*     Copyright (c) 2015年 lanhu. All rights reserved.
-*   
-*   文件名称：Condition.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年01月14日
-*   描    述：
-*
-#pragma once
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: Condition.h
+ Update Time: Sun 11 Jun 2023 22:18:04 CST
+ brief: 
+*/
+
 #ifndef __CONDITION_H__
 #define __CONDITION_H__
 
 #include <pthread.h>
 #include "Lock.h"
 
-class CCondition
-{
+class CCondition {
 public:
     CCondition(CLock* pLock);
     ~CCondition();
