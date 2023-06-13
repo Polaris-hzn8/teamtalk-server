@@ -1,0 +1,55 @@
+<mxfile host="Electron" modified="2023-06-05T23:33:44.341Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/21.2.8 Chrome/112.0.5615.165 Electron/24.2.0 Safari/537.36" etag="0ur7LMFT8iEfTwwg_0Af" version="21.2.8" type="device">
+  <diagram name="第 1 页" id="TiUcTzkpdyk3yZOjxuos">
+    <mxGraphModel dx="1143" dy="566" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="UwWf0O9ZXofa9Gb1HdYy-1" target="UwWf0O9ZXofa9Gb1HdYy-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-1" value="消息转发" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="380" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="UwWf0O9ZXofa9Gb1HdYy-2" target="UwWf0O9ZXofa9Gb1HdYy-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-2" value="原始密码password" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="190" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="UwWf0O9ZXofa9Gb1HdYy-4" target="UwWf0O9ZXofa9Gb1HdYy-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-4" value="客户端加密&lt;br&gt;md5（password）" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="290" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-8" value="发送到msg_server" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="590" y="340" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-9" value="msg_server" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="640" y="385" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-10" value="客户端" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="640" y="295" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-11" value="密码验证&lt;br&gt;md5(md5(password) +salt)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="515" y="480" width="150" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-13" value="db_proxy_server" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="485" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-15" value="发送到db_proxy_server" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="590" y="440" width="150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="UwWf0O9ZXofa9Gb1HdYy-16" target="UwWf0O9ZXofa9Gb1HdYy-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-16" value="数据库比对" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="530" y="580" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="UwWf0O9ZXofa9Gb1HdYy-18" value="mysql" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="665" y="580" width="120" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
