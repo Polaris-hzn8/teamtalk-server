@@ -1,9 +1,10 @@
 /*
- * ImPduBase.h
- *
- *  Created on: 2013-8-27
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: ImPduBase.h
+ Update Time: Mon 12 Jun 2023 23:48:57 CST
+ brief: 
+*/
 
 #ifndef IMPDUBASE_H_
 #define IMPDUBASE_H_

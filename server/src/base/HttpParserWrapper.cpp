@@ -1,10 +1,10 @@
-//
-//  HttpPdu.cpp
-//  http_msg_server
-//
-//  Created by jianqing.du on 13-9-29.
-//  Copyright (c) 2013年 ziteng. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: HttpParserWrapper.cpp
+ Update Time: Mon 12 Jun 2023 23:46:28 CST
+ brief: 
+*/
 
 #include "HttpParserWrapper.h"
 #include "http_parser.h"

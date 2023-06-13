@@ -1,9 +1,10 @@
 /*
- * imconn.cpp
- *
- *  Created on: 2013-6-5
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: imconn.cpp
+ Update Time: Mon 12 Jun 2023 23:48:11 CST
+ brief: 
+*/
 
 #include "imconn.h"
 

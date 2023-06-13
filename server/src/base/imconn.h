@@ -1,9 +1,10 @@
 /*
- * imconn.h
- *
- *  Created on: 2013-6-5
- *      Author: ziteng
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: imconn.h
+ Update Time: Mon 12 Jun 2023 23:48:34 CST
+ brief: 
+*/
 
 #ifndef IMCONN_H_
 #define IMCONN_H_

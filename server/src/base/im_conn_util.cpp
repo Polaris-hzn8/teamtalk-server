@@ -1,10 +1,10 @@
-//
-//  im_conn_util.cpp
-//  TeamTalk
-//
-//  Created by benqi on 15/8/5.
-//  Copyright (c) 2015年 benqi. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: im_conn_util.cpp
+ Update Time: Mon 12 Jun 2023 23:47:56 CST
+ brief: 
+*/
 
 #include "im_conn_util.h"
 
