@@ -1,14 +1,11 @@
-/*================================================================
-*     Copyright (c) 2015年 lanhu. All rights reserved.
-*   
-*   文件名称：Task.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年01月12日
-*   描    述：
-*
-#pragma once
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: Task.h
+ Update Time: Tue 13 Jun 2023 09:01:22 CST
+ brief: 
+*/
+
 #ifndef __TASK_H__
 #define __TASK_H__
 
@@ -21,4 +18,4 @@ public:
 private:
 };
 
-#endif /*defined(__TASK_H__) */
+#endif
