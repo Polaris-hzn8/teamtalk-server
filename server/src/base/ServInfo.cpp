@@ -1,9 +1,10 @@
 /*
- * ServInfo.cpp
- *
- *  Created on: 2013-8-8
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: ServInfo.cpp
+ Update Time: Tue 13 Jun 2023 14:56:01 CST
+ brief: 
+*/
 
 #include "ServInfo.h"
 
