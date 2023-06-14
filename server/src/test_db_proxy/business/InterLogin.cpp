@@ -1,18 +1,16 @@
-/*================================================================
-*     Copyright (c) 2015年 lanhu. All rights reserved.
-*   
-*   文件名称：InterLogin.cpp
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年03月09日
-*   描    述：
-*
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: InterLogin.cpp
+ Update Time: Thu 15 Jun 2023 01:06:29 CST
+ brief:
+*/
+
 #include "InterLogin.h"
 #include "../DBPool.h"
 #include "EncDec.h"
 
-bool CInterLoginStrategy::doLogin(const std::string &strName, const std::string &strPass, IM::BaseDefine::UserInfo& user)
+bool CInterLoginStrategy::doLogin(const std::string& strName, const std::string& strPass, IM::BaseDefine::UserInfo& user)
 {
     bool bRet = false;
     CDBManager* pDBManger = CDBManager::getInstance();
@@ -20,16 +18,15 @@ bool CInterLoginStrategy::doLogin(const std::string &strName, const std::string 
     if (pDBConn) {
         string strSql = "select * from IMUser where name='" + strName + "' and status=0";
         CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
-        if(pResultSet)
-        {
+        if (pResultSet) {
             string strResult, strSalt;
             uint32_t nId, nGender, nDeptId, nStatus;
-            string strNick, strAvatar, strEmail, strRealName, strTel, strDomain,strSignInfo;
+            string strNick, strAvatar, strEmail, strRealName, strTel, strDomain, strSignInfo;
             while (pResultSet->Next()) {
                 nId = pResultSet->GetInt("id");
                 strResult = pResultSet->GetString("password");
                 strSalt = pResultSet->GetString("salt");
-                
+
                 strNick = pResultSet->GetString("nick");
                 nGender = pResultSet->GetInt("sex");
                 strRealName = pResultSet->GetString("name");
@@ -40,15 +37,13 @@ bool CInterLoginStrategy::doLogin(const std::string &strName, const std::string 
                 nDeptId = pResultSet->GetInt("departId");
                 nStatus = pResultSet->GetInt("status");
                 strSignInfo = pResultSet->GetString("sign_info");
-
             }
 
             string strInPass = strPass + strSalt;
             char szMd5[33];
             CMd5::MD5_Calculate(strInPass.c_str(), strInPass.length(), szMd5);
             string strOutPass(szMd5);
-            if(strOutPass == strResult)
-            {
+            if (strOutPass == strResult) {
                 bRet = true;
                 user.set_user_id(nId);
                 user.set_user_nick_name(strNick);
@@ -60,10 +55,9 @@ bool CInterLoginStrategy::doLogin(const std::string &strName, const std::string 
                 user.set_avatar_url(strAvatar);
                 user.set_department_id(nDeptId);
                 user.set_status(nStatus);
-  	        user.set_sign_info(strSignInfo);
-
+                user.set_sign_info(strSignInfo);
             }
-            delete  pResultSet;
+            delete pResultSet;
         }
         pDBManger->RelDBConn(pDBConn);
     }

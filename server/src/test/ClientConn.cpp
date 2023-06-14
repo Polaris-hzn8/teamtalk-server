@@ -1,45 +1,41 @@
-/*================================================================
- *   Copyright (C) 2014 All rights reserved.
- *
- *   文件名称：ClientConn.cpp
- *   创 建 者：Zhang Yuanhao
- *   邮    箱：bluefoxah@gmail.com
- *   创建日期：2014年12月30日
- *   描    述：
- *
- ================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: ClientConn.cpp
+ Update Time: Thu 15 Jun 2023 01:01:08 CST
+ brief:
+*/
+
 #include "ClientConn.h"
 #include "Common.h"
 #include "md5.h"
 
 static ConnMap_t g_msg_server_conn_map;
 
-ClientConn::ClientConn(IPacketCallback *pClient):m_bOpen(false), m_pCallback(pClient)
+ClientConn::ClientConn(IPacketCallback* pClient)
+    : m_bOpen(false)
+    , m_pCallback(pClient)
 {
     m_pSeqAlloctor = CSeqAlloctor::getInstance();
 }
 
 ClientConn::~ClientConn()
 {
-
 }
 
 net_handle_t ClientConn::connect(const string& strIp, uint16_t nPort, const string& strName, const string& strPass)
 {
-	m_handle = netlib_connect(strIp.c_str(), nPort, imconn_callback, (void*)&g_msg_server_conn_map);
+    m_handle = netlib_connect(strIp.c_str(), nPort, imconn_callback, (void*)&g_msg_server_conn_map);
     if (m_handle != NETLIB_INVALID_HANDLE) {
         g_msg_server_conn_map.insert(make_pair(m_handle, this));
     }
-    return  m_handle;
+    return m_handle;
 }
-
-
 
 void ClientConn::OnConfirm()
 {
     printf("%s\n", __FUNCTION__);
-    if(m_pCallback)
-    {
+    if (m_pCallback) {
         m_pCallback->onConnect();
     }
 }
@@ -48,8 +44,7 @@ void ClientConn::OnClose()
 {
     log("onclose from handle=%d\n", m_handle);
     printf("onclose from handle=%d\n", m_handle);
-    if(m_pCallback)
-    {
+    if (m_pCallback) {
         m_pCallback->onClose();
     }
 }
@@ -62,24 +57,23 @@ void ClientConn::OnTimer(uint64_t curr_tick)
         IM::Other::IMHeartBeat msg;
         cPdu.SetPBMsg(&msg);
         cPdu.SetServiceId(IM::BaseDefine::SID_OTHER);
-        cPdu.SetCommandId(IM::BaseDefine::CID_OTHER_HEARTBEAT);     // 心跳包
+        cPdu.SetCommandId(IM::BaseDefine::CID_OTHER_HEARTBEAT); // 心跳包
         uint32_t nSeqNo = m_pSeqAlloctor->getSeq(ALLOCTOR_PACKET);
         cPdu.SetSeqNum(nSeqNo);
         SendPdu(&cPdu);
     }
-    
+
     if (curr_tick > m_last_recv_tick + CLIENT_TIMEOUT) {
         log("conn to msg_server timeout\n");
         printf("conn to msg_server timeout\n");
-        if(m_pCallback)
+        if (m_pCallback)
             m_pCallback->onClose();
     }
 }
 
-
-uint32_t ClientConn::login(const string &strName, const string &strPass)
+uint32_t ClientConn::login(const string& strName, const string& strPass)
 {
-	printf("%s strName=%s, strPass=%s\n", __FUNCTION__, strName.c_str(), strPass.c_str());
+    printf("%s strName=%s, strPass=%s\n", __FUNCTION__, strName.c_str(), strPass.c_str());
     CImPdu cPdu;
     IM::Login::IMLoginReq msg;
     msg.set_user_name(strName);
@@ -90,7 +84,7 @@ uint32_t ClientConn::login(const string &strName, const string &strPass)
     cPdu.SetPBMsg(&msg);
     cPdu.SetServiceId(IM::BaseDefine::SID_LOGIN);
     cPdu.SetCommandId(IM::BaseDefine::CID_LOGIN_REQ_USERLOGIN);
-    uint32_t nSeqNo = m_pSeqAlloctor->getSeq(ALLOCTOR_PACKET);      // 序列号
+    uint32_t nSeqNo = m_pSeqAlloctor->getSeq(ALLOCTOR_PACKET); // 序列号
     cPdu.SetSeqNum(nSeqNo);
     SendPdu(&cPdu);
     return nSeqNo;
@@ -116,7 +110,7 @@ uint32_t ClientConn::getUserInfo(uint32_t nUserId, list<uint32_t>& lsUserId)
     CImPdu cPdu;
     IM::Buddy::IMUsersInfoReq msg;
     msg.set_user_id(nUserId);
-    for (auto it=lsUserId.begin(); it!=lsUserId.end(); ++it) {
+    for (auto it = lsUserId.begin(); it != lsUserId.end(); ++it) {
         msg.add_user_id_list(*it);
     }
     cPdu.SetPBMsg(&msg);
@@ -160,7 +154,6 @@ uint32_t ClientConn::getUnreadMsgCnt(uint32_t nUserId)
     SendPdu(&cPdu);
     return nSeqNo;
 }
-
 
 uint32_t ClientConn::getRecentSession(uint32_t nUserId, uint32_t nLastTime)
 {
@@ -211,29 +204,29 @@ uint32_t ClientConn::sendMsgAck(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefi
     SendPdu(&cPdu);
     return nSeqNo;
 }
-uint32_t ClientConn::registerUser(const string &strName, const string &strNick)
+uint32_t ClientConn::registerUser(const string& strName, const string& strNick)
 {
 
     CImPdu cPdu;
     char md5[33];
     md5[32] = '\0';
     string strPass = "123456";
-    MD5_Calculate(strPass.c_str(), strPass.size(), md5);    // 
-    
+    MD5_Calculate(strPass.c_str(), strPass.size(), md5); //
+
     IM::Login::IMRegistReq msg;
     msg.set_user_name(strName);
-	msg.set_nick(strNick);
-	msg.set_password(md5);
-	msg.set_sex(1);
-	msg.set_phone("18570368134");
-	msg.set_email("326873713@qq.com");
-	
+    msg.set_nick(strNick);
+    msg.set_password(md5);
+    msg.set_sex(1);
+    msg.set_phone("18570368134");
+    msg.set_email("326873713@qq.com");
+
     cPdu.SetPBMsg(&msg);
     cPdu.SetServiceId(IM::BaseDefine::SID_LOGIN);
     cPdu.SetCommandId(IM::BaseDefine::CID_LOGIN_REQ_REGIST);
     uint32_t nSeqNo = m_pSeqAlloctor->getSeq(ALLOCTOR_PACKET);
     cPdu.SetSeqNum(nSeqNo);
-	printf("registerUser send success\n");
+    printf("registerUser send success\n");
     SendPdu(&cPdu);
     return nSeqNo;
 }
@@ -242,70 +235,64 @@ void ClientConn::Close()
 {
     printf("ClientConn::Close\n");
     g_msg_server_conn_map.erase(m_handle);
-	if (m_handle != NETLIB_INVALID_HANDLE) {
-		netlib_close(m_handle);
-	}
-	ReleaseRef();
+    if (m_handle != NETLIB_INVALID_HANDLE) {
+        netlib_close(m_handle);
+    }
+    ReleaseRef();
 }
 
 void ClientConn::HandlePdu(CImPdu* pPdu)
 {
-    //printf("pdu type = %u\n", pPdu->GetPduType());
-	switch (pPdu->GetCommandId()) {
-        case IM::BaseDefine::CID_OTHER_HEARTBEAT:
-//		printf("Heartbeat\n");
-		break;
-        case IM::BaseDefine::CID_LOGIN_RES_USERLOGIN:
-            _HandleLoginResponse(pPdu);
-		break;
-        case IM::BaseDefine::CID_BUDDY_LIST_ALL_USER_RESPONSE:
-            _HandleUser(pPdu);
+    // printf("pdu type = %u\n", pPdu->GetPduType());
+    switch (pPdu->GetCommandId()) {
+    case IM::BaseDefine::CID_OTHER_HEARTBEAT:
+        //		printf("Heartbeat\n");
         break;
-        case IM::BaseDefine::CID_BUDDY_LIST_USER_INFO_RESPONSE:
-            _HandleUserInfo(pPdu);
+    case IM::BaseDefine::CID_LOGIN_RES_USERLOGIN:
+        _HandleLoginResponse(pPdu);
         break;
-        case IM::BaseDefine::CID_MSG_DATA_ACK:
-            _HandleSendMsg(pPdu);
+    case IM::BaseDefine::CID_BUDDY_LIST_ALL_USER_RESPONSE:
+        _HandleUser(pPdu);
         break;
-        case IM::BaseDefine::CID_MSG_UNREAD_CNT_RESPONSE:
-            _HandleUnreadCnt(pPdu);
-            break;
-        case IM::BaseDefine::CID_BUDDY_LIST_RECENT_CONTACT_SESSION_RESPONSE:
-            _HandleRecentSession(pPdu);
-            break;
-        case IM::BaseDefine::CID_MSG_LIST_RESPONSE:
-            _HandleMsgList(pPdu);
-            break;
-        case IM::BaseDefine::CID_MSG_DATA:
-            _HandleMsgData(pPdu);
-            break;
-        default:
-		    log("can't handle cmd=0x%x, you can according to the cmd add the handler\n", pPdu->GetCommandId());
-            printf("can't handle cmd=0x%x, you can according to the cmd add the handler\n", pPdu->GetCommandId());
-		break;
-	}
+    case IM::BaseDefine::CID_BUDDY_LIST_USER_INFO_RESPONSE:
+        _HandleUserInfo(pPdu);
+        break;
+    case IM::BaseDefine::CID_MSG_DATA_ACK:
+        _HandleSendMsg(pPdu);
+        break;
+    case IM::BaseDefine::CID_MSG_UNREAD_CNT_RESPONSE:
+        _HandleUnreadCnt(pPdu);
+        break;
+    case IM::BaseDefine::CID_BUDDY_LIST_RECENT_CONTACT_SESSION_RESPONSE:
+        _HandleRecentSession(pPdu);
+        break;
+    case IM::BaseDefine::CID_MSG_LIST_RESPONSE:
+        _HandleMsgList(pPdu);
+        break;
+    case IM::BaseDefine::CID_MSG_DATA:
+        _HandleMsgData(pPdu);
+        break;
+    default:
+        log("can't handle cmd=0x%x, you can according to the cmd add the handler\n", pPdu->GetCommandId());
+        printf("can't handle cmd=0x%x, you can according to the cmd add the handler\n", pPdu->GetCommandId());
+        break;
+    }
 }
 void ClientConn::_HandleLoginResponse(CImPdu* pPdu)
 {
     IM::Login::IMLoginRes msgResp;
     uint32_t nSeqNo = pPdu->GetSeqNum();
-    if(msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()))
-    {
+    if (msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t nRet = msgResp.result_code();
         string strMsg = msgResp.result_string();
-        if(nRet == 0)
-        {
+        if (nRet == 0) {
             m_bOpen = true;
             IM::BaseDefine::UserInfo cUser = msgResp.user_info();
             m_pCallback->onLogin(nSeqNo, nRet, strMsg, &cUser);
-        }
-        else
-        {
+        } else {
             m_pCallback->onLogin(nSeqNo, nRet, strMsg);
         }
-    }
-    else
-    {
+    } else {
         m_pCallback->onError(nSeqNo, pPdu->GetCommandId(), "parse pb error");
     }
 }
@@ -314,20 +301,16 @@ void ClientConn::_HandleUser(CImPdu* pPdu)
 {
     IM::Buddy::IMAllUserRsp msgResp;
     uint32_t nSeqNo = pPdu->GetSeqNum();
-    if(msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()))
-    {
+    if (msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t userCnt = msgResp.user_list_size();
         printf("get %d users\n", userCnt);
         list<IM::BaseDefine::UserInfo> lsUsers;
-        for(uint32_t i=0; i<userCnt; ++i)
-        {
+        for (uint32_t i = 0; i < userCnt; ++i) {
             IM::BaseDefine::UserInfo cUserInfo = msgResp.user_list(i);
             lsUsers.push_back(cUserInfo);
         }
         m_pCallback->onGetChangedUser(nSeqNo, lsUsers);
-    }
-    else
-    {
+    } else {
         m_pCallback->onError(nSeqNo, pPdu->GetCommandId(), "parse pb error");
     }
 }
@@ -336,18 +319,15 @@ void ClientConn::_HandleUserInfo(CImPdu* pPdu)
 {
     IM::Buddy::IMUsersInfoRsp msgResp;
     uint32_t nSeqNo = pPdu->GetSeqNum();
-    if(msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()))
-    {
+    if (msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t userCnt = msgResp.user_info_list_size();
         list<IM::BaseDefine::UserInfo> lsUser;
-        for (uint32_t i=0; i<userCnt; ++i) {
+        for (uint32_t i = 0; i < userCnt; ++i) {
             IM::BaseDefine::UserInfo userInfo = msgResp.user_info_list(i);
             lsUser.push_back(userInfo);
         }
         m_pCallback->onGetUserInfo(nSeqNo, lsUser);
-    }
-    else
-    {
+    } else {
         m_pCallback->onError(nSeqNo, pPdu->GetCommandId(), "parse pb error");
     }
 }
@@ -356,85 +336,71 @@ void ClientConn::_HandleSendMsg(CImPdu* pPdu)
 {
     IM::Message::IMMsgDataAck msgResp;
     uint32_t nSeqNo = pPdu->GetSeqNum();
-    if(msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()))
-    {
+    if (msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t nSendId = msgResp.user_id();
         uint32_t nRecvId = msgResp.session_id();
         uint32_t nMsgId = msgResp.msg_id();
         IM::BaseDefine::SessionType nType = msgResp.session_type();
         m_pCallback->onSendMsg(nSeqNo, nSendId, nRecvId, nType, nMsgId);
-    }
-    else
-    {
+    } else {
         m_pCallback->onError(nSeqNo, pPdu->GetCommandId(), "parse pb error");
     }
 }
-
 
 void ClientConn::_HandleUnreadCnt(CImPdu* pPdu)
 {
     IM::Message::IMUnreadMsgCntRsp msgResp;
     uint32_t nSeqNo = pPdu->GetSeqNum();
-    if(msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()))
-    {
+    if (msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         list<IM::BaseDefine::UnreadInfo> lsUnreadInfo;
         uint32_t nUserId = msgResp.user_id();
         uint32_t nTotalCnt = msgResp.total_cnt();
         uint32_t nCnt = msgResp.unreadinfo_list_size();
-        for (uint32_t i=0; i<nCnt; ++i) {
+        for (uint32_t i = 0; i < nCnt; ++i) {
             IM::BaseDefine::UnreadInfo unreadInfo = msgResp.unreadinfo_list(i);
             lsUnreadInfo.push_back(unreadInfo);
         }
         m_pCallback->onGetUnreadMsgCnt(nSeqNo, nUserId, nTotalCnt, lsUnreadInfo);
-    }
-    else
-    {
+    } else {
         m_pCallback->onError(nSeqNo, pPdu->GetCommandId(), "parse pb fail");
     }
 }
 
-void ClientConn::_HandleRecentSession(CImPdu *pPdu)
+void ClientConn::_HandleRecentSession(CImPdu* pPdu)
 {
     IM::Buddy::IMRecentContactSessionRsp msgResp;
     uint32_t nSeqNo = pPdu->GetSeqNum();
-    if(msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()))
-    {
+    if (msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         list<IM::BaseDefine::ContactSessionInfo> lsSession;
         uint32_t nUserId = msgResp.user_id();
         uint32_t nCnt = msgResp.contact_session_list_size();
-        for (uint32_t i=0; i<nCnt; ++i) {
+        for (uint32_t i = 0; i < nCnt; ++i) {
             IM::BaseDefine::ContactSessionInfo session = msgResp.contact_session_list(i);
             lsSession.push_back(session);
         }
         m_pCallback->onGetRecentSession(nSeqNo, nUserId, lsSession);
-    }
-    else
-    {
+    } else {
         m_pCallback->onError(nSeqNo, pPdu->GetCommandId(), "parse pb error");
     }
 }
 
-void ClientConn::_HandleMsgList(CImPdu *pPdu)
+void ClientConn::_HandleMsgList(CImPdu* pPdu)
 {
     IM::Message::IMGetMsgListRsp msgResp;
     uint32_t nSeqNo = pPdu->GetSeqNum();
-    if(msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()))
-    {
-        uint32_t nUserId= msgResp.user_id();
+    if (msgResp.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
+        uint32_t nUserId = msgResp.user_id();
         IM::BaseDefine::SessionType nSessionType = msgResp.session_type();
         uint32_t nPeerId = msgResp.session_id();
         uint32_t nMsgId = msgResp.msg_id_begin();
         uint32_t nMsgCnt = msgResp.msg_list_size();
         list<IM::BaseDefine::MsgInfo> lsMsg;
-        for(uint32_t i=0; i<nMsgCnt; ++i)
-        {
+        for (uint32_t i = 0; i < nMsgCnt; ++i) {
             IM::BaseDefine::MsgInfo msgInfo = msgResp.msg_list(i);
             lsMsg.push_back(msgInfo);
         }
         m_pCallback->onGetMsgList(nSeqNo, nUserId, nPeerId, nSessionType, nMsgId, nMsgCnt, lsMsg);
-    }
-    else
-    {
+    } else {
         m_pCallback->onError(nSeqNo, pPdu->GetCommandId(), "parse pb falied");
     }
 }
@@ -442,37 +408,27 @@ void ClientConn::_HandleMsgData(CImPdu* pPdu)
 {
     IM::Message::IMMsgData msg;
     uint32_t nSeqNo = pPdu->GetSeqNum();
-    if(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()))
-    {
+    if (msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t nFromId = msg.from_user_id();
         uint32_t nToId = msg.to_session_id();
         uint32_t nMsgId = msg.msg_id();
         IM::BaseDefine::MsgType nMsgType = msg.msg_type();
         uint32_t nCreateTime = msg.create_time();
         string strMsg(msg.msg_data().c_str(), msg.msg_data().length());
-        
+
         IM::BaseDefine::SessionType nSessionType;
-        if(nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_TEXT)
-        {
+        if (nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_TEXT) {
             nSessionType = IM::BaseDefine::SESSION_TYPE_SINGLE;
-        }
-        else if(nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO)
-        {
+        } else if (nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO) {
             nSessionType = IM::BaseDefine::SESSION_TYPE_SINGLE;
-        }
-        else if(nMsgType == IM::BaseDefine::MSG_TYPE_GROUP_TEXT)
-        {
+        } else if (nMsgType == IM::BaseDefine::MSG_TYPE_GROUP_TEXT) {
             nSessionType = IM::BaseDefine::SESSION_TYPE_GROUP;
-        }
-        else if(nMsgType == IM::BaseDefine::MSG_TYPE_GROUP_AUDIO)
-        {
+        } else if (nMsgType == IM::BaseDefine::MSG_TYPE_GROUP_AUDIO) {
             nSessionType = IM::BaseDefine::SESSION_TYPE_GROUP;
         }
         sendMsgAck(nFromId, nToId, nSessionType, nMsgId);
         m_pCallback->onRecvMsg(nSeqNo, nFromId, nToId, nMsgId, nCreateTime, nMsgType, strMsg);
-    }
-    else
-    {
+    } else {
         m_pCallback->onError(nSeqNo, pPdu->GetCommandId(), "parse pb falied");
     }
 }
