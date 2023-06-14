@@ -188,3 +188,8 @@
 
 server/im-server-1.0.tar.gz
 
+
+# 3.protobuf
+/pb/gen/
+/server/src/base/pb/protocol/
+

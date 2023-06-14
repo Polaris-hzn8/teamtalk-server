@@ -1,13 +1,10 @@
-/*================================================================
- *   Copyright (C) 2014 All rights reserved.
- *
- *   文件名称：AudioModel.cpp
- *   创 建 者：Zhang Yuanhao
- *   邮    箱：bluefoxah@gmail.com
- *   创建日期：2014年12月15日
- *   描    述：
- *
- ================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: AudioModel.cpp
+ Update Time: Wed 14 Jun 2023 20:56:16 CST
+ brief: 
+*/
 
 #include "../DBPool.h"
 #include "../HttpClient.h"

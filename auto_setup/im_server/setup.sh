@@ -140,8 +140,14 @@ case $1 in
         check_user
         check_os
 
-    build_im_server
+        build_im_server
         run_im_server
+        ;;
+
+    run)
+        cd im-server-1.0/
+        run_im_server
+        cd ..
         ;;
     *)
         print_help

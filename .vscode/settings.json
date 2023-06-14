@@ -62,5 +62,5 @@
         "typeinfo": "cpp",
         "hash_set": "cpp"
     },
-    "cmake.sourceDirectory": "/home/luochenhao/1.imp_project/instantMessageSystem/server/src/base"
+    "cmake.sourceDirectory": "/home/luochenhao/1.teamtalk/teamtalk-server/server/src/libsecurity/src"
 }

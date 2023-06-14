@@ -16,6 +16,8 @@ build() {
         mkdir lib
     fi
 
+    #####################################################################
+    # 编译base目录 
 	cd base
     cmake .
 	make
@@ -29,6 +31,9 @@ build() {
     then
         cp libbase.a ../lib/
     fi
+
+    #####################################################################
+    # 编译base目录 
     cd ../slog
     cmake .
     make
@@ -46,7 +51,8 @@ build() {
     cp -a lib/liblog4cxx* ../base/slog/lib/
 
 
-
+    #####################################################################
+    # 1.编译login_server目录 
     cd ../login_server
     cmake .
 	make
@@ -57,6 +63,8 @@ build() {
         exit;
     fi
 
+    #####################################################################
+    # 1.编译route_server目录
 	cd ../route_server
     cmake .
 	make
@@ -67,6 +75,10 @@ build() {
         exit;
     fi
 
+
+
+    #####################################################################
+    # 1.编译msg_server目录
 	cd ../msg_server
     cmake .
 	make
@@ -77,6 +89,9 @@ build() {
         exit;
     fi
 
+
+    #####################################################################
+    # 1.编译http_msg_server目录
     cd ../http_msg_server
     cmake .
     make
@@ -87,6 +102,9 @@ build() {
         exit;
     fi
 
+
+    #####################################################################
+    # 1.编译file_server目录
     cd ../file_server
     cmake .
     make
@@ -97,6 +115,9 @@ build() {
         exit;
     fi
 
+
+    #####################################################################
+    # 1.编译push_server目录
     cd ../push_server
     cmake .
     make
@@ -107,6 +128,9 @@ build() {
         exit;
     fi
 
+
+    #####################################################################
+    # 1.编译tools目录
     cd ../tools
     make
     if [ $? -eq 0 ]; then
@@ -116,6 +140,8 @@ build() {
         exit;
     fi
 
+    #####################################################################
+    # 1.编译db_proxy_server目录
     cd ../db_proxy_server
     cmake .
     make
@@ -126,6 +152,8 @@ build() {
         exit;
     fi
 
+
+    #####################################################################
     cd ../msfs
     cmake .
     make
@@ -136,6 +164,7 @@ build() {
         exit;
     fi
 
+    #####################################################################
 	cd ../
 
     mkdir -p ../run/login_server
@@ -147,6 +176,9 @@ build() {
     mkdir -p ../run/http_msg_server
     mkdir -p ../run/db_proxy_server
 
+
+
+    #####################################################################
 	#copy executables to run/ dir
 	cp login_server/login_server ../run/login_server/
 
@@ -166,6 +198,8 @@ build() {
 
     cp tools/daeml ../run/
 
+
+    #####################################################################
     build_version=im-server-$1
     build_name=$build_version.tar.gz
 	if [ -e "$build_name" ]; then
@@ -182,6 +216,8 @@ build() {
     mkdir -p ../$build_version/db_proxy_server
     mkdir -p ../$build_version/lib
 
+
+    #####################################################################
     # 文件拷贝
     cp login_server/loginserver.conf ../$build_version/login_server/
     cp login_server/login_server ../$build_version/login_server/

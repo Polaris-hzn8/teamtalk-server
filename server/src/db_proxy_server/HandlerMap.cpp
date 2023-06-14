@@ -1,13 +1,10 @@
-/*================================================================
- *     Copyright (c) 2014年 lanhu. All rights reserved.
- *
- *   文件名称：HandlerMap.cpp
- *   创 建 者：Zhang Yuanhao
- *   邮    箱：bluefoxah@gmail.com
- *   创建日期：2014年12月02日
- *   描    述：
- *
- ================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: HandlerMap.cpp
+ Update Time: Wed 14 Jun 2023 23:02:11 CST
+ brief: 
+*/
 
 #include "HandlerMap.h"
 
@@ -26,42 +23,22 @@ using namespace IM::BaseDefine;
 
 CHandlerMap* CHandlerMap::s_handler_instance = NULL;
 
-/**
- *  构造函数
- */
-CHandlerMap::CHandlerMap()
-{
 
-}
+CHandlerMap::CHandlerMap() {}
 
-/**
- *  析构函数
- */
-CHandlerMap::~CHandlerMap()
-{
+CHandlerMap::~CHandlerMap() {}
 
-}
-
-/**
- *  单例
- *
- *  @return 返回指向CHandlerMap的单例指针
- */
-CHandlerMap* CHandlerMap::getInstance()
-{
+//返回指向CHandlerMap的单例指针 单例
+CHandlerMap* CHandlerMap::getInstance() {
 	if (!s_handler_instance) {
 		s_handler_instance = new CHandlerMap();
 		s_handler_instance->Init();
 	}
-
 	return s_handler_instance;
 }
 
-/**
- *  初始化函数,加载了各种commandId 对应的处理函数
- */
-void CHandlerMap::Init()
-{
+//初始化函数,加载了各种commandId 对应的处理函数
+void CHandlerMap::Init() {
 	// Login validate
 	m_handler_map.insert(make_pair(uint32_t(CID_OTHER_VALIDATE_REQ), DB_PROXY::doLogin));
     m_handler_map.insert(make_pair(uint32_t(CID_LOGIN_REQ_PUSH_SHIELD), DB_PROXY::doPushShield));
@@ -109,15 +86,11 @@ void CHandlerMap::Init()
 
 }
 
-/**
- *  通过commandId获取处理函数
- *
- *  @param pdu_type commandId
- *
- *  @return 处理函数的函数指针
- */
-pdu_handler_t CHandlerMap::GetHandler(uint32_t pdu_type)
-{
+
+/// @brief 通过commandId获取处理函数
+/// @param pdu_type commandId
+/// @return 处理函数的函数指针
+pdu_handler_t CHandlerMap::GetHandler(uint32_t pdu_type) {
 	HandlerMap_t::iterator it = m_handler_map.find(pdu_type);
 	if (it != m_handler_map.end()) {
 		return it->second;

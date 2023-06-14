@@ -1,5 +1,5 @@
 package IM.BaseDefine;
-option java_package = "com.mogujie.tt.protobuf";
+option java_package = "com.teamtalk.protobuf";
 //option java_outer_classname = "MOGUJIEIMMessage";
 option optimize_for = LITE_RUNTIME;
 
@@ -7,7 +7,7 @@ option optimize_for = LITE_RUNTIME;
 enum ServiceID{
     SID_LOGIN           = 0x0001;           // for login
     SID_BUDDY_LIST      = 0x0002;		    // for friend list
-    SID_MSG             = 0x0003;           //
+    SID_MSG             = 0x0003;
     SID_GROUP           = 0x0004;           // for group message
     SID_FILE            = 0x0005;
     SID_SWITCH_SERVICE  = 0x0006;
@@ -17,23 +17,23 @@ enum ServiceID{
 
 // command id for login
 enum LoginCmdID{
-    CID_LOGIN_REQ_MSGSERVER         = 0x0101; 	//
-    CID_LOGIN_RES_MSGSERVER         = 0x0102;	//
-    CID_LOGIN_REQ_USERLOGIN         = 0x0103;	//
-    CID_LOGIN_RES_USERLOGIN         = 0x0104;	//
-    CID_LOGIN_REQ_LOGINOUT          = 0x0105;	//
-    CID_LOGIN_RES_LOGINOUT          = 0x0106; 	//
-    CID_LOGIN_KICK_USER				= 0x0107; 	//
-    CID_LOGIN_REQ_DEVICETOKEN       = 0x0108;  //
-    CID_LOGIN_RES_DEVICETOKEN       = 0x0109;  //
-    CID_LOGIN_REQ_KICKPCCLIENT      = 0x010a;
+    CID_LOGIN_REQ_MSGSERVER         = 0x0101; 	//消息服务器login
+    CID_LOGIN_RES_MSGSERVER         = 0x0102;
+    CID_LOGIN_REQ_USERLOGIN         = 0x0103;	//用户登录
+    CID_LOGIN_RES_USERLOGIN         = 0x0104;
+    CID_LOGIN_REQ_LOGINOUT          = 0x0105;	//用户登出
+    CID_LOGIN_RES_LOGINOUT          = 0x0106;
+    CID_LOGIN_KICK_USER				= 0x0107; 	//踢出用户
+    CID_LOGIN_REQ_DEVICETOKEN       = 0x0108;   //设备token
+    CID_LOGIN_RES_DEVICETOKEN       = 0x0109;
+    CID_LOGIN_REQ_KICKPCCLIENT      = 0x010a;   //踢出PC端设备
     CID_LOGIN_RES_KICKPCCLIENT      = 0x010b;
     CID_LOGIN_REQ_PUSH_SHIELD       = 0x010c;	//勿扰
-    CID_LOGIN_RES_PUSH_SHIELD       = 0x010d; 	//
-    CID_LOGIN_REQ_QUERY_PUSH_SHIELD = 0x010e; 	//
+    CID_LOGIN_RES_PUSH_SHIELD       = 0x010d;
+    CID_LOGIN_REQ_QUERY_PUSH_SHIELD = 0x010e; 	//查询勿扰
     CID_LOGIN_RES_QUERY_PUSH_SHIELD = 0x010f;
-    CID_LOGIN_REQ_REGIST = 0x0110;     // 注册新用户
-    CID_LOGIN_RES_REGIST = 0x0111;	
+    CID_LOGIN_REQ_REGIST = 0x0110;              // 注册新用户
+    CID_LOGIN_RES_REGIST = 0x0111;     
 }
 
 // command id for buddy list
@@ -94,6 +94,7 @@ enum GroupCmdID{
     CID_GROUP_CHANGE_MEMBER_NOTIFY			= 0x040b;
 }
 
+// command id for file_server
 enum FileCmdID{
     CID_FILE_LOGIN_REQ              = 0x0501; // sender/receiver need to login to
     CID_FILE_LOGIN_RES              = 0x0502; // login success or failure
@@ -115,6 +116,7 @@ enum SwitchServiceCmdID{
     CID_SWITCH_P2P_CMD	= 0x0601;	//
 }
 
+// other command id
 enum OtherCmdID{
     CID_OTHER_HEARTBEAT                     = 0x0701;
     CID_OTHER_STOP_RECV_PACKET              = 0x0702;
@@ -138,6 +140,9 @@ enum OtherCmdID{
     CID_OTHER_FILE_SERVER_IP_REQ            = 0x0733;
     CID_OTHER_FILE_SERVER_IP_RSP            = 0x0734;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 enum ResultType{
 	REFUSE_REASON_NONE				= 0;
@@ -241,8 +246,7 @@ enum DepartmentStatusType{
     DEPT_STATUS_DELETE          = 0x01;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 message IpAddr{
 	required string ip = 1;

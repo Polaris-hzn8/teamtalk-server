@@ -1,19 +1,19 @@
 /*
- * DBPool.h
- *
- *  Created on: 2014年7月22日
- *      Author: ziteng
- *  Modify By ZhangYuanhao
- *  2015-01-12
- *  enable config the max connection of every instance
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: DBPool.h
+ Update Time: Wed 14 Jun 2023 20:56:48 CST
+ brief: 
+	enable config the max connection of every instance
+*/
 
 #ifndef DBPOOL_H_
 #define DBPOOL_H_
 
 #include "../base/util.h"
 #include "ThreadPool.h"
-#include <mysql.h>
+#include <mysql/mysql.h>
+
 
 #define MAX_ESCAPE_STRING_LEN	10240
 
