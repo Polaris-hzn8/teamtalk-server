@@ -1,14 +1,11 @@
-/*================================================================
-*     Copyright (c) 2015年 lanhu. All rights reserved.
-*   
-*   文件名称：Client.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年01月20日
-*   描    述：
-*
-#pragma once
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: Client.h
+ Update Time: Wed 14 Jun 2023 15:33:07 CST
+ brief: 
+*/
+
 #ifndef __CLIENT_H__
 #define __CLIENT_H__
 #include <iostream>
@@ -21,15 +18,14 @@ using namespace std;
 
 typedef hash_map<uint32_t, IM::BaseDefine::UserInfo*> CMapId2User_t;
 typedef hash_map<string, IM::BaseDefine::UserInfo*> CMapNick2User_t;
-class CClient:public IPacketCallback
-{
+class CClient:public IPacketCallback {
 public:
     CClient(const string& strName, const string& strPass, const string strDomain="http://192.168.2.132:8080");
     ~CClient();
 public:
     string getName(){ return m_strName; }
     string getDomain() { return m_strLoginDomain; }
-  //  static void TimerCallback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
+    //static void TimerCallback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
     CMapNick2User_t& getNick2UserMap() { return m_mapNick2UserInfo; }
     bool isLogin() {return m_bLogined;}
     ClientConn* getConn() {return m_client_conn;}
