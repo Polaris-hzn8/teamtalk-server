@@ -166,6 +166,7 @@ enum UserStatType{
 	USER_STATUS_LEAVE	= 3;
 
 }
+
 enum SessionType{
 	SESSION_TYPE_SINGLE = 1;          	//单个用户会话
 	SESSION_TYPE_GROUP = 2;          	//群会话
@@ -240,6 +241,9 @@ enum DepartmentStatusType{
     DEPT_STATUS_DELETE          = 0x01;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 message IpAddr{
 	required string ip = 1;
 	required uint32 port = 2;
@@ -302,7 +306,6 @@ message MsgInfo{
 message GroupVersionInfo{
 	required uint32 group_id = 1;
 	required uint32 version = 2;
-	
 }
 
 message GroupInfo{

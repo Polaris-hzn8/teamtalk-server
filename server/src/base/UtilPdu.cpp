@@ -58,6 +58,7 @@ CByteStream::CByteStream(uchar_t* buf, uint32_t len) {
     m_pos = 0;
 }
 
+//接受一个指向缓冲区的指针和缓冲区的长度作为参数
 CByteStream::CByteStream(CSimpleBuffer* pSimpBuf, uint32_t pos) {
     m_pSimpBuf = pSimpBuf;
     m_pos = pos;
@@ -86,7 +87,19 @@ int32_t CByteStream::ReadInt32(uchar_t* buf) {
     return data;
 }
 
+/**
+ * 从给定的 buf 缓冲区中读取无符号32位整数（uint32_t）数据
+*/
 uint32_t CByteStream::ReadUint32(uchar_t* buf) {
+    /**
+     * 首先通过位运算将缓冲区中的4个字节按照大端字节序（Big-Endian）进行合并 
+     * 构造出一个32位整数数据
+     * buf[0] << 24 将 buf 缓冲区的第一个字节左移24位
+     * buf[1] << 16 将 buf 缓冲区的第二个字节左移16位
+     * buf[2] << 8 将 buf 缓冲区的第三个字节左移8位
+     * buf[3] 取 buf 缓冲区的第四个字节
+     * 进行 或（OR）操作，将四个字节合并为一个32位整数数据 并将结果存储在变量 data 中
+    */
     uint32_t data = (buf[0] << 24) | (buf[1] << 16) | (buf[2] << 8) | buf[3];
     return data;
 }

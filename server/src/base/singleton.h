@@ -1,10 +1,10 @@
-// Copyright (C) 2012 by wubenqi
-//
-// By: wubenqi<wubenqi@gmail.com>
-//
-// 单件设计模式实现
-// 非线程安全
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: singleton.h
+ Update Time: Tue 13 Jun 2023 18:08:36 CST
+ brief: 单件设计模式实现（非线程安全）
+*/
 
 #ifndef BASE_SINGLETON_H_
 #define BASE_SINGLETON_H_

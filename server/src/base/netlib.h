@@ -1,3 +1,11 @@
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: netlib.h
+ Update Time: Wed 14 Jun 2023 08:47:55 CST
+ brief: 
+*/
+
 #ifndef __NETLIB_H__
 #define __NETLIB_H__
 
@@ -17,6 +25,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 int netlib_init();
 
@@ -54,8 +63,10 @@ void netlib_stop_event();
 
 bool netlib_is_running();
 
+
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+
