@@ -134,6 +134,7 @@ CImPdu* CImPdu::ReadPdu(uchar_t* buf, uint32_t len) {
     uint32_t pdu_len = 0;
     // 1.检查给定缓冲区中是否存在完整的 PDU 数据
     if (!IsPduAvailable(buf, len, pdu_len)) return NULL;
+
     // 2.从缓冲区 buf 中读取 service_id 和 command_id 字段，分别存储在对应的变量中
     uint16_t service_id = CByteStream::ReadUint16(buf + 8);
     uint16_t command_id = CByteStream::ReadUint16(buf + 10);
@@ -142,6 +143,7 @@ CImPdu* CImPdu::ReadPdu(uchar_t* buf, uint32_t len) {
     pPdu = new CImPdu();
     // 3.调用pPdu->Write(buf, pdu_len)将缓冲区buf中的数据写入到pPdu对象的内部缓冲区中（消息体）
     pPdu->Write(buf, pdu_len);
+    
     // 4.调用pPdu->ReadPduHeader(buf, IM_PDU_HEADER_LEN)解析pPdu对象的PDU头部信息（消息头）
     pPdu->ReadPduHeader(buf, IM_PDU_HEADER_LEN);
 

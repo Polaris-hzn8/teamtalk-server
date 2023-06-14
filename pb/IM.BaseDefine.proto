@@ -5,93 +5,101 @@ option optimize_for = LITE_RUNTIME;
 
 // service id
 enum ServiceID{
-    SID_LOGIN           = 0x0001;           // for login
-    SID_BUDDY_LIST      = 0x0002;		    // for friend list
-    SID_MSG             = 0x0003;
-    SID_GROUP           = 0x0004;           // for group message
-    SID_FILE            = 0x0005;
-    SID_SWITCH_SERVICE  = 0x0006;
-    SID_OTHER           = 0x0007;
-    SID_INTERNAL        = 0x0008;		     
+    SID_LOGIN           = 0x0001;           // 用于登录服务
+    SID_BUDDY_LIST      = 0x0002;		    // 用于好友列表服务
+    SID_MSG             = 0x0003;           // 用于消息服务
+    SID_GROUP           = 0x0004;           // 用于群组消息服务
+    SID_FILE            = 0x0005;           // 用于文件传输服务
+    SID_SWITCH_SERVICE  = 0x0006;           // 用于切换服务
+    SID_OTHER           = 0x0007;           // 用于其他服务
+    SID_INTERNAL        = 0x0008;		    // 用于内部服务
 }
 
 // command id for login
 enum LoginCmdID{
-    CID_LOGIN_REQ_MSGSERVER         = 0x0101; 	//消息服务器login
-    CID_LOGIN_RES_MSGSERVER         = 0x0102;
-    CID_LOGIN_REQ_USERLOGIN         = 0x0103;	//用户登录
+    CID_LOGIN_REQ_MSGSERVER         = 0x0101; 	//msg_server地址请求(已经废弃改用http请求)
+    CID_LOGIN_RES_MSGSERVER         = 0x0102;   
+    CID_LOGIN_REQ_USERLOGIN         = 0x0103;	//登陆请求
     CID_LOGIN_RES_USERLOGIN         = 0x0104;
-    CID_LOGIN_REQ_LOGINOUT          = 0x0105;	//用户登出
+    CID_LOGIN_REQ_LOGINOUT          = 0x0105;	//登出请求
     CID_LOGIN_RES_LOGINOUT          = 0x0106;
     CID_LOGIN_KICK_USER				= 0x0107; 	//踢出用户
-    CID_LOGIN_REQ_DEVICETOKEN       = 0x0108;   //设备token
+    CID_LOGIN_REQ_DEVICETOKEN       = 0x0108;   //设备token汇报请求(用于推送)
     CID_LOGIN_RES_DEVICETOKEN       = 0x0109;
-    CID_LOGIN_REQ_KICKPCCLIENT      = 0x010a;   //踢出PC端设备
+    CID_LOGIN_REQ_KICKPCCLIENT      = 0x010a;   //移动端踢PC端请求
     CID_LOGIN_RES_KICKPCCLIENT      = 0x010b;
     CID_LOGIN_REQ_PUSH_SHIELD       = 0x010c;	//勿扰
     CID_LOGIN_RES_PUSH_SHIELD       = 0x010d;
     CID_LOGIN_REQ_QUERY_PUSH_SHIELD = 0x010e; 	//查询勿扰
     CID_LOGIN_RES_QUERY_PUSH_SHIELD = 0x010f;
-    CID_LOGIN_REQ_REGIST = 0x0110;              // 注册新用户
-    CID_LOGIN_RES_REGIST = 0x0111;     
+    CID_LOGIN_REQ_REGIST            = 0x0110;   // 注册新用户
+    CID_LOGIN_RES_REGIST            = 0x0111;     
 }
 
 // command id for buddy list
 enum BuddyListCmdID{
-    CID_BUDDY_LIST_RECENT_CONTACT_SESSION_REQUEST       = 0x0201;
+    CID_BUDDY_LIST_RECENT_CONTACT_SESSION_REQUEST       = 0x0201;   //最近联系人会话请求
     CID_BUDDY_LIST_RECENT_CONTACT_SESSION_RESPONSE      = 0x0202;
-    CID_BUDDY_LIST_STATUS_NOTIFY                        = 0x0203; //
-    CID_BUDDY_LIST_USER_INFO_REQUEST                    = 0x0204; //
+    CID_BUDDY_LIST_STATUS_NOTIFY                        = 0x0203;   //用户状态通知
+    CID_BUDDY_LIST_USER_INFO_REQUEST                    = 0x0204;   //用户信息请求
     CID_BUDDY_LIST_USER_INFO_RESPONSE                   = 0x0205;
-    CID_BUDDY_LIST_REMOVE_SESSION_REQ                   = 0x0206;
+    //其中带了一个latest_update_time字段，请求应答会返回latest_update_time时间之后发生变化的用户回来 
+    CID_BUDDY_LIST_REMOVE_SESSION_REQ                   = 0x0206;   //删除最近会话请求
     CID_BUDDY_LIST_REMOVE_SESSION_RES                   = 0x0207;
-    CID_BUDDY_LIST_ALL_USER_REQUEST                     = 0x0208;
+    CID_BUDDY_LIST_ALL_USER_REQUEST                     = 0x0208;   //所有用户请求
     CID_BUDDY_LIST_ALL_USER_RESPONSE                    = 0x0209;
-    CID_BUDDY_LIST_USERS_STATUS_REQUEST                 = 0x020a;
+    CID_BUDDY_LIST_USERS_STATUS_REQUEST                 = 0x020a;   //用户状态请求
     CID_BUDDY_LIST_USERS_STATUS_RESPONSE                = 0x020b;
-    CID_BUDDY_LIST_CHANGE_AVATAR_REQUEST                = 0x020c;
+    CID_BUDDY_LIST_CHANGE_AVATAR_REQUEST                = 0x020c;   //更改头像请求(暂时未使用)
     CID_BUDDY_LIST_CHANGE_AVATAR_RESPONSE               = 0x020d;
-    CID_BUDDY_LIST_PC_LOGIN_STATUS_NOTIFY               = 0x020e;
-    CID_BUDDY_LIST_REMOVE_SESSION_NOTIFY                = 0x020f;
-    CID_BUDDY_LIST_DEPARTMENT_REQUEST                   = 0x0210;
+    CID_BUDDY_LIST_PC_LOGIN_STATUS_NOTIFY               = 0x020e;   //PC登陆后通知移动端
+    CID_BUDDY_LIST_REMOVE_SESSION_NOTIFY                = 0x020f;   //删除会话后的通知，用于多端同步
+    CID_BUDDY_LIST_DEPARTMENT_REQUEST                   = 0x0210;   //部门信息请求
     CID_BUDDY_LIST_DEPARTMENT_RESPONSE                  = 0x0211;
-    CID_BUDDY_LIST_AVATAR_CHANGED_NOTIFY                = 0x0212; //头像更改通知
-    CID_BUDDY_LIST_CHANGE_SIGN_INFO_REQUEST             = 0x0213; //修改个性签名请求
-    CID_BUDDY_LIST_CHANGE_SIGN_INFO_RESPONSE            = 0x0214; //
-    CID_BUDDY_LIST_SIGN_INFO_CHANGED_NOTIFY             = 0x0215; //签名修改通知
+    CID_BUDDY_LIST_AVATAR_CHANGED_NOTIFY                = 0x0212;   //头像更改通知
+    CID_BUDDY_LIST_CHANGE_SIGN_INFO_REQUEST             = 0x0213;   //修改个性签名请求
+    CID_BUDDY_LIST_CHANGE_SIGN_INFO_RESPONSE            = 0x0214;
+    CID_BUDDY_LIST_SIGN_INFO_CHANGED_NOTIFY             = 0x0215;   //签名修改通知
 }
+
+/**
+    获取消息回复
+    对于群而言，如果消息数目返回的数值小于请求的cnt,则表示群的消息能拉取的到头了，更早的消息没有权限拉取。
+    如果msg_cnt 和 msg_id_begin计算得到的最早消息id与实际返回的最早消息id不一致，
+    说明服务器消息有缺失，需客户端做一个缺失标记，避免下次再次拉取。
+*/
 
 // command id for msg
 enum MessageCmdID{
-    CID_MSG_DATA					= 0x0301;	//  对方需要用 CID_MSG_READ_ACK
-    CID_MSG_DATA_ACK				= 0x0302; 	//   CID_MSG_DATA_ACK 服务要应答发送端
-    CID_MSG_READ_ACK				= 0x0303; 	//
-    CID_MSG_READ_NOTIFY     		= 0x0304;    //  已读消息通知
-    CID_MSG_TIME_REQUEST 			= 0x0305;	//
-    CID_MSG_TIME_RESPONSE			= 0x0306; 	//
-    CID_MSG_UNREAD_CNT_REQUEST		= 0x0307; 	//
-    CID_MSG_UNREAD_CNT_RESPONSE		= 0x0308;	//
-    CID_MSG_LIST_REQUEST            = 0x0309;    //获取指定队列消息
+    CID_MSG_DATA					= 0x0301;	//发送消息
+    CID_MSG_DATA_ACK				= 0x0302;   //消息收到应答
+    CID_MSG_READ_ACK				= 0x0303; 	//消息已读应答
+    CID_MSG_READ_NOTIFY     		= 0x0304;   //消息已读通知，用于多端同步
+    CID_MSG_TIME_REQUEST 			= 0x0305;	//服务器时间请求
+    CID_MSG_TIME_RESPONSE			= 0x0306;   
+    CID_MSG_UNREAD_CNT_REQUEST		= 0x0307; 	//未读消息计数请求
+    CID_MSG_UNREAD_CNT_RESPONSE		= 0x0308;
+    CID_MSG_LIST_REQUEST            = 0x0309;   //获取消息请求
     CID_MSG_LIST_RESPONSE           = 0x030a;
-    CID_MSG_GET_LATEST_MSG_ID_REQ   = 0x030b;
+    CID_MSG_GET_LATEST_MSG_ID_REQ   = 0x030b;   //获取某个会话最新msg_id请求
     CID_MSG_GET_LATEST_MSG_ID_RSP   = 0x030c;
-    CID_MSG_GET_BY_MSG_ID_REQ       = 0x030d;
+    CID_MSG_GET_BY_MSG_ID_REQ       = 0x030d;   //通过msg_id获取消息请求
     CID_MSG_GET_BY_MSG_ID_RES       = 0x030e;
 }
 
 // command id for group message
 enum GroupCmdID{
-    CID_GROUP_NORMAL_LIST_REQUEST			= 0x0401;
+    CID_GROUP_NORMAL_LIST_REQUEST			= 0x0401;   //用户所在固定群组请求
     CID_GROUP_NORMAL_LIST_RESPONSE			= 0x0402;
-    CID_GROUP_INFO_REQUEST          		= 0x0403;
+    CID_GROUP_INFO_REQUEST          		= 0x0403;   //群组信息请求
     CID_GROUP_INFO_RESPONSE         		= 0x0404;
-    CID_GROUP_CREATE_REQUEST                = 0x0405;
+    CID_GROUP_CREATE_REQUEST                = 0x0405;   //创建群组请求
     CID_GROUP_CREATE_RESPONSE               = 0x0406;
-    CID_GROUP_CHANGE_MEMBER_REQUEST 		= 0x0407;
+    CID_GROUP_CHANGE_MEMBER_REQUEST 		= 0x0407;   //群组成员变更请求
     CID_GROUP_CHANGE_MEMBER_RESPONSE 		= 0x0408;
-    CID_GROUP_SHIELD_GROUP_REQUEST  		= 0x0409;
+    CID_GROUP_SHIELD_GROUP_REQUEST  		= 0x0409;   //屏蔽群组请求
     CID_GROUP_SHIELD_GROUP_RESPONSE 		= 0x040a;
-    CID_GROUP_CHANGE_MEMBER_NOTIFY			= 0x040b;
+    CID_GROUP_CHANGE_MEMBER_NOTIFY			= 0x040b;   //群组成员变更通知
 }
 
 // command id for file_server
@@ -111,33 +119,36 @@ enum FileCmdID{
     CID_FILE_DEL_OFFLINE_REQ        = 0x050c;
 }
 
+// 客户端之间的协议，服务端只做转发
 // command id for switch service
 enum SwitchServiceCmdID{
-    CID_SWITCH_P2P_CMD	= 0x0601;	//
+    CID_SWITCH_P2P_CMD	= 0x0601;	//客户端之间的协议，服务端不认识，只做转发 例如 正在输入 这些
 }
 
+// 主要用于msg_server与db_proxy之间的通信
 // other command id
 enum OtherCmdID{
-    CID_OTHER_HEARTBEAT                     = 0x0701;
+    CID_OTHER_HEARTBEAT                     = 0x0701;   //心跳协议
+
     CID_OTHER_STOP_RECV_PACKET              = 0x0702;
-    CID_OTHER_VALIDATE_REQ                  = 0x0703;
+    CID_OTHER_VALIDATE_REQ                  = 0x0703;   //客户端登陆认证请求
     CID_OTHER_VALIDATE_RSP                  = 0x0704;
-    CID_OTHER_GET_DEVICE_TOKEN_REQ          = 0x0705;
+    CID_OTHER_GET_DEVICE_TOKEN_REQ          = 0x0705;   //获取某个用户的设备token请求
     CID_OTHER_GET_DEVICE_TOKEN_RSP          = 0x0706;
-    CID_OTHER_ROLE_SET                      = 0x0707;
-    CID_OTHER_ONLINE_USER_INFO              = 0x0708;
-    CID_OTHER_MSG_SERV_INFO                 = 0x0709;
-    CID_OTHER_USER_STATUS_UPDATE            = 0x070a;
-    CID_OTHER_USER_CNT_UPDATE               = 0x070b;
-    CID_OTHER_SERVER_KICK_USER              = 0x070d;
-    CID_OTHER_LOGIN_STATUS_NOTIFY           = 0x070e;
-    CID_OTHER_PUSH_TO_USER_REQ              = 0x070f;
+    CID_OTHER_ROLE_SET                      = 0x0707;   //服务端主从角色变换，用于route_server
+    CID_OTHER_ONLINE_USER_INFO              = 0x0708;   //在线用户信息
+    CID_OTHER_MSG_SERV_INFO                 = 0x0709;   //msg_server信息，主要用于msg_server向login_server汇报用
+    CID_OTHER_USER_STATUS_UPDATE            = 0x070a;   //用户状态变更
+    CID_OTHER_USER_CNT_UPDATE               = 0x070b;   //用户数量变化
+    CID_OTHER_SERVER_KICK_USER              = 0x070d;   //服务端踢人
+    CID_OTHER_LOGIN_STATUS_NOTIFY           = 0x070e;   //PC登陆通知
+    CID_OTHER_PUSH_TO_USER_REQ              = 0x070f;   //发送push通知请求
     CID_OTHER_PUSH_TO_USER_RSP              = 0x0710;
-    CID_OTHER_GET_SHIELD_REQ                = 0x0711;
+    CID_OTHER_GET_SHIELD_REQ                = 0x0711;   //获取用户屏蔽群设置请求
     CID_OTHER_GET_SHIELD_RSP                = 0x0712;
-    CID_OTHER_FILE_TRANSFER_REQ             = 0x0731;
+    CID_OTHER_FILE_TRANSFER_REQ             = 0x0731;   //文件传输请求
     CID_OTHER_FILE_TRANSFER_RSP             = 0x0732;
-    CID_OTHER_FILE_SERVER_IP_REQ            = 0x0733;
+    CID_OTHER_FILE_SERVER_IP_REQ            = 0x0733;   //文件服务器信息请求
     CID_OTHER_FILE_SERVER_IP_RSP            = 0x0734;
 }
 
@@ -169,7 +180,6 @@ enum UserStatType{
 	USER_STATUS_ONLINE 	= 1;
 	USER_STATUS_OFFLINE	= 2;
 	USER_STATUS_LEAVE	= 3;
-
 }
 
 enum SessionType{

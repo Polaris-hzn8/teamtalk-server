@@ -3,7 +3,7 @@
  Email: 3453851623@qq.com
  filename: db_proxy_server.cpp
  Update Time: Wed 14 Jun 2023 23:05:27 CST
- brief: 
+ brief:
 */
 
 #include "CachePool.h"
@@ -129,7 +129,8 @@ int main(int argc, char* argv[])
 
     int ret = netlib_init();
 
-    if (ret == NETLIB_ERROR) return ret;
+    if (ret == NETLIB_ERROR)
+        return ret;
 
     /// yunfan add 2014.9.28
     // for 603 push

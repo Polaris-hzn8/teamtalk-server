@@ -29,5 +29,3 @@ private:
     CacheConn* m_pCacheConn;
 };
 #endif
-
-
