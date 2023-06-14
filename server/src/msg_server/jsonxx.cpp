@@ -1,10 +1,10 @@
-/*
- Reviser: Polaris_hzn8
- Email: 3453851623@qq.com
- filename: jsonxx.cpp
- Update Time: Thu 15 Jun 2023 00:55:47 CST
- brief:
-*/
+// -*- mode: c++; c-basic-offset: 4; -*-
+
+// Author: Hong Jiang <hong@hjiang.net>
+// Contributors:
+//   Sean Middleditch <sean@middleditch.us>
+//   rlyeh <https://github.com/r-lyeh>
+
 #include "jsonxx.h"
 
 #include <cctype>

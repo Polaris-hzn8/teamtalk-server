@@ -23,14 +23,8 @@ public:
         pthread_mutex_init(&m_mutex, &mutex_attribute);
         pthread_mutexattr_destroy(&mutex_attribute);
     }
-    ~CriticalSection()
-    {
-        pthread_mutex_destroy(&m_mutex);
-    }
-    void Enter()
-    {
-        pthread_mutex_lock(&m_mutex);
-    }
+    ~CriticalSection() { pthread_mutex_destroy(&m_mutex); }
+    void Enter() { pthread_mutex_lock(&m_mutex); }
     bool TryEnter()
     {
         if (pthread_mutex_trylock(&m_mutex) == 0) {
@@ -38,15 +32,12 @@ public:
         }
         return false;
     }
-    void Leave()
-    {
-        pthread_mutex_unlock(&m_mutex);
-    }
+    void Leave() { pthread_mutex_unlock(&m_mutex); }
 
 private:
     pthread_mutex_t m_mutex;
 };
 
-}
+} // namespace msfs
 
 #endif
