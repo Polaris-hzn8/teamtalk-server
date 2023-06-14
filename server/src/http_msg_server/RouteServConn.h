@@ -1,39 +1,40 @@
 /*
- * RouteServConn.h
- *
- *  Created on: 2013-7-8
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: RouteServConn.h
+ Update Time: Thu 15 Jun 2023 00:43:10 CST
+ brief:
+*/
 
 #ifndef ROUTESERVCONN_H_
 #define ROUTESERVCONN_H_
 
-#include "imconn.h"
 #include "ServInfo.h"
+#include "imconn.h"
 
 namespace HTTP {
 
-class CRouteServConn : public CImConn
-{
+class CRouteServConn : public CImConn {
 public:
-	CRouteServConn();
-	virtual ~CRouteServConn();
+    CRouteServConn();
+    virtual ~CRouteServConn();
 
-	bool IsOpen() { return m_bOpen; }
-	uint64_t GetConnectTime() { return m_connect_time; }
+    bool IsOpen() { return m_bOpen; }
+    uint64_t GetConnectTime() { return m_connect_time; }
 
-	void Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx);
-	virtual void Close();
+    void Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx);
+    virtual void Close();
 
-	virtual void OnConfirm();
-	virtual void OnClose();
-	virtual void OnTimer(uint64_t curr_tick);
+    virtual void OnConfirm();
+    virtual void OnClose();
+    virtual void OnTimer(uint64_t curr_tick);
 
-	virtual void HandlePdu(CImPdu* pPdu);
+    virtual void HandlePdu(CImPdu* pPdu);
+
 private:
-	bool 		m_bOpen;
-	uint32_t	m_serv_idx;
-	uint64_t	m_connect_time;
+    bool m_bOpen;
+    uint32_t m_serv_idx;
+    uint64_t m_connect_time;
 };
 
 void init_route_serv_conn(serv_info_t* server_list, uint32_t server_count);
