@@ -218,8 +218,7 @@ void CProxyConn::HandlePduBuf(uchar_t* pdu_buf, uint32_t pdu_len)
  * if pPdu == NULL, it means you want to close connection with conn_uuid
  * e.g. parse packet failed
  */
-void CProxyConn::AddResponsePdu(uint32_t conn_uuid, CImPdu* pPdu)
-{
+void CProxyConn::AddResponsePdu(uint32_t conn_uuid, CImPdu* pPdu) {
     ResponsePdu_t* pResp = new ResponsePdu_t;
     pResp->conn_uuid = conn_uuid;
     pResp->pPdu = pPdu;

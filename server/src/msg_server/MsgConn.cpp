@@ -262,15 +262,21 @@ void CMsgConn::OnTimer(uint64_t curr_tick)
     }
 }
 
-void CMsgConn::HandlePdu(CImPdu* pPdu)
-{
+
+//处理收到的PDU 根据PDU的命令ID，将其分派给相应的处理函数
+void CMsgConn::HandlePdu(CImPdu* pPdu) {   
+    // 1.检查pPdu的命令ID是否为CID_OTHER_HEARTBEAT（心跳命令）如果不是心跳命令，则打印相应的日志信息
     if (pPdu->GetCommandId() != CID_OTHER_HEARTBEAT)
         log("HandlePdu cmd:0x%04x\n", pPdu->GetCommandId()); // request authorization check
+    // 2.检查pPdu的命令ID是否为CID_LOGIN_REQ_USERLOGIN（用户登录请求）并且当前连接是打开的并且被踢出的状态
     if (pPdu->GetCommandId() != CID_LOGIN_REQ_USERLOGIN && !IsOpen() && IsKickOff()) {
+        //如果条件满足则打印相应的日志信息，并抛出一个CPduException异常，异常信息指示处理PDU时出错用户未登录
         log("HandlePdu, wrong msg. ");
         throw CPduException(pPdu->GetServiceId(), pPdu->GetCommandId(), ERROR_CODE_WRONG_SERVICE_ID, "HandlePdu error, user not login. ");
         return;
     }
+    // 3.最后通过switch语句根据pPdu的命令ID执行相应的操作
+    // 根据不同的命令ID，调用相应的私有方法来处理不同的请求，例如处理心跳、用户登录请求、用户登出请求等
     switch (pPdu->GetCommandId()) {
     case CID_OTHER_HEARTBEAT:
         _HandleHeartBeat(pPdu);
@@ -390,79 +396,113 @@ void CMsgConn::_HandleHeartBeat(CImPdu* pPdu)
     SendPdu(pPdu);
 }
 
-// process: send validate request to db server
+//向db_proxy_server发送用户登录认证请求
 void CMsgConn::_HandleLoginRequest(CImPdu* pPdu)
-{
-    // refuse second validate request
+{   
+    // 1.检查是否已经存在登录名 如果存在则打印相应的日志信息，并直接返回拒绝重复的登录请求
     if (m_login_name.length() != 0) {
         log("duplicate LoginRequest in the same conn ");
         return;
     }
 
-    // check if all server connection are OK
+    // 2.检查各个服务器连接的可用性 包括数据库服务器连接和路由服务器连接
     uint32_t result = 0;
     string result_string = "";
+    // 获取数据库服务器连接对象 pDbConn
     CDBServConn* pDbConn = get_db_serv_conn_for_login();
     if (!pDbConn) {
+        //没有数据库服务器连接 表示拒绝登录
         result = IM::BaseDefine::REFUSE_REASON_NO_DB_SERVER;
         result_string = "服务端异常";
     } else if (!is_login_server_available()) {
+        //登录服务器不可用
         result = IM::BaseDefine::REFUSE_REASON_NO_LOGIN_SERVER;
         result_string = "服务端异常";
     } else if (!is_route_server_available()) {
+        //路由服务器不可用
         result = IM::BaseDefine::REFUSE_REASON_NO_ROUTE_SERVER;
         result_string = "服务端异常";
     }
+
+    // 3.如果存在拒绝登录的情况（result不为0）则会发送登录响应消息给客户端，并关闭连接
     if (result) {
+        // 3-1.创建一个IM::Login::IMLoginRes对象msg 并设置该对象的字段值
         IM::Login::IMLoginRes msg;
-        msg.set_server_time(time(NULL));
-        msg.set_result_code((IM::BaseDefine::ResultType)result);
-        msg.set_result_string(result_string);
+        // 3-2.设置相关响应消息 
+        msg.set_server_time(time(NULL));//设置为当前时间
+        msg.set_result_code((IM::BaseDefine::ResultType)result);//设置为result的值，表示拒绝原因
+        msg.set_result_string(result_string);//设置为result_string的值，表示结果说明
+        // 3-3.创建一个CImPdu对象pdu，并将msg对象设置为其消息体
         CImPdu pdu;
-        pdu.SetPBMsg(&msg);
-        pdu.SetServiceId(SID_LOGIN);
-        pdu.SetCommandId(CID_LOGIN_RES_USERLOGIN); // 如果db_proxy_server没有启动
-        pdu.SetSeqNum(pPdu->GetSeqNum());
+        pdu.SetPBMsg(&msg);//将 msg 对象设置为其消息体
+        pdu.SetServiceId(SID_LOGIN);//设置pdu的服务ID为SID_LOGIN
+        pdu.SetCommandId(CID_LOGIN_RES_USERLOGIN); //命令ID为CID_LOGIN_RES_USERLOGIN
+        pdu.SetSeqNum(pPdu->GetSeqNum());//消息序列号为登录请求消息的序列号
+        // 3-4.调用SendPdu方法将登录响应消息发送给客户端
         SendPdu(&pdu);
-        Close(); // 关闭 CMsgConn* pConn = new CMsgConn(); 什么时候释放资源
+        // 3-5.最后调用Close方法关闭连接结束处理
+        Close();// 关闭 CMsgConn* pConn = new CMsgConn(); 什么时候释放资源
         return;
     }
+
+    // 4.服务器连接都正常，则继续处理登录请求
     IM::Login::IMLoginReq msg;
+    // 4-1.解析登录请求消息的内容
+    // 该方法将消息的二进制数据解析为 IM::Login::IMLoginReq 对象 msg
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
-    // 假如是汉字，则转成拼音
-    m_login_name = msg.user_name();
-    string password = msg.password();
+
+    // 4-2.设置消息中的信息到私有成员变量中
+    m_login_name = msg.user_name();//登录请求中的用户名
+    string password = msg.password();//登录请求中的密码
+    //检查在线状态的取值范围是否有效 如果不在有效范围内 会打印相应的日志信息，并将在线状态设置为默认值
     uint32_t online_status = msg.online_status();
     if (online_status < IM::BaseDefine::USER_STATUS_ONLINE || online_status > IM::BaseDefine::USER_STATUS_LEAVE) {
         log("HandleLoginReq, online status wrong: %u ", online_status);
         online_status = IM::BaseDefine::USER_STATUS_ONLINE;
     }
-    m_client_version = msg.client_version();
-    m_client_type = msg.client_type();
-    m_online_status = online_status;
+    m_client_version = msg.client_version();//客户端版本
+    m_client_type = msg.client_type();//客户端类型
+    m_online_status = online_status;//在线状态
     log("HandleLoginReq, user_name=%s, status=%u, client_type=%u, client=%s, ",
         m_login_name.c_str(), online_status, m_client_type, m_client_version.c_str());
+
+    // 5.用户重复登录验证
+    // 通过调用 CImUserManager::GetInstance()->GetImUserByLoginName(GetLoginName()) 方法
+    // 5-1.根据登录名获取对应的 CImUser 对象 pImUser
     CImUser* pImUser = CImUserManager::GetInstance()->GetImUserByLoginName(GetLoginName());
-    if (!pImUser) { // 只允许一个user存在，允许多个端同时登陆
+
+    // 5-2.如果pImUser为空，表示该用户尚未存在创建一个新的CImUser对象，并将其添加到用户管理器中
+    if (!pImUser) {
         pImUser = new CImUser(GetLoginName()); // 新建一个用户
         CImUserManager::GetInstance()->AddImUserByLoginName(GetLoginName(), pImUser);
     }
-    pImUser->AddUnValidateMsgConn(this); //
-    // attach_data 这个对象作用是什么？他绑定了m_handle，实际是fd
-    CDbAttachData attach_data(ATTACH_TYPE_HANDLE, m_handle, 0);
-    // continue to validate if the user is OK
 
+    // 6.将验证消息转发到 db_proxy_server 进行身份验证
+    // 6-1.将当前连接（this）添加到用户的未验证连接列表中
+    pImUser->AddUnValidateMsgConn(this);
+
+    // 6-2.创建 CDbAttachData 对象 attach_data，该对象用于传递附加数据给数据库代理服务器
+    // 将连接的句柄（m_handle）作为附加数据，用于后续验证的过程中标识连接
+    CDbAttachData attach_data(ATTACH_TYPE_HANDLE, m_handle, 0);
+
+    // 6-3.创建IM::Server::IMValidateReq对象msg2消息体，并将用户名、密码和附加数据设置到该对象中
     IM::Server::IMValidateReq msg2;
-    msg2.set_user_name(msg.user_name());
-    msg2.set_password(password);
-    msg2.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
+    msg2.set_user_name(msg.user_name());//用户名
+    msg2.set_password(password);//密码
+    msg2.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());//附加数据
+
+    // 6-4.设置pdu的服务ID为SID_OTHER，命令ID为CID_OTHER_VALIDATE_REQ，序列号为原始登录请求的序列号
     CImPdu pdu;
     pdu.SetPBMsg(&msg2);
     pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_VALIDATE_REQ); // 请求验证
+    pdu.SetCommandId(CID_OTHER_VALIDATE_REQ);//发送新的请求command_id CID_OTHER_VALIDATE_REQ !!!!!!!!!!!!!!!
     pdu.SetSeqNum(pPdu->GetSeqNum());
+
+    // 6-5.通过数据库代理连接对象pDbConn调用SendPdu()方法，将验证请求 pdu 发送给数据库代理服务器进行验证
     pDbConn->SendPdu(&pdu);
 }
+
+
 
 void CMsgConn::_HandleLoginOutRequest(CImPdu* pPdu)
 {
@@ -856,20 +896,32 @@ void CMsgConn::_HandleClientUsersStatusRequest(CImPdu* pPdu)
     }
 }
 
-void CMsgConn::_HandleClientDepartmentRequest(CImPdu* pPdu)
-{
+//处理客户端部门信息请求
+//当客户端发送部门信息请求时，服务器会调用此函数进行处理
+void CMsgConn::_HandleClientDepartmentRequest(CImPdu* pPdu) {
     IM::Buddy::IMDepartmentReq msg;
+    // 1.解析部门信息请求消息，获取用户ID和最新更新时间
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
     log("HandleClientDepartmentRequest, user_id=%u, latest_update_time=%u.", GetUserId(), msg.latest_update_time());
+
+    // 2.获取数据库服务器连接 pDBConn
     CDBServConn* pDBConn = get_db_serv_conn();
+
+    // 3.如果存在数据库服务器连接 pDBConn，则进行以下操作
     if (pDBConn) {
+        // 3-1.创建CDbAttachData对象attach，用于存储附加数据
+        // 附加数据类型为 ATTACH_TYPE_HANDLE，句柄为当前连接的句柄，长度为0
         CDbAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0);
+        // 3-2.设置部门信息请求消息的用户ID和附加数据
         msg.set_user_id(GetUserId());
         msg.set_attach_data(attach.GetBuffer(), attach.GetLength());
+        // 3-3.将部门信息请求消息设置为待发送的消息对象 pPdu 的 消息体
         pPdu->SetPBMsg(&msg);
+        // 3-4.调用数据库服务器连接 pDBConn的SendPdu方法将数据发送到 db_proxy_server
         pDBConn->SendPdu(pPdu);
     }
 }
+
 
 void CMsgConn::_HandleClientDeviceToken(CImPdu* pPdu)
 {

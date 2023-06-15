@@ -192,8 +192,7 @@ void CDBServConn::OnTimer(uint64_t curr_tick)
     }
 }
 
-void CDBServConn::HandlePdu(CImPdu* pPdu)
-{
+void CDBServConn::HandlePdu(CImPdu* pPdu) {
     switch (pPdu->GetCommandId()) {
     case CID_OTHER_HEARTBEAT:
         break;
@@ -280,22 +279,28 @@ void CDBServConn::HandlePdu(CImPdu* pPdu)
     }
 }
 
-void CDBServConn::_HandleValidateResponse(CImPdu* pPdu)
-{
+//处理验证响应消息的函数 
+void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
     IM::Server::IMValidateRsp msg;
+    // 1.解析验证响应消息 获取登录名 login_name、结果码 result 和 结果字符串 result_string
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
     string login_name = msg.user_name();
     uint32_t result = msg.result_code();
     string result_string = msg.result_string();
+
+    // 2.根据附加数据构造 CDbAttachData 对象
     CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
     log("HandleValidateResp, user_name=%s, result=%d", login_name.c_str(), result);
 
+    // 3.根据登录名获取用户对象 pImUser 记录日志
     CImUser* pImUser = CImUserManager::GetInstance()->GetImUserByLoginName(login_name);
     CMsgConn* pMsgConn = NULL;
     if (!pImUser) {
+        // 如果用户对象存在，则根据附加数据的句柄获取未验证的消息连接对象 pMsgConn
         log("ImUser for user_name=%s not exist", login_name.c_str());
         return;
     } else {
+        // 如果 pMsgConn 不存在或者已经打开，则记录日志并返回
         pMsgConn = pImUser->GetUnValidateMsgConn(attach_data.GetHandle());
         if (!pMsgConn || pMsgConn->IsOpen()) {
             log("no such conn is validated, user_name=%s", login_name.c_str());
@@ -303,32 +308,39 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu)
         }
     }
 
-    if (result != 0) {
-        result = IM::BaseDefine::REFUSE_REASON_DB_VALIDATE_FAILED;
-    }
+    // 4.如果结果码 result 不为零，将结果码重置为 IM::BaseDefine::REFUSE_REASON_DB_VALIDATE_FAILED
+    if (result != 0) result = IM::BaseDefine::REFUSE_REASON_DB_VALIDATE_FAILED;
 
+    // 5.如果结果码为零表示验证成功，继续处理验证成功的逻辑
     if (result == 0) {
+        // 5-1.获取用户信息 user_info  user_id  用户对象pUser
         IM::BaseDefine::UserInfo user_info = msg.user_info();
         uint32_t user_id = user_info.user_id();
         CImUser* pUser = CImUserManager::GetInstance()->GetImUserById(user_id);
         if (pUser) {
+            // 已存在该ID的用户对象 pUser 则将该连接添加到 pUser 的未验证连接列表中，并从 pImUser 的未验证连接列表中删除
             pUser->AddUnValidateMsgConn(pMsgConn);
             pImUser->DelUnValidateMsgConn(pMsgConn);
+            // 如果 pImUser 的未验证连接列表为空，表示没有其他未验证的连接了，可以移除该用户对象
             if (pImUser->IsMsgConnEmpty()) {
                 CImUserManager::GetInstance()->RemoveImUserByLoginName(login_name);
                 delete pImUser;
             }
         } else {
+            // 如果用户对象 pUser 不存在，则将 pUser 设置为 pImUser
             pUser = pImUser;
         }
 
-        pUser->SetUserId(user_id);
-        pUser->SetNickName(user_info.user_nick_name());
-        pUser->SetValidated();
+        // 5-2.设置 pUser 的用户ID、昵称、验证状态
+        pUser->SetUserId(user_id);//uid
+        pUser->SetNickName(user_info.user_nick_name());//nick_name
+        pUser->SetValidated();//SetValidated
         CImUserManager::GetInstance()->AddImUserById(user_id, pUser);
 
+        // 5-3.根据连接的客户端类型踢出相同类型的重复用户
         pUser->KickOutSameClientType(pMsgConn->GetClientType(), IM::BaseDefine::KICK_REASON_DUPLICATE_USER, pMsgConn);
 
+        // 5-4.获取路由服务器连接 pRouteConn，如果存在则向路由服务器发送踢出用户的消息
         CRouteServConn* pRouteConn = get_route_serv_conn();
         if (pRouteConn) {
             IM::Server::IMServerKickUser msg2;
@@ -338,16 +350,18 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu)
             CImPdu pdu;
             pdu.SetPBMsg(&msg2);
             pdu.SetServiceId(SID_OTHER);
-            pdu.SetCommandId(CID_OTHER_SERVER_KICK_USER);
+            pdu.SetCommandId(CID_OTHER_SERVER_KICK_USER);//踢出用户的消息
             pRouteConn->SendPdu(&pdu);
         }
-
         log("user_name: %s, uid: %d", login_name.c_str(), user_id);
+
+        // 5-5.设置连接的用户ID、打开状态，并发送用户状态更新的消息
         pMsgConn->SetUserId(user_id);
         pMsgConn->SetOpen();
         pMsgConn->SendUserStatusUpdate(IM::BaseDefine::USER_STATUS_ONLINE);
         pUser->ValidateMsgConn(pMsgConn->GetHandle(), pMsgConn);
 
+        // 5-6.构造登录响应消息 msg3，设置相关字段
         IM::Login::IMLoginRes msg3;
         msg3.set_server_time(time(NULL));
         msg3.set_result_code(IM::BaseDefine::REFUSE_REASON_NONE);
@@ -365,29 +379,39 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu)
         user_info_tmp->set_user_tel(user_info.user_tel());
         user_info_tmp->set_user_domain(user_info.user_domain());
         user_info_tmp->set_status(user_info.status());
+
+        // 5-6.构造登录响应消息Pdu pdu2，设置相关字段
         CImPdu pdu2;
-        pdu2.SetPBMsg(&msg3);
-        pdu2.SetServiceId(SID_LOGIN);
-        pdu2.SetCommandId(CID_LOGIN_RES_USERLOGIN);
-        pdu2.SetSeqNum(pPdu->GetSeqNum());
+        pdu2.SetPBMsg(&msg3);//消息体
+        pdu2.SetServiceId(SID_LOGIN);//service_id
+        pdu2.SetCommandId(CID_LOGIN_RES_USERLOGIN);//新的command_id CID_LOGIN_RES_USERLOGIN
+        pdu2.SetSeqNum(pPdu->GetSeqNum());//设置消息序号
+
+        // 5-7.发送登录响应消息给客户端
         pMsgConn->SendPdu(&pdu2);
     } else {
+        // 6.如果结果码不为零，表示验证失败，继续处理验证失败的逻辑
+        // 6-1.构造登录响应消息 msg4，设置相关字段
         IM::Login::IMLoginRes msg4;
         msg4.set_server_time(time(NULL));
         msg4.set_result_code((IM::BaseDefine::ResultType)result);
         msg4.set_result_string(result_string);
+
+        // 6-2.构造登录响应消息Pdu pdu2，设置相关字段
         CImPdu pdu3;
-        pdu3.SetPBMsg(&msg4);
-        pdu3.SetServiceId(SID_LOGIN);
-        pdu3.SetCommandId(CID_LOGIN_RES_USERLOGIN);
+        pdu3.SetPBMsg(&msg4);//消息体
+        pdu3.SetServiceId(SID_LOGIN);//service_id
+        pdu3.SetCommandId(CID_LOGIN_RES_USERLOGIN);//command_id CID_LOGIN_RES_USERLOGIN
         pdu3.SetSeqNum(pPdu->GetSeqNum());
         pMsgConn->SendPdu(&pdu3);
+
+        // 6-3.关闭连接
         pMsgConn->Close();
     }
 }
 
-void CDBServConn::_HandleRecentSessionResponse(CImPdu* pPdu)
-{
+
+void CDBServConn::_HandleRecentSessionResponse(CImPdu* pPdu) {
     IM::Buddy::IMRecentContactSessionRsp msg;
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
     uint32_t user_id = msg.user_id();
@@ -653,22 +677,32 @@ void CDBServConn::_HandleChangeAvatarResponse(CImPdu* pPdu)
     }
 }
 
-void CDBServConn::_HandleDepartmentResponse(CImPdu* pPdu)
-{
+//处理部门信息的响应
+void CDBServConn::_HandleDepartmentResponse(CImPdu* pPdu) {
+    // 1.解析收到的部门信息响应消息，将消息内容存储在 IM::Buddy::IMDepartmentRsp 类型的 msg 对象中
     IM::Buddy::IMDepartmentRsp msg;
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
+    // 2.获取用户ID、最新更新时间和部门数量等信息
     uint32_t user_id = msg.user_id();
     uint32_t latest_update_time = msg.latest_update_time();
     uint32_t dept_cnt = msg.dept_list_size();
     log("HandleDepartmentResponse, user_id=%u, latest_update_time=%u, dept_cnt=%u.", user_id, latest_update_time, dept_cnt);
 
+    // 3.解析附加数据，将其转换为 CDbAttachData 对象，获取句柄（handle）
     CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
+
+    // 4.通过用户ID和句柄获取与之关联的消息连接对象 pConn
     uint32_t handle = attach_data.GetHandle();
     CMsgConn* pConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+
+    // 5.如果消息连接对象存在且处于打开状态
     if (pConn && pConn->IsOpen()) {
+        //清除附加数据中的内容
         msg.clear_attach_data();
+        //设置响应消息的内容为解析后的 msg 对象
         pPdu->SetPBMsg(&msg);
+        //将响应消息发送给消息连接对象
         pConn->SendPdu(pPdu);
     }
 }

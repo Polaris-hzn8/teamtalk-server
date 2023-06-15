@@ -25,6 +25,8 @@
  * 提供了发送和接收数据的功能，并定义了一些虚拟函数供派生类进行重写以实现特定的业务逻辑
  * 
  * CImConn 继承了引用计数类 CRefObject 实现对象的引用计数管理
+ * 每个socket tcp长连接都需要绑定一个CImConn对象
+ * 要实现具体的业务就需要继承CImConn对象 实现具体的业务逻辑
 */
 class CImConn : public CRefObject {
 public:

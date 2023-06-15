@@ -36,9 +36,8 @@ CHandlerMap* CHandlerMap::getInstance()
     return s_handler_instance;
 }
 
-// 初始化函数,加载了各种commandId 对应的处理函数
-void CHandlerMap::Init()
-{
+//CHandlerMap初始化函数,加载了各种commandId 对应的处理函数
+void CHandlerMap::Init() {
     // Login validate
     m_handler_map.insert(make_pair(uint32_t(CID_OTHER_VALIDATE_REQ), DB_PROXY::doLogin));
     m_handler_map.insert(make_pair(uint32_t(CID_LOGIN_REQ_PUSH_SHIELD), DB_PROXY::doPushShield));
@@ -85,8 +84,7 @@ void CHandlerMap::Init()
 /// @brief 通过commandId获取处理函数
 /// @param pdu_type commandId
 /// @return 处理函数的函数指针
-pdu_handler_t CHandlerMap::GetHandler(uint32_t pdu_type)
-{
+pdu_handler_t CHandlerMap::GetHandler(uint32_t pdu_type) {
     HandlerMap_t::iterator it = m_handler_map.find(pdu_type);
     if (it != m_handler_map.end()) {
         return it->second;
