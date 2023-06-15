@@ -13,8 +13,7 @@
 
 CDBManager* CDBManager::s_db_manager = NULL;
 
-CResultSet::CResultSet(MYSQL_RES* res)
-{
+CResultSet::CResultSet(MYSQL_RES* res) {
     m_res = res;
 
     // map table field key to index in the result array

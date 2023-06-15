@@ -231,8 +231,7 @@ void CHttpConn::OnTimer(uint64_t curr_tick)
 }
 
 // Add By Lanhu 2014-12-19 通过登陆IP来优选电信还是联通IP
-void CHttpConn::_HandleMsgServRequest(string& url, string& post_data)
-{
+void CHttpConn::_HandleMsgServRequest(string& url, string& post_data) {
     msg_serv_info_t* pMsgServInfo;
     uint32_t min_user_cnt = (uint32_t)-1;
     map<uint32_t, msg_serv_info_t*>::iterator it_min_conn = g_msg_serv_info.end();

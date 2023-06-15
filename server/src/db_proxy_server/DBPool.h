@@ -33,35 +33,11 @@ private:
     map<string, int> m_key_map;
 };
 
-/*
- * TODO:
- * 用MySQL的prepare statement接口来防止SQL注入
- * 暂时只用于插入IMMessage表，因为只有那里有SQL注入的风险，
- * 以后可以把全部接口用这个来实现替换
- */
-class CPrepareStatement {
-public:
-    CPrepareStatement();
-    virtual ~CPrepareStatement();
-
-    bool Init(MYSQL* mysql, string& sql);
-
-    void SetParam(uint32_t index, int& value);
-    void SetParam(uint32_t index, uint32_t& value);
-    void SetParam(uint32_t index, string& value);
-    void SetParam(uint32_t index, const string& value);
-
-    bool ExecuteUpdate();
-    uint32_t GetInsertId();
-
-private:
-    MYSQL_STMT* m_stmt;
-    MYSQL_BIND* m_param_bind;
-    uint32_t m_param_cnt;
-};
-
 class CDBPool;
 
+/**
+ * 
+*/
 class CDBConn {
 public:
     CDBConn(CDBPool* pDBPool);
@@ -84,6 +60,9 @@ private:
     char m_escape_string[MAX_ESCAPE_STRING_LEN + 1];
 };
 
+/**
+ * 
+*/
 class CDBPool {
 public:
     CDBPool(const char* pool_name, const char* db_server_ip, uint16_t db_server_port,
@@ -114,7 +93,9 @@ private:
     CThreadNotify m_free_notify;
 };
 
-// manage db pool (master for write and slave for read)
+/**
+ * manage db pool (master for write and slave for read)
+*/
 class CDBManager {
 public:
     virtual ~CDBManager();
@@ -134,4 +115,37 @@ private:
     map<string, CDBPool*> m_dbpool_map;
 };
 
-#endif /* DBPOOL_H_ */
+
+
+/*
+ * TODO:
+ * 用MySQL的prepare statement接口来防止SQL注入
+ * 暂时只用于插入IMMessage表，因为只有那里有SQL注入的风险，
+ * 以后可以把全部接口用这个来实现替换
+ */
+class CPrepareStatement {
+public:
+    CPrepareStatement();
+    virtual ~CPrepareStatement();
+
+    bool Init(MYSQL* mysql, string& sql);
+
+    void SetParam(uint32_t index, int& value);
+    void SetParam(uint32_t index, uint32_t& value);
+    void SetParam(uint32_t index, string& value);
+    void SetParam(uint32_t index, const string& value);
+
+    bool ExecuteUpdate();
+    uint32_t GetInsertId();
+
+private:
+    MYSQL_STMT* m_stmt;
+    MYSQL_BIND* m_param_bind;
+    uint32_t m_param_cnt;
+};
+
+
+
+
+#endif
+

@@ -77,8 +77,8 @@ void getMessage(CImPdu* pPdu, uint32_t conn_uuid)
     }
 }
 
-void sendMessage(CImPdu* pPdu, uint32_t conn_uuid)
-{
+//
+void sendMessage(CImPdu* pPdu, uint32_t conn_uuid) {
     IM::Message::IMMsgData msg;
     if (msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t nFromId = msg.from_user_id();

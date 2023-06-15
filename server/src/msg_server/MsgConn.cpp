@@ -590,47 +590,61 @@ void CMsgConn::_HandleClientRecentContactSessionRequest(CImPdu* pPdu)
     pConn->SendPdu(pPdu);
 }
 
-void CMsgConn::_HandleClientMsgData(CImPdu* pPdu)
-{
+//处理客户端发送的消息数据
+void CMsgConn::_HandleClientMsgData(CImPdu* pPdu) {
+    // 1.解析收到的消息数据，将消息内容存储在 IM::Message::IMMsgData 类型的 msg 对象中
     IM::Message::IMMsgData msg;
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+
+    // 2.检查消息数据是否为空，如果为空则记录日志并丢弃该消息
     if (msg.msg_data().length() == 0) {
         log("discard an empty message, uid=%u ", GetUserId());
         return;
     }
 
+    // 3.检查每秒发送的消息数量是否超过阈值，如果超过则记录日志并丢弃该消息
     if (m_msg_cnt_per_sec >= MAX_MSG_CNT_PER_SECOND) {
         log("!!!too much msg cnt in one second, uid=%u ", GetUserId());
         return;
     }
 
+    // 4.检查消息的发送者和接收者是否相同，并且消息类型是否为单聊类型，如果满足条件则记录日志并丢弃该消息
     if (msg.from_user_id() == msg.to_session_id() && CHECK_MSG_TYPE_SINGLE(msg.msg_type())) {
         log("!!!from_user_id == to_user_id. ");
         return;
     }
 
+    //增加每秒发送的消息数量计数
     m_msg_cnt_per_sec++;
 
+
+    // 5.获取消息的接收者ID、消息ID、消息类型和消息内容等信息
     uint32_t to_session_id = msg.to_session_id();
     uint32_t msg_id = msg.msg_id();
     uint8_t msg_type = msg.msg_type();
     string msg_data = msg.msg_data();
 
-    if (g_log_msg_toggle) {
-        log("HandleClientMsgData, %d->%d, msg_type=%u, msg_id=%u. ", GetUserId(), to_session_id, msg_type, msg_id);
-    }
+    // 如果日志记录开关打开，则记录日志，输出发送者ID、接收者ID、消息类型和消息ID等信息
+    if (g_log_msg_toggle) log("HandleClientMsgData, %d->%d, msg_type=%u, msg_id=%u. ", GetUserId(), to_session_id, msg_type, msg_id);
 
+    // 6.获取当前时间作为消息的创建时间
     uint32_t cur_time = time(NULL);
+
+    // 7.创建 CDbAttachData 对象，将其类型设置为 ATTACH_TYPE_HANDLE，并存储句柄（handle）信息
+    // 设置消息的发送者ID、创建时间和附加数据等信息
     CDbAttachData attach_data(ATTACH_TYPE_HANDLE, m_handle, 0);
     msg.set_from_user_id(GetUserId());
     msg.set_create_time(cur_time);
+    // 将消息数据设置为解析后的 msg 对象
     msg.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
+    
+    // 8.设置msg为消息体
     pPdu->SetPBMsg(&msg);
+    
     // send to DB storage server
+    // 9.将消息发送给 db_proxy_server
     CDBServConn* pDbConn = get_db_serv_conn();
-    if (pDbConn) {
-        pDbConn->SendPdu(pPdu);
-    }
+    if (pDbConn) pDbConn->SendPdu(pPdu);
 }
 
 void CMsgConn::_HandleClientMsgDataAck(CImPdu* pPdu)
