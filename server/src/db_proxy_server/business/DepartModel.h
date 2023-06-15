@@ -1,29 +1,28 @@
-/*================================================================
-*     Copyright (c) 2015年 lanhu. All rights reserved.
-*   
-*   文件名称：DepartModel.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年03月12日
-*   描    述：
-*
-#pragma once
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: DepartModel.h
+ Update Time: Thu 15 Jun 2023 00:29:27 CST
+ brief:
+*/
+
 #ifndef __DEPARTMODEL_H__
 #define __DEPARTMODEL_H__
 
-#include "ImPduBase.h"
 #include "IM.BaseDefine.pb.h"
+#include "ImPduBase.h"
 
 class CDepartModel {
 public:
     static CDepartModel* getInstance();
-    ~CDepartModel() {}
+    ~CDepartModel() { }
     void getChgedDeptId(uint32_t& nLastTime, list<uint32_t>& lsChangedIds);
     void getDepts(list<uint32_t>& lsDeptIds, list<IM::BaseDefine::DepartInfo>& lsDepts);
     void getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept);
+
 private:
-    CDepartModel(){};
+    CDepartModel() {};
+
 private:
     static CDepartModel* m_pInstance;
 };

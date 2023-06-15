@@ -1,14 +1,11 @@
-/*================================================================
- *   Copyright (C) 2014 All rights reserved.
- *
- *   文件名称：HttpConn.h
- *   创 建 者：Zhang Yuanhao
- *   邮    箱：bluefoxah@gmail.com
- *   创建日期：2014年07月29日
- *   描    述：
- *
- #pragma once
- ================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: HttpConn.h
+ Update Time: Thu 15 Jun 2023 00:51:54 CST
+ brief:
+*/
+
 #ifndef __HTTP_CONN_H__
 #define __HTTP_CONN_H__
 
@@ -16,64 +13,66 @@
 #if (MSFS_LINUX)
 #include <sys/sendfile.h>
 #elif (MSFS_BSD)
+#include <sys/socket.h>
 #include <sys/types.h>
- #include <sys/socket.h>
- #include <sys/uio.h>
+#include <sys/uio.h>
 #endif
-#include <pthread.h>
-#include "netlib.h"
-#include "FileManager.h"
 #include "ConfigFileReader.h"
-#include "ThreadPool.h"
+#include "FileManager.h"
 #include "HttpParserWrapper.h"
+#include "ThreadPool.h"
+#include "netlib.h"
+#include <pthread.h>
 
-#define HTTP_CONN_TIMEOUT            30000
-#define HTTP_UPLOAD_MAX                 0xA00000     //10M
-#define BOUNDARY_MARK                    "boundary="
-#define HTTP_END_MARK                        "\r\n\r\n"
-#define CONTENT_TYPE                            "Content-Type:"
-#define CONTENT_DISPOSITION         "Content-Disposition:"
-#define READ_BUF_SIZE    0x100000 //1M
-#define HTTP_RESPONSE_HEADER    "HTTP/1.1 200 OK\r\n"\
-"Connection:close\r\n"\
-"Content-Length:%d\r\n"\
-"Content-Type:multipart/form-data\r\n\r\n"
-#define HTTP_RESPONSE_EXTEND        "HTTP/1.1 200 OK\r\n"\
-                                    "Connection:close\r\n"\
-                                    "Content-Length:%d\r\n"\
-                                    "Content-Type:multipart/form-data\r\n\r\n"
-#define HTTP_RESPONSE_IMAGE         "HTTP/1.1 200 OK\r\n"\
-                                    "Connection:close\r\n"\
-                                    "Content-Length:%d\r\n"\
-                                    "Content-Type:image/%s\r\n\r\n"
-#define HTTP_RESPONSE_HTML          "HTTP/1.1 200 OK\r\n"\
-                                    "Connection:close\r\n"\
-                                    "Content-Length:%d\r\n"\
-                                    "Content-Type:text/html;charset=utf-8\r\n\r\n%s"
-#define HTTP_RESPONSE_HTML_MAX      1024
-#define HTTP_RESPONSE_403           "HTTP/1.1 403 Access Forbidden\r\n"\
-                                    "Content-Length: 0\r\n"\
-                                    "Connection: close\r\n"\
-                                    "Content-Type: text/html;charset=utf-8\r\n\r\n"
-#define HTTP_RESPONSE_403_LEN       strlen(HTTP_RESPONSE_403)
-#define HTTP_RESPONSE_404           "HTTP/1.1 404 Not Found\r\n"\
-                                    "Content-Length: 0\r\n"\
-                                    "Connection: close\r\n"\
-                                    "Content-Type: text/html;charset=utf-8\r\n\r\n"
-#define HTTP_RESPONSE_404_LEN       strlen(HTTP_RESPONSE_404)
-#define HTTP_RESPONSE_500           "HTTP/1.1 500 Internal Server Error\r\n"\
-                                    "Connection:close\r\n"\
-                                    "Content-Length:0\r\n"\
-                                    "Content-Type:text/html;charset=utf-8\r\n\r\n"
-#define HTTP_RESPONSE_500_LEN       strlen(HTTP_RESPONSE_500)
+#define HTTP_CONN_TIMEOUT 30000
+#define HTTP_UPLOAD_MAX 0xA00000 // 10M
+#define BOUNDARY_MARK "boundary="
+#define HTTP_END_MARK "\r\n\r\n"
+#define CONTENT_TYPE "Content-Type:"
+#define CONTENT_DISPOSITION "Content-Disposition:"
+#define READ_BUF_SIZE 0x100000 // 1M
+#define HTTP_RESPONSE_HEADER "HTTP/1.1 200 OK\r\n"   \
+                             "Connection:close\r\n"  \
+                             "Content-Length:%d\r\n" \
+                             "Content-Type:multipart/form-data\r\n\r\n"
+#define HTTP_RESPONSE_EXTEND "HTTP/1.1 200 OK\r\n"   \
+                             "Connection:close\r\n"  \
+                             "Content-Length:%d\r\n" \
+                             "Content-Type:multipart/form-data\r\n\r\n"
+#define HTTP_RESPONSE_IMAGE "HTTP/1.1 200 OK\r\n"   \
+                            "Connection:close\r\n"  \
+                            "Content-Length:%d\r\n" \
+                            "Content-Type:image/%s\r\n\r\n"
+#define HTTP_RESPONSE_HTML "HTTP/1.1 200 OK\r\n"   \
+                           "Connection:close\r\n"  \
+                           "Content-Length:%d\r\n" \
+                           "Content-Type:text/html;charset=utf-8\r\n\r\n%s"
+#define HTTP_RESPONSE_HTML_MAX 1024
+#define HTTP_RESPONSE_403 "HTTP/1.1 403 Access Forbidden\r\n" \
+                          "Content-Length: 0\r\n"             \
+                          "Connection: close\r\n"             \
+                          "Content-Type: text/html;charset=utf-8\r\n\r\n"
+#define HTTP_RESPONSE_403_LEN strlen(HTTP_RESPONSE_403)
+#define HTTP_RESPONSE_404 "HTTP/1.1 404 Not Found\r\n" \
+                          "Content-Length: 0\r\n"      \
+                          "Connection: close\r\n"      \
+                          "Content-Type: text/html;charset=utf-8\r\n\r\n"
+#define HTTP_RESPONSE_404_LEN strlen(HTTP_RESPONSE_404)
+#define HTTP_RESPONSE_500 "HTTP/1.1 500 Internal Server Error\r\n" \
+                          "Connection:close\r\n"                   \
+                          "Content-Length:0\r\n"                   \
+                          "Content-Type:text/html;charset=utf-8\r\n\r\n"
+#define HTTP_RESPONSE_500_LEN strlen(HTTP_RESPONSE_500)
 
 using namespace msfs;
-enum
-{
-    CONN_STATE_IDLE, CONN_STATE_CONNECTED, CONN_STATE_OPEN, CONN_STATE_CLOSED,
+enum {
+    CONN_STATE_IDLE,
+    CONN_STATE_CONNECTED,
+    CONN_STATE_OPEN,
+    CONN_STATE_CLOSED,
 };
 
-extern FileManager * g_fileManager;
+extern FileManager* g_fileManager;
 extern CConfigFileReader config_file;
 extern CThreadPool g_PostThreadPool;
 extern CThreadPool g_GetThreadPool;
@@ -86,23 +85,23 @@ typedef struct {
     char* pContent;
     string strUrl;
     string strContentType;
-}Request_t;
+} Request_t;
 
 typedef struct {
-    uint32_t    conn_handle;
-    char*     pContent;
+    uint32_t conn_handle;
+    char* pContent;
     uint32_t content_len;
 } Response_t;
 
 class CHttpConn;
-class CHttpTask: public CTask
-{
+class CHttpTask : public CTask {
 public:
     CHttpTask(Request_t request);
     virtual ~CHttpTask();
     void run();
     void OnUpload();
     void OnDownload();
+
 private:
     uint32_t m_ConnHandle;
     int m_nMethod;
@@ -113,8 +112,7 @@ private:
     string m_strAccessHost;
 };
 
-class CHttpConn: public CRefObject
-{
+class CHttpConn : public CRefObject {
 public:
     CHttpConn();
     virtual ~CHttpConn();
@@ -125,7 +123,7 @@ public:
     }
     char* GetPeerIP()
     {
-        return (char*) m_peer_ip.c_str();
+        return (char*)m_peer_ip.c_str();
     }
 
     int Send(void* data, int len);
@@ -138,8 +136,8 @@ public:
     void OnTimer(uint64_t curr_tick);
     void OnSendComplete();
 
-    static void AddResponsePdu(uint32_t conn_handle, char* pContent, int nLen);   // 工作线程调用
-    static void SendResponsePduList();  // 主线程调用
+    static void AddResponsePdu(uint32_t conn_handle, char* pContent, int nLen); // 工作线程调用
+    static void SendResponsePduList(); // 主线程调用
 protected:
     net_handle_t m_sock_handle;
     uint32_t m_conn_handle;
@@ -156,8 +154,8 @@ protected:
 
     CHttpParserWrapper m_HttpParser;
 
-    static CLock          s_list_lock;
-    static list<Response_t*> s_response_pdu_list;    // 主线程发送回复消息
+    static CLock s_list_lock;
+    static list<Response_t*> s_response_pdu_list; // 主线程发送回复消息
 };
 
 typedef hash_map<uint32_t, CHttpConn*> HttpConnMap_t;

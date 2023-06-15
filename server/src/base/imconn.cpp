@@ -122,9 +122,7 @@ int CImConn::Send(void* data, int len) {
 }
 
 
-/**
- * OnRead方法完成了从连接读取数据、解析CImPdu对象并处理的过程
-*/
+//OnRead方法完成了从连接读取数据、解析CImPdu对象并处理的过程
 void CImConn::OnRead() {
 	// 1.通过循环不断读取数据
     for (;;) {
@@ -173,7 +171,6 @@ void CImConn::OnRead() {
         }
         OnClose();
     }
-
 }
 
 /**

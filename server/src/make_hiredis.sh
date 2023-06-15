@@ -1,4 +1,5 @@
 #!/bin/bash
+#安装mysql以及hiredis
 
 HIREDIS=hiredis-master
 CUR_DIR=
