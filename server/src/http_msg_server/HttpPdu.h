@@ -1,31 +1,31 @@
 /*
- * HttpPdu.h
- *
- *  Created on: 2013-10-1
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: HttpPdu.h
+ Update Time: Thu 15 Jun 2023 00:42:45 CST
+ brief:
+*/
 
 #ifndef HTTPPDU_H_
 #define HTTPPDU_H_
 
-#include "util.h"
-#include "ImPduBase.h"
-#include <list>
 #include "IM.BaseDefine.pb.h"
-
+#include "ImPduBase.h"
+#include "util.h"
+#include <list>
 
 // jsonp parameter parser
-class CPostDataParser
-{
+class CPostDataParser {
 public:
-	CPostDataParser() {}
-	virtual ~CPostDataParser() {}
+    CPostDataParser() { }
+    virtual ~CPostDataParser() { }
 
-	bool Parse(const char* content);
+    bool Parse(const char* content);
 
-	char* GetValue(const char* key);
+    char* GetValue(const char* key);
+
 private:
-	std::map<std::string, std::string> m_post_map;
+    std::map<std::string, std::string> m_post_map;
 };
 
 char* PackSendResult(uint32_t error_code, const char* error_msg = "");

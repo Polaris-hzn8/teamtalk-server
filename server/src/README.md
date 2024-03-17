@@ -14,11 +14,11 @@
 	当以上步骤都完成后，可以使用"./build.sh version 1"编译整个TeamTalk工程,一旦编译完成，会在上级目录生成im_server_x.tar.gz包，该压缩包包含的内容有:
 	sync_lib_for_zip.sh: 将lib目录下的依赖库copy至各个服务器的目录下，启动服务前需要先执行一次该脚本
 	lib: 主要包含各个服务器依赖的第三方库
-	restart.sh: 启动脚本，启动方式为./restart.sh msg_server
-	login_server:
-	msg_server:
-	route_server:			
+	restart.sh: 启动脚本，启动方式为./restart.sh slog
+	slog:
+	slog:
+	slog:			
 	db_proxy_server:
-	file_server:
-	push_server:
-	msfs:
+	slog:
+	slog:
+	slog:

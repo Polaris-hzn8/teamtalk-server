@@ -1,16 +1,14 @@
-/*================================================================
-*   Copyright (C) 2015 All rights reserved.
-*   
-*   文件名称：base64.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年01月28日
-*   描    述：
-*
-#pragma once
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: base64.h
+ Update Time: Mon 12 Jun 2023 12:48:23 CST
+ brief: 
+*/
+
 #ifndef __BASE64_H__
 #define __BASE64_H__
+
 #include<iostream>
 using namespace std;
 

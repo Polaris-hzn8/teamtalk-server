@@ -1,9 +1,10 @@
 /*
- * FileHandler.h
- *
- *  Created on: 2013-12-17
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: FileHandler.h
+ Update Time: Thu 15 Jun 2023 00:54:46 CST
+ brief:
+*/
 
 #ifndef FILEHANDLER_H_
 #define FILEHANDLER_H_
@@ -12,12 +13,11 @@
 
 class CMsgConn;
 
-class CFileHandler
-{
+class CFileHandler {
 public:
-	virtual ~CFileHandler() {}
+    virtual ~CFileHandler() { }
 
-	static CFileHandler* getInstance();
+    static CFileHandler* getInstance();
 
     void HandleClientFileRequest(CMsgConn* pMsgConn, CImPdu* pPdu);
     void HandleClientFileHasOfflineReq(CMsgConn* pMsgConn, CImPdu* pPdu);
@@ -25,12 +25,12 @@ public:
     void HandleClientFileDelOfflineReq(CMsgConn* pMsgConn, CImPdu* pPdu);
     void HandleFileHasOfflineRes(CImPdu* pPdu);
     void HandleFileNotify(CImPdu* pPdu);
-private:
-	CFileHandler() {}
 
 private:
-	static CFileHandler* s_handler_instance;
+    CFileHandler() { }
+
+private:
+    static CFileHandler* s_handler_instance;
 };
-
 
 #endif /* FILEHANDLER_H_ */

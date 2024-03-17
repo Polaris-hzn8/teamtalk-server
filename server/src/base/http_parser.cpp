@@ -21,6 +21,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
+
+//http解析实际上是利用了ngnix的http_parse解析库
 #include "http_parser.h"
 #include <assert.h>
 #include <stddef.h>

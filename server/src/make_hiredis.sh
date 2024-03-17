@@ -1,6 +1,5 @@
 #!/bin/bash
-# author: luoning
-# date: 03/24/2015
+#安装mysql以及hiredis
 
 HIREDIS=hiredis-master
 CUR_DIR=

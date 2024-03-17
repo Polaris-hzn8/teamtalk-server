@@ -1,31 +1,30 @@
-//
-//  UserInfo.cpp
-//  im-server-TT
-//
-//  Created by luoning on 14-10-23.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: UserInfo.cpp
+ Update Time: Thu 15 Jun 2023 00:59:24 CST
+ brief:
+*/
 
 #include "UserInfo.h"
+#include "IM.BaseDefine.pb.h"
 #include "ImPduBase.h"
 #include "public_define.h"
-#include "IM.BaseDefine.pb.h"
 using namespace IM::BaseDefine;
 CUserInfo::CUserInfo()
-{}
+{
+}
 
 CUserInfo::~CUserInfo()
-{}
+{
+}
 
 void CUserInfo::AddClientType(uint32_t client_type)
 {
     map<uint32_t, uint32_t>::iterator it = m_ClientTypeList.find(client_type);
-    if (it != m_ClientTypeList.end())
-    {
+    if (it != m_ClientTypeList.end()) {
         it->second += 1;
-    }
-    else
-    {
+    } else {
         m_ClientTypeList[client_type] = 1;
     }
 }
@@ -33,30 +32,23 @@ void CUserInfo::AddClientType(uint32_t client_type)
 void CUserInfo::RemoveClientType(uint32_t client_type)
 {
     map<uint32_t, uint32_t>::iterator it = m_ClientTypeList.find(client_type);
-    if (it != m_ClientTypeList.end())
-    {
+    if (it != m_ClientTypeList.end()) {
         uint32_t count = it->second;
         count -= 1;
-        if (count > 0)
-        {
+        if (count > 0) {
             it->second = count;
-        }
-        else
-        {
+        } else {
             m_ClientTypeList.erase(client_type);
         }
     }
 }
 
-bool CUserInfo::FindRouteConn(CRouteConn *pConn)
+bool CUserInfo::FindRouteConn(CRouteConn* pConn)
 {
     set<CRouteConn*>::iterator it = m_RouteConnSet.find(pConn);
-    if (it != m_RouteConnSet.end())
-    {
+    if (it != m_RouteConnSet.end()) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -66,9 +58,7 @@ uint32_t CUserInfo::GetCountByClientType(uint32_t client_type)
     map<uint32_t, uint32_t>::iterator it = m_ClientTypeList.find(client_type);
     if (it != m_ClientTypeList.end()) {
         return it->second;
-    }
-    else
-    {
+    } else {
         return 0;
     }
 }
@@ -77,9 +67,7 @@ bool CUserInfo::IsMsgConnNULL()
 {
     if (m_ClientTypeList.size() == 0) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
@@ -93,11 +81,9 @@ bool CUserInfo::IsPCClientLogin()
 {
     bool bRet = false;
     map<uint32_t, uint32_t>::iterator it = m_ClientTypeList.begin();
-    for (; it != m_ClientTypeList.end(); it++)
-    {
+    for (; it != m_ClientTypeList.end(); it++) {
         uint32_t client_type = it->first;
-        if (CHECK_CLIENT_TYPE_PC(client_type))
-        {
+        if (CHECK_CLIENT_TYPE_PC(client_type)) {
             bRet = true;
             break;
         }
@@ -109,11 +95,9 @@ bool CUserInfo::IsMobileClientLogin()
 {
     bool bRet = false;
     map<uint32_t, uint32_t>::iterator it = m_ClientTypeList.begin();
-    for (; it != m_ClientTypeList.end(); it++)
-    {
+    for (; it != m_ClientTypeList.end(); it++) {
         uint32_t client_type = it->first;
-        if (CHECK_CLIENT_TYPE_MOBILE(client_type))
-        {
+        if (CHECK_CLIENT_TYPE_MOBILE(client_type)) {
             bRet = true;
             break;
         }
@@ -125,11 +109,9 @@ uint32_t CUserInfo::GetStatus()
 {
     uint32_t status = USER_STATUS_OFFLINE;
     map<uint32_t, uint32_t>::iterator it = m_ClientTypeList.begin();
-    for (; it != m_ClientTypeList.end(); it++)
-    {
+    for (; it != m_ClientTypeList.end(); it++) {
         uint32_t client_type = it->first;
-        if (CHECK_CLIENT_TYPE_PC(client_type))
-        {
+        if (CHECK_CLIENT_TYPE_PC(client_type)) {
             status = USER_STATUS_ONLINE;
             break;
         }

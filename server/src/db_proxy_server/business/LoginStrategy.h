@@ -1,14 +1,11 @@
-/*================================================================
-*     Copyright (c) 2015年 lanhu. All rights reserved.
-*   
-*   文件名称：LoginStrategy.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年03月09日
-*   描    述：
-*
-#pragma once
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: LoginStrategy.h
+ Update Time: Thu 15 Jun 2023 00:31:30 CST
+ brief:
+*/
+
 #ifndef __LOGINSTRATEGY_H__
 #define __LOGINSTRATEGY_H__
 
@@ -16,8 +13,7 @@
 
 #include "IM.BaseDefine.pb.h"
 
-class CLoginStrategy
-{
+class CLoginStrategy {
 public:
     virtual bool doLogin(const std::string& strName, const std::string& strPass, IM::BaseDefine::UserInfo& user) = 0;
 };
