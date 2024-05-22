@@ -73,8 +73,7 @@ int daemon(int nochdir, int noclose, int asroot)
 }
 
 // for client connect in
-void http_callback(void* callback_data, uint8_t msg, uint32_t handle,
-    void* pParam)
+void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
     if (msg == NETLIB_MSG_CONNECT) {
         CHttpConn* pConn = new CHttpConn();
@@ -95,6 +94,7 @@ void doQuitJob()
     netlib_destroy();
     log("I'm ready quit...");
 }
+
 void Stop(int signo)
 {
     log("receive signal:%d", signo);
@@ -110,6 +110,7 @@ void Stop(int signo)
         _exit(0);
     }
 }
+
 int main(int argc, char* argv[])
 {
     for (int i = 0; i < argc; ++i) {
