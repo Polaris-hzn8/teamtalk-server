@@ -18,11 +18,17 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
+
+//http解析实际上是利用了ngnix的http_parse解析库
+
 #ifndef http_parser_h
 #define http_parser_h
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 
 /* Also update SONAME in the Makefile whenever you change these. */
 #define HTTP_PARSER_VERSION_MAJOR 2

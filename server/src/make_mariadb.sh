@@ -1,6 +1,5 @@
 #!/bin/bash
-# author: luoning
-# date: 03/24/2015
+#安装mysql
 
 MARIADB_DEVEL=MariaDB-10.0.17-centos6-x86_64-devel
 MARIADB_DEVEL_DOWNLOAD_PATH=http://sfo1.mirrors.digitalocean.com/mariadb/mariadb-10.0.17/yum/centos6-amd64/rpms/$MARIADB_DEVEL.rpm

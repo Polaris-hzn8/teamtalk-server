@@ -1,15 +1,16 @@
 /*
- * HttpQuery.h
- *
- *  Created on: 2013-10-22
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: HttpQuery.h
+ Update Time: Thu 15 Jun 2023 00:42:57 CST
+ brief:
+*/
 
 #ifndef HTTPQUERY_H_
 #define HTTPQUERY_H_
-#include "json/json.h"
 #include "HttpConn.h"
 #include "public_define.h"
+#include "json/json.h"
 
 typedef enum {
     HTTP_ERROR_SUCCESS = 0,
@@ -33,8 +34,7 @@ typedef enum {
     HTTP_SEND_MSG_TYPE_GROUP = 2,
 } HTTP_SEND_MSG_TYPE;
 
-static string HTTP_ERROR_MSG[] =
-{
+static string HTTP_ERROR_MSG[] = {
     "成功",
     "参数错误",
     "appKey不存在",
@@ -50,26 +50,23 @@ static string HTTP_ERROR_MSG[] =
     "消息加密失败",
 };
 
-
-class CHttpQuery
-{
+class CHttpQuery {
 public:
-	virtual ~CHttpQuery() {}
+    virtual ~CHttpQuery() { }
 
-	static CHttpQuery* GetInstance();
+    static CHttpQuery* GetInstance();
 
-	static void DispatchQuery(std::string& url, std::string& post_data, CHttpConn* pHttpConn);
-    
+    static void DispatchQuery(std::string& url, std::string& post_data, CHttpConn* pHttpConn);
+
 private:
-	CHttpQuery() {}
-    static void _QueryCreateGroup(const string& strAppKey,Json::Value& post_json_obj, CHttpConn* pHttpConn);
-    static void _QueryChangeMember(const string& strAppKey,Json::Value& post_json_obj, CHttpConn* pHttpConn);
+    CHttpQuery() { }
+    static void _QueryCreateGroup(const string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
+    static void _QueryChangeMember(const string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
     static HTTP_ERROR_CODE _CheckAuth(const string& strAppKey, const uint32_t userId, const string& strInterface, const string& strIp);
-    static HTTP_ERROR_CODE _CheckPermission(const string& strAppKey, uint8_t nType, const list<uint32_t>& lsToId , string strMsg);
-    
-private:
-	static CHttpQuery*	m_query_instance;
-};
+    static HTTP_ERROR_CODE _CheckPermission(const string& strAppKey, uint8_t nType, const list<uint32_t>& lsToId, string strMsg);
 
+private:
+    static CHttpQuery* m_query_instance;
+};
 
 #endif /* HTTPQUERY_H_ */

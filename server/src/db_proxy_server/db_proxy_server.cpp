@@ -1,165 +1,151 @@
 /*
- * db_proxy_server.cpp
- *
- *  Created on: 2014年7月21日
- *      Author: ziteng
- */
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: db_proxy_server.cpp
+ Update Time: Wed 14 Jun 2023 23:05:27 CST
+ brief:
+*/
 
-#include "netlib.h"
-#include "ConfigFileReader.h"
-#include "version.h"
-#include "ThreadPool.h"
-#include "DBPool.h"
 #include "CachePool.h"
-#include "ProxyConn.h"
-#include "HttpClient.h"
+#include "ConfigFileReader.h"
+#include "DBPool.h"
 #include "EncDec.h"
-#include "business/AudioModel.h"
-#include "business/MessageModel.h"
-#include "business/SessionModel.h"
-#include "business/RelationModel.h"
-#include "business/UserModel.h"
-#include "business/GroupModel.h"
-#include "business/GroupMessageModel.h"
-#include "business/FileModel.h"
+#include "HttpClient.h"
+#include "ProxyConn.h"
 #include "SyncCenter.h"
+#include "ThreadPool.h"
+#include "business/AudioModel.h"
+#include "business/FileModel.h"
+#include "business/GroupMessageModel.h"
+#include "business/GroupModel.h"
+#include "business/MessageModel.h"
+#include "business/RelationModel.h"
+#include "business/SessionModel.h"
+#include "business/UserModel.h"
+#include "netlib.h"
+#include "version.h"
 
 string strAudioEnc;
 // this callback will be replaced by imconn_callback() in OnConnect()
 void proxy_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
-	if (msg == NETLIB_MSG_CONNECT)
-	{
-		CProxyConn* pConn = new CProxyConn();
-		pConn->OnConnect(handle);
-	}
-	else
-	{
-		log("!!!error msg: %d", msg);
-	}
+    if (msg == NETLIB_MSG_CONNECT) {
+        CProxyConn* pConn = new CProxyConn();
+        pConn->OnConnect(handle);
+    } else {
+        log("!!!error msg: %d", msg);
+    }
 }
 
 int main(int argc, char* argv[])
 {
-	if ((argc == 2) && (strcmp(argv[1], "-v") == 0)) {
-		printf("Server Version: DBProxyServer/%s\n", VERSION);
-		printf("Server Build: %s %s\n", __DATE__, __TIME__);
-		return 0;
-	}
-
-	signal(SIGPIPE, SIG_IGN);
-	srand(time(NULL));
-
-	CacheManager* pCacheManager = CacheManager::getInstance();
-	if (!pCacheManager) {
-		log("CacheManager init failed");
-		return -1;
-	}
-
-	CDBManager* pDBManager = CDBManager::getInstance();
-	if (!pDBManager) {
-		log("DBManager init failed");
-		return -1;
-	}
-puts("db init success");
-	// 主线程初始化单例，不然在工作线程可能会出现多次初始化
-	if (!CAudioModel::getInstance()) {
-		return -1;
-	}
-    
-    if (!CGroupMessageModel::getInstance()) {
-        return -1;
+    // 命令行参数为-v，则打印服务器版本和构建信息，然后退出
+    if ((argc == 2) && (strcmp(argv[1], "-v") == 0)) {
+        printf("Server Version: DBProxyServer/%s\n", VERSION);
+        printf("Server Build: %s %s\n", __DATE__, __TIME__);
+        return 0;
     }
-    
-    if (!CGroupModel::getInstance()) {
-        return -1;
-    }
-    
-    if (!CMessageModel::getInstance()) {
+
+    // 设置信号处理函数：忽略SIGPIPE信号，以避免在处理网络连接时收到此信号导致进程退出
+    signal(SIGPIPE, SIG_IGN);
+    srand(time(NULL));
+
+    // 1.初始化缓存管理器：获取CacheManager对象并初始化与Redis的连接
+    CacheManager* pCacheManager = CacheManager::getInstance();
+    if (!pCacheManager) {
+        log("CacheManager init failed");
         return -1;
     }
 
-	if (!CSessionModel::getInstance()) {
-		return -1;
-	}
-    
-    if(!CRelationModel::getInstance())
-    {
+    // 2.初始化数据库管理器：获取CDBManager对象并初始化与MySQL的连接
+    CDBManager* pDBManager = CDBManager::getInstance();
+    if (!pDBManager) {
+        log("DBManager init failed");
         return -1;
     }
-    
-    if (!CUserModel::getInstance()) {
+    puts("db init success");
+
+    // 3.启动任务队列：初始化多个单例对象，用于处理不同类型的任务
+    // 主线程初始化单例，不然在工作线程可能会出现多次初始化
+    if (!CAudioModel::getInstance()) return -1;
+    if (!CGroupMessageModel::getInstance()) return -1;
+    if (!CGroupModel::getInstance()) return -1;
+    if (!CMessageModel::getInstance()) return -1;
+    if (!CSessionModel::getInstance()) return -1;
+    if (!CRelationModel::getInstance()) return -1;
+    if (!CUserModel::getInstance()) return -1;
+    if (!CFileModel::getInstance()) return -1;
+
+    // 4.读取配置文件：使用CConfigFileReader读取名为dbproxyserver.conf的配置文件
+    CConfigFileReader config_file("dbproxyserver.conf");
+    char* listen_ip = config_file.GetConfigName("ListenIP");//服务器的监听IP
+    char* str_listen_port = config_file.GetConfigName("ListenPort");//端口号
+    char* str_thread_num = config_file.GetConfigName("ThreadNum");//线程数量
+    char* str_file_site = config_file.GetConfigName("MsfsSite");//msfs多媒体文件站存储服务器地址
+    char* str_aes_key = config_file.GetConfigName("aesKey");//AES密钥
+    // 检查配置项：确保配置项都存在
+    if (!listen_ip || !str_listen_port || !str_thread_num || !str_file_site || !str_aes_key) {
+        log("missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...");
         return -1;
     }
-    
-    if (!CFileModel::getInstance()) {
-        return -1;
-    }
 
-
-	CConfigFileReader config_file("dbproxyserver.conf");
-
-	char* listen_ip = config_file.GetConfigName("ListenIP");
-	char* str_listen_port = config_file.GetConfigName("ListenPort");
-	char* str_thread_num = config_file.GetConfigName("ThreadNum");
-    char* str_file_site = config_file.GetConfigName("MsfsSite");
-    char* str_aes_key = config_file.GetConfigName("aesKey");
-
-	if (!listen_ip || !str_listen_port || !str_thread_num || !str_file_site || !str_aes_key) {
-		log("missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...");
-		return -1;
-	}
-    
-    if(strlen(str_aes_key) != 32)
-    {
+    // 5.配置文件读取的数据进行设置
+    // 5-1.对敏感信息进行加密，以保护数据的安全性
+    // 检查AES密钥的有效性
+    if (strlen(str_aes_key) != 32) {
         log("aes key is invalied");
         return -2;
     }
     string strAesKey(str_aes_key, 32);
     CAes cAes = CAes(strAesKey);
     string strAudio = "[语音]";
+    // 加密语音信息：使用AES加密算法对字符串"[语音]"进行加密，生成加密后的字符串strAudioEnc
     char* pAudioEnc;
     uint32_t nOutLen;
-    if(cAes.Encrypt(strAudio.c_str(), strAudio.length(), &pAudioEnc, nOutLen) == 0)
-    {
+    if (cAes.Encrypt(strAudio.c_str(), strAudio.length(), &pAudioEnc, nOutLen) == 0) {
         strAudioEnc.clear();
         strAudioEnc.append(pAudioEnc, nOutLen);
         cAes.Free(pAudioEnc);
     }
 
-	uint16_t listen_port = atoi(str_listen_port);
-	uint32_t thread_num = atoi(str_thread_num);
-    
+    // 5-2.将字符串转换为整数：将监听端口号和线程数量的字符串表示转换为对应的整数值
+    uint16_t listen_port = atoi(str_listen_port);//监听端口号
+    uint32_t thread_num = atoi(str_thread_num);//线程数量
+
+    // 5-3.设置文件站点URL：将文件站点URL设置到CAudioModel的实例中
     string strFileSite(str_file_site);
     CAudioModel::getInstance()->setUrl(strFileSite);
 
-	int ret = netlib_init();
 
-	if (ret == NETLIB_ERROR)
-		return ret;
-    
-    /// yunfan add 2014.9.28
-    // for 603 push
+    // 6.初始化网络库：调用netlib_init()函数初始化网络库 用于支持tcp请求
+    int ret = netlib_init();
+    if (ret == NETLIB_ERROR) return ret;
+
+    // 7.初始化CURL库：调用curl_global_init()函数初始化CURL库，用于支持HTTP请求
     curl_global_init(CURL_GLOBAL_ALL);
-    /// yunfan add end
 
-	init_proxy_conn(thread_num);
+    // 8.初始化代理连接：调用init_proxy_conn()函数初始化代理连接
+    init_proxy_conn(thread_num);
+
+    // 9.初始化同步中心：获取CSyncCenter的实例并进行初始化
     CSyncCenter::getInstance()->init();
-    CSyncCenter::getInstance()->startSync();
+    CSyncCenter::getInstance()->startSync();//启动同步线程，用于处理同步操作
 
-	CStrExplode listen_ip_list(listen_ip, ';');
-	for (uint32_t i = 0; i < listen_ip_list.GetItemCnt(); i++) {
-		ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, proxy_serv_callback, NULL);
-		if (ret == NETLIB_ERROR)
-			return ret;
-	}
+    // 10.监听多个IP地址和端口
+    // 根据配置文件中的ListenIP和ListenPort配置项 使用netlib_listen()函数在每个IP地址和端口上启动监听
+    // 并指定回调函数proxy_serv_callback
+    CStrExplode listen_ip_list(listen_ip, ';');
+    for (uint32_t i = 0; i < listen_ip_list.GetItemCnt(); i++) {
+        ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, proxy_serv_callback, NULL);
+        if (ret == NETLIB_ERROR) return ret;
+    }
 
-	printf("server start listen on: %s:%d\n", listen_ip,  listen_port);
-	printf("now enter the event loop...\n");
+    printf("server start listen on: %s:%d\n", listen_ip, listen_port);
+    printf("now enter the event loop...\n");
     writePid();
-	netlib_eventloop(10);
 
-	return 0;
+    // 11.调用netlib_eventloop()函数进入事件循环，等待事件的发生
+    netlib_eventloop(10);
+
+    return 0;
 }
-
-

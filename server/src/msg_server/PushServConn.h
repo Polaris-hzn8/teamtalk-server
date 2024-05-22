@@ -1,41 +1,41 @@
-//
-//  PushServConn.h
-//  im-server-TT
-//
-//  Created by luoning on 14-9-15.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: PushServConn.h
+ Update Time: Thu 15 Jun 2023 00:57:12 CST
+ brief:
+*/
 
 #ifndef PushServConn_H
 #define PushServConn_H
 
 #include <iostream>
 
-#include "imconn.h"
 #include "ServInfo.h"
+#include "imconn.h"
 
-class CPushServConn : public CImConn
-{
+class CPushServConn : public CImConn {
 public:
-	CPushServConn();
-	virtual ~CPushServConn();
-    
-	bool IsOpen() { return m_bOpen; }
-    
-	void Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx);
-	virtual void Close();
-    
-	virtual void OnConfirm();
-	virtual void OnClose();
-	virtual void OnTimer(uint64_t curr_tick);
-    
-	virtual void HandlePdu(CImPdu* pPdu);
-private:
-	void _HandlePushToUserResponse(CImPdu* pPdu);
+    CPushServConn();
+    virtual ~CPushServConn();
+
+    bool IsOpen() { return m_bOpen; }
+
+    void Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx);
+    virtual void Close();
+
+    virtual void OnConfirm();
+    virtual void OnClose();
+    virtual void OnTimer(uint64_t curr_tick);
+
+    virtual void HandlePdu(CImPdu* pPdu);
 
 private:
-	bool 		m_bOpen;
-	uint32_t	m_serv_idx;
+    void _HandlePushToUserResponse(CImPdu* pPdu);
+
+private:
+    bool m_bOpen;
+    uint32_t m_serv_idx;
 };
 
 void init_push_serv_conn(serv_info_t* server_list, uint32_t server_count);

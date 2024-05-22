@@ -1,22 +1,18 @@
-/*================================================================
-*     Copyright (c) 2015年 lanhu. All rights reserved.
-*   
-*   文件名称：UserModel.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年01月05日
-*   描    述：
-*
-#pragma once
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: UserModel.h
+ Update Time: Thu 15 Jun 2023 01:08:30 CST
+ brief:
+*/
+
 #ifndef __USERMODEL_H__
 #define __USERMODEL_H__
 
 #include "IM.BaseDefine.pb.h"
 #include "ImPduBase.h"
 #include "public_define.h"
-class CUserModel
-{
+class CUserModel {
 public:
     static CUserModel* getInstance();
     ~CUserModel();
@@ -26,7 +22,7 @@ public:
 
     bool updateUser(DBUserInfo_t& cUser);
     bool insertUser(DBUserInfo_t& cUser);
-//    void getUserByNick(const list<string>& lsNicks, list<IM::BaseDefine::UserInfo>& lsUsers);
+    //    void getUserByNick(const list<string>& lsNicks, list<IM::BaseDefine::UserInfo>& lsUsers);
     void clearUserCounter(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefine::SessionType nSessionType);
     void setCallReport(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefine::ClientType nClientType);
 
@@ -37,6 +33,7 @@ public:
 
 private:
     CUserModel();
+
 private:
     static CUserModel* m_pInstance;
 };

@@ -1,4 +1,11 @@
-// OS dependant type definition
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: ostype.h
+ Update Time: Mon 12 Jun 2023 08:34:19 CST
+ brief: OS dependant type definition
+*/
+
 #ifndef __OS_TYPE_H__
 #define __OS_TYPE_H__
 
@@ -15,6 +22,7 @@
     #else
         #include <sys/epoll.h>
     #endif
+
     #include <pthread.h>
     #include <sys/types.h>
     #include <sys/socket.h>
@@ -71,9 +79,11 @@
     const int INVALID_SOCKET = -1;
 #endif
 
+
 typedef unsigned char	uchar_t;
 typedef int				net_handle_t;
 typedef int				conn_handle_t;
+
 
 enum {
 	NETLIB_OK		= 0,
@@ -82,8 +92,7 @@ enum {
 
 #define NETLIB_INVALID_HANDLE	-1
 
-enum
-{
+enum {
 	NETLIB_MSG_CONNECT = 1,
 	NETLIB_MSG_CONFIRM,
 	NETLIB_MSG_READ,
@@ -96,6 +105,20 @@ enum
 const uint32_t INVALID_UINT32  = (uint32_t) -1;
 const uint32_t INVALID_VALUE = 0;
 
+/**
+ * callback_t是一个函数指针类型
+ * 该函数指针类型表示一个回调函数，它接受四个参数：
+ *  - callback_data：回调函数的参数数据，类型为 void*
+ *  - msg：消息类型，类型为 uint8_t
+ *  - handle：句柄或标识符，类型为 uint32_t
+ *  - pParam：额外的参数，类型为 void*
+ * 回调函数的返回类型为 void，
+ * 它可以执行特定的操作或处理特定的事件，根
+ * 据 msg 和 handle 的值进行不同的逻辑处理，并使用 pParam 参数进行必要的数据传递
+*/
 typedef void (*callback_t)(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
 
+
 #endif
+
+

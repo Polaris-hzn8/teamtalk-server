@@ -5,7 +5,7 @@ s is a setup scripts for im server
 # setup im server
 
 INSTALL_DIR=.
-IM_SERVER=im-server-*
+IM_SERVER=im-server-1.0
 
 FILE_SERVER=file_server
 LOGIN_SERVER=login_server
@@ -68,7 +68,7 @@ clean_yum() {
 }
 
 build_im_server() {
-
+    
     #yum -y install yum-fastestmirror
     clean_yum
     #yum -y install libuuid-devel
@@ -88,7 +88,10 @@ build_im_server() {
         cp -f ./conf/$DB_PROXY_SERVER_CONF $INSTALL_DIR/$IM_SERVER/$DB_PROXY_SERVER/
 
         cd $IM_SERVER
+        pwd
+
         chmod +x ./sync_lib_for_zip.sh
+        chmod +x ./daeml
         ./sync_lib_for_zip.sh
         cd ..
         #cp -f ./$IM_SERVER/lib/* $INSTALL_DIR/$IM_SERVER/$LOGIN_SERVER/
@@ -99,8 +102,8 @@ build_im_server() {
         #cp -f ./$IM_SERVER/lib/* $INSTALL_DIR/$IM_SERVER/$HTTP_MSG_SERVER/
         #cp -f ./$IM_SERVER/lib/* $INSTALL_DIR/$IM_SERVER/$PUSH_SERVER/
         #cp -f ./$IM_SERVER/lib/* $INSTALL_DIR/$IM_SERVER/$DB_PROXY_SERVER/
+        pwd
         chmod 755 $INSTALL_DIR/$IM_SERVER/restart.sh
-
         set +x
     else 
         echo "Error: unzip im-server failed."
@@ -137,8 +140,14 @@ case $1 in
         check_user
         check_os
 
-    build_im_server
+        build_im_server
         run_im_server
+        ;;
+
+    run)
+        cd im-server-1.0/
+        run_im_server
+        cd ..
         ;;
     *)
         print_help

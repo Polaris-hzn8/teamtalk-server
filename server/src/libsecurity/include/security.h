@@ -1,14 +1,10 @@
-/*================================================================
-*   Copyright (C) 2015 All rights reserved.
-*   
-*   文件名称：security.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2015年01月29日
-*   描    述：
-*
-#pragma once
-================================================================*/
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: security.h
+ Update Time: Mon 12 Jun 2023 08:49:43 CST
+ brief: 
+*/
 
 #ifndef __SECURITY_H__
 #define __SECURITY_H__
@@ -39,7 +35,8 @@ typedef unsigned char	uchar_t;
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
+
 #ifdef __ANDROID__
     jbyteArray Java_com_mogujie_tt_Security_EncryptMsg(JNIEnv* env, jobject obj, jstring jstr);
     jbyteArray Java_com_mogujie_tt_Security_DecryptMsg(JNIEnv* env, jobject obj, jstring jstr);
@@ -90,9 +87,11 @@ extern "C" {
     DLL_MODIFIER void Free(char* pOutData);
     
 #endif
-    
+
+
 #ifdef __cplusplus
 }
 #endif
+
 
 #endif

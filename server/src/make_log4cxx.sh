@@ -1,6 +1,5 @@
 #!/bin/bash
-# author: luoning
-# date: 03/24/2015
+#log4CXX安装
 
 LOG4CXX=apache-log4cxx-0.10.0.0voice
 LOG4CXX_PATH=http://mirror.bit.edu.cn/apache/logging/log4cxx/0.10.0/$LOG4CXX.tar.gz

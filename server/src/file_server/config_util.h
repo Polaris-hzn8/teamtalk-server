@@ -1,37 +1,40 @@
-//
-//  config_util.h
-//  im-server-mac-new
-//
-//  Created by wubenqi on 15/7/16.
-//  Copyright (c) 2015年 benqi. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: config_util.h
+ Update Time: Thu 15 Jun 2023 00:40:05 CST
+ brief:
+*/
 
 #ifndef FILE_SERVER_CONFIG_UTIL_H_
 #define FILE_SERVER_CONFIG_UTIL_H_
 
 #include <list>
 
-#include "base/singleton.h"
 #include "base/pb/protocol/IM.BaseDefine.pb.h"
+#include "base/singleton.h"
 
 class ConfigUtil : public Singleton<ConfigUtil> {
 public:
     ~ConfigUtil() { }
-    
+
     void AddAddress(const char* ip, uint16_t port);
-    const std::list<IM::BaseDefine::IpAddr>& GetAddressList() const {
+    const std::list<IM::BaseDefine::IpAddr>& GetAddressList() const
+    {
         return addrs_;
     }
-    
+
     void SetTaskTimeout(uint32_t timeout) { task_timeout_ = timeout; }
     uint32_t GetTaskTimeout() const { return task_timeout_; }
-    
+
 private:
     friend class Singleton<ConfigUtil>;
-    
+
     ConfigUtil()
-        : task_timeout_(3600) { }
-    
+        : task_timeout_(3600)
+    {
+    }
+
     std::list<IM::BaseDefine::IpAddr> addrs_;
     uint32_t task_timeout_;
 };

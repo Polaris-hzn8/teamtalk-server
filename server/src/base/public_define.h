@@ -1,10 +1,10 @@
-//
-//  public_define.h
-//  im-server-mac-new
-//
-//  Created by luoning on 14-12-24.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: public_define.h
+ Update Time: Tue 13 Jun 2023 14:58:46 CST
+ brief: 
+*/
 
 #ifndef _public_define_h
 #define _public_define_h
@@ -42,15 +42,16 @@ enum {
 #define CLIENT_TYPE_FLAG_MOBILE  0x02
 #define CLIENT_TYPE_FLAG_BOTH    0x03
 
-/*
-enum {
-    CLIENT_TYPE_WINDOWS     = 0x01,
-    CLIENT_TYPE_MAC         = 0x02,
-    CLIENT_TYPE_IOS         = 0x11,
-    CLIENT_TYPE_ANDROID     = 0x12,
-};
-*/
 
+// enum {
+//     CLIENT_TYPE_WINDOWS     = 0x01,
+//     CLIENT_TYPE_MAC         = 0x02,
+//     CLIENT_TYPE_IOS         = 0x11,
+//     CLIENT_TYPE_ANDROID     = 0x12,
+// };
+
+
+///////////////////////////////////CHECK_CLIENT_TYPE_PC/////////////////////////
 #define CHECK_CLIENT_TYPE_PC(type) \
 ({\
 bool bRet = false;\
@@ -77,22 +78,20 @@ enum {
     GENDER_WOMAN    = 2,
 };
 
-/*
-enum {
-    SESSION_TYPE_SINGLE     = 0x01,
-    SESSION_TYPE_GROUP      = 0x02,
-};
-*/
+// enum {
+//     SESSION_TYPE_SINGLE     = 0x01,
+//     SESSION_TYPE_GROUP      = 0x02,
+// };
 
-/*
-enum {
-    MSG_TYPE_SINGLE_TEXT    = 0x01,
-    MSG_TYPE_SINGLE_AUDIO   = 0x02,
-    MSG_TYPE_GROUP_TEXT     = 0x11,
-    MSG_TYPE_GROUP_AUDIO    = 0x12,
-};
-*/
+// enum {
+//     MSG_TYPE_SINGLE_TEXT    = 0x01,
+//     MSG_TYPE_SINGLE_AUDIO   = 0x02,
+//     MSG_TYPE_GROUP_TEXT     = 0x11,
+//     MSG_TYPE_GROUP_AUDIO    = 0x12,
+// };
 
+
+///////////////////////////////////////////////CHECK_MSG_TYPE_SINGLE//////////////////////////////////////////////////
 #define CHECK_MSG_TYPE_SINGLE(type) \
 ({\
 bool bRet = false;\
@@ -115,8 +114,7 @@ bRet;\
 })
 
 
-
-
+////////////////////////////////////////定义结构体//////////////////////////////////////////////
 typedef struct AudioMsgInfo{
     uint32_t    audioId;
     uint32_t    fileSize;
@@ -126,8 +124,12 @@ typedef struct AudioMsgInfo{
     
 } AudioMsgInfo_t;
 
-typedef struct DBUserInfo_t
-{
+/**
+ * 结构体可以用来表示用户的基本信息
+ * 并通过赋值运算符重载函数实现对象之间的赋值操作
+*/
+typedef struct DBUserInfo_t {
+    /* 成员变量 */
     uint32_t nId;//用户ID
     uint8_t nSex;// 用户性别 1.男;2.女
     uint8_t nStatus; // 用户状态0 正常， 1 离职
@@ -139,10 +141,11 @@ typedef struct DBUserInfo_t
     string strEmail;// Email
     string strAvatar;// 头像
     string sign_info;//个性签名
-    DBUserInfo_t& operator=(const DBUserInfo_t& rhs)
-    {
-        if(this != &rhs)
-        {
+
+    /* 赋值运算符重载函数 用于DBUserInfo_t对象之间的赋值操作 */
+    DBUserInfo_t& operator=(const DBUserInfo_t& rhs) {
+        /* 避免自我赋值 */
+        if(this != &rhs) {
             nId = rhs.nId;
             nSex = rhs.nSex;
             nStatus = rhs.nStatus;
@@ -157,21 +160,25 @@ typedef struct DBUserInfo_t
         }
         return *this;
     }
-    
 } DBUserInfo_t;
 
 typedef hash_map<uint32_t, DBUserInfo_t*> DBUserMap_t;
 
-typedef struct DBDeptInfo_t
-{
+
+/**
+ * 结构体可以用于存储部门的基本信息
+ * 并通过赋值运算符重载函数实现对象之间的赋值操作
+*/
+typedef struct DBDeptInfo_t {
+    /* 成员变量 */
     uint32_t nId;
     uint32_t nParentId;
     string strName;
     
-    DBDeptInfo_t& operator=(const DBDeptInfo_t& rhs)
-    {
-        if(this != &rhs)
-        {
+    /* 赋值运算符重载函数 用于DBDeptInfo_t对象之间的赋值操作 */
+    DBDeptInfo_t& operator=(const DBDeptInfo_t& rhs) {
+        /* 避免自我赋值 */
+        if(this != &rhs) {
             nId = rhs.nId;
             nParentId = rhs.nParentId;
             strName = rhs.strName;
@@ -184,26 +191,42 @@ typedef struct DBDeptInfo_t
 typedef hash_map<uint32_t, DBDeptInfo_t*> DBDeptMap_t;
 
 
+/**
+ * user_conn_t 用于表示用户连接信息
+ * 方便地记录用户的连接情况，并对连接数量进行统计和处理
+*/
 typedef struct {
-    uint32_t 	user_id;
-    uint32_t	conn_cnt;
+    uint32_t 	user_id;//用户id
+    uint32_t	conn_cnt;//连接数量
 } user_conn_t;
 
+/**
+ * user_stat_t 用于存储用户的状态信息
+*/
 typedef struct {
-    uint32_t user_id;
-    uint32_t status;
-    uint32_t client_type;
+    uint32_t user_id;//用户ID
+    uint32_t status;//用户状态
+    uint32_t client_type;//登录客户端类型
 } user_stat_t;
 
-typedef struct
-{
-    uint32_t user_id;
-    set<uint32_t> allow_user_ids;
-    set<uint32_t> allow_group_ids;
-    set<string>  authed_ips;
-    set<string>  authed_interfaces;
+/**
+ * auth_struct 表示授权信息
+ * 通过使用 auth_struct 结构体，可以方便地记录和管理授权信息
+ * 例如确定用户是否有权限访问某些资源、验证用户的身份等
+ * 
+ * set是C++标准库中的容器，用于存储不重复的元素，并且可以进行高效的插入、删除和查找操作
+*/
+typedef struct {
+    uint32_t user_id;//用户id
+    set<uint32_t> allow_user_ids;//允许访问的用户id集合
+    set<uint32_t> allow_group_ids;//允许访问的用户组id集合
+    set<string>  authed_ips;//已授权的IP地址集合
+    set<string>  authed_interfaces;//已授权的接口名称集合
 } auth_struct;
+
 
 #define MAX_MSG_LEN     4096
 
 #endif
+
+

@@ -6,7 +6,7 @@
 # setup mysql
 
 IM_SQL=ttopen.sql
-MYSQL_PASSWORD=123456
+MYSQL_PASSWORD=20001201
 
 
 print_hello(){
