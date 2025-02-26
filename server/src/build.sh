@@ -17,7 +17,7 @@ build() {
     fi
 
     #####################################################################
-    # 编译base目录 
+    # 编译base
 	cd base
     cmake .
 	make
@@ -33,7 +33,7 @@ build() {
     fi
 
     #####################################################################
-    # 编译base目录 
+    # 编译slog目录
     cd ../slog
     cmake .
     make
@@ -52,7 +52,7 @@ build() {
 
 
     #####################################################################
-    # 1.编译login_server目录 
+    # 1.login_server编译
     cd ../login_server
     cmake .
 	make
@@ -64,7 +64,7 @@ build() {
     fi
 
     #####################################################################
-    # 1.编译route_server目录
+    # 2.route_server编译
 	cd ../route_server
     cmake .
 	make
@@ -75,10 +75,8 @@ build() {
         exit;
     fi
 
-
-
     #####################################################################
-    # 1.编译msg_server目录
+    # 3.msg_server编译
 	cd ../msg_server
     cmake .
 	make
@@ -89,9 +87,8 @@ build() {
         exit;
     fi
 
-
     #####################################################################
-    # 1.编译http_msg_server目录
+    # 4.http_msg_server编译
     cd ../http_msg_server
     cmake .
     make
@@ -102,9 +99,8 @@ build() {
         exit;
     fi
 
-
     #####################################################################
-    # 1.编译file_server目录
+    # 5.file_server编译
     cd ../file_server
     cmake .
     make
@@ -115,9 +111,8 @@ build() {
         exit;
     fi
 
-
     #####################################################################
-    # 1.编译push_server目录
+    # 6.push_server编译
     cd ../push_server
     cmake .
     make
@@ -128,9 +123,8 @@ build() {
         exit;
     fi
 
-
     #####################################################################
-    # 1.编译tools目录
+    # 7.tools编译
     cd ../tools
     make
     if [ $? -eq 0 ]; then
@@ -141,7 +135,7 @@ build() {
     fi
 
     #####################################################################
-    # 1.编译db_proxy_server目录
+    # 8.db_proxy_server编译
     cd ../db_proxy_server
     cmake .
     make
@@ -152,8 +146,8 @@ build() {
         exit;
     fi
 
-
     #####################################################################
+    # 9.msfs编译
     cd ../msfs
     cmake .
     make
@@ -165,6 +159,7 @@ build() {
     fi
 
     #####################################################################
+    # 运行目录创建
 	cd ../
 
     mkdir -p ../run/login_server
@@ -176,10 +171,8 @@ build() {
     mkdir -p ../run/http_msg_server
     mkdir -p ../run/db_proxy_server
 
-
-
     #####################################################################
-	#copy executables to run/ dir
+	# 可执行文件拷贝
 	cp login_server/login_server ../run/login_server/
 
 	cp route_server/route_server ../run/route_server/
