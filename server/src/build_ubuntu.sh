@@ -1,63 +1,26 @@
 #!/bin/bash
 
-build_part1() {
-    export CPLUS_INCLUDE_PATH=$PWD/slog
-    export LD_LIBRARY_PATH=$PWD/slog
-    export LIBRARY_PATH=$PWD/slog:$LIBRARY_PATH
-
-    apt-get -y install cmake
-    apt-get -y install libuu-dev
-    apt-get -y install libcurl4-openssl-dev
-    apt-get -y install libssl-dev
-    apt-get -y install libcurl-dev 
-    #sudo apt-get -y install liblog4cxx10-dev
-    #sudo apt-get -y install libprotobuf-lite9v5 
-    #sudo apt-get -y install protobuf-compiler 
-    #sudo apt-get -y install libprotobuf-dev
-
-    echo "#ifndef __VERSION_H__" > base/version.h
-    echo "#define __VERSION_H__" >> base/version.h
-    echo "#define VERSION \"$1\"" >> base/version.h
-    echo "#endif" >> base/version.h
-
-    if [ ! -d lib ]
-    then
-        mkdir lib
-    fi
-
-    CURPWD=$PWD	
-
-    for i in base slog  route_server msg_server http_msg_server file_server push_server tools db_proxy_server msfs login_server ; do     
-        cd $CURPWD/$i
-        cmake .
-        make
-        if [ $? -eq 0 ]; then
-            echo "make msfs successed";
-        else
-            echo "make msfs failed";
-            exit;
-        fi
-    done
-
-    echo $CURPWD
-    echo $build_version
-    echo 
-}
-
 build() {
-    export CPLUS_INCLUDE_PATH=$PWD/slog
-    export LD_LIBRARY_PATH=$PWD/slog
-    export LIBRARY_PATH=$PWD/slog:$LIBRARY_PATH
+    # 基本工具安装
+    # apt-get -y install cmake
+    # apt-get -y install libuu-dev
+    # apt-get -y install libcurl4-openssl-dev
+    # apt-get -y install libssl-dev
+    # apt-get -y install libcurl-dev
 
-    apt-get -y install cmake
-    apt-get -y install libuu-dev
-    apt-get -y install libcurl4-openssl-dev
-    apt-get -y install libssl-dev
-    apt-get -y install libcurl-dev 
-    #sudo apt-get -y install liblog4cxx10-dev
-    #sudo apt-get -y install libprotobuf-lite9v5 
-    #sudo apt-get -y install protobuf-compiler 
-    #sudo apt-get -y install libprotobuf-dev
+    # 第三方及本地库引入
+    # base
+    export CPLUS_INCLUDE_PATH=$PWD/base:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$PWD/base/build:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$PWD/base/build:$LIBRARY_PATH
+    # slog
+    export CPLUS_INCLUDE_PATH=$PWD/slog/include:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$PWD/slog/build:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$PWD/slog/build:$LIBRARY_PATH
+    # protobuf
+    export CPLUS_INCLUDE_PATH=$PWD/protobuf/include:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$PWD/protobuf/lib:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$PWD/protobuf/lib:$LIBRARY_PATH
 
     echo "#ifndef __VERSION_H__" > base/version.h
     echo "#define __VERSION_H__" >> base/version.h
@@ -69,28 +32,40 @@ build() {
         mkdir lib
     fi
 
-    CURPWD=$PWD	
+    CURPWD=$PWD
 
-    for i in base slog  route_server msg_server http_msg_server file_server push_server tools db_proxy_server msfs login_server ; do     
+    # START COMPILE SERVERS
+    # base slog tools
+    # route_server msg_server http_msg_server file_server push_server db_proxy_server msfs login_server
+    for i in route_server msg_server http_msg_server file_server push_server db_proxy_server msfs login_server; do
         cd $CURPWD/$i
-        cmake .
+
+        if [ ! -d lib ]
+        then
+            mkdir build
+        fi
+
+        cd build
+        cmake ../
         make
         if [ $? -eq 0 ]; then
-            echo "make msfs successed";
+            echo ">>> makeout: $i succeed~";
         else
-            echo "make msfs failed";
+            echo ">>> makeout: $i failed!";
             exit;
         fi
     done
 
     cd $CURPWD
 
-    cp base/libbase.a lib/
-
+    # base -> lib
+    cp base/build/libbase.a lib/
+    # slog -> base/slog
     mkdir base/slog/lib
     cp slog/slog_api.h base/slog/
     cp slog/libslog.so base/slog/lib/
 
+    # copy executables to run/
     mkdir -p ../run/login_server
     mkdir -p ../run/route_server
     mkdir -p ../run/msg_server
@@ -99,31 +74,25 @@ build() {
     mkdir -p ../run/push_server
     mkdir -p ../run/http_msg_server
     mkdir -p ../run/db_proxy_server
-
-    #copy executables to run/ dir
     cp login_server/login_server ../run/login_server/
-
     cp route_server/route_server ../run/route_server/
-
     cp msg_server/msg_server ../run/msg_server/
-
     cp http_msg_server/http_msg_server ../run/http_msg_server/
-
     cp file_server/file_server ../run/file_server/
-
     cp push_server/push_server ../run/push_server/
-
     cp db_proxy_server/db_proxy_server ../run/db_proxy_server/
-
     cp msfs/msfs ../run/msfs/
-
     cp tools/daeml ../run/
 
+    # 软件打包
+    # im-server-1.0
+    # copy executables and configs to im-server-1.0/
     build_version=im-server-$1
     build_name=$build_version.tar.gz
     if [ -e "$build_name" ]; then
         rm $build_name
     fi
+
     mkdir -p ../$build_version
     mkdir -p ../$build_version/login_server
     mkdir -p ../$build_version/route_server
@@ -137,37 +106,31 @@ build() {
 
     cp login_server/loginserver.conf ../$build_version/login_server/
     cp login_server/login_server ../$build_version/login_server/
-
     cp route_server/route_server ../$build_version/route_server/
     cp route_server/routeserver.conf ../$build_version/route_server/
-
     cp msg_server/msg_server ../$build_version/msg_server/
     cp msg_server/msgserver.conf ../$build_version/msg_server/
-
     cp http_msg_server/http_msg_server ../$build_version/http_msg_server/
     cp http_msg_server/httpmsgserver.conf ../$build_version/http_msg_server/
-
     cp file_server/file_server ../$build_version/file_server/
     cp file_server/fileserver.conf ../$build_version/file_server/
-
     cp push_server/push_server ../$build_version/push_server/
     cp push_server/pushserver.conf ../$build_version/push_server/
-
     cp db_proxy_server/db_proxy_server ../$build_version/db_proxy_server/
     cp db_proxy_server/dbproxyserver.conf ../$build_version/db_proxy_server/
-
     cp msfs/msfs ../$build_version/msfs/
     cp msfs/msfs.conf.example ../$build_version/msfs/
 
     cp slog/log4cxx.properties ../$build_version/lib/
-    cp slog/libslog.so  ../$build_version/lib/
     cp -a slog/lib/liblog4cxx.so* ../$build_version/lib/
-    cp sync_lib_for_zip.sh ../$build_version/
+    cp slog/libslog.so  ../$build_version/lib/
 
-    cp tools/daeml ../$build_version/
     cp ../run/restart.sh ../$build_version/
+    cp sync_lib_for_zip.sh ../$build_version/
+    cp tools/daeml ../$build_version/
 
     cd ../
+    
     tar zcvf    $build_name $build_version
 
     rm -rf $build_version
@@ -175,90 +138,94 @@ build() {
 
 clean() {
     cd base
-    make clean
+    rm -rf build
     cd ../login_server
-    make clean
+    rm -rf build
     cd ../route_server
-    make clean
+    rm -rf build
     cd ../msg_server
-    make clean
+    rm -rf build
     cd ../http_msg_server
-    make clean
+    rm -rf build
     cd ../file_server
-    make clean
+    rm -rf build
     cd ../push_server
-    make clean
+    rm -rf build
     cd ../db_proxy_server
-    make clean
+    rm -rf build
     cd ../push_server
-    make clean
+    rm -rf build
 }
 
 distclean() {
-    # base slog  route_server msg_server http_msg_server file_server push_server tools db_proxy_server msfs login_server
+    # tools
     # base
     cd base
     echo "clean base"
-    make clean
-    rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake base
-    rm -rf pb/google 
-    rm -rf pb/lib
-    rm -rf slog/lib
+    rm -rf build pb/google pb/lib slog
 
     # slog
     cd ../slog
     echo "clean slog"
-    make clean
-    rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake libslog.so include lib
-   
+    rm -rf build include lib
+
+    # protobuf
+    cd ../protobuf
+    echo "clean protobuf"
+    rm -rf bin include lib protobuf-2.6.1
+
+    # log4cxx
+    echo "clean log4cxx"
+    cd ../log4cxx
+    rm -rf apache-log4cxx-0.10.0 include lib
+
     # route_server
     cd ../route_server
     echo "clean route_server"
     make clean
     rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake route_server
 
+    # login_server
     cd ../login_server
     echo "clean login_server"
     make clean
     rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake login_server
     
+    # msg_server
     cd ../msg_server
     echo "clean msg_server"
     make clean
     rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake msg_server
 
+    # http_msg_server
     cd ../http_msg_server
     echo "clean http_msg_server"
     make clean
     rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake http_msg_server
 
+    # file_server
     cd ../file_server
     echo "clean file_server"
     make clean
     rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake file_server
 
+    # push_server
     cd ../push_server
     echo "clean push_server"
     make clean
     rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake push_server
 
+    # db_proxy_server
     cd ../db_proxy_server
     echo "clean db_proxy_server"
     make clean
     rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake db_proxy_server
 
+    # msfs
     cd ../msfs
     echo "clean msfs"
     make clean
     rm -rf Makefile CMakeCache.txt CMakeFiles cmake_install.cmake msfs
-
-    cd ../protobuf
-    echo "clean protobuf"
-    rm -rf bin  include  lib  protobuf-2.6.1
-
-    echo "clean log4cxx"
-    cd ../log4cxx
-    rm -rf apache-log4cxx-0.10.0 include lib
 }
 
 print_help() {
@@ -286,7 +253,7 @@ case $1 in
 
         echo $2
         echo "build..."
-        build_part1 $2
+        build $2
         ;;
     *)
     print_help
