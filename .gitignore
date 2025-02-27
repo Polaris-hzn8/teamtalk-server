@@ -33,3 +33,18 @@
 
 # vscode_folders
 .vscode/
+
+# protobuff
+server/src/protobuf/*
+!server/src/protobuf/protobuf-2.6.1.tar.gz
+server/src/base/pb
+!server/src/base/pb/protocal
+
+# log4cxx
+server/src/slog/include
+server/src/slog/lib
+server/src/log4cxx/*
+!server/src/log4cxx/apache-log4cxx-0.10.0.tar.gz
+!server/src/log4cxx/console.cpp
+!server/src/log4cxx/inputstreamreader.cpp
+!server/src/log4cxx/socketoutputstream.cpp

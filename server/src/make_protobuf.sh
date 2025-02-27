@@ -1,10 +1,8 @@
 #!/bin/bash
-#编译安装protobuf
 
 PROTOBUF=protobuf-2.6.1
 CUR_DIR=
 
-# 检查当前执行用户权限
 check_user() {
     if [ $(id -u) != "0" ]; then
         echo "Error: You must be root to run this script, please use root to install im"
@@ -12,7 +10,6 @@ check_user() {
     fi
 }
 
-# 用于获取当前脚本所在的目录路径
 get_cur_dir() {
     case $0 in
         /*)
@@ -61,7 +58,6 @@ get_cur_dir() {
     CUR_DIR=$(dirname "${REALPATH}")
 }
 
-# 安装protobuf
 build_protobuf(){
     cd protobuf
     tar -xf $PROTOBUF.tar.gz

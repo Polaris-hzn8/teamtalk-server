@@ -1,5 +1,4 @@
 #!/bin/bash
-#安装mysql
 
 MARIADB_DEVEL=MariaDB-10.0.17-centos6-x86_64-devel
 MARIADB_DEVEL_DOWNLOAD_PATH=http://sfo1.mirrors.digitalocean.com/mariadb/mariadb-10.0.17/yum/centos6-amd64/rpms/$MARIADB_DEVEL.rpm
@@ -104,7 +103,6 @@ build_mariadb_devel(){
 
         yum -y install openssl-devel
 
-
         rpm -ivh MariaDB-*
         RET=$?
         if [ $RET -eq 0 ]; then
@@ -116,8 +114,6 @@ build_mariadb_devel(){
             return 1;
         fi
     fi
-
-    
 }
 
 check_user
