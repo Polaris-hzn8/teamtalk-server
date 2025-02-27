@@ -1,14 +1,56 @@
 #!/bin/bash
 
+build_part1() {
+    export CPLUS_INCLUDE_PATH=$PWD/slog
+    export LD_LIBRARY_PATH=$PWD/slog
+    export LIBRARY_PATH=$PWD/slog:$LIBRARY_PATH
+
+    apt-get -y install cmake
+    apt-get -y install libuu-dev
+    apt-get -y install libcurl4-openssl-dev
+    apt-get -y install libssl-dev
+    apt-get -y install libcurl-dev 
+    #sudo apt-get -y install liblog4cxx10-dev
+    #sudo apt-get -y install libprotobuf-lite9v5 
+    #sudo apt-get -y install protobuf-compiler 
+    #sudo apt-get -y install libprotobuf-dev
+
+    echo "#ifndef __VERSION_H__" > base/version.h
+    echo "#define __VERSION_H__" >> base/version.h
+    echo "#define VERSION \"$1\"" >> base/version.h
+    echo "#endif" >> base/version.h
+
+    if [ ! -d lib ]
+    then
+        mkdir lib
+    fi
+
+    CURPWD=$PWD	
+
+    for i in base slog  route_server msg_server http_msg_server file_server push_server tools db_proxy_server msfs login_server ; do     
+        cd $CURPWD/$i
+        cmake .
+        make
+        if [ $? -eq 0 ]; then
+            echo "make msfs successed";
+        else
+            echo "make msfs failed";
+            exit;
+        fi
+    done
+
+    echo $CURPWD
+    echo $build_version
+    echo 
+}
 
 build() {
     export CPLUS_INCLUDE_PATH=$PWD/slog
     export LD_LIBRARY_PATH=$PWD/slog
     export LIBRARY_PATH=$PWD/slog:$LIBRARY_PATH
 
-
     apt-get -y install cmake
-    apt-get -y install libuu-dev 
+    apt-get -y install libuu-dev
     apt-get -y install libcurl4-openssl-dev
     apt-get -y install libssl-dev
     apt-get -y install libcurl-dev 
@@ -129,7 +171,7 @@ build() {
     tar zcvf    $build_name $build_version
 
     rm -rf $build_version
-} 
+}
 
 clean() {
     cd base
@@ -244,7 +286,7 @@ case $1 in
 
         echo $2
         echo "build..."
-        build $2
+        build_part1 $2
         ;;
     *)
     print_help

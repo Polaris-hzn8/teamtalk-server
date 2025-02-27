@@ -1,8 +1,4 @@
-s is a setup scripts for im server
-# author: luoning
-# date: 09/02/2014
-
-# setup im server
+#!/bin/bash
 
 INSTALL_DIR=.
 IM_SERVER=im-server-1.0

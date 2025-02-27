@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 build() {
 	export CPLUS_INCLUDE_PATH=$PWD/slog
 	export LD_LIBRARY_PATH=$PWD/slog
