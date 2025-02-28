@@ -2,13 +2,13 @@
 # this is a setup scripts for mysql table init.
 # setup mysql
 
-IM_SQL=ttopen.sql
+SQL_FILE=ttopen.sql
 MYSQL_PASSWORD=20001201
 
 
 print_hello(){
 	echo "==========================================="
-	echo "$1 mysql for TeamTalk"
+	echo "$1 prepare mysql tables for teamtalk."
 	echo "==========================================="
 }
 
@@ -21,15 +21,15 @@ check_user() {
 
 create_database() {
 	cd ./conf/
-	if [ -f "$IM_SQL" ]; then
-		echo "$IM_SQL existed, begin to run $IM_SQL"
+	if [ -f "$SQL_FILE" ]; then
+		echo "$SQL_FILE existed, begin to run $SQL_FILE"
 	else
-		echo "Error: $IM_SQL not existed."
+		echo "Error: $SQL_FILE not existed."
 		cd ..
 		return 1
 	fi
 
-	mysql -u root -p$MYSQL_PASSWORD < $IM_SQL
+	mysql -u root -p$MYSQL_PASSWORD < $SQL_FILE
 	if [ $? -eq 0 ]; then
 		echo "run sql successed."
 		cd ..
