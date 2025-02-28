@@ -49,10 +49,24 @@ server/src/log4cxx/*
 # slog
 server/src/slog/include
 server/src/slog/lib
-server/src/base/slog
+server/src/base/lib
 
 # tools
 server/src/tools/daeml
 
 # cmake
 build/
+
+# run
+server/run/daeml
+server/run/msg_server/msg_server
+server/run/file_server/file_server
+server/run/push_server/push_server
+server/run/login_server/login_server
+server/run/route_server/route_server
+server/run/http_msg_server/http_msg_server
+server/run/db_proxy_server/db_proxy_server
+server/run/msfs/msfs
+
+# output_pack
+server/*.tar.gz
