@@ -7,11 +7,10 @@ FILE_SERVER=file_server
 LOGIN_SERVER=login_server
 MSG_SERVER=msg_server
 ROUTE_SERVER=route_server
-MSFS_SERVER=msfs
 HTTP_MSG_SERVER=http_msg_server
 PUSH_SERVER=push_server
 DB_PROXY_SERVER=db_proxy_server
-
+MSFS_SERVER=msfs
 
 FILE_SERVER_CONF=fileserver.conf
 LOGIN_SERVER_CONF=loginserver.conf
@@ -64,7 +63,6 @@ clean_yum() {
 }
 
 build_im_server() {
-    
     #yum -y install yum-fastestmirror
     clean_yum
     #yum -y install libuuid-devel
@@ -134,12 +132,11 @@ case $1 in
     install)
         print_hello $1
         check_user
-        check_os
+        # check_os
 
         build_im_server
         run_im_server
         ;;
-
     run)
         cd im-server-1.0/
         run_im_server
