@@ -37,7 +37,7 @@
 # protobuff
 src/protobuf/*
 !src/protobuf/protobuf-2.6.1.tar.gz
-!src/base/pb
+src/base/pb
 !src/base/pb/protocal
 
 # log4cxx
@@ -50,6 +50,7 @@ src/log4cxx/*
 src/slog/include
 src/slog/lib
 src/base/lib
+src/base/slog
 
 # tools
 src/tools/daeml
@@ -58,4 +59,5 @@ src/tools/daeml
 build/
 
 # output_pack
-src/*.tar.gz
+im-server-*.tar.gz
+im-server-*/

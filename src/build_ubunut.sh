@@ -1,6 +1,9 @@
 #!/bin/bash
 
 build() {
+    CURPWD=$PWD
+
+    echo $CURPWD
     ###################################################################################
     # 基本工具安装
     # apt-get -y install cmake
@@ -28,8 +31,6 @@ build() {
     echo "#define __VERSION_H__" >> base/version.h
     echo "#define VERSION \"$1\"" >> base/version.h
     echo "#endif" >> base/version.h
-
-    CURPWD=$PWD
 
     cd $CURPWD
     for i in base slog; do
@@ -59,7 +60,7 @@ build() {
     # copy libbase.a
     cp base/build/libbase.a lib/
     # copy libslog.so
-    mkdir base/slog/lib
+    mkdir -p base/slog/lib
     cp slog/slog_api.h base/slog/
     cp slog/build/libslog.so base/slog/lib/
 
@@ -99,7 +100,7 @@ build() {
     fi
 
     rm -rf $build_name
-    rm -rf $build_version
+    rm -rf $build_version.tar.gz
 
     mkdir -p ../$build_version
     mkdir -p ../$build_version/login_server
@@ -135,7 +136,7 @@ build() {
     cp slog/log4cxx.properties ../$build_version/conf/
 
     # copy libs
-    cp slog/libslog.so  ../$build_version/lib/
+    cp slog/build/libslog.so  ../$build_version/lib/
     cp -a slog/lib/liblog4cxx.so* ../$build_version/lib/
 
     # copy sript
@@ -174,6 +175,7 @@ clean() {
     rm -rf build
     cd ../push_server
     rm -rf build
+    cd ../
 }
 
 distclean() {

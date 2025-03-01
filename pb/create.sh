@@ -1,7 +1,7 @@
 #!/bin/sh
 SRC_DIR=./
 DST_DIR=./gen
-PROTOC=$PWD/../server/src/protobuf/bin/protoc
+PROTOC=$PWD/../src/protobuf/bin/protoc
 #C++
 mkdir -p $DST_DIR/cpp
 $PROTOC -I=$SRC_DIR --cpp_out=$DST_DIR/cpp/ $SRC_DIR/*.proto
