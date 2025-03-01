@@ -1,0 +1,21 @@
+安装包组成结构：
+conf
+  loginserver.conf
+  msfs.conf
+  ......
+  log4cxx.properties
+lib
+  libslog.so
+  liblog4cxx.so
+loginserver
+  loginserver
+msg_server
+  msg_server
+file_server
+  file_server
+restart.sh
+monitor.sh
+ttopen.sh
+setup.sh
+ttopen.sql
+daeml
