@@ -35,38 +35,27 @@
 .vscode/
 
 # protobuff
-server/src/protobuf/*
-!server/src/protobuf/protobuf-2.6.1.tar.gz
-server/src/base/pb
-!server/src/base/pb/protocal
+src/protobuf/*
+!src/protobuf/protobuf-2.6.1.tar.gz
+src/base/pb
+!src/base/pb/protocal
 
 # log4cxx
-server/src/log4cxx/*
-!server/src/log4cxx/apache-log4cxx-0.10.0.tar.gz
-!server/src/log4cxx/console.cpp
-!server/src/log4cxx/inputstreamreader.cpp
-!server/src/log4cxx/socketoutputstream.cpp
+src/log4cxx/*
+!src/log4cxx/apache-log4cxx-0.10.0.tar.gz
+!src/log4cxx/console.cpp
+!src/log4cxx/inputstreamreader.cpp
+!src/log4cxx/socketoutputstream.cpp
 # slog
-server/src/slog/include
-server/src/slog/lib
-server/src/base/lib
+src/slog/include
+src/slog/lib
+src/base/lib
 
 # tools
-server/src/tools/daeml
+src/tools/daeml
 
 # cmake
 build/
 
-# run
-server/run/daeml
-server/run/msg_server/msg_server
-server/run/file_server/file_server
-server/run/push_server/push_server
-server/run/login_server/login_server
-server/run/route_server/route_server
-server/run/http_msg_server/http_msg_server
-server/run/db_proxy_server/db_proxy_server
-server/run/msfs/msfs
-
 # output_pack
-server/*.tar.gz
+src/*.tar.gz
