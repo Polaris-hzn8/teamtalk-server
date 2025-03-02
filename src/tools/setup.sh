@@ -72,28 +72,28 @@ remove_lib() {
 
 sync_lib() {
     cp -a ./lib/libslog.so  ./login_server/
-    cp -a ./lib/liblog4cxx.so* ./login_server/
+    cp -a ./lib/libprotobuf-lite* ./login_server/
 
     cp -a ./lib/libslog.so  ./route_server/
-    cp -a ./lib/liblog4cxx.so* ./route_server/
+    cp -a ./lib/libprotobuf-lite* ./route_server/
 
     cp -a ./lib/libslog.so  ./msg_server/
-    cp -a ./lib/liblog4cxx.so* ./msg_server/
+    cp -a ./lib/libprotobuf-lite* ./msg_server/
 
     cp -a ./lib/libslog.so  ./http_msg_server/
-    cp -a ./lib/liblog4cxx.so* ./http_msg_server/
+    cp -a ./lib/libprotobuf-lite* ./http_msg_server/
 
     cp -a ./lib/libslog.so  ./file_server/
-    cp -a ./lib/liblog4cxx.so* ./file_server/
+    cp -a ./lib/libprotobuf-lite* ./file_server/
 
     cp -a ./lib/libslog.so  ./push_server/
-    cp -a ./lib/liblog4cxx.so* ./push_server/
+    cp -a ./lib/libprotobuf-lite* ./push_server/
 
     cp -a ./lib/libslog.so  ./db_proxy_server/
-    cp -a ./lib/liblog4cxx.so* ./db_proxy_server/
+    cp -a ./lib/libprotobuf-lite* ./db_proxy_server/
 
     cp -a ./lib/libslog.so  ./msfs/
-    cp -a ./lib/liblog4cxx.so* ./msfs/
+    cp -a ./lib/libprotobuf-lite* ./msfs/
 }
 
 sync_conf() {
