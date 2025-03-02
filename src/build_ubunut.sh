@@ -137,7 +137,7 @@ build() {
 
     # copy libs
     cp slog/build/libslog.so  ../$build_version/lib/
-    cp -a slog/lib/liblog4cxx.so* ../$build_version/lib/
+    cp -a protobuf/lib/libprotobuf-lite.so* ../$build_version/lib/
 
     # copy sript
     cp tools/restart.sh ../$build_version/

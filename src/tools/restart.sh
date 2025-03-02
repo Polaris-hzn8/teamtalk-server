@@ -60,9 +60,9 @@ case $1 in
         restart $1
         ;;  
     *)
-    echo "Usage: "
-    echo "  ./restart.sh (login_server|msg_server|route_server|http_msg_server|file_server|push_server|msfs)"
-    ;;
+        echo "Usage: "
+        echo "  ./restart.sh (login_server|msg_server|route_server|http_msg_server|file_server|push_server|msfs)"
+        ;;
 esac
 
 
