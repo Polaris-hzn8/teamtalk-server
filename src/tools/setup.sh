@@ -59,6 +59,17 @@ clean_yum() {
     fi
 }
 
+remove_lib() {
+    rm -rf ./$LOGIN_SERVER_CONF/lib*
+    rm -rf ./$MSG_SERVER/lib*
+    rm -rf ./$ROUTE_SERVER/lib*
+    rm -rf ./$FILE_SERVER/lib*
+    rm -rf ./$MSFS_SERVER/lib*
+    rm -rf ./$HTTP_MSG_SERVER/lib*
+    rm -rf ./$PUSH_SERVER/lib*
+    rm -rf ./$DB_PROXY_SERVER/lib*
+}
+
 sync_lib() {
     cp -a ./lib/libslog.so  ./login_server/
     cp -a ./lib/liblog4cxx.so* ./login_server/
@@ -87,14 +98,14 @@ sync_lib() {
 
 sync_conf() {
     # slog conf
-    cp -a ./lib/log4cxx.properties ./login_server/
-    cp -a ./lib/log4cxx.properties ./route_server/
-    cp -a ./lib/log4cxx.properties ./msg_server/
-    cp -a ./lib/log4cxx.properties ./http_msg_server/
-    cp -a ./lib/log4cxx.properties ./file_server/
-    cp -a ./lib/log4cxx.properties ./push_server/
-    cp -a ./lib/log4cxx.properties ./db_proxy_server/
-    cp -a ./lib/log4cxx.properties ./msfs/
+    cp -a ./conf/log4cxx.properties ./login_server/
+    cp -a ./conf/log4cxx.properties ./route_server/
+    cp -a ./conf/log4cxx.properties ./msg_server/
+    cp -a ./conf/log4cxx.properties ./http_msg_server/
+    cp -a ./conf/log4cxx.properties ./file_server/
+    cp -a ./conf/log4cxx.properties ./push_server/
+    cp -a ./conf/log4cxx.properties ./db_proxy_server/
+    cp -a ./conf/log4cxx.properties ./msfs/
     # server conf
     cp -f ./conf/$LOGIN_SERVER_CONF $LOGIN_SERVER/
     cp -f ./conf/$MSG_SERVER_CONF $MSG_SERVER/
@@ -107,14 +118,14 @@ sync_conf() {
 }
 
 run_im_server() {
-    ./restart.sh $LOGIN_SERVER/$LOGIN_SERVER
-    ./restart.sh $ROUTE_SERVER/$ROUTE_SERVER
-    ./restart.sh $MSG_SERVER/$MSG_SERVER
-    ./restart.sh $FILE_SERVER/$FILE_SERVER
-    ./restart.sh $MSFS_SERVER/$MSFS_SERVER
-    ./restart.sh $HTTP_MSG_SERVER/$HTTP_MSG_SERVER
-    ./restart.sh $PUSH_SERVER/$PUSH_SERVER
-    ./restart.sh $DB_PROXY_SERVER/$DB_PROXY_SERVER
+    ./restart.sh $LOGIN_SERVER
+    ./restart.sh $ROUTE_SERVER
+    ./restart.sh $MSG_SERVER
+    ./restart.sh $FILE_SERVER
+    ./restart.sh $MSFS_SERVER
+    ./restart.sh $HTTP_MSG_SERVER
+    ./restart.sh $PUSH_SERVER
+    ./restart.sh $DB_PROXY_SERVER
 }
 
 print_help() {
@@ -148,6 +159,9 @@ case $1 in
         sync_lib
         sync_conf
         run_im_server
+        ;;
+    remove_lib)
+        remove_lib
         ;;
     *)
         print_help
