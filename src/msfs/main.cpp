@@ -77,8 +77,8 @@ void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pPar
 {
     if (msg == NETLIB_MSG_CONNECT) {
         CHttpConn* pConn = new CHttpConn();
-        //        CHttpTask* pTask = new CHttpTask(handle, pConn);
-        //        g_ThreadPool.AddTask(pTask);
+        // CHttpTask* pTask = new CHttpTask(handle, pConn);
+        // g_ThreadPool.AddTask(pTask);
         pConn->OnConnect(handle);
     } else {
         log("!!!error msg: %d", msg);
@@ -162,8 +162,7 @@ int main(int argc, char* argv[])
 
     CStrExplode listen_ip_list(listen_ip, ';');
     for (uint32_t i = 0; i < listen_ip_list.GetItemCnt(); i++) {
-        ret = netlib_listen(listen_ip_list.GetItem(i), listen_port,
-            http_callback, NULL);
+        ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, http_callback, NULL);
         if (ret == NETLIB_ERROR)
             return ret;
     }
@@ -178,6 +177,7 @@ int main(int argc, char* argv[])
     init_http_conn();
     printf("now enter the event loop...\n");
 
+    writePid();
     netlib_eventloop();
     return 0;
 }
