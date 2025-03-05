@@ -1,6 +1,6 @@
 #!/bin/bash
 
-build() {
+build_version() {
     CURPWD=$PWD
 
     echo $CURPWD
@@ -248,6 +248,43 @@ print_help() {
     echo "  $0 version version_str --- build a version"
 }
 
+build() {
+    CURPWD=$PWD
+    # base
+    export CPLUS_INCLUDE_PATH=$PWD/base:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$PWD/base/build:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$PWD/base/build:$LIBRARY_PATH
+    # slog
+    export CPLUS_INCLUDE_PATH=$PWD/slog/include:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$PWD/slog/build:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$PWD/slog/build:$LIBRARY_PATH
+    # protobuf
+    export CPLUS_INCLUDE_PATH=$PWD/protobuf/include:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$PWD/protobuf/lib:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$PWD/protobuf/lib:$LIBRARY_PATH
+
+    if [ ! -d $1 ]
+    then
+        echo "build failed: folder[$1] not exist."
+        exit;
+    fi
+
+    cd $1
+    rm -rf build
+    mkdir build
+    cd build
+    cmake ../
+    make
+    if [ $? -eq 0 ]; then
+        echo ">>> module build: $1 succeed~";
+    else
+        echo ">>> module build: $1 failed!";
+        exit;
+    fi
+
+    cd $CURPWD
+}
+
 case $1 in
     clean)
         echo "clean all build..."
@@ -263,16 +300,49 @@ case $1 in
             print_help
             exit
         fi
-
         clean
-
-        echo $2
-        echo "build..."
-        build $2
+        echo "version $2 in building..."
+        build_version $2
+        ;;
+    login_server)
+        build $1
+        cp $1/build/$1 ../im-server-1.0/$1
+        ;;
+    msg_server)
+        build $1
+        cp $1/build/$1 ../im-server-1.0/$1
+        ;;
+    route_server)
+        build $1
+        cp $1/build/$1 ../im-server-1.0/$1
+        ;;
+    http_msg_server)
+        build $1
+        cp $1/build/$1 ../im-server-1.0/$1
+        ;;
+    file_server)
+        build $1
+        cp $1/build/$1 ../im-server-1.0/$1
+        ;;
+    push_server)
+        build $1
+        cp $1/build/$1 ../im-server-1.0/$1
+        ;;
+    db_proxy_server)
+        build $1
+        cp $1/build/$1 ../im-server-1.0/$1
+        ;;
+    msfs)
+        build $1
+        cp $1/build/$1 ../im-server-1.0/$1
+        ;;
+    base)
+        build $1
+        cp base/build/libbase.a lib/
         ;;
     *)
     print_help
-    ;;
+    ;; 
 esac
 
 

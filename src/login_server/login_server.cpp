@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
     if (ret == NETLIB_ERROR)
         return ret;
 
-    //
+    //ClientListenIP Port
     CStrExplode client_listen_ip_list(client_listen_ip, ';');
     for (uint32_t i = 0; i < client_listen_ip_list.GetItemCnt(); i++) {
         ret = netlib_listen(client_listen_ip_list.GetItem(i), client_port, client_callback, NULL);
@@ -98,6 +98,7 @@ int main(int argc, char* argv[]) {
             return ret;
     }
 
+    //MsgServerListenIP Port
     CStrExplode msg_server_listen_ip_list(msg_server_listen_ip, ';');
     for (uint32_t i = 0; i < msg_server_listen_ip_list.GetItemCnt(); i++) {
         ret = netlib_listen(msg_server_listen_ip_list.GetItem(i), msg_server_port, msg_serv_callback, NULL);
@@ -105,6 +106,7 @@ int main(int argc, char* argv[]) {
             return ret;
     }
 
+    //HttpListenIP Port
     CStrExplode http_listen_ip_list(http_listen_ip, ';');
     for (uint32_t i = 0; i < http_listen_ip_list.GetItemCnt(); i++) {
         ret = netlib_listen(http_listen_ip_list.GetItem(i), http_port, http_callback, NULL);
