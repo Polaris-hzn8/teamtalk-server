@@ -1,6 +1,6 @@
 #!/bin/bash
 
-build_version() {
+pack_folder() {
     CURPWD=$PWD
 
     echo $CURPWD
@@ -13,7 +13,7 @@ build_version() {
     # apt-get -y install libcurl-dev
 
     ###################################################################################
-    # 第三方及本地库引入
+    # step1.第三方及本地库编译
     # base
     export CPLUS_INCLUDE_PATH=$PWD/base:$CPLUS_INCLUDE_PATH
     export LD_LIBRARY_PATH=$PWD/base/build:$LD_LIBRARY_PATH
@@ -64,11 +64,12 @@ build_version() {
     cp slog/slog_api.h base/slog/
     cp slog/build/libslog.so base/slog/lib/
 
-    cd $CURPWD
     ###################################################################################
-    # START COMPILE SERVERS
-    # base slog tools
-    # route_server msg_server http_msg_server file_server push_server db_proxy_server msfs login_server
+    # step2.所有业务服务器编译
+    # login_server msg_server route_server
+    # msfs file_server db_proxy_server http_msg_server
+    # push_server
+    cd $CURPWD
     for i in route_server msg_server http_msg_server file_server push_server db_proxy_server msfs login_server; do
         cd $CURPWD/$i
 
@@ -91,69 +92,68 @@ build_version() {
     cd $CURPWD
 
     ###################################################################################
-    # 软件打包 im-server-1.0
-    # copy executables and configs to im-server-1.0/
-    build_version=im-server-$1
-    build_name=$build_version.tar.gz
-    if [ -e "$build_name" ]; then
-        rm $build_name
+    # step3.打包所有编译结果与配置文件
+    # copy executables and configs to im-server-$version
+
+    pack_folder=pack_folder
+    target_name=im-server-$1.tar.gz
+    if [ -e "$target_name" ]; then
+        rm $target_name
     fi
 
-    rm -rf $build_name
-    rm -rf $build_version.tar.gz
-
-    mkdir -p ../$build_version
-    mkdir -p ../$build_version/login_server
-    mkdir -p ../$build_version/route_server
-    mkdir -p ../$build_version/msg_server
-    mkdir -p ../$build_version/file_server
-    mkdir -p ../$build_version/msfs
-    mkdir -p ../$build_version/http_msg_server
-    mkdir -p ../$build_version/push_server
-    mkdir -p ../$build_version/db_proxy_server
-    mkdir -p ../$build_version/lib
-    mkdir -p ../$build_version/conf
+    rm -rf pack_folder
+    mkdir -p ../$pack_folder
+    mkdir -p ../$pack_folder/login_server
+    mkdir -p ../$pack_folder/route_server
+    mkdir -p ../$pack_folder/msg_server
+    mkdir -p ../$pack_folder/file_server
+    mkdir -p ../$pack_folder/msfs
+    mkdir -p ../$pack_folder/http_msg_server
+    mkdir -p ../$pack_folder/push_server
+    mkdir -p ../$pack_folder/db_proxy_server
+    mkdir -p ../$pack_folder/lib
+    mkdir -p ../$pack_folder/conf
 
     # copy executables
-    cp login_server/build/login_server ../$build_version/login_server/
-    cp route_server/build/route_server ../$build_version/route_server/
-    cp msg_server/build/msg_server ../$build_version/msg_server/
-    cp http_msg_server/build/http_msg_server ../$build_version/http_msg_server/
-    cp file_server/build/file_server ../$build_version/file_server/
-    cp push_server/build/push_server ../$build_version/push_server/
-    cp db_proxy_server/build/db_proxy_server ../$build_version/db_proxy_server/
-    cp msfs/build/msfs ../$build_version/msfs/
+    cp login_server/build/login_server ../$pack_folder/login_server/
+    cp route_server/build/route_server ../$pack_folder/route_server/
+    cp msg_server/build/msg_server ../$pack_folder/msg_server/
+    cp http_msg_server/build/http_msg_server ../$pack_folder/http_msg_server/
+    cp file_server/build/file_server ../$pack_folder/file_server/
+    cp push_server/build/push_server ../$pack_folder/push_server/
+    cp db_proxy_server/build/db_proxy_server ../$pack_folder/db_proxy_server/
+    cp msfs/build/msfs ../$pack_folder/msfs/
 
     # copy conf
-    cp login_server/loginserver.conf ../$build_version/conf/
-    cp route_server/routeserver.conf ../$build_version/conf/
-    cp msg_server/msgserver.conf ../$build_version/conf/
-    cp http_msg_server/httpmsgserver.conf ../$build_version/conf/
-    cp file_server/fileserver.conf ../$build_version/conf/
-    cp push_server/pushserver.conf ../$build_version/conf/
-    cp db_proxy_server/dbproxyserver.conf ../$build_version/conf/
-    cp msfs/msfs.conf ../$build_version/conf/
-    cp slog/log4cxx.properties ../$build_version/conf/
+    cp login_server/loginserver.conf ../$pack_folder/conf/
+    cp route_server/routeserver.conf ../$pack_folder/conf/
+    cp msg_server/msgserver.conf ../$pack_folder/conf/
+    cp http_msg_server/httpmsgserver.conf ../$pack_folder/conf/
+    cp file_server/fileserver.conf ../$pack_folder/conf/
+    cp push_server/pushserver.conf ../$pack_folder/conf/
+    cp db_proxy_server/dbproxyserver.conf ../$pack_folder/conf/
+    cp msfs/msfs.conf ../$pack_folder/conf/
+    cp slog/log4cxx.properties ../$pack_folder/conf/
 
     # copy libs
-    cp slog/build/libslog.so  ../$build_version/lib/
-    cp -a protobuf/lib/libprotobuf-lite.so* ../$build_version/lib/
+    cp slog/build/libslog.so  ../$pack_folder/lib/
+    cp -a protobuf/lib/libprotobuf-lite.so* ../$pack_folder/lib/
 
     # copy sript
-    cp tools/restart.sh ../$build_version/
-    cp tools/monitor.sh ../$build_version/
-    cp tools/ttopen.sh ../$build_version/
-    cp tools/setup.sh ../$build_version/
+    cp tools/restart.sh ../$pack_folder/
+    cp tools/monitor.sh ../$pack_folder/
+    cp tools/ttopen.sh ../$pack_folder/
+    cp tools/setup.sh ../$pack_folder/
 
     # copy sql
-    cp tools/ttopen.sql ../$build_version/
+    cp tools/ttopen.sql ../$pack_folder/
 
     # copy daeml
-    cp tools/daeml ../$build_version/
+    cp tools/daeml ../$pack_folder/
 
     cd ../
     
-    tar zcvf    $build_name $build_version
+    tar zcvf $target_name $pack_folder
 }
 
 clean() {
@@ -302,7 +302,7 @@ case $1 in
         fi
         clean
         echo "version $2 in building..."
-        build_version $2
+        pack_folder $2
         ;;
     login_server)
         build $1
