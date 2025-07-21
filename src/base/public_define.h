@@ -9,10 +9,10 @@
 #ifndef _public_define_h
 #define _public_define_h
 
-#include <iostream>
 #include <set>
-#include "IM.BaseDefine.pb.h"
+#include <iostream>
 #include "ostype.h"
+#include "IM.BaseDefine.pb.h"
 using namespace std;
 
 #define XIAO_T_UID  99999999
@@ -54,22 +54,22 @@ enum {
 ///////////////////////////////////CHECK_CLIENT_TYPE_PC/////////////////////////
 #define CHECK_CLIENT_TYPE_PC(type) \
 ({\
-bool bRet = false;\
-if ((type & 0x10) == 0x00)\
-{\
-bRet = true;\
-}\
-bRet;\
+    bool bRet = false;\
+    if ((type & 0x10) == 0x00)\
+    {\
+        bRet = true;\
+    }\
+    bRet;\
 })
 
 #define CHECK_CLIENT_TYPE_MOBILE(type) \
 ({\
-bool bRet = false;\
-if ((type & 0x10) == 0x10)\
-{\
-bRet = true;\
-}\
-bRet;\
+    bool bRet = false;\
+    if ((type & 0x10) == 0x10)\
+    {\
+        bRet = true;\
+    }\
+    bRet;\
 })
 
 enum {
@@ -121,26 +121,22 @@ typedef struct AudioMsgInfo{
     uint32_t    data_len;
     uchar_t*    data;
     string      path;
-    
 } AudioMsgInfo_t;
 
-/**
- * 结构体可以用来表示用户的基本信息
- * 并通过赋值运算符重载函数实现对象之间的赋值操作
-*/
+// 用户基本信息
 typedef struct DBUserInfo_t {
     /* 成员变量 */
-    uint32_t nId;//用户ID
-    uint8_t nSex;// 用户性别 1.男;2.女
-    uint8_t nStatus; // 用户状态0 正常， 1 离职
-    uint32_t nDeptId;// 所属部门
-    string strNick;// 花名
-    string strDomain;// 花名拼音
-    string strName;// 真名
-    string strTel;// 手机号码
-    string strEmail;// Email
-    string strAvatar;// 头像
-    string sign_info;//个性签名
+    uint32_t    nId;        // 用户ID
+    uint8_t     nSex;       // 用户性别 1.男;2.女
+    uint8_t     nStatus;    // 用户状态0 正常， 1 离职
+    uint32_t    nDeptId;    // 所属部门
+    string      strNick;    // 花名
+    string      strDomain;  // 花名拼音
+    string      strName;    // 真名
+    string      strTel;     // 手机号码
+    string      strEmail;   // Email
+    string      strAvatar;  // 头像
+    string      sign_info;  // 个性签名
 
     /* 赋值运算符重载函数 用于DBUserInfo_t对象之间的赋值操作 */
     DBUserInfo_t& operator=(const DBUserInfo_t& rhs) {
@@ -161,19 +157,14 @@ typedef struct DBUserInfo_t {
         return *this;
     }
 } DBUserInfo_t;
-
 typedef hash_map<uint32_t, DBUserInfo_t*> DBUserMap_t;
 
-
-/**
- * 结构体可以用于存储部门的基本信息
- * 并通过赋值运算符重载函数实现对象之间的赋值操作
-*/
+// 部门基本信息
 typedef struct DBDeptInfo_t {
     /* 成员变量 */
-    uint32_t nId;
-    uint32_t nParentId;
-    string strName;
+    uint32_t    nId;
+    uint32_t    nParentId;
+    string      strName;
     
     /* 赋值运算符重载函数 用于DBDeptInfo_t对象之间的赋值操作 */
     DBDeptInfo_t& operator=(const DBDeptInfo_t& rhs) {
@@ -187,46 +178,32 @@ typedef struct DBDeptInfo_t {
     }
     
 } DBDeptInfo_t;
-
 typedef hash_map<uint32_t, DBDeptInfo_t*> DBDeptMap_t;
 
-
-/**
- * user_conn_t 用于表示用户连接信息
- * 方便地记录用户的连接情况，并对连接数量进行统计和处理
-*/
+// 用户连接信息
 typedef struct {
-    uint32_t 	user_id;//用户id
-    uint32_t	conn_cnt;//连接数量
+    uint32_t 	user_id;    //用户id
+    uint32_t	conn_cnt;   //连接数量
 } user_conn_t;
 
-/**
- * user_stat_t 用于存储用户的状态信息
-*/
+
+// 用户状态信息
 typedef struct {
-    uint32_t user_id;//用户ID
-    uint32_t status;//用户状态
-    uint32_t client_type;//登录客户端类型
+    uint32_t user_id;       //用户ID
+    uint32_t status;        //用户状态
+    uint32_t client_type;   //登录终端类型
 } user_stat_t;
 
-/**
- * auth_struct 表示授权信息
- * 通过使用 auth_struct 结构体，可以方便地记录和管理授权信息
- * 例如确定用户是否有权限访问某些资源、验证用户的身份等
- * 
- * set是C++标准库中的容器，用于存储不重复的元素，并且可以进行高效的插入、删除和查找操作
-*/
+// 授权信息
 typedef struct {
-    uint32_t user_id;//用户id
-    set<uint32_t> allow_user_ids;//允许访问的用户id集合
-    set<uint32_t> allow_group_ids;//允许访问的用户组id集合
-    set<string>  authed_ips;//已授权的IP地址集合
-    set<string>  authed_interfaces;//已授权的接口名称集合
+    uint32_t        user_id;            //用户id
+    set<uint32_t>   allow_user_ids;     //允许访问的用户id集合
+    set<uint32_t>   allow_group_ids;    //允许访问的用户组id集合
+    set<string>     authed_ips;         //已授权的IP地址集合
+    set<string>     authed_interfaces;  //已授权的接口名称集合
 } auth_struct;
-
 
 #define MAX_MSG_LEN     4096
 
 #endif
-
 

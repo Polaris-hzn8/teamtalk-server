@@ -6,17 +6,18 @@
  brief:
 */
 
-#ifndef __im_server_TT__UserInfo__
-#define __im_server_TT__UserInfo__
+#ifndef _ROUTE_SERVER_USERINFO_H_
+#define _ROUTE_SERVER_USERINFO_H_
 
-#include "ostype.h"
-#include <iostream>
 #include <map>
 #include <set>
-class CRouteConn;
-
+#include <iostream>
+#include "ostype.h"
 using namespace std;
-class CUserInfo {
+
+class CRouteConn;
+class CUserInfo
+{
 public:
     CUserInfo();
     ~CUserInfo();
@@ -41,7 +42,7 @@ public:
 
 private:
     set<CRouteConn*> m_RouteConnSet;
-    map<uint32_t /* client_type */, uint32_t /* count */> m_ClientTypeList;
+    map<uint32_t /* client_type */, uint32_t /* count */> m_clientTypeList;
 };
 
-#endif /* defined(__im_server_TT__UserInfo__) */
+#endif /* _ROUTE_SERVER_USERINFO_H_ */

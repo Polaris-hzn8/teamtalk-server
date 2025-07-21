@@ -55,7 +55,8 @@ using namespace std;
  * CPduException 类用于处理 PDU 过程中的异常情况 以便捕获和处理错误情况
  * 通过获取异常对象的属性，可以获取有关错误的详细信息，如服务ID、命令ID、错误代码和错误消息，从而进行相应的错误处理
 */
-class CPduException {
+class CPduException
+{
 public:
 	CPduException(uint32_t service_id, uint32_t command_id, uint32_t error_code, const char* error_msg) {
 		m_service_id = service_id;

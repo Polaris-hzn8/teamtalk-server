@@ -11,17 +11,9 @@
 
 #include "util.h"
 
-/// @brief 用于生成令牌token
-/// @param uid 用户id
-/// @param time_offset 时间偏移量
-/// @param md5_str_buf 指向字符数组的指针
-/// @return 0 if generate token successful
+// 生成令牌token
 int genToken(unsigned int uid, time_t time_offset, char* md5_str_buf);
-
-/// @brief 验证用户令牌token是否有效
-/// @param user_id 用户id
-/// @param token 
-/// @return 
+// 验证令牌token
 bool IsTokenValid(uint32_t user_id, const char* token);
 
 #endif

@@ -25,7 +25,8 @@
  * 
  * 这样的封装使得代码在不同操作系统上具有可移植性，因为在不同系统上使用不同的互斥锁实现方式
 */
-class CLock {
+class CLock
+{
 public:
     CLock();
     virtual ~CLock();

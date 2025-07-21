@@ -9,12 +9,7 @@
 #ifndef __BASE64_H__
 #define __BASE64_H__
 
-#include<iostream>
-using namespace std;
-
-// 对 Base64 编码的字符串进行解码，返回解码后的原始数据
 string base64_decode(const string &ascdata);
-// 对原始数据进行 Base64 编码，返回编码后的字符串
 string base64_encode(const string &bindata);
 
 #endif

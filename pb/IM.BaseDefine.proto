@@ -1,10 +1,11 @@
 package IM.BaseDefine;
-option java_package = "com.mogujie.tt.protobuf";
-//option java_outer_classname = "MOGUJIEIMMessage";
-option optimize_for = LITE_RUNTIME;
+//option java_outer_classname = "TTIMMessage";
+option java_package = "com.polaris-hzn8.protobuf";
+option optimize_for = LITE_RUNTIME; // 运行时轻量版protobuff
 
 // service id
-enum ServiceID{
+enum ServiceID
+{
     SID_LOGIN           = 0x0001;           // for login
     SID_BUDDY_LIST      = 0x0002;		    // for friend list
     SID_MSG             = 0x0003;           //

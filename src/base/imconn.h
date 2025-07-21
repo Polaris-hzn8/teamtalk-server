@@ -9,8 +9,8 @@
 #ifndef IMCONN_H_
 #define IMCONN_H_
 
-#include "netlib.h"
 #include "util.h"
+#include "netlib.h"
 #include "ImPduBase.h"
 
 #define SERVER_HEARTBEAT_INTERVAL	5000
@@ -18,7 +18,7 @@
 #define CLIENT_HEARTBEAT_INTERVAL	30000
 #define CLIENT_TIMEOUT				120000
 #define MOBILE_CLIENT_TIMEOUT       60000 * 5
-#define READ_BUF_SIZE	2048
+#define READ_BUF_SIZE				2048
 
 /**
  * CImConn 类封装了对网络连接的管理和事件处理
@@ -27,6 +27,13 @@
  * CImConn 继承了引用计数类 CRefObject 实现对象的引用计数管理
  * 每个socket tcp长连接都需要绑定一个CImConn对象
  * 要实现具体的业务就需要继承CImConn对象 实现具体的业务逻辑
+*/
+
+/*
+	CImConn
+	1.封装了对网络连接的管理 和事件处理
+	2.提供发送和接收数据的功能，并定义了部分虚函数 供派生类重写
+	3.
 */
 class CImConn : public CRefObject {
 public:
@@ -54,19 +61,19 @@ public:
 	virtual void HandlePdu(CImPdu* pPdu) {}
 
 protected:
-	net_handle_t	m_handle;//网络句柄，用于标识连接 int类型
-	bool			m_busy;//连接是否处于忙碌状态
+	net_handle_t	m_handle;				//网络句柄，用于标识连接 int类型
+	bool			m_busy;					//连接是否处于忙碌状态
 
-	string			m_peer_ip;//对端IP地址
-	uint16_t		m_peer_port;//对端端口号
-	CSimpleBuffer	m_in_buf;//输入缓冲区
-	CSimpleBuffer	m_out_buf;//输出缓冲区
+	string			m_peer_ip;				//对端IP地址
+	uint16_t		m_peer_port;			//对端端口号
+	CSimpleBuffer	m_in_buf;				//输入缓冲区
+	CSimpleBuffer	m_out_buf;				//输出缓冲区
 
-	bool			m_policy_conn;//连接是否为策略连接
-	uint32_t		m_recv_bytes;//已接收的字节数
-	uint64_t		m_last_send_tick;//最后一次发送数据的时间戳
-	uint64_t		m_last_recv_tick;//最后一次接收数据的时间戳
-    uint64_t        m_last_all_user_tick;//最后一次处理所有用户的时间戳
+	bool			m_policy_conn;			//连接是否为策略连接
+	uint32_t		m_recv_bytes;			//已接收的字节数
+	uint64_t		m_last_send_tick;		//最后一次发送数据的时间戳
+	uint64_t		m_last_recv_tick;		//最后一次接收数据的时间戳
+    uint64_t        m_last_all_user_tick;	//最后一次处理所有用户的时间戳
 };
 
 //哈希映射容器类型 用于将网络句柄 net_handle_t 映射到 CImConn* 对象
