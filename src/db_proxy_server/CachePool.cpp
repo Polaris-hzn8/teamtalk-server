@@ -677,6 +677,8 @@ int CacheManager::Init()
             return 2;
         }
 
+        log("Connecting cache instance: host[%s] port[%s] db[%s] maxconnect[%s]", cache_host, str_cache_port, str_cache_db, str_max_conn_cnt);
+
         CachePool* pCachePool = new CachePool(pool_name, cache_host, atoi(str_cache_port),
             atoi(str_cache_db), atoi(str_max_conn_cnt));
         if (pCachePool->Init()) {

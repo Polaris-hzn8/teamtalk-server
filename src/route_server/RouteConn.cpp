@@ -6,16 +6,16 @@
  brief:
 */
 
+#include "netlib.h"
+#include "UserInfo.h"
 #include "RouteConn.h"
+#include "public_define.h"
 #include "IM.Buddy.pb.h"
 #include "IM.Group.pb.h"
-#include "IM.Message.pb.h"
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
+#include "IM.Message.pb.h"
 #include "IM.SwitchService.pb.h"
-#include "UserInfo.h"
-#include "netlib.h"
-#include "public_define.h"
 using namespace IM::BaseDefine;
 
 // typedef hash_map<uint32_t /* user_id */, UserStat_t> UserStatMap_t;
