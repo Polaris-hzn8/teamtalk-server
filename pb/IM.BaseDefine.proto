@@ -1,3 +1,4 @@
+
 package IM.BaseDefine;
 //option java_outer_classname = "TTIMMessage";
 option java_package = "com.polaris-hzn8.protobuf";

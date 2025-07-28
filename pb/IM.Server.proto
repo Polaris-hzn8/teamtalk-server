@@ -1,5 +1,8 @@
+
 package IM.Server;
 import "IM.BaseDefine.proto";
+//option java_outer_classname = "TTIMMessage";
+option java_package = "com.polaris-hzn8.protobuf";
 option optimize_for = LITE_RUNTIME;
 
 //service id:   0x0007

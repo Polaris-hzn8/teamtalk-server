@@ -37,8 +37,9 @@
 # protobuff
 src/protobuf/*
 !src/protobuf/protobuf-2.6.1.tar.gz
+# protobuff - base
 src/base/pb
-!src/base/pb/protocal
+!src/base/pb/protocal/
 
 # log4cxx
 src/log4cxx/*
