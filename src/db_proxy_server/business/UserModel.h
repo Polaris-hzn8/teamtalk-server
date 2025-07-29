@@ -9,10 +9,12 @@
 #ifndef __USERMODEL_H__
 #define __USERMODEL_H__
 
-#include "IM.BaseDefine.pb.h"
 #include "ImPduBase.h"
 #include "public_define.h"
-class CUserModel {
+#include "IM.BaseDefine.pb.h"
+
+class CUserModel
+{
 public:
     static CUserModel* getInstance();
     ~CUserModel();

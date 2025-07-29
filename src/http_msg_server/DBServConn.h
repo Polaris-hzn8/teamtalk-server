@@ -6,16 +6,17 @@
  brief:
 */
 
-#ifndef DBSERVCONN_H_
-#define DBSERVCONN_H_
+#ifndef _DBSERVCONN_H_
+#define _DBSERVCONN_H_
 
-#include "RouteServConn.h"
-#include "ServInfo.h"
 #include "imconn.h"
+#include "ServInfo.h"
+#include "RouteServConn.h"
 
 namespace HTTP {
 
-class CDBServConn : public CImConn {
+class CDBServConn : public CImConn 
+{
 public:
     CDBServConn();
     virtual ~CDBServConn();
@@ -37,14 +38,15 @@ private:
     void _HandleChangeMemberRsp(CImPdu* pPdu);
 
 private:
-    bool m_bOpen;
-    uint32_t m_serv_idx;
+    bool        m_bOpen;
+    uint32_t    m_serv_idx;
 };
 
 void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count, uint32_t concur_conn_cnt);
+
 CDBServConn* get_db_serv_conn_for_login();
 CDBServConn* get_db_serv_conn();
 
 };
 
-#endif /* DBSERVCONN_H_ */
+#endif /* _DBSERVCONN_H_ */

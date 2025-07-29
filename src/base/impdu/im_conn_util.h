@@ -9,7 +9,7 @@
 #ifndef BASE_IM_CONN_UTIL_H_
 #define BASE_IM_CONN_UTIL_H_
 
-#include "base/common/ostype.h"
+#include "common/ostype.h"
 
 namespace google {
     namespace protobuf {

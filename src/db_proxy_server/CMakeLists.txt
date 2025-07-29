@@ -15,17 +15,38 @@ endif()
 SET(MYSQL_INCLUDE_DIR /usr/include/mysql)
 SET(MYSQL_LIB /usr/lib64/mysql)
 
-ADD_DEFINITIONS( -g -W -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DAC_HAS_INFO
--DAC_HAS_WARNING -DAC_HAS_ERROR -DAC_HAS_CRITICAL -DTIXML_USE_STL
--DAC_HAS_DEBUG -DLINUX_DAEMON -std=c++11 -DENCRYPT)
+ADD_DEFINITIONS( 
+    g -W -Wall
+    -D_REENTRANT -D_FILE_OFFSET_BITS=64
+    -DAC_HAS_INFO
+    -DAC_HAS_WARNING
+    -DAC_HAS_ERROR
+    -DAC_HAS_CRITICAL
+    -DAC_HAS_DEBUG
+    -DTIXML_USE_STL
+    -DLINUX_DAEMON
+    -DENCRYPT
+    -std=c++11)
 
-INCLUDE_DIRECTORIES(./ ./businiess ../base ../base/jsoncpp ../base/pb/protocol
-../base/pb/ ${MYSQL_INCLUDE_DIR})
-LINK_DIRECTORIES(./ ../base ${PB_LIB_DIR} ${MYSQL_LIB} ../base/slog/lib)
+INCLUDE_DIRECTORIES(
+    ./
+    ./businiess
+    ../base
+    ../base/jsoncpp
+    ../base/pb/protocol
+    ../base/pb/
+    ${MYSQL_INCLUDE_DIR})
+
+LINK_DIRECTORIES(
+    ./
+    ../base
+    ${PB_LIB_DIR}
+    ${MYSQL_LIB}
+    ../base/slog/lib)
 
 #ADD_XXXX必须在TARGET_LINK_LIBRARIES前面，否则会报错
 #ADD_LIBRARY(${PROJECTNAME} SHARED/STATIC ${SRC_LIST})
 ADD_EXECUTABLE(db_proxy_server ${SRC_LIST})
 
 TARGET_LINK_LIBRARIES(db_proxy_server pthread base protobuf-lite mysqlclient hiredis curl slog crypto)
- 
+

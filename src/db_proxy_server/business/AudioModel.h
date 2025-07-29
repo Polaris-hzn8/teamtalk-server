@@ -9,15 +9,16 @@
 #ifndef AUDIO_MODEL_H_
 #define AUDIO_MODEL_H_
 
+#include <map>
+#include <list>
 #include "IM.BaseDefine.pb.h"
 #include "public_define.h"
 #include "util.h"
-#include <list>
-#include <map>
 
 using namespace std;
 
-class CAudioModel {
+class CAudioModel
+{
 public:
     virtual ~CAudioModel();
 
@@ -35,7 +36,7 @@ private:
 
 private:
     static CAudioModel* m_pInstance;
-    string m_strFileSite;
+    std::string         m_strFileSite;
 };
 
 #endif

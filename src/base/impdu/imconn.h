@@ -12,7 +12,7 @@
 #include <unordered_map>
 #include "ImPduBase.h"
 #include "common/util.h"
-#include "network/netlib.h"
+#include "netlib/netlib.h"
 
 #define SERVER_HEARTBEAT_INTERVAL	5000
 #define SERVER_TIMEOUT				30000
