@@ -1,15 +1,17 @@
-/*
- * HttpConn.cpp
- *
- *  Created on: 2013-9-29
- *      Author: ziteng@mogujie.com
- */
 
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: HttpConn.cpp
+ Update Time: Wed 06 Aug 2025 17:04:01 CST
+ brief: 
+*/
+
+#include "ipparser.h"
 #include "HttpConn.h"
 #include "json/json.h"
 #include "LoginConn.h"
 #include "HttpParserWrapper.h"
-#include "ipparser.h"
 
 static HttpConnMap_t g_http_conn_map;
 

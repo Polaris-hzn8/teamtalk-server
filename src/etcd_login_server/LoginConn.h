@@ -1,9 +1,11 @@
+
 /*
- * LoginConn.h
- *
- *  Created on: 2013-6-21
- *      Author: jianqingdu
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: LoginConn.h
+ Update Time: Wed 06 Aug 2025 17:06:16 CST
+ brief: 
+*/
 
 #ifndef LOGINCONN_H_
 #define LOGINCONN_H_

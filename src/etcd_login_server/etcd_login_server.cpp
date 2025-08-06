@@ -1,9 +1,11 @@
+
 /*
- * login_server.cpp
- *
- *  Created on: 2013-6-21
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: login_server.cpp
+ Update Time: Wed 06 Aug 2025 17:05:24 CST
+ brief: 
+*/
 
 #include "LoginConn.h"
 #include "netlib.h"
@@ -12,8 +14,6 @@
 #include "HttpConn.h"
 #include "ipparser.h"
 #include "ServerRegister.h"
-
-
 
 IpParser* pIpParser = NULL;
 string strMsfsUrl;

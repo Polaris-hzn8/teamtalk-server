@@ -1,9 +1,11 @@
+
 /*
- * ServerRegister.h
- *
- *  Created on: 2020-11-09
- *      Author: 0voice Darren
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: ServerRegister.h
+ Update Time: Wed 06 Aug 2025 17:08:12 CST
+ brief: 
+*/
 
 #ifndef SERVER_REGISTER_H_
 #define SERVER_REGISTER_H_

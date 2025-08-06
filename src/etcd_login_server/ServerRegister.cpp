@@ -1,24 +1,21 @@
+
 /*
- * ServerRegister.cpp
- *
- *  Created on: 2020-11-09
- *      Author: 0voice Darren
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: ServerRegister.cpp
+ Update Time: Wed 06 Aug 2025 17:07:21 CST
+ brief: 
+*/
 
-
-#include "ServerRegister.h"
-#include "public_define.h"
-#include "HttpClient.h"     // http客户端
-#include "json/json.h"      // json文件
 #include "cetcd.h"
-
+#include "json/json.h"      // json文件
+#include "HttpClient.h"     // http客户端
+#include "public_define.h"
+#include "ServerRegister.h"
 
 using namespace IM::BaseDefine;
 
-
 static LoginServerRegInfo g_reg_info;
-
-// 开源项目地址：https://github.com/shafreeck/cetcd
 
 void server_register_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {

@@ -1,15 +1,17 @@
+
 /*
- * HttpConn.h
- *
- *  Created on: 2013-9-29
- *      Author: ziteng
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: HttpConn.h
+ Update Time: Wed 06 Aug 2025 17:03:48 CST
+ brief: 
+*/
 
 #ifndef __HTTP_CONN_H__
 #define __HTTP_CONN_H__
 
-#include "netlib.h"
 #include "util.h"
+#include "netlib.h"
 #include "HttpParserWrapper.h"
 
 #define HTTP_CONN_TIMEOUT			60000

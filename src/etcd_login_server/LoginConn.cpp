@@ -1,9 +1,11 @@
+
 /*
- * LoginConn.cpp
- *
- *  Created on: 2013-6-21
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: LoginConn.cpp
+ Update Time: Wed 06 Aug 2025 17:06:32 CST
+ brief: 
+*/
 
 #include "LoginConn.h"
 #include "IM.Server.pb.h"
@@ -11,6 +13,7 @@
 #include "IM.Login.pb.h"
 #include "public_define.h"
 using namespace IM::BaseDefine;
+
 static ConnMap_t g_client_conn_map;
 static ConnMap_t g_msg_serv_conn_map;
 static uint32_t g_total_online_user_cnt = 0;	// 并发在线总人数

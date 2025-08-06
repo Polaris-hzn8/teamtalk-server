@@ -1,14 +1,16 @@
-/*================================================================
-*   Copyright (C) 2014 All rights reserved.
-*   
-*   文件名称：ipparser.cpp
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2014年08月26日
-*   描    述：
+
+/**
+* Copyright (C) 2024 Polaris-hzn8 / LuoChenhao
 *
-#include "ipparser.h"
-================================================================*/
+* Author: luochenhao
+* Email: lch2022fox@163.com
+* Time: Wed 06 Aug 2025 16:59:59 CST
+* Github: https://github.com/Polaris-hzn8
+* Src code may be copied only under the term's of the Apache License
+* Please visit the http://www.apache.org/licenses/ Page for more detail.
+*
+**/
+
 #include "ipparser.h"
 
 IpParser::IpParser()

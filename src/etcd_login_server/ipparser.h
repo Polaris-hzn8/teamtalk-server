@@ -1,14 +1,12 @@
-/*================================================================
-*   Copyright (C) 2014 All rights reserved.
-*   
-*   文件名称：ipparser.h
-*   创 建 者：Zhang Yuanhao
-*   邮    箱：bluefoxah@gmail.com
-*   创建日期：2014年08月26日
-*   描    述：
-*
-#pragma once
-================================================================*/
+
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: ipparser.h
+ Update Time: Wed 06 Aug 2025 17:04:56 CST
+ brief: 
+*/
+
 #ifndef _IPPARSER_H_
 #define _IPPARSER_H_
 
