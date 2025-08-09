@@ -16,8 +16,8 @@
 #include <sys/stat.h>
 #include "Lock.h"
 #include "ostype.h"
-#include "slog/slog_api.h"
-#include "impdu/UtilPdu.h"
+#include "UtilPdu.h"
+#include "slog_api.h"
 
 #ifdef _WIN32
 #define snprintf sprintf_s

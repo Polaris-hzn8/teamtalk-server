@@ -1,41 +1,55 @@
 cmake_minimum_required(VERSION 2.6)
-PROJECT(Base)
+project(base)
 
-AUX_SOURCE_DIRECTORY(./jsoncpp SRC_LIST1)
-AUX_SOURCE_DIRECTORY(./pb/protocol SRC_LIST2)
-AUX_SOURCE_DIRECTORY(./http SRC_LIST3)
-AUX_SOURCE_DIRECTORY(./impdu SRC_LIST4)
-AUX_SOURCE_DIRECTORY(./common SRC_LIST5)
-AUX_SOURCE_DIRECTORY(./netlib SRC_LIST6)
-AUX_SOURCE_DIRECTORY(./threadpool SRC_LIST7)
+aux_source_directory(./pbgen SRC_LIST1)
+aux_source_directory(./jsoncpp SRC_LIST2)
+aux_source_directory(./http SRC_LIST3)
+aux_source_directory(./impdu SRC_LIST4)
+aux_source_directory(./common SRC_LIST5)
+aux_source_directory(./netlib SRC_LIST6)
+aux_source_directory(./threadpool SRC_LIST7)
+
+set(THIRD_DIR ../third)
 
 if(APPLE)
-    SET(PB_LIB_DIR ./pb/lib/mac)
+    set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
 elseif(UNIX)
-    SET(PB_LIB_DIR ./pb/lib/linux)
+    set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
 endif()
+set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 
-ADD_DEFINITIONS(
-    -g -W -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64
-    -DAC_HAS_INFO -DAC_HAS_WARNING -DAC_HAS_ERROR
-    -DAC_HAS_CRITICAL -DAC_HAS_DEBUG -DTIXML_USE_STL
+add_definitions(
+    -g -W -Wall
+    -D_REENTRANT
+    -D_FILE_OFFSET_BITS=64
+    -DAC_HAS_INFO
+    -DAC_HAS_WARNING
+    -DAC_HAS_ERROR
+    -DAC_HAS_CRITICAL
+    -DAC_HAS_DEBUG
+    -DTIXML_USE_STL
     -DLINUX_DAEMON)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ./
-    ../
+    ./common
+    ./http
+    ./impdu
     ./jsoncpp
-    ./pb
-    ./pb/protocol)
+    ./netlib
+    ./pbgen
+    ./threadpool
+    ${THIRD_DIR}/slog/include
+    ${THIRD_DIR}/protobuf/include)
 
-LINK_DIRECTORIES(
-    ./
-    ./slog/lib
+link_directories(
+    ${SLOG_LIB_DIR}
     ${PB_LIB_DIR})
 
-ADD_LIBRARY(base STATIC
+add_library(base STATIC
     ${SRC_LIST1}
     ${SRC_LIST2}
     ${SRC_LIST3}
@@ -44,4 +58,4 @@ ADD_LIBRARY(base STATIC
     ${SRC_LIST6}
     ${SRC_LIST7})
 
-TARGET_LINK_LIBRARIES(base slog crypto pthread)
+target_link_libraries(base slog crypto pthread)

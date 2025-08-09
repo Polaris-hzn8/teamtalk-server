@@ -53,6 +53,7 @@ src/third/protobuf/*
 src/tools/daeml
 
 # cmake
+bin/
 build/
 
 # output_pack

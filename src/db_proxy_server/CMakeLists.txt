@@ -5,17 +5,21 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_LIST1)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/redis SRC_LIST2)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/business SRC_LIST3)
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../base)
+set(THIRD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../third)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 # 编译链接的库文件
 if(APPLE)
-    set(PB_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../base/pb/lib/mac")
+    set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
 elseif(UNIX)
-    set(PB_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../base/pb/lib/linux")
+    set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
 endif()
-set(SLOG_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../base/slog/lib")
-set(BASE_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../lib")
-set(MYSQL_LIB /usr/lib64/mysql)
+set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
+set(BASE_LIB_DIR ${BASE_DIR}/bin)
+set(MYSQL_LIB_DIR /usr/lib64/mysql)
 
 add_definitions(
     -g -W -Wall
@@ -32,27 +36,27 @@ add_definitions(
     -std=c++11)
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/redis
-    ${CMAKE_CURRENT_SOURCE_DIR}/business
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/pb
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/pb/protocol
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/common
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/http
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/impdu
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/jsoncpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/netlib
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/security
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/slog
-    ${CMAKE_CURRENT_SOURCE_DIR}/../base/threadpool
+    ./
+    ./redis
+    ./business
+    ${BASE_DIR}
+    ${BASE_DIR}/pbgen
+    ${BASE_DIR}/common
+    ${BASE_DIR}/http
+    ${BASE_DIR}/impdu
+    ${BASE_DIR}/jsoncpp
+    ${BASE_DIR}/netlib
+    ${BASE_DIR}/threadpool
+    ${THIRD_DIR}/slog/include
+    ${THIRD_DIR}/protobuf/include
+    ${THIRD_DIR}/libsecurity/include
     /usr/include/mysql)
 
 link_directories(
-    ${PB_LIB}
-    ${BASE_LIB}
-    ${MYSQL_LIB}
-    ${SLOG_LIB})
+    ${PB_LIB_DIR}
+    ${SLOG_LIB_DIR}
+    ${BASE_LIB_DIR}
+    ${MYSQL_LIB_DIR})
 
 add_executable(db_proxy_server
     ${SRC_LIST1}
