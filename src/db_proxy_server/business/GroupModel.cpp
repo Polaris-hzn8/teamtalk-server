@@ -6,23 +6,21 @@
  brief:
 */
 
-#include "../CachePool.h"
-#include "../DBPool.h"
-
-#include "AudioModel.h"
 #include "Common.h"
-#include "GroupMessageModel.h"
-#include "GroupModel.h"
 #include "ImPduBase.h"
-#include "SessionModel.h"
 #include "UserModel.h"
+#include "GroupModel.h"
+#include "AudioModel.h"
+#include "SessionModel.h"
 #include "public_define.h"
+#include "GroupMessageModel.h"
+
+#include "../DBPool.h"
+#include "../CachePool.h"
+using namespace std;
 
 CGroupModel* CGroupModel::m_pInstance = NULL;
 
-/**
- *  <#Description#>
- */
 CGroupModel::CGroupModel()
 {
 }
@@ -33,9 +31,8 @@ CGroupModel::~CGroupModel()
 
 CGroupModel* CGroupModel::getInstance()
 {
-    if (!m_pInstance) {
+    if (!m_pInstance)
         m_pInstance = new CGroupModel();
-    }
     return m_pInstance;
 }
 

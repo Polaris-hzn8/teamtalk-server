@@ -63,4 +63,3 @@ build/
 im-server-*.tar.gz
 im-server-*/
 pack_folder/
-src/base/version.h

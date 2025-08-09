@@ -28,13 +28,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * SDS库
- * 这段代码是一个C语言的简单动态字符串库（SDS）版权归Salvatore Sanfilippo所有
- * SDS是一种在C语言中使用的动态字符串实现，它提供了一组函数和数据结构用于创建、操作和释放动态字符串
- * 该库旨在解决C语言中处理字符串时的一些常见问题，如长度计算、内存管理和字符串连接等
- */
-
 #ifndef __SDS_H
 #define __SDS_H
 

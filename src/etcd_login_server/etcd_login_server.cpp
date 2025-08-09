@@ -7,13 +7,13 @@
  brief: 
 */
 
-#include "LoginConn.h"
 #include "netlib.h"
-#include "ConfigFileReader.h"
 #include "version.h"
 #include "HttpConn.h"
 #include "ipparser.h"
+#include "LoginConn.h"
 #include "ServerRegister.h"
+#include "ConfigFileReader.h"
 
 IpParser* pIpParser = NULL;
 string strMsfsUrl;

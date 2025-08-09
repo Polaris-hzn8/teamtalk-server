@@ -58,7 +58,7 @@ extern "C" {
     jstring Java_com_mogujie_im_security_EncryptPass(JNIEnv* env, jobject obj, jstring jstr, jstring jkey);
 #else
     /**
-     *  @brief 1.对消息加密
+     *  @brief 消息加密
      *
      *  @param pInData  待加密的消息内容指针
      *  @param nInLen   待加密消息内容长度
@@ -70,7 +70,7 @@ extern "C" {
     DLL_MODIFIER int EncryptMsg(const char* pInData, uint32_t nInLen, char** pOutData, uint32_t& nOutLen);
     
     /**
-     *  @brief 2.对消息解密
+     *  @brief 消息解密
      *
      *  @param pInData  待解密的消息内容指针
      *  @param nInLen   待解密消息内容长度
@@ -82,7 +82,7 @@ extern "C" {
     DLL_MODIFIER int DecryptMsg(const char* pInData, uint32_t nInLen, char** pOutData, uint32_t& nOutLen);
     
     /**
-     *  @brief 3.对密码进行加密
+     *  @brief 密码加密
      *
      *  @param pInData  待解密的消息内容指针
      *  @param nInLen   待解密消息内容长度
@@ -95,7 +95,7 @@ extern "C" {
     DLL_MODIFIER int EncryptPass(const char* pInData, uint32_t nInLen, char** pOutData, uint32_t& nOutLen, const char* pKey);
     
     /**
-     *  @brief 4.对密码进行解密
+     *  @brief 密码解密
      *
      *  @param pInData  待解密的消息内容指针
      *  @param nInLen   待解密消息内容长度
@@ -108,7 +108,7 @@ extern "C" {
     DLL_MODIFIER int DecryptPass(const char* pInData, uint32_t nInLen, char** ppOutData, uint32_t& nOutLen, const char* pKey);
     
     /**
-     *  @brief 5.释放资源
+     *  @brief 释放资源
      *  @param pOutData 需要释放的资源
      */
     DLL_MODIFIER void Free(char* pOutData);

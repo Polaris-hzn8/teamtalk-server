@@ -9,17 +9,19 @@
 #include <map>
 #include <set>
 
-#include "../CachePool.h"
-#include "../DBPool.h"
 #include "AudioModel.h"
 #include "MessageModel.h"
-#include "RelationModel.h"
 #include "SessionModel.h"
+#include "RelationModel.h"
+
+#include "../DBPool.h"
+#include "../CachePool.h"
 
 using namespace std;
 
-CMessageModel* CMessageModel::m_pInstance = NULL;
 extern string strAudioEnc;
+
+CMessageModel* CMessageModel::m_pInstance = NULL;
 
 CMessageModel::CMessageModel()
 {
@@ -31,15 +33,15 @@ CMessageModel::~CMessageModel()
 
 CMessageModel* CMessageModel::getInstance()
 {
-    if (!m_pInstance) {
+    if (!m_pInstance)
         m_pInstance = new CMessageModel();
-    }
-
     return m_pInstance;
 }
 
-void CMessageModel::getMessage(uint32_t nUserId, uint32_t nPeerId, uint32_t nMsgId,
-    uint32_t nMsgCnt, list<IM::BaseDefine::MsgInfo>& lsMsg)
+void CMessageModel::getMessage(
+    uint32_t nUserId, uint32_t nPeerId,
+    uint32_t nMsgId, uint32_t nMsgCnt,
+    list<IM::BaseDefine::MsgInfo>& lsMsg)
 {
     uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(nUserId, nPeerId, false);
     if (nRelateId != INVALID_VALUE) {
@@ -92,7 +94,11 @@ void CMessageModel::getMessage(uint32_t nUserId, uint32_t nPeerId, uint32_t nMsg
  * GetShopId
  * Insert into IMMessage_ShopId%8
  */
-bool CMessageModel::sendMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t nToId, IM::BaseDefine::MsgType nMsgType, uint32_t nCreateTime, uint32_t nMsgId, string& strMsgContent)
+bool CMessageModel::sendMessage(
+    uint32_t nRelateId, uint32_t nFromId, uint32_t nToId,
+    IM::BaseDefine::MsgType nMsgType,
+    uint32_t nCreateTime,
+    uint32_t nMsgId, string& strMsgContent)
 {
     bool bRet = false;
     if (nFromId == 0 || nToId == 0) {
@@ -136,11 +142,14 @@ bool CMessageModel::sendMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t n
     return bRet;
 }
 
-bool CMessageModel::sendAudioMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t nToId, IM::BaseDefine::MsgType nMsgType, uint32_t nCreateTime, uint32_t nMsgId, const char* pMsgContent, uint32_t nMsgLen)
+bool CMessageModel::sendAudioMessage(
+    uint32_t nRelateId, uint32_t nFromId, uint32_t nToId,
+    IM::BaseDefine::MsgType nMsgType,
+    uint32_t nCreateTime,
+    uint32_t nMsgId, const char* pMsgContent, uint32_t nMsgLen)
 {
-    if (nMsgLen <= 4) {
+    if (nMsgLen <= 4)
         return false;
-    }
 
     CAudioModel* pAudioModel = CAudioModel::getInstance();
     int nAudioId = pAudioModel->saveAudioInfo(nFromId, nToId, nCreateTime, pMsgContent, nMsgLen);
@@ -169,7 +178,9 @@ void CMessageModel::incMsgCount(uint32_t nFromId, uint32_t nToId)
     }
 }
 
-void CMessageModel::getUnreadMsgCount(uint32_t nUserId, uint32_t& nTotalCnt, list<IM::BaseDefine::UnreadInfo>& lsUnreadCount)
+void CMessageModel::getUnreadMsgCount(
+    uint32_t nUserId, uint32_t& nTotalCnt,
+    list<IM::BaseDefine::UnreadInfo>& lsUnreadCount)
 {
     CacheManager* pCacheManager = CacheManager::getInstance();
     CacheConn* pCacheConn = pCacheManager->GetCacheConn("unread");
@@ -221,16 +232,20 @@ uint32_t CMessageModel::getMsgId(uint32_t nRelateId)
 }
 
 /**
- *  <#Description#>
- *
- *  @param nFromId    <#nFromId description#>
- *  @param nToId      <#nToId description#>
- *  @param nMsgId     <#nMsgId description#>
- *  @param strMsgData <#strMsgData description#>
- *  @param nMsgType   <#nMsgType description#>
- *  @param nStatus    0获取未被删除的，1获取所有的，默认获取未被删除的
+ * @brief 
+ * 
+ * @param nFromId 
+ * @param nToId 
+ * @param nMsgId 
+ * @param strMsgData 
+ * @param nMsgType 
+ * @param nStatus 0获取未被删除的，1获取所有的，默认获取未被删除的
  */
-void CMessageModel::getLastMsg(uint32_t nFromId, uint32_t nToId, uint32_t& nMsgId, string& strMsgData, IM::BaseDefine::MsgType& nMsgType, uint32_t nStatus)
+void CMessageModel::getLastMsg(
+    uint32_t nFromId, uint32_t nToId,
+    uint32_t& nMsgId, string& strMsgData,
+    IM::BaseDefine::MsgType& nMsgType,
+    uint32_t nStatus)
 {
     uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(nFromId, nToId, false);
 
@@ -272,8 +287,8 @@ void CMessageModel::getUnReadCntAll(uint32_t nUserId, uint32_t& nTotalCnt)
     CacheManager* pCacheManager = CacheManager::getInstance();
     CacheConn* pCacheConn = pCacheManager->GetCacheConn("unread");
     if (pCacheConn) {
-        map<string, string> mapUnread;
-        string strKey = "unread_" + int2string(nUserId);
+        std::map<std::string, std::string> mapUnread;
+        std::string strKey = "unread_" + int2string(nUserId);
         bool bRet = pCacheConn->hgetAll(strKey, mapUnread);
         pCacheManager->RelCacheConn(pCacheConn);
 
@@ -289,15 +304,15 @@ void CMessageModel::getUnReadCntAll(uint32_t nUserId, uint32_t& nTotalCnt)
     }
 }
 
-void CMessageModel::getMsgByMsgId(uint32_t nUserId, uint32_t nPeerId, const list<uint32_t>& lsMsgId, list<IM::BaseDefine::MsgInfo>& lsMsg)
+void CMessageModel::getMsgByMsgId(
+    uint32_t nUserId, uint32_t nPeerId,
+    const std::list<uint32_t>& lsMsgId,
+    std::list<IM::BaseDefine::MsgInfo>& lsMsg)
 {
     if (lsMsgId.empty())
-
-    {
         return;
-    }
-    uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(nUserId, nPeerId, false);
 
+    uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(nUserId, nPeerId, false);
     if (nRelateId == INVALID_VALUE) {
         log("invalid relation id between %u and %u", nUserId, nPeerId);
         return;
@@ -318,7 +333,7 @@ void CMessageModel::getMsgByMsgId(uint32_t nUserId, uint32_t nPeerId, const list
             }
         }
 
-        string strSql = "select * from " + strTableName + " where relateId=" + int2string(nRelateId) + "  and status=0 and msgId in (" + strClause + ") order by created desc, id desc limit 100";
+        std::string strSql = "select * from " + strTableName + " where relateId=" + int2string(nRelateId) + "  and status=0 and msgId in (" + strClause + ") order by created desc, id desc limit 100";
         CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
         if (pResultSet) {
             while (pResultSet->Next()) {
@@ -355,12 +370,11 @@ bool CMessageModel::resetMsgId(uint32_t nRelateId)
     CacheManager* pCacheManager = CacheManager::getInstance();
     CacheConn* pCacheConn = pCacheManager->GetCacheConn("unread");
     if (pCacheConn) {
-        string strKey = "msg_id_" + int2string(nRelateId);
-        string strValue = "0";
-        string strReply = pCacheConn->set(strKey, strValue);
-        if (strReply == strValue) {
+        std::string strKey = "msg_id_" + int2string(nRelateId);
+        std::string strValue = "0";
+        std::string strReply = pCacheConn->set(strKey, strValue);
+        if (strReply == strValue)
             bRet = true;
-        }
         pCacheManager->RelCacheConn(pCacheConn);
     }
     return bRet;

@@ -9,27 +9,22 @@
 #include <list>
 #include <vector>
 
-#include "../CachePool.h"
-#include "../DBPool.h"
-#include "../ProxyConn.h"
+#include "UserModel.h"
 #include "GroupModel.h"
 #include "IM.Buddy.pb.h"
-#include "RecentSession.h"
 #include "SessionModel.h"
-#include "UserModel.h"
+#include "RecentSession.h"
+
+#include "../DBPool.h"
+#include "../CachePool.h"
+#include "../ProxyConn.h"
 
 using namespace std;
 
 namespace DB_PROXY {
-/**
- *  获取最近会话接口
- *
- *  @param pPdu      收到的packet包指针
- *  @param conn_uuid 该包过来的socket 描述符
- */
+
 void getRecentSession(CImPdu* pPdu, uint32_t conn_uuid)
 {
-
     IM::Buddy::IMRecentContactSessionReq msg;
     IM::Buddy::IMRecentContactSessionRsp msgResp;
     if (msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
@@ -68,12 +63,6 @@ void getRecentSession(CImPdu* pPdu, uint32_t conn_uuid)
     }
 }
 
-/**
- *  删除会话接口
- *
- *  @param pPdu      收到的packet包指针
- *  @param conn_uuid 该包过来的socket 描述符
- */
 void deleteRecentSession(CImPdu* pPdu, uint32_t conn_uuid)
 {
     IM::Buddy::IMRemoveSessionReq msg;
@@ -115,4 +104,4 @@ void deleteRecentSession(CImPdu* pPdu, uint32_t conn_uuid)
     }
 }
 
-};
+}

@@ -6,17 +6,19 @@
  brief:
 */
 
+#include <time.h>
+#include "UserModel.h"
+#include "MessageModel.h"
 #include "MessageCounter.h"
+#include "GroupMessageModel.h"
+
+#include "IM.Login.pb.h"
+#include "IM.Server.pb.h"
+#include "IM.Message.pb.h"
+#include "IM.BaseDefine.pb.h"
+
 #include "../CachePool.h"
 #include "../ProxyConn.h"
-#include "GroupMessageModel.h"
-#include "IM.BaseDefine.pb.h"
-#include "IM.Login.pb.h"
-#include "IM.Message.pb.h"
-#include "IM.Server.pb.h"
-#include "MessageModel.h"
-#include "UserModel.h"
-#include <time.h>
 
 namespace DB_PROXY {
 
@@ -29,7 +31,7 @@ void getUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid)
 
         uint32_t nUserId = msg.user_id();
 
-        list<IM::BaseDefine::UnreadInfo> lsUnreadCount;
+        std::list<IM::BaseDefine::UnreadInfo> lsUnreadCount;
         uint32_t nTotalCnt = 0;
 
         CMessageModel::getInstance()->getUnreadMsgCount(nUserId, nTotalCnt, lsUnreadCount);
@@ -80,13 +82,13 @@ void setDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
     IM::Login::IMDeviceTokenRsp msgResp;
     if (msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t nUserId = msg.user_id();
-        string strToken = msg.device_token();
+        std::string strToken = msg.device_token();
         CImPdu* pPduResp = new CImPdu;
         CacheManager* pCacheManager = CacheManager::getInstance();
         CacheConn* pCacheConn = pCacheManager->GetCacheConn("token");
         if (pCacheConn) {
             IM::BaseDefine::ClientType nClientType = msg.client_type();
-            string strValue;
+            std::string strValue;
             if (IM::BaseDefine::CLIENT_TYPE_IOS == nClientType) {
                 strValue = "ios:" + strToken;
             } else if (IM::BaseDefine::CLIENT_TYPE_ANDROID == nClientType) {
@@ -95,22 +97,21 @@ void setDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
                 strValue = strToken;
             }
 
-            string strOldValue = pCacheConn->get("device_" + int2string(nUserId));
-
+            std::string strOldValue = pCacheConn->get("device_" + int2string(nUserId));
             if (!strOldValue.empty()) {
                 size_t nPos = strOldValue.find(":");
                 if (nPos != string::npos) {
-                    string strOldToken = strOldValue.substr(nPos + 1);
-                    string strReply = pCacheConn->get("device_" + strOldToken);
+                    std::string strOldToken = strOldValue.substr(nPos + 1);
+                    std::string strReply = pCacheConn->get("device_" + strOldToken);
                     if (!strReply.empty()) {
-                        string strNewValue("");
+                        std::string strNewValue("");
                         pCacheConn->set("device_" + strOldToken, strNewValue);
                     }
                 }
             }
 
             pCacheConn->set("device_" + int2string(nUserId), strValue);
-            string strNewValue = int2string(nUserId);
+            std::string strNewValue = int2string(nUserId);
             pCacheConn->set("device_" + strToken, strNewValue);
 
             log("setDeviceToken. userId=%u, deviceToken=%s", nUserId, strToken.c_str());
@@ -146,32 +147,32 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
         // 对于android，由客户端处理
         bool is_check_shield_status = false;
         time_t now = time(NULL);
-        struct tm* _tm = localtime(&now);
-        if (_tm->tm_hour >= 22 || _tm->tm_hour <= 7) {
+        struct tm* stm = localtime(&now);
+        if (stm->tm_hour >= 22 || stm->tm_hour <= 7)
             is_check_shield_status = true;
-        }
+
         if (pCacheConn) {
-            vector<string> vecTokens;
+            std::vector<std::string> vecTokens;
             for (uint32_t i = 0; i < nCnt; ++i) {
-                string strKey = "device_" + int2string(msg.user_id(i));
+                std::string strKey = "device_" + int2string(msg.user_id(i));
                 vecTokens.push_back(strKey);
             }
-            map<string, string> mapTokens;
+            std::map<std::string, std::string> mapTokens;
             bool bRet = pCacheConn->mget(vecTokens, mapTokens);
             pCacheManager->RelCacheConn(pCacheConn);
 
             if (bRet) {
                 for (auto it = mapTokens.begin(); it != mapTokens.end(); ++it) {
-                    string strKey = it->first;
+                    std::string strKey = it->first;
                     size_t nPos = strKey.find("device_");
                     if (nPos != string::npos) {
-                        string strUserId = strKey.substr(nPos + strlen("device_"));
+                        std::string strUserId = strKey.substr(nPos + strlen("device_"));
                         uint32_t nUserId = string2int(strUserId);
-                        string strValue = it->second;
+                        std::string strValue = it->second;
                         nPos = strValue.find(":");
                         if (nPos != string::npos) {
-                            string strType = strValue.substr(0, nPos);
-                            string strToken = strValue.substr(nPos + 1);
+                            std::string strType = strValue.substr(0, nPos);
+                            std::string strToken = strValue.substr(nPos + 1);
                             IM::BaseDefine::ClientType nClientType = IM::BaseDefine::ClientType(0);
                             if (strType == "ios") {
                                 // 过滤出已经设置勿打扰并且为晚上22：00～07：00
@@ -181,8 +182,7 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
                                 }
 
                                 if (shield_status == 1) {
-                                    // 对IOS处理
-                                    continue;
+                                    continue;// 对IOS处理
                                 } else {
                                     nClientType = IM::BaseDefine::CLIENT_TYPE_IOS;
                                 }
@@ -208,7 +208,6 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
                         } else {
                             log("invalid value. value=%s", strValue.c_str());
                         }
-
                     } else {
                         log("invalid key.key=%s", strKey.c_str());
                     }
@@ -232,4 +231,5 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
         log("parse pb failed");
     }
 }
-};
+
+}

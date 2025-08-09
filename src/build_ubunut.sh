@@ -27,6 +27,7 @@ pack_folder() {
     export LD_LIBRARY_PATH=$PWD/protobuf/lib:$LD_LIBRARY_PATH
     export LIBRARY_PATH=$PWD/protobuf/lib:$LIBRARY_PATH
 
+    rm -f base/version.h
     echo "#ifndef __VERSION_H__" > base/version.h
     echo "#define __VERSION_H__" >> base/version.h
     echo "#define VERSION \"$1\"" >> base/version.h

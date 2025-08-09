@@ -29,11 +29,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * 来自Redis（REmote DIctionary Server）项目的一部分代码
- * 包括了一些常量定义、结构体定义以及函数声明
- * 这些函数和数据结构用于解析Redis协议，并将读取的数据转换为相应的Redis回复对象
- */
+// Redis部分代码
+// 解析Redis协议，并将读取的数据转换为相应的Redis回复对象
 
 #ifndef __HIREDIS_READ_H
 #define __HIREDIS_READ_H

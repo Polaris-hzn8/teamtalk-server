@@ -6,9 +6,9 @@
  brief:
 */
 
+#include "DBPool.h"
 #include "AudioModel.h"
-#include "../DBPool.h"
-#include "../HttpClient.h"
+#include "HttpClient.h"
 using namespace std;
 
 CAudioModel* CAudioModel::m_pInstance = NULL;
@@ -31,7 +31,7 @@ CAudioModel* CAudioModel::getInstance()
 }
 
 // 语音存储地址URL
-void CAudioModel::setUrl(string& strFileSite)
+void CAudioModel::setUrl(std::string& strFileSite)
 {
     m_strFileSite = strFileSite;
     if (m_strFileSite[m_strFileSite.length()] != '/')
@@ -39,7 +39,7 @@ void CAudioModel::setUrl(string& strFileSite)
 }
 
 // 读取语音消息
-bool CAudioModel::readAudios(list<IM::BaseDefine::MsgInfo>& lsMsg)
+bool CAudioModel::readAudios(std::list<IM::BaseDefine::MsgInfo>& lsMsg)
 {
     if (lsMsg.empty())
         return true;
@@ -52,12 +52,12 @@ bool CAudioModel::readAudios(list<IM::BaseDefine::MsgInfo>& lsMsg)
             IM::BaseDefine::MsgType nType = it->msg_type();
             if ((IM::BaseDefine::MSG_TYPE_GROUP_AUDIO == nType) ||
                 (IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO == nType)) {
-                string strSql = "select * from IMAudio where id=" + it->msg_data();
+                std::string strSql = "select * from IMAudio where id=" + it->msg_data();
                 CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
                 if (pResultSet) {
                     while (pResultSet->Next()) {
-                        uint32_t nCostTime = pResultSet->GetInt("duration");
                         uint32_t nSize = pResultSet->GetInt("size");
+                        uint32_t nCostTime = pResultSet->GetInt("duration");
                         std::string strPath = pResultSet->GetString("path");
                         readAudioContent(nCostTime, nSize, strPath, *it);
                     }

@@ -12,24 +12,23 @@
 #include <list>
 #include <string>
 
+#include "util.h"
+#include "ImPduBase.h"
 #include "AudioModel.h"
 #include "IM.BaseDefine.pb.h"
-#include "ImPduBase.h"
-#include "util.h"
 using namespace std;
 
-class CMessageModel {
+class CMessageModel
+{
 public:
     virtual ~CMessageModel();
     static CMessageModel* getInstance();
 
-    bool sendMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t nToId, IM::BaseDefine::MsgType nMsgType, uint32_t nCreateTime,
-        uint32_t nMsgId, string& strMsgContent);
-    bool sendAudioMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t nToId, IM::BaseDefine::MsgType nMsgType, uint32_t nCreateTime,
-        uint32_t nMsgId, const char* pMsgContent, uint32_t nMsgLen);
-    void getMessage(uint32_t nUserId, uint32_t nPeerId, uint32_t nMsgId, uint32_t nMsgCnt,
-        list<IM::BaseDefine::MsgInfo>& lsMsg);
+    bool sendMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t nToId, IM::BaseDefine::MsgType nMsgType, uint32_t nCreateTime, uint32_t nMsgId, std::string& strMsgContent);
+    bool sendAudioMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t nToId, IM::BaseDefine::MsgType nMsgType, uint32_t nCreateTime, uint32_t nMsgId, const char* pMsgContent, uint32_t nMsgLen);
+    void getMessage(uint32_t nUserId, uint32_t nPeerId, uint32_t nMsgId, uint32_t nMsgCnt, list<IM::BaseDefine::MsgInfo>& lsMsg);
     bool clearMessageCount(uint32_t nUserId, uint32_t nPeerId);
+    
     uint32_t getMsgId(uint32_t nRelateId);
     void getUnreadMsgCount(uint32_t nUserId, uint32_t& nTotalCnt, list<IM::BaseDefine::UnreadInfo>& lsUnreadCount);
     void getLastMsg(uint32_t nFromId, uint32_t nToId, uint32_t& nMsgId, string& strMsgData, IM::BaseDefine::MsgType& nMsgType, uint32_t nStatus = 0);

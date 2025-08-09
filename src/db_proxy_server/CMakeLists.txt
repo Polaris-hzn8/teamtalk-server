@@ -1,23 +1,27 @@
 cmake_minimum_required(VERSION 2.6)
-PROJECT(db_proxy_server)
+project(db_proxy_server)
 
-AUX_SOURCE_DIRECTORY(./ SRC_LIST)
-AUX_SOURCE_DIRECTORY(./business SRC_LIST)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_LIST1)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/redis SRC_LIST2)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/business SRC_LIST3)
 
-#SET(LIBRARY_OUTPUT_PATH ./)
-SET(EXECUTABLE_OUTPUT_PATH  ./)
+set(EXECUTABLE_OUTPUT_PATH ./)
+# set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+
+# 编译链接的库文件
 if(APPLE)
-    SET(PB_LIB_DIR ../base/pb/lib/mac)
+    set(PB_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../base/pb/lib/mac")
 elseif(UNIX)
-    SET(PB_LIB_DIR ../base/pb/lib/linux)
+    set(PB_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../base/pb/lib/linux")
 endif()
+set(SLOG_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../base/slog/lib")
+set(BASE_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../lib")
+set(MYSQL_LIB /usr/lib64/mysql)
 
-SET(MYSQL_INCLUDE_DIR /usr/include/mysql)
-SET(MYSQL_LIB /usr/lib64/mysql)
-
-ADD_DEFINITIONS( 
-    g -W -Wall
-    -D_REENTRANT -D_FILE_OFFSET_BITS=64
+add_definitions(
+    -g -W -Wall
+    -D_REENTRANT
+    -D_FILE_OFFSET_BITS=64
     -DAC_HAS_INFO
     -DAC_HAS_WARNING
     -DAC_HAS_ERROR
@@ -28,25 +32,33 @@ ADD_DEFINITIONS(
     -DENCRYPT
     -std=c++11)
 
-INCLUDE_DIRECTORIES(
-    ./
-    ./businiess
-    ../base
-    ../base/jsoncpp
-    ../base/pb/protocol
-    ../base/pb/
-    ${MYSQL_INCLUDE_DIR})
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/redis
+    ${CMAKE_CURRENT_SOURCE_DIR}/business
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/pb
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/pb/protocol
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/http
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/impdu
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/jsoncpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/netlib
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/security
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/slog
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base/threadpool
+    /usr/include/mysql)
 
-LINK_DIRECTORIES(
-    ./
-    ../base
-    ${PB_LIB_DIR}
+link_directories(
+    ${PB_LIB}
+    ${BASE_LIB}
     ${MYSQL_LIB}
-    ../base/slog/lib)
+    ${SLOG_LIB})
 
-#ADD_XXXX必须在TARGET_LINK_LIBRARIES前面，否则会报错
-#ADD_LIBRARY(${PROJECTNAME} SHARED/STATIC ${SRC_LIST})
-ADD_EXECUTABLE(db_proxy_server ${SRC_LIST})
+add_executable(db_proxy_server
+    ${SRC_LIST1}
+    ${SRC_LIST2}
+    ${SRC_LIST3})
 
-TARGET_LINK_LIBRARIES(db_proxy_server pthread base protobuf-lite mysqlclient hiredis curl slog crypto)
+target_link_libraries(db_proxy_server pthread base protobuf-lite mysqlclient hiredis curl slog crypto)
 

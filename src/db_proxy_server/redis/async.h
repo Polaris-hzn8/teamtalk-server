@@ -29,10 +29,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * hiredis库的头文件
- */
-
 #ifndef __HIREDIS_ASYNC_H
 #define __HIREDIS_ASYNC_H
 #include "hiredis.h"

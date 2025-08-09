@@ -6,14 +6,18 @@
  brief:
 */
 
-#include "CachePool.h"
-#include "ConfigFileReader.h"
-#include "DBPool.h"
+#include "netlib.h"
 #include "EncDec.h"
-#include "HttpClient.h"
+#include "version.h"
 #include "ProxyConn.h"
+#include "HttpClient.h"
+#include "ConfigFileReader.h"
+
+#include "DBPool.h"
+#include "CachePool.h"
 #include "SyncCenter.h"
 #include "ThreadPool.h"
+
 #include "business/AudioModel.h"
 #include "business/FileModel.h"
 #include "business/GroupMessageModel.h"
@@ -22,10 +26,8 @@
 #include "business/RelationModel.h"
 #include "business/SessionModel.h"
 #include "business/UserModel.h"
-#include "netlib.h"
-#include "version.h"
 
-string strAudioEnc;
+std::string strAudioEnc;
 // this callback will be replaced by imconn_callback() in OnConnect()
 void proxy_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
@@ -39,51 +41,57 @@ void proxy_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void
 
 int main(int argc, char* argv[])
 {
-    // 命令行参数为-v，则打印服务器版本和构建信息，然后退出
     if ((argc == 2) && (strcmp(argv[1], "-v") == 0)) {
         printf("Server Version: DBProxyServer/%s\n", VERSION);
         printf("Server Build: %s %s\n", __DATE__, __TIME__);
         return 0;
     }
 
-    // 设置信号处理函数：忽略SIGPIPE信号，以避免在处理网络连接时收到此信号导致进程退出
+    //忽略SIGPIPE信号 以避免在处理网络连接时收到此信号导致进程退出
     signal(SIGPIPE, SIG_IGN);
     srand(time(NULL));
 
-    // 1.初始化缓存管理器：获取CacheManager对象并初始化与Redis的连接
+    // CacheManager初始化 Redis相关
     CacheManager* pCacheManager = CacheManager::getInstance();
     if (!pCacheManager) {
         log("CacheManager init failed");
         return -1;
     }
 
-    // 2.初始化数据库管理器：获取CDBManager对象并初始化与MySQL的连接
+    // CDBManager初始化 MySQL相关
     CDBManager* pDBManager = CDBManager::getInstance();
     if (!pDBManager) {
         log("DBManager init failed");
         return -1;
     }
+
     puts("db init success");
 
-    // 3.启动任务队列：初始化多个单例对象，用于处理不同类型的任务
-    // 主线程初始化单例，不然在工作线程可能会出现多次初始化
-    if (!CAudioModel::getInstance()) return -1;
-    if (!CGroupMessageModel::getInstance()) return -1;
-    if (!CGroupModel::getInstance()) return -1;
-    if (!CMessageModel::getInstance()) return -1;
-    if (!CSessionModel::getInstance()) return -1;
-    if (!CRelationModel::getInstance()) return -1;
-    if (!CUserModel::getInstance()) return -1;
-    if (!CFileModel::getInstance()) return -1;
+    // 初始化各单例对象
+    if (!CAudioModel::getInstance())
+        return -1;
+    if (!CGroupMessageModel::getInstance())
+        return -1;
+    if (!CGroupModel::getInstance())
+        return -1;
+    if (!CMessageModel::getInstance())
+        return -1;
+    if (!CSessionModel::getInstance())
+        return -1;
+    if (!CRelationModel::getInstance())
+        return -1;
+    if (!CUserModel::getInstance())
+        return -1;
+    if (!CFileModel::getInstance())
+        return -1;
 
-    // 4.读取配置文件：使用CConfigFileReader读取名为dbproxyserver.conf的配置文件
+    // 服务配置读取
     CConfigFileReader config_file("dbproxyserver.conf");
-    char* listen_ip = config_file.GetConfigName("ListenIP");//服务器的监听IP
-    char* str_listen_port = config_file.GetConfigName("ListenPort");//端口号
-    char* str_thread_num = config_file.GetConfigName("ThreadNum");//线程数量
-    char* str_file_site = config_file.GetConfigName("MsfsSite");//msfs多媒体文件站存储服务器地址
-    char* str_aes_key = config_file.GetConfigName("aesKey");//AES密钥
-    // 检查配置项：确保配置项都存在
+    char* listen_ip = config_file.GetConfigName("ListenIP");            //监听ip地址
+    char* str_listen_port = config_file.GetConfigName("ListenPort");    //端口号
+    char* str_thread_num = config_file.GetConfigName("ThreadNum");      //线程数量
+    char* str_file_site = config_file.GetConfigName("MsfsSite");        //msfs多媒体文件存储服务器地址
+    char* str_aes_key = config_file.GetConfigName("aesKey");            //AES密钥
     if (!listen_ip || !str_listen_port || !str_thread_num || !str_file_site || !str_aes_key) {
         log("missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...");
         return -1;

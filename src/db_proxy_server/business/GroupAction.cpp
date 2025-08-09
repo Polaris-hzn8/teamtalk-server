@@ -6,21 +6,21 @@
  brief:
 */
 
-#include "GroupAction.h"
-#include "../ProxyConn.h"
-#include "GroupModel.h"
-#include "IM.BaseDefine.pb.h"
 #include "IM.Group.pb.h"
 #include "IM.Server.pb.h"
+#include "IM.BaseDefine.pb.h"
+#include "GroupModel.h"
+#include "GroupAction.h"
 #include "public_define.h"
+#include "../ProxyConn.h"
 
 namespace DB_PROXY {
 
 /**
- *  创建群组
- *
- *  @param pPdu      收到的packet包指针
- *  @param conn_uuid 该包过来的socket 描述符
+ * @brief Create a Group object
+ * 
+ * @param pPdu          Packet字节流包
+ * @param conn_uuid     Socket文件描述符
  */
 void createGroup(CImPdu* pPdu, uint32_t conn_uuid)
 {
@@ -72,10 +72,10 @@ void createGroup(CImPdu* pPdu, uint32_t conn_uuid)
 }
 
 /**
- *  获取正式群列表
- *
- *  @param pPdu      收到的packet包指针
- *  @param conn_uuid 该包过来的socket 描述符
+ * @brief Get the Normal Group List object
+ * 
+ * @param pPdu          Packet字节流包
+ * @param conn_uuid     Socket文件描述符
  */
 void getNormalGroupList(CImPdu* pPdu, uint32_t conn_uuid)
 {
@@ -109,10 +109,10 @@ void getNormalGroupList(CImPdu* pPdu, uint32_t conn_uuid)
 }
 
 /**
- *  获取群信息
- *
- *  @param pPdu      收到的packet包指针
- *  @param conn_uuid 该包过来的socket 描述符
+ * @brief Get the Group Info object
+ * 
+ * @param pPdu          Packet字节流包
+ * @param conn_uuid     Socket文件描述符
  */
 void getGroupInfo(CImPdu* pPdu, uint32_t conn_uuid)
 {
@@ -163,11 +163,12 @@ void getGroupInfo(CImPdu* pPdu, uint32_t conn_uuid)
         log("parse pb failed");
     }
 }
+
 /**
- *  修改群成员，增加或删除
- *
- *  @param pPdu      收到的packet包指针
- *  @param conn_uuid 该包过来的socket 描述符
+ * @brief 群成员修改 新增/删除
+ * 
+ * @param pPdu          Packet字节流包
+ * @param conn_uuid     Socket文件描述符
  */
 void modifyMember(CImPdu* pPdu, uint32_t conn_uuid)
 {
@@ -211,17 +212,16 @@ void modifyMember(CImPdu* pPdu, uint32_t conn_uuid)
         } else {
             log("invalid groupModifyType or groupId. userId=%u, groupId=%u, groupModifyType=%u", nUserId, nGroupId, nType);
         }
-
     } else {
         log("parse pb failed");
     }
 }
 
 /**
- *  设置群组信息推送，屏蔽或者取消屏蔽
- *
- *  @param pPdu      收到的packet包指针
- *  @param conn_uuid 该包过来的socket 描述符
+ * @brief 群组信息推送设置 屏蔽或取消屏蔽
+ * 
+ * @param pPdu          Packet字节流包
+ * @param conn_uuid     Socket文件描述符
  */
 void setGroupPush(CImPdu* pPdu, uint32_t conn_uuid)
 {
@@ -257,10 +257,10 @@ void setGroupPush(CImPdu* pPdu, uint32_t conn_uuid)
 }
 
 /**
- *  获取一个群的推送设置
- *
- *  @param pPdu      收到的packet包指针
- *  @param conn_uuid 该包过来的socket 描述符
+ * @brief 获取某个群聊的推送设置
+ * 
+ * @param pPdu          Packet字节流包
+ * @param conn_uuid     Socket文件描述符
  */
 void getGroupPush(CImPdu* pPdu, uint32_t conn_uuid)
 {
@@ -302,4 +302,5 @@ void getGroupPush(CImPdu* pPdu, uint32_t conn_uuid)
         log("parse pb failed");
     }
 }
+
 }

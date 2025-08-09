@@ -8,6 +8,7 @@
 
 #ifndef __DEPARTACTION_H__
 #define __DEPARTACTION_H__
+
 #include "ImPduBase.h"
 
 namespace DB_PROXY {
