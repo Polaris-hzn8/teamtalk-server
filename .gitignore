@@ -34,9 +34,9 @@
 # vscode_folders
 .vscode/
 
-# protobuff
-src/third/protobuf/*
-!src/third/protobuf/protobuf-2.6.1.tar.gz
+#hiredis
+src/third/hiredis/*
+!src/third/hiredis/hiredis-master.zip
 
 # log4cxx
 src/third/log4cxx/*
@@ -44,6 +44,10 @@ src/third/log4cxx/*
 !src/third/log4cxx/console.cpp
 !src/third/log4cxx/inputstreamreader.cpp
 !src/third/log4cxx/socketoutputstream.cpp
+
+# protobuff
+src/third/protobuf/*
+!src/third/protobuf/protobuf-2.6.1.tar.gz
 
 # tools
 src/tools/daeml

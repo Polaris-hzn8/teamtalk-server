@@ -1,22 +1,22 @@
 #!/bin/sh
 SRC_DIR=./
-DST_DIR=./gen
-CPP_DIR=../src/base/pb/protocol
-PROTOC=$PWD/../src/protobuf/bin/protoc
+GEM_DIR=./gen
+DEST_DIR=../src/base/pbgen
+PROTOC=$PWD/../src/third/protobuf/bin/protoc
 
 build() {
     echo "building..."
     #C++
-    mkdir -p $DST_DIR/cpp
-    $PROTOC -I=$SRC_DIR --cpp_out=$DST_DIR/cpp/ $SRC_DIR/*.proto
+    mkdir -p $GEM_DIR/cpp
+    $PROTOC -I=$SRC_DIR --cpp_out=$GEM_DIR/cpp/ $SRC_DIR/*.proto
 
     #JAVA
-    mkdir -p $DST_DIR/java
-    $PROTOC -I=$SRC_DIR --java_out=$DST_DIR/java/ $SRC_DIR/*.proto
+    mkdir -p $GEM_DIR/java
+    $PROTOC -I=$SRC_DIR --java_out=$GEM_DIR/java/ $SRC_DIR/*.proto
 
     #PYTHON
-    mkdir -p $DST_DIR/python
-    $PROTOC -I=$SRC_DIR --python_out=$DST_DIR/python/ $SRC_DIR/*.proto
+    mkdir -p $GEM_DIR/python
+    $PROTOC -I=$SRC_DIR --python_out=$GEM_DIR/python/ $SRC_DIR/*.proto
 
     echo "build finished."
 }
@@ -24,7 +24,7 @@ build() {
 sync() {
     echo "syncing..."
     #C++
-    sudo cp $DST_DIR/cpp/* $CPP_DIR/
+    sudo cp $GEM_DIR/cpp/* $DEST_DIR/
 
     echo "sync finished."
     rm -rf ./gen
