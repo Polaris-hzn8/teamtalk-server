@@ -3,9 +3,7 @@
  Email: 3453851623@qq.com
  filename: slog_api.h
  Update Time: Sun 11 Jun 2023 11:22:26 CST
- brief: 
-    SLog模块依赖于log4cxx，实际是对log4cxx的进一步封装
-    CSLog 是对 CLog4CXX 的封装类，提供了更便捷的日志接口，使用可变参数和格式化字符串来输出日志。
+ brief: 封装log4cxx为SLog
 */
 
 #ifndef __slog__slog_api__
@@ -16,8 +14,8 @@
 #define WATCH_DELAY_TIME     10 * 1000
 
 class CSLogObject;
-
-class CSLog {
+class CSLog
+{
 public:
     CSLog(const char* module_name, int delay = WATCH_DELAY_TIME);
     virtual ~CSLog();
