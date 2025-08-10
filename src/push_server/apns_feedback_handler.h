@@ -1,17 +1,17 @@
-//
-//  apns_feedback_handler.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-17.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: apns_feedback_handler.h
+ Update Time: Sun 10 Aug 2025 12:06:55 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__apns_feedback_handler__
 #define __my_push_server__apns_feedback_handler__
 
 #include <stdio.h>
-#include "socket/base_handler.hpp"
 #include "apns_msg.h"
+#include "socket/base_handler.hpp"
 
 class CAPNSFeedBackHandler : public CBaseHandler
 {

@@ -1,18 +1,19 @@
-//
-//  byte_stream.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-13.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: byte_stream.h
+ Update Time: Sun 10 Aug 2025 12:07:50 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__byte_stream__
 #define __my_push_server__byte_stream__
 
 #include <stdio.h>
+#include "string"
 #include "type/base_type.h"
 #include "bufferloop/buffer_loop.hpp"
-#include "string"
+
 using namespace std;
 class CByteStream
 {

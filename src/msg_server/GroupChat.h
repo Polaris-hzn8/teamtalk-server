@@ -9,14 +9,16 @@
 #ifndef GROUPCHAT_H_
 #define GROUPCHAT_H_
 
+#include <map>
+#include <set>
 #include "ImPduBase.h"
 
-typedef set<uint32_t> group_member_t;
-typedef hash_map<uint32_t, group_member_t*> group_map_t;
+typedef std::set<uint32_t> group_member_t;
+typedef std::unordered_map<uint32_t, group_member_t*> group_map_t;
 
 class CMsgConn;
-
-class CGroupChat {
+class CGroupChat
+{
 public:
     virtual ~CGroupChat() { }
 

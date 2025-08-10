@@ -6,11 +6,17 @@
  brief:
 */
 
+#include "ImUser.h"
 #include "MsgConn.h"
+#include "GroupChat.h"
+#include "ImPduBase.h"
 #include "AttachData.h"
 #include "DBServConn.h"
 #include "FileHandler.h"
-#include "GroupChat.h"
+#include "LoginServConn.h"
+#include "RouteServConn.h"
+#include "public_define.h"
+
 #include "IM.Buddy.pb.h"
 #include "IM.Group.pb.h"
 #include "IM.Login.pb.h"
@@ -18,12 +24,9 @@
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
 #include "IM.SwitchService.pb.h"
-#include "ImPduBase.h"
-#include "ImUser.h"
-#include "LoginServConn.h"
-#include "RouteServConn.h"
-#include "public_define.h"
+
 using namespace IM::BaseDefine;
+using namespace std;
 
 #define TIMEOUT_WATI_LOGIN_RESPONSE 15000 // 15 seconds
 #define TIMEOUT_WAITING_MSG_DATA_ACK 15000 // 15 seconds

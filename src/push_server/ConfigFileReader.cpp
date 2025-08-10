@@ -1,14 +1,16 @@
 /*
- * ConfigFileReader.cpp
- *
- *  Created on: 2013-7-2
- *      Author: ziteng@mogujie.com
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: ConfigFileReader.cpp
+ Update Time: Sun 10 Aug 2025 12:08:22 CST
+ brief: 
+*/
 
-
-#include "ConfigFileReader.h"
 #include "stdio.h"
 #include "string.h"
+#include "ConfigFileReader.h"
+using namespace std;
+
 CConfigFileReader::CConfigFileReader(const char* filename)
 {
 	m_config_map = new map<string, string>;

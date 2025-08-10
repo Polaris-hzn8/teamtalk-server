@@ -6,25 +6,28 @@
  brief:
 */
 
+#include <list>
+
+#include "HttpPdu.h"
+#include "HttpConn.h"
+#include "HttpQuery.h"
 #include "DBServConn.h"
 #include "AttachData.h"
-#include "HttpConn.h"
-#include "HttpPdu.h"
-#include "HttpQuery.h"
+#include "RouteServConn.h"
+#include "public_define.h"
+
 #include "IM.Buddy.pb.h"
 #include "IM.Group.pb.h"
 #include "IM.Message.pb.h"
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
 #include "IM.SwitchService.pb.h"
-#include "RouteServConn.h"
-#include "public_define.h"
-#include <list>
-using namespace std;
 
+using namespace std;
 using namespace IM::BaseDefine;
 
-extern hash_map<string, auth_struct*> g_hm_http_auth;
+extern std::unordered_map<std::string, auth_struct*> g_hm_http_auth;
+
 bool g_bOnSync = false;
 
 uint64_t g_last_recv_auth = 0;

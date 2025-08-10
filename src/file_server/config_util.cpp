@@ -6,7 +6,7 @@
  brief:
 */
 
-#include "file_server/config_util.h"
+#include "config_util.h"
 
 void ConfigUtil::AddAddress(const char* ip, uint16_t port)
 {

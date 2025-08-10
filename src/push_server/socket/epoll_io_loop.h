@@ -12,12 +12,12 @@
 #ifndef _EPOLL_IO_LOOP_H
 #define _EPOLL_IO_LOOP_H
 
-#include "socket_io.h"
-#include "../thread/base_thread.hpp"
-#include "base_socket.hpp"
-#include "../type/base_type.h"
-#include "base_io_stream.h"
 #include "io_loop.h"
+#include "socket_io.h"
+#include "base_socket.hpp"
+#include "type/base_type.h"
+#include "base_io_stream.h"
+#include "thread/base_thread.hpp"
 
 #include <map>
 #include <vector>

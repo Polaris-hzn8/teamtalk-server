@@ -6,12 +6,13 @@
  brief:
 */
 
-#ifndef __HTTP_CONN_H__
-#define __HTTP_CONN_H__
+#ifndef _HTTP_CONN_H_
+#define _HTTP_CONN_H_
 
-#include "HttpParserWrapper.h"
-#include "netlib.h"
 #include "util.h"
+#include "netlib.h"
+#include "HttpParserWrapper.h"
+#include <unordered_map>
 
 #define HTTP_CONN_TIMEOUT 60000
 
@@ -29,7 +30,8 @@ enum {
     CONN_STATE_CLOSED,
 };
 
-class CHttpConn : public CRefObject {
+class CHttpConn : public CRefObject
+{
 public:
     CHttpConn();
     virtual ~CHttpConn();
@@ -48,28 +50,28 @@ public:
     void OnWriteComlete();
 
 private:
-    void _HandleMsgServRequest(string& url, string& post_data);
+    void _HandleMsgServRequest(std::string& url, std::string& post_data);
 
 protected:
-    net_handle_t m_sock_handle;
-    uint32_t m_conn_handle;
-    bool m_busy;
+    net_handle_t    m_sock_handle;
+    uint32_t        m_conn_handle;
+    bool            m_busy;
 
-    uint32_t m_state;
-    std::string m_peer_ip;
-    uint16_t m_peer_port;
-    CSimpleBuffer m_in_buf;
-    CSimpleBuffer m_out_buf;
+    uint32_t        m_state;
+    std::string     m_peer_ip;
+    uint16_t        m_peer_port;
+    CSimpleBuffer   m_in_buf;
+    CSimpleBuffer   m_out_buf;
 
-    uint64_t m_last_send_tick;
-    uint64_t m_last_recv_tick;
+    uint64_t        m_last_send_tick;
+    uint64_t        m_last_recv_tick;
 
     CHttpParserWrapper m_cHttpParser;
 };
 
-typedef hash_map<uint32_t, CHttpConn*> HttpConnMap_t;
+typedef std::unordered_map<uint32_t, CHttpConn*> HttpConnMap_t;
 
 CHttpConn* FindHttpConnByHandle(uint32_t handle);
 void init_http_conn();
 
-#endif /* IMCONN_H_ */
+#endif // _HTTP_CONN_H_

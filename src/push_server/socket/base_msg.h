@@ -1,9 +1,10 @@
+
 #ifndef _BASE_MSG_H
 #define _BASE_MSG_H
 
 #include "socket_io.h"
-#include "../type/base_type.h"
-#include "../bufferloop/buffer_loop.hpp"
+#include "type/base_type.h"
+#include "bufferloop/buffer_loop.hpp"
 
 class SOCKET_IO_DECLARE_CLASS CBaseMsg
 {

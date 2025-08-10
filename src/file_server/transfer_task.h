@@ -6,12 +6,11 @@
  brief:
 */
 
-#ifndef FILE_SERVER_TRANSFER_TASK_H_
-#define FILE_SERVER_TRANSFER_TASK_H_
+#ifndef _FILE_SERVER_TRANSFER_TASK_H_
+#define _FILE_SERVER_TRANSFER_TASK_H_
 
-#include "base/util.h"
-
-#include "file_server/offline_file_util.h"
+#include "util.h"
+#include "offline_file_util.h"
 
 class CImConn;
 
@@ -233,11 +232,12 @@ protected:
     // uint64_t    last_update_time_;
 };
 
-typedef map<std::string, BaseTransferTask*> TransferTaskMap;
-typedef map<CImConn*, BaseTransferTask*> TransferTaskConnkMap;
+typedef std::map<std::string, BaseTransferTask*> TransferTaskMap;
+typedef std::map<CImConn*, BaseTransferTask*> TransferTaskConnkMap;
 
 //----------------------------------------------------------------------------
-class OnlineTransferTask : public BaseTransferTask {
+class OnlineTransferTask : public BaseTransferTask
+{
 public:
     OnlineTransferTask(const std::string& task_id, uint32_t from_user_id, uint32_t to_user_id, const std::string& file_name, uint32_t file_size)
         : BaseTransferTask(task_id, from_user_id, to_user_id, file_name, file_size)
@@ -273,7 +273,8 @@ private:
 //----------------------------------------------------------------------------
 #define SEGMENT_SIZE 32768
 
-class OfflineTransferTask : public BaseTransferTask {
+class OfflineTransferTask : public BaseTransferTask
+{
 public:
     OfflineTransferTask(const std::string& task_id, uint32_t from_user_id, uint32_t to_user_id, const std::string& file_name, uint32_t file_size)
         : BaseTransferTask(task_id, from_user_id, to_user_id, file_name, file_size)
@@ -331,9 +332,8 @@ private:
     inline int SetMaxSegmentSize(uint32_t file_size)
     {
         int seg_size = file_size / SEGMENT_SIZE;
-        if (file_size_ % SEGMENT_SIZE != 0) {
+        if (file_size_ % SEGMENT_SIZE != 0)
             seg_size = file_size / SEGMENT_SIZE + 1;
-        }
         return seg_size;
     }
 
@@ -458,4 +458,4 @@ const char* GetCurrentOfflinePath();
 
 // nt generate_id(char* id);
 
-#endif /* defined(__im_server_mac_new__transfer_task__) */
+#endif // _FILE_SERVER_TRANSFER_TASK_H_

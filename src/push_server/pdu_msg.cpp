@@ -1,10 +1,11 @@
-//
-//  pdu_msg.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-12.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: pdu_msg.cpp
+ Update Time: Sun 10 Aug 2025 12:09:51 CST
+ brief: 
+*/
 
 #include "pdu_msg.h"
 #include "byte_stream.h"
@@ -22,7 +23,9 @@ CPduMsg::CPduMsg()
 }
 
 CPduMsg::~CPduMsg()
-{}
+{
+    
+}
 
 BOOL CPduMsg::CheckMsgAvailable()
 {

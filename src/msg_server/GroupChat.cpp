@@ -6,18 +6,19 @@
  brief:
 */
 
+#include "ImUser.h"
+#include "MsgConn.h"
 #include "GroupChat.h"
 #include "DBServConn.h"
-#include "MsgConn.h"
+#include "AttachData.h"
 #include "RouteServConn.h"
 
-#include "AttachData.h"
 #include "IM.Group.pb.h"
 #include "IM.Message.pb.h"
 #include "IM.Server.pb.h"
-#include "ImUser.h"
-#include <set>
+
 using namespace IM::BaseDefine;
+using namespace std;
 
 CGroupChat* CGroupChat::s_group_chat_instance = NULL;
 

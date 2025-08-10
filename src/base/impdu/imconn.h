@@ -10,9 +10,9 @@
 #define _IMCONN_H_
 
 #include <unordered_map>
+#include "util.h"
+#include "netlib.h"
 #include "ImPduBase.h"
-#include "common/util.h"
-#include "netlib/netlib.h"
 
 #define SERVER_HEARTBEAT_INTERVAL	5000
 #define SERVER_TIMEOUT				30000

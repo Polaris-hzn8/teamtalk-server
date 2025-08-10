@@ -6,25 +6,27 @@
  brief:
 */
 
-#include "LoginConn.h"
 #include "IM.Login.pb.h"
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
+
+#include "LoginConn.h"
 #include "public_define.h"
 
 using namespace IM::BaseDefine;
+using namespace std;
 
-//用于管理客户端连接对象 根据网络句柄找到对应的连接对象
+// 客户端连接管理 handle -> ImConn
 static ConnMap_t g_client_conn_map;
 
-//用于管理消息服务器连接对象 根据网络句柄找到对应的连接对象
+// 消息服连接管理 handle -> ImConn
 static ConnMap_t g_msg_serv_conn_map;
 
-//并发在线总人数
+// 当前服务器在线人数
 static uint32_t g_total_online_user_cnt = 0;        
 
 //存储消息服务器的信息 根据消息服务器的连接句柄 uint32_t 映射到消息服务器信息的指针 msg_serv_info_t*
-map<uint32_t, msg_serv_info_t*> g_msg_serv_info;    
+std::map<uint32_t, msg_serv_info_t*> g_msg_serv_info;
 
 /**
  * @brief

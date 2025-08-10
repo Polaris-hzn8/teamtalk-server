@@ -1,6 +1,8 @@
-#include "tcp_server.h"
+
 #include "io_loop.h"
+#include "tcp_server.h"
 #include "socket_io_define.h"
+
 CTCPServer::CTCPServer(CIOLoop* pIO) : CBaseIOStream(pIO)
 {
 	SetSockType(SOCK_TCP_SERVER);
@@ -14,10 +16,6 @@ CTCPServer::~CTCPServer(void)
 	Close();
 }
 
-/**	@fn	void CTCPServer::OnAccept()
-*	@brief 
-*	@return	
-*/
 void CTCPServer::OnAccept()
 {
     char szIP[32] = {0};
@@ -29,20 +27,12 @@ void CTCPServer::OnAccept()
 	}
 }
 
-/**	@fn	void CTCPServer::Listen()
-*	@brief 
-*	@return	
-*/
 void CTCPServer::Listen()
 {
 	S_Listen(GetSocket(), 1000);
 	m_pio->Add_Handler(this);
 }
 
-/**	@fn	void CTCPServer::Close()
-*	@brief 
-*	@return	
-*/
 void CTCPServer::Close()
 {
 	if (GetSocket() != S_INVALID_SOCKET)

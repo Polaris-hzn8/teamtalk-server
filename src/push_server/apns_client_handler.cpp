@@ -1,14 +1,14 @@
-//
-//  apns_client_handler.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-11.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: apns_client_handler.cpp
+ Update Time: Sun 10 Aug 2025 12:06:23 CST
+ brief: 
+*/
 
-#include "apns_client_handler.h"
 #include "push_define.h"
 #include "session_manager.h"
+#include "apns_client_handler.h"
 
 void CAPNSClientHandler::OnClose(uint32_t nsockid)
 {

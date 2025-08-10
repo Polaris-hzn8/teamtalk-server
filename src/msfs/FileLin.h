@@ -19,7 +19,8 @@ using namespace std;
 
 namespace msfs {
 
-class File {
+class File
+{
 public:
     File(const char* path);
     ~File();

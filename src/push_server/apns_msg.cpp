@@ -1,17 +1,18 @@
-//
-//  apns_msg.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-17.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: apns_msg.cpp
+ Update Time: Sun 10 Aug 2025 12:07:15 CST
+ brief: 
+*/
 
-#include "apns_msg.h"
-#include "byte_stream.h"
-#include "jsonxx.h"
 #include <string.h>
 #include <arpa/inet.h>
+#include "jsonxx.h"
+#include "apns_msg.h"
 #include "push_define.h"
+#include "byte_stream.h"
+
 CAPNSGateWayMsg::CAPNSGateWayMsg()
 {
     memset(&m_stHead, 0, sizeof(ST_GATEWAY_HEAD));
@@ -25,7 +26,9 @@ CAPNSGateWayMsg::CAPNSGateWayMsg()
 }
 
 CAPNSGateWayMsg::~CAPNSGateWayMsg()
-{}
+{
+    
+}
 
 void CAPNSGateWayMsg::WriteHead()
 {

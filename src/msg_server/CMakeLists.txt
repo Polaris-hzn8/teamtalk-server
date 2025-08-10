@@ -1,29 +1,57 @@
 cmake_minimum_required(VERSION 2.6)
-PROJECT(msgserver)
+project(msgserver)
 
-AUX_SOURCE_DIRECTORY(./ SRC_LIST)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_LIST)
 
-#SET(LIBRARY_OUTPUT_PATH ./)
-SET(EXECUTABLE_OUTPUT_PATH  ./)
+set(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../base)
+set(THIRD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../third)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
 if(APPLE)
-    SET(PB_LIB_DIR ../base/pb/lib/mac)
-    SET(SECURITY_LIB_DIR ../base/security/lib/mac)
+    set(SECURITY_LIB_DIR ${THIRD_DIR}/libsecurity/lib/mac)
 elseif(UNIX)
-    SET(PB_LIB_DIR ../base/pb/lib/linux)
-    SET(SECURITY_LIB_DIR ../base/security/lib/linux)
+    set(SECURITY_LIB_DIR ${THIRD_DIR}/libsecurity/lib/unix)
 endif()
+set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
+set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
+set(BASE_LIB_DIR ${BASE_DIR}/bin)
 
+add_definitions(
+    -g -W -Wall
+    -D_REENTRANT
+    -D_FILE_OFFSET_BITS=64
+    -DAC_HAS_INFO
+    -DAC_HAS_WARNING
+    -DAC_HAS_ERROR
+    -DAC_HAS_CRITICAL
+    -DAC_HAS_DEBUG
+    -DTIXML_USE_STL
+    -DLINUX_DAEMON
+    -std=c++11)
 
-ADD_DEFINITIONS( -g -W -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DAC_HAS_INFO
--DAC_HAS_WARNING -DAC_HAS_ERROR -DAC_HAS_CRITICAL -DTIXML_USE_STL
--DAC_HAS_DEBUG -DLINUX_DAEMON -std=c++11)
+include_directories(
+    ./
+    ${BASE_DIR}
+    ${BASE_DIR}/pbgen
+    ${BASE_DIR}/common
+    ${BASE_DIR}/http
+    ${BASE_DIR}/impdu
+    ${BASE_DIR}/jsoncpp
+    ${BASE_DIR}/netlib
+    ${BASE_DIR}/threadpool
+    ${THIRD_DIR}/slog/include
+    ${THIRD_DIR}/protobuf/include
+    ${THIRD_DIR}/libsecurity/include)
 
-INCLUDE_DIRECTORIES(./ ../base ../base/pb/protocol ../base/pb/ ../base/security/)
-LINK_DIRECTORIES(./ ../base ${PB_LIB_DIR} ../base/slog/lib ${SECURITY_LIB_DIR})
+link_directories(
+    ${PB_LIB_DIR}
+    ${SLOG_LIB_DIR}
+    ${BASE_LIB_DIR}
+    ${SECURITY_LIB_DIR})
 
-#ADD_XXXX必须在TARGET_LINK_LIBRARIES前面，否则会报错
-#ADD_LIBRARY(${PROJECTNAME} SHARED/STATIC ${SRC_LIST})
-ADD_EXECUTABLE(msg_server ${SRC_LIST})
+add_executable(msg_server ${SRC_LIST})
 
-TARGET_LINK_LIBRARIES(msg_server base protobuf-lite slog crypto pthread )
+target_link_libraries(msg_server base slog protobuf-lite crypto pthread)
  

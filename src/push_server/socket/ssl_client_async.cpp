@@ -1,15 +1,15 @@
-//
-//  ssl_client_async.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-14.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: ssl_client_async.cpp
+ Update Time: Sun 10 Aug 2025 12:25:00 CST
+ brief: 
+*/
 
+#include "io_loop.h"
+#include "timer/Timer.hpp"
 #include "ssl_client_async.h"
 #include "socket_io_define.h"
-#include "io_loop.h"
-#include "../timer/Timer.hpp"
 #include <openssl/err.h>
 
 CSSLClientAsync::CSSLClientAsync(CIOLoop* pIO) : CTCPClientAsync(pIO)

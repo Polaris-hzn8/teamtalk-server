@@ -1,10 +1,10 @@
-//
-//  base_socket.h
-//  my-code
-//
-//  Created by shiwei on 14-7-14.
-//  Copyright (c) 2014年 shiwei. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: base_socket.hpp
+ Update Time: Sun 10 Aug 2025 12:28:09 CST
+ brief: 
+*/
 
 #ifndef _BASE_SOCKET_HPP
 #define _BASE_SOCKET_HPP
@@ -20,7 +20,7 @@
 #include <unistd.h>
 #endif
 
-#include "../type/base_type.h"
+#include "type/base_type.h"
 
 
 #include <string.h>

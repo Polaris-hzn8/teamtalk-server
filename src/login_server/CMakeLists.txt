@@ -1,25 +1,49 @@
 cmake_minimum_required(VERSION 2.6)
-PROJECT(loginserver)
+project(loginserver)
 
-AUX_SOURCE_DIRECTORY(./ SRC_LIST)
+aux_source_directory(./ SRC_LIST)
 
-#SET(LIBRARY_OUTPUT_PATH ./)
-SET(EXECUTABLE_OUTPUT_PATH  ./)
-if(APPLE)
-    SET(PB_LIB_DIR ../base/pb/lib/mac)
-elseif(UNIX)
-    SET(PB_LIB_DIR ../base/pb/lib/linux)
-endif()
+set(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../base)
+set(THIRD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../third)
 
-ADD_DEFINITIONS( -g -W -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DAC_HAS_INFO
--DAC_HAS_WARNING -DAC_HAS_ERROR -DAC_HAS_CRITICAL -DTIXML_USE_STL
--DAC_HAS_DEBUG -DLINUX_DAEMON -std=c++11)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-INCLUDE_DIRECTORIES(./ ../base ../base/pb/protocol ../base/jsoncpp/ ../base/pb/)
-LINK_DIRECTORIES(./ ../base ${PB_LIB_DIR} ../base/slog/lib)
+set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
+set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
+set(BASE_LIB_DIR ${BASE_DIR}/bin)
 
-#ADD_XXXX必须在TARGET_LINK_LIBRARIES前面，否则会报错
-#ADD_LIBRARY(${PROJECTNAME} SHARED/STATIC ${SRC_LIST})
-ADD_EXECUTABLE(login_server ${SRC_LIST})
+add_definitions(
+    -g -W -Wall
+    -D_REENTRANT
+    -D_FILE_OFFSET_BITS=64
+    -DAC_HAS_INFO
+    -DAC_HAS_WARNING
+    -DAC_HAS_ERROR
+    -DAC_HAS_CRITICAL
+    -DAC_HAS_DEBUG
+    -DTIXML_USE_STL
+    -DLINUX_DAEMON
+    -std=c++11)
 
-TARGET_LINK_LIBRARIES(login_server base protobuf-lite slog pthread) 
+include_directories(
+    ./
+    ${BASE_DIR}
+    ${BASE_DIR}/pbgen
+    ${BASE_DIR}/common
+    ${BASE_DIR}/http
+    ${BASE_DIR}/impdu
+    ${BASE_DIR}/jsoncpp
+    ${BASE_DIR}/netlib
+    ${BASE_DIR}/threadpool
+    ${THIRD_DIR}/slog/include
+    ${THIRD_DIR}/protobuf/include)
+
+LINK_DIRECTORIES(
+    ${PB_LIB_DIR}
+    ${SLOG_LIB_DIR}
+    ${BASE_LIB_DIR})
+
+add_executable(login_server ${SRC_LIST})
+
+target_link_libraries(login_server base slog protobuf-lite pthread)

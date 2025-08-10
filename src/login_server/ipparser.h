@@ -11,11 +11,12 @@
 
 #include "util.h"
 
-class IpParser {
+class IpParser
+{
 public:
     IpParser();
     virtual ~IpParser();
-    bool isTelcome(const char* ip);//指示该IP地址是否属于电信公司
+    bool isTelcome(const char* ip);
 };
 
 #endif

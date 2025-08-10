@@ -15,8 +15,7 @@ namespace msfs {
 
 class CriticalSection {
 public:
-    CriticalSection()
-    {
+    CriticalSection() {
         pthread_mutexattr_t mutex_attribute;
         pthread_mutexattr_init(&mutex_attribute);
         pthread_mutexattr_settype(&mutex_attribute, PTHREAD_MUTEX_RECURSIVE);
@@ -25,11 +24,9 @@ public:
     }
     ~CriticalSection() { pthread_mutex_destroy(&m_mutex); }
     void Enter() { pthread_mutex_lock(&m_mutex); }
-    bool TryEnter()
-    {
-        if (pthread_mutex_trylock(&m_mutex) == 0) {
+    bool TryEnter() {
+        if (pthread_mutex_trylock(&m_mutex) == 0)
             return true;
-        }
         return false;
     }
     void Leave() { pthread_mutex_unlock(&m_mutex); }

@@ -6,12 +6,14 @@
  brief:
 */
 
+#include "ImUser.h"
 #include "PushServConn.h"
 #include "IM.BaseDefine.pb.h"
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
-#include "ImUser.h"
+
 using namespace IM::BaseDefine;
+using namespace std;
 
 #define IOS_PUSH_FLASH_MAX_LENGTH 40
 
@@ -95,9 +97,8 @@ void build_ios_push_flash(string& flash, uint32_t msg_type, uint32_t from_id)
 CPushServConn* get_push_serv_conn()
 {
     CPushServConn* push_conn = NULL;
-    if (g_master_push_conn && g_master_push_conn->IsOpen()) {
+    if (g_master_push_conn && g_master_push_conn->IsOpen())
         push_conn = g_master_push_conn;
-    }
     return push_conn;
 }
 

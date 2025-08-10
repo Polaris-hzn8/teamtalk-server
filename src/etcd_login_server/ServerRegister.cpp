@@ -8,18 +8,18 @@
 */
 
 #include "cetcd.h"
-#include "json/json.h"      // json文件
-#include "HttpClient.h"     // http客户端
+#include "json/json.h"
+#include "HttpClient.h"
 #include "public_define.h"
 #include "ServerRegister.h"
-
 using namespace IM::BaseDefine;
+using namespace std;
 
 static LoginServerRegInfo g_reg_info;
 
 void server_register_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
-     cetcd_client cli;
+    cetcd_client cli;
     cetcd_response *resp;
     cetcd_array addrs;
 

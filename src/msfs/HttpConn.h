@@ -9,20 +9,22 @@
 #ifndef __HTTP_CONN_H__
 #define __HTTP_CONN_H__
 
-#include "util.h"
 #if (MSFS_LINUX)
-#include <sys/sendfile.h>
+    #include <sys/sendfile.h>
 #elif (MSFS_BSD)
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/uio.h>
+    #include <sys/socket.h>
+    #include <sys/types.h>
+    #include <sys/uio.h>
 #endif
-#include "ConfigFileReader.h"
-#include "FileManager.h"
-#include "HttpParserWrapper.h"
-#include "ThreadPool.h"
-#include "netlib.h"
 #include <pthread.h>
+#include <unordered_map>
+
+#include "util.h"
+#include "netlib.h"
+#include "ThreadPool.h"
+#include "FileManager.h"
+#include "ConfigFileReader.h"
+#include "HttpParserWrapper.h"
 
 #define HTTP_CONN_TIMEOUT 30000
 #define HTTP_UPLOAD_MAX 0xA00000 // 10M
@@ -65,6 +67,7 @@
 #define HTTP_RESPONSE_500_LEN strlen(HTTP_RESPONSE_500)
 
 using namespace msfs;
+
 enum {
     CONN_STATE_IDLE,
     CONN_STATE_CONNECTED,
@@ -81,10 +84,10 @@ typedef struct {
     uint32_t conn_handle;
     int method;
     int nContentLen;
-    string strAccessHost;
+    std::string strAccessHost;
     char* pContent;
-    string strUrl;
-    string strContentType;
+    std::string strUrl;
+    std::string strContentType;
 } Request_t;
 
 typedef struct {
@@ -94,7 +97,8 @@ typedef struct {
 } Response_t;
 
 class CHttpConn;
-class CHttpTask : public CTask {
+class CHttpTask : public CTask
+{
 public:
     CHttpTask(Request_t request);
     virtual ~CHttpTask();
@@ -103,28 +107,23 @@ public:
     void OnDownload();
 
 private:
-    uint32_t m_ConnHandle;
-    int m_nMethod;
-    string m_strUrl;
-    string m_strContentType;
-    char* m_pContent;
-    int m_nContentLen;
-    string m_strAccessHost;
+    uint32_t        m_ConnHandle;
+    int             m_nMethod;
+    std::string     m_strUrl;
+    std::string     m_strContentType;
+    char*           m_pContent;
+    int             m_nContentLen;
+    std::string     m_strAccessHost;
 };
 
-class CHttpConn : public CRefObject {
+class CHttpConn : public CRefObject
+{
 public:
     CHttpConn();
     virtual ~CHttpConn();
 
-    uint32_t GetConnHandle()
-    {
-        return m_conn_handle;
-    }
-    char* GetPeerIP()
-    {
-        return (char*)m_peer_ip.c_str();
-    }
+    uint32_t GetConnHandle() { return m_conn_handle; }
+    char* GetPeerIP() { return (char*)m_peer_ip.c_str(); }
 
     int Send(void* data, int len);
 
@@ -138,29 +137,30 @@ public:
 
     static void AddResponsePdu(uint32_t conn_handle, char* pContent, int nLen); // 工作线程调用
     static void SendResponsePduList(); // 主线程调用
+
 protected:
-    net_handle_t m_sock_handle;
-    uint32_t m_conn_handle;
-    bool m_busy;
+    net_handle_t        m_sock_handle;
+    uint32_t            m_conn_handle;
+    bool                m_busy;
 
-    uint32_t m_state;
-    string m_peer_ip;
-    uint16_t m_peer_port;
-    string m_access_host;
-    CSimpleBuffer m_in_buf;
-    CSimpleBuffer m_out_buf;
-    uint64_t m_last_send_tick;
-    uint64_t m_last_recv_tick;
+    uint32_t            m_state;
+    std::string         m_peer_ip;
+    uint16_t            m_peer_port;
+    std::string         m_access_host;
+    CSimpleBuffer       m_in_buf;
+    CSimpleBuffer       m_out_buf;
+    uint64_t            m_last_send_tick;
+    uint64_t            m_last_recv_tick;
 
-    CHttpParserWrapper m_HttpParser;
+    CHttpParserWrapper  m_HttpParser;
 
-    static CLock s_list_lock;
-    static list<Response_t*> s_response_pdu_list; // 主线程发送回复消息
+    static CLock                    s_list_lock;
+    static std::list<Response_t*>   s_response_pdu_list; // 主线程发送回复消息
 };
 
-typedef hash_map<uint32_t, CHttpConn*> HttpConnMap_t;
+typedef std::unordered_map<uint32_t, CHttpConn*> HttpConnMap_t;
 
 CHttpConn* FindHttpConnByHandle(uint32_t handle);
 void init_http_conn();
 
-#endif
+#endif // __HTTP_CONN_H__

@@ -14,10 +14,10 @@
 
 typedef struct
 {
-    string reg_center_addr;
-    string service_id;  // 作为key
-    string service_dir;
-    string host_ip;
+    std::string reg_center_addr;
+    std::string service_id;  // 作为key
+    std::string service_dir;
+    std::string host_ip;
     int ttl;
     int client_port;
     int http_port;

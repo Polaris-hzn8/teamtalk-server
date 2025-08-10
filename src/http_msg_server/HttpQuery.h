@@ -8,9 +8,10 @@
 
 #ifndef HTTPQUERY_H_
 #define HTTPQUERY_H_
+
 #include "HttpConn.h"
-#include "public_define.h"
 #include "json/json.h"
+#include "public_define.h"
 
 typedef enum {
     HTTP_ERROR_SUCCESS = 0,
@@ -34,7 +35,8 @@ typedef enum {
     HTTP_SEND_MSG_TYPE_GROUP = 2,
 } HTTP_SEND_MSG_TYPE;
 
-static string HTTP_ERROR_MSG[] = {
+static std::string HTTP_ERROR_MSG[] =
+{
     "成功",
     "参数错误",
     "appKey不存在",
@@ -50,7 +52,8 @@ static string HTTP_ERROR_MSG[] = {
     "消息加密失败",
 };
 
-class CHttpQuery {
+class CHttpQuery
+{
 public:
     virtual ~CHttpQuery() { }
 
@@ -60,10 +63,10 @@ public:
 
 private:
     CHttpQuery() { }
-    static void _QueryCreateGroup(const string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
-    static void _QueryChangeMember(const string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
-    static HTTP_ERROR_CODE _CheckAuth(const string& strAppKey, const uint32_t userId, const string& strInterface, const string& strIp);
-    static HTTP_ERROR_CODE _CheckPermission(const string& strAppKey, uint8_t nType, const list<uint32_t>& lsToId, string strMsg);
+    static void _QueryCreateGroup(const std::string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
+    static void _QueryChangeMember(const std::string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
+    static HTTP_ERROR_CODE _CheckAuth(const std::string& strAppKey, const uint32_t userId, const std::string& strInterface, const std::string& strIp);
+    static HTTP_ERROR_CODE _CheckPermission(const std::string& strAppKey, uint8_t nType, const std::list<uint32_t>& lsToId, std::string strMsg);
 
 private:
     static CHttpQuery* m_query_instance;

@@ -6,15 +6,16 @@
  brief:
 */
 
-#ifndef FILE_SERVER_FILE_MSG_SERVER_CONN_H_
-#define FILE_SERVER_FILE_MSG_SERVER_CONN_H_
+#ifndef _FILE_SERVER_FILE_MSG_SERVER_CONN_H_
+#define _FILE_SERVER_FILE_MSG_SERVER_CONN_H_
 
-#include "base/imconn.h"
-#include "file_server/file_server_util.h"
+#include "imconn.h"
+#include "file_server_util.h"
 
-typedef map<std::string, transfer_task_t*> TaskMap_t; // on client connect
+typedef std::map<std::string, transfer_task_t*> TaskMap_t; // on client connect
 
-class FileMsgServerConn : public CImConn {
+class FileMsgServerConn : public CImConn
+{
 public:
     FileMsgServerConn();
     virtual ~FileMsgServerConn();
@@ -40,4 +41,4 @@ private:
 void InitializeFileMsgServerConn();
 void FileMsgServerConnCallback(void* callback_data, uint8_t msg, uint32_t handle, void* param);
 
-#endif /* defined(FILE_SERVER_FILE_MSG_SERVER_CONN_H_) */
+#endif // _FILE_SERVER_FILE_MSG_SERVER_CONN_H_

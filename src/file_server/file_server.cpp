@@ -6,16 +6,14 @@
  brief:
 */
 
-// #include "FileConn.h"
+#include "netlib.h"
+#include "version.h"
+#include "ConfigFileReader.h"
+#include "IM.BaseDefine.pb.h"
 
-#include "base/ConfigFileReader.h"
-#include "base/netlib.h"
-#include "base/pb/protocol/IM.BaseDefine.pb.h"
-#include "base/version.h"
-
-#include "file_server/config_util.h"
-#include "file_server/file_client_conn.h"
-#include "file_server/file_msg_server_conn.h"
+#include "config_util.h"
+#include "file_client_conn.h"
+#include "file_msg_server_conn.h"
 
 /*
  Address=0.0.0.0         # address for client

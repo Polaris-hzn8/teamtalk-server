@@ -1,15 +1,15 @@
-     //
-//  main.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-4.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: main.cpp
+ Update Time: Sun 10 Aug 2025 12:09:22 CST
+ brief: 
+*/
 
 #include <iostream>
+#include <sys/signal.h>
 #include "push_app.h"
 #include "timer/Timer.hpp"
-#include <sys/signal.h>
 
 void writePid()
 {
@@ -27,8 +27,8 @@ void writePid()
     fclose(f);
 }
 
-
-int main(int argc, const char * argv[]) {
+int main(int argc, const char * argv[])
+{
     // insert code here...
     printf("start push server...\n");
     signal(SIGPIPE, SIG_IGN);

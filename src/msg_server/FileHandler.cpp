@@ -6,26 +6,27 @@
  brief:
 */
 
-#include "FileHandler.h"
+#include "ImUser.h"
+#include "MsgConn.h"
 #include "AttachData.h"
 #include "DBServConn.h"
+#include "FileHandler.h"
 #include "FileServConn.h"
+#include "RouteServConn.h"
+
 #include "IM.Buddy.pb.h"
 #include "IM.File.pb.h"
 #include "IM.Server.pb.h"
-#include "ImUser.h"
-#include "MsgConn.h"
-#include "RouteServConn.h"
+
 using namespace IM::BaseDefine;
+using namespace std;
 
 CFileHandler* CFileHandler::s_handler_instance = NULL;
 
 CFileHandler* CFileHandler::getInstance()
 {
-    if (!s_handler_instance) {
+    if (!s_handler_instance)
         s_handler_instance = new CFileHandler();
-    }
-
     return s_handler_instance;
 }
 
@@ -36,7 +37,7 @@ void CFileHandler::HandleClientFileRequest(CMsgConn* pMsgConn, CImPdu* pPdu)
 
     uint32_t from_id = pMsgConn->GetUserId();
     uint32_t to_id = msg.to_user_id();
-    string file_name = msg.file_name();
+    std::string file_name = msg.file_name();
     uint32_t file_size = msg.file_size();
     uint32_t trans_mode = msg.trans_mode();
     log("HandleClientFileRequest, %u->%u, fileName: %s, trans_mode: %u.", from_id, to_id, file_name.c_str(), trans_mode);

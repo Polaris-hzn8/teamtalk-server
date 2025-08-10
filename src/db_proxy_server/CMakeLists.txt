@@ -12,11 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 # 编译链接的库文件
-if(APPLE)
-    set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
-elseif(UNIX)
-    set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
-endif()
+set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
 set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
 set(BASE_LIB_DIR ${BASE_DIR}/bin)
 set(MYSQL_LIB_DIR /usr/lib64/mysql)

@@ -1,20 +1,22 @@
-//
-//  base_handler.hpp
-//  my-code
-//
-//  Created by shiwei on 14-10-13.
-//  Copyright (c) 2014年 shiwei. All rights reserved.
-//
+
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: base_handler.hpp
+ Update Time: Sun 10 Aug 2025 12:29:14 CST
+ brief: 
+*/
 
 #ifndef _BASE_HANDLER_HPP
 #define _BASE_HANDLER_HPP
 
-#include "../sigslot/sigslot.h"
-#include "../type/base_type.h"
-#include "base_socket.hpp"
 #include <string>
+#include "base_socket.hpp"
+#include "type/base_type.h"
+#include "sigslot/sigslot.h"
 using namespace std;
 using namespace sigslot;
+
 class CBaseHandler : public has_slots<>
 {
 public:
@@ -31,9 +33,7 @@ public:
 	
     virtual void OnRecvData(const char* szBuf, int32_t nBufSize) {}
     
-    void OnRecv(uint32_t nsockid, const char* szBuf, int32_t nBufSize, const char* szIP,
-                int32_t nPort)
-    {
+    void OnRecv(uint32_t nsockid, const char* szBuf, int32_t nBufSize, const char* szIP, int32_t nPort) {
         m_nSockID = nsockid;
         m_strRemoteIP = szIP;
         m_nRemotePort = nPort;

@@ -7,8 +7,9 @@
 */
 
 #include "HttpConn.h"
-#include "HttpParserWrapper.h"
 #include "HttpQuery.h"
+#include "HttpParserWrapper.h"
+using namespace std;
 
 static HttpConnMap_t g_http_conn_map;
 
@@ -19,10 +20,8 @@ CHttpConn* FindHttpConnByHandle(uint32_t conn_handle)
 {
     CHttpConn* pConn = NULL;
     HttpConnMap_t::iterator it = g_http_conn_map.find(conn_handle);
-    if (it != g_http_conn_map.end()) {
+    if (it != g_http_conn_map.end())
         pConn = it->second;
-    }
-
     return pConn;
 }
 
@@ -34,9 +33,8 @@ void httpconn_callback(void* callback_data, uint8_t msg, uint32_t handle, uint32
     // convert void* to uint32_t, oops
     uint32_t conn_handle = *((uint32_t*)(&callback_data));
     CHttpConn* pConn = FindHttpConnByHandle(conn_handle);
-    if (!pConn) {
+    if (!pConn)
         return;
-    }
 
     switch (msg) {
     case NETLIB_MSG_READ:

@@ -6,16 +6,12 @@
  brief:
 */
 
-#include "file_server/file_client_conn.h"
-
-#include "base/pb/protocol/IM.File.pb.h"
-#include "base/pb/protocol/IM.Other.pb.h"
-
-#include "base/im_conn_util.h"
-
-#include "file_server/config_util.h"
-#include "file_server/transfer_task_manager.h"
-
+#include "config_util.h"
+#include "im_conn_util.h"
+#include "file_client_conn.h"
+#include "transfer_task_manager.h"
+#include "IM.File.pb.h"
+#include "IM.Other.pb.h"
 using namespace IM::BaseDefine;
 
 static ConnMap_t g_file_client_conn_map; // connection with others, on connect insert...
@@ -158,17 +154,15 @@ void FileClientConn::Close2() {
 
 void FileClientConn::OnConnect(net_handle_t handle)
 {
-    /// yunfan modify 2014.8.7
     m_handle = handle;
 
-    g_file_client_conn_map.insert(make_pair(handle, this));
+    g_file_client_conn_map.insert(std::make_pair(handle, this));
     netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)imconn_callback);
     netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)&g_file_client_conn_map);
 
     uint32_t socket_buf_size = NETLIB_MAX_SOCKET_BUF_SIZE;
     netlib_option(handle, NETLIB_OPT_SET_SEND_BUF_SIZE, &socket_buf_size);
     netlib_option(handle, NETLIB_OPT_SET_RECV_BUF_SIZE, &socket_buf_size);
-    /// yunfan modify end
 }
 
 void FileClientConn::OnClose()
@@ -237,7 +231,7 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu)
     CHECK_PB_PARSE_MSG(login_req.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
 
     uint32_t user_id = login_req.user_id();
-    string task_id = login_req.task_id();
+    std::string task_id = login_req.task_id();
     IM::BaseDefine::ClientFileRole mode = login_req.file_role();
 
     log("Client login, user_id=%d, task_id=%s, file_role=%d", user_id, task_id.c_str(), mode);
@@ -332,7 +326,7 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu)
     IM::File::IMFileState file_state;
     CHECK_PB_PARSE_MSG(file_state.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
 
-    string task_id = file_state.task_id();
+    std::string task_id = file_state.task_id();
     uint32_t user_id = file_state.user_id();
     uint32_t file_stat = file_state.state();
 
@@ -431,7 +425,7 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu)
     IM::File::IMFilePullDataReq pull_data_req;
     CHECK_PB_PARSE_MSG(pull_data_req.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
     uint32_t user_id = pull_data_req.user_id(); // 用户id
-    string task_id = pull_data_req.task_id(); // 任务id
+    std::string task_id = pull_data_req.task_id(); // 任务id
     uint32_t mode = pull_data_req.trans_mode(); // 传输模式
     uint32_t offset = pull_data_req.offset(); // 文件传输偏移量
     uint32_t datasize = pull_data_req.data_size(); // 文件数据
@@ -552,7 +546,7 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu)
     IM::File::IMFilePullDataRsp pull_data_rsp;
     CHECK_PB_PARSE_MSG(pull_data_rsp.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
     uint32_t user_id = pull_data_rsp.user_id(); // 用户id
-    string task_id = pull_data_rsp.task_id(); // 任务id
+    std::string task_id = pull_data_rsp.task_id(); // 任务id
     uint32_t offset = pull_data_rsp.offset(); // 偏移量offset
     // pull_data_rsp.file_data()是一个字符串对象
     // 由于 data_size 的类型是uint32_t 需要使用static_cast 进行类型转换 确保将字符串长度转换为正确的类型并存储在 data_size 变量中

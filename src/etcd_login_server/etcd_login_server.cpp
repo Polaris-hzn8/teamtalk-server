@@ -16,8 +16,8 @@
 #include "ConfigFileReader.h"
 
 IpParser* pIpParser = NULL;
-string strMsfsUrl;
-string strDiscovery;//发现获取地址
+std::string strMsfsUrl;
+std::string strDiscovery;//发现获取地址
 void client_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
 	if (msg == NETLIB_MSG_CONNECT)

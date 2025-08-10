@@ -1,12 +1,13 @@
 #ifndef _IO_LOOP_H
 #define _IO_LOOP_H
-#include "socket_io.h"
-#include "base_socket.hpp"
-#include "../thread/base_thread.hpp"
-#include "base_io_stream.h"
-#include "../type/base_type.h"
+
 #include <map>
 #include <vector>
+#include "socket_io.h"
+#include "base_socket.hpp"
+#include "base_io_stream.h"
+#include "type/base_type.h"
+#include "thread/base_thread.hpp"
 using namespace std;
 
 class CWakerPipe

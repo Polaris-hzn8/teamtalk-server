@@ -1,16 +1,17 @@
-//
-//  push_server_handler.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-11.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
 
-#include "push_server_handler.h"
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: push_server_handler.cpp
+ Update Time: Sun 10 Aug 2025 12:12:47 CST
+ brief: 
+*/
+
+#include "push_app.h"
 #include "push_define.h"
 #include "push_session.h"
-#include "push_app.h"
 #include "session_manager.h"
+#include "push_server_handler.h"
 
 void CPushServerHandler::OnClose(uint32_t nsockid)
 {

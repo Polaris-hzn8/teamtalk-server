@@ -8,16 +8,20 @@
 
 #include <sstream>
 
-#include "AttachData.h"
-#include "DBServConn.h"
 #include "HttpPdu.h"
 #include "HttpQuery.h"
+#include "AttachData.h"
+#include "DBServConn.h"
+#include "RouteServConn.h"
+#include "public_define.h"
+
 #include "IM.Buddy.pb.h"
 #include "IM.Group.pb.h"
 #include "IM.Message.pb.h"
 #include "IM.SwitchService.pb.h"
-#include "RouteServConn.h"
-#include "public_define.h"
+
+using namespace std;
+
 static uint32_t g_total_query = 0;
 static uint32_t g_last_year = 0;
 static uint32_t g_last_month = 0;
@@ -25,7 +29,7 @@ static uint32_t g_last_mday = 0;
 
 CHttpQuery* CHttpQuery::m_query_instance = NULL;
 
-hash_map<string, auth_struct*> g_hm_http_auth;
+std::unordered_map<std::string, auth_struct*> g_hm_http_auth;
 
 void http_query_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
