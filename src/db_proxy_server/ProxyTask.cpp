@@ -25,13 +25,11 @@ CProxyTask::~CProxyTask()
 
 void CProxyTask::run()
 {
-
     if (!m_pPdu) {
         // tell CProxyConn to close connection with m_conn_uuid
         CProxyConn::AddResponsePdu(m_conn_uuid, NULL);
     } else {
-        if (m_pdu_handler) {
+        if (m_pdu_handler)
             m_pdu_handler(m_pPdu, m_conn_uuid);
-        }
     }
 }

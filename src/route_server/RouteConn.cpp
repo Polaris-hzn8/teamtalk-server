@@ -10,17 +10,19 @@
 #include "UserInfo.h"
 #include "RouteConn.h"
 #include "public_define.h"
+
 #include "IM.Buddy.pb.h"
 #include "IM.Group.pb.h"
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
 #include "IM.Message.pb.h"
 #include "IM.SwitchService.pb.h"
+
 using namespace IM::BaseDefine;
 
-// typedef hash_map<uint32_t /* user_id */, UserStat_t> UserStatMap_t;
+typedef std::unordered_map<uint32_t, CUserInfo*> UserInfoMap_t;
+
 static ConnMap_t g_route_conn_map;
-typedef hash_map<uint32_t, CUserInfo*> UserInfoMap_t;
 static UserInfoMap_t g_user_map;
 
 CUserInfo* GetUserInfo(uint32_t user_id)
@@ -30,7 +32,6 @@ CUserInfo* GetUserInfo(uint32_t user_id)
     if (it != g_user_map.end()) {
         pUser = it->second;
     }
-
     return pUser;
 }
 
@@ -40,7 +41,6 @@ void route_serv_timer_callback(void* callback_data, uint8_t msg, uint32_t handle
     for (ConnMap_t::iterator it = g_route_conn_map.begin(); it != g_route_conn_map.end();) {
         ConnMap_t::iterator it_old = it;
         it++;
-
         CRouteConn* pConn = (CRouteConn*)it_old->second;
         pConn->OnTimer(cur_time);
     }
@@ -68,7 +68,6 @@ void CRouteConn::Close()
     }
 
     // remove all user info from this MessageServer
-
     UserInfoMap_t::iterator it_old;
     for (UserInfoMap_t::iterator it = g_user_map.begin(); it != g_user_map.end();) {
         it_old = it;
@@ -82,15 +81,13 @@ void CRouteConn::Close()
             g_user_map.erase(it_old);
         }
     }
-
     ReleaseRef();
 }
 
 void CRouteConn::OnConnect(net_handle_t handle)
 {
     m_handle = handle;
-
-    g_route_conn_map.insert(make_pair(handle, this));
+    g_route_conn_map.insert(std::make_pair(handle, this));
 
     netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)imconn_callback);
     netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)&g_route_conn_map);
@@ -149,7 +146,6 @@ void CRouteConn::HandlePdu(CImPdu* pPdu)
     case CID_BUDDY_LIST_SIGN_INFO_CHANGED_NOTIFY:
         _BroadcastMsg(pPdu);
         break;
-
     default:
         log("CRouteConn::HandlePdu, wrong cmd id: %d ", pPdu->GetCommandId());
         break;
@@ -200,14 +196,12 @@ void CRouteConn::_HandleUserStatusUpdate(CImPdu* pPdu)
 
         if (user_status == USER_STATUS_OFFLINE) {
             // pc端下线且无pc端存在，则给msg_server发送一个通知
-            if (CHECK_CLIENT_TYPE_PC(client_type) && !pUser->IsPCClientLogin()) {
+            if (CHECK_CLIENT_TYPE_PC(client_type) && !pUser->IsPCClientLogin())
                 _BroadcastMsg(&pdu);
-            }
         } else {
             // 只要pc端在线，则不管上线的是pc还是移动端，都通知msg_server
-            if (pUser->IsPCClientLogin()) {
+            if (pUser->IsPCClientLogin())
                 _BroadcastMsg(&pdu);
-            }
         }
     }
 
@@ -231,9 +225,8 @@ void CRouteConn::_HandleUserStatusUpdate(CImPdu* pPdu)
             } else {
                 _BroadcastMsg(&pdu2);
             }
-        } else // 该用户不存在了，则表示是离线状态
-        {
-            _BroadcastMsg(&pdu2);
+        } else {
+            _BroadcastMsg(&pdu2);// 该用户不存在了，则表示是离线状态
         }
     }
 }
@@ -244,7 +237,6 @@ void CRouteConn::_HandleRoleSet(CImPdu* pPdu)
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
     uint32_t master = msg.master();
-
     log("HandleRoleSet, master=%u, handle=%u ", master, m_handle);
     if (master == 1) {
         m_bMaster = true;
@@ -265,7 +257,7 @@ void CRouteConn::_HandleUsersStatusRequest(CImPdu* pPdu)
     IM::Buddy::IMUsersStatRsp msg2;
     msg2.set_user_id(request_id);
     msg2.set_attach_data(msg.attach_data());
-    list<user_stat_t> result_list;
+    std::list<user_stat_t> result_list;
     user_stat_t status;
     for (uint32_t i = 0; i < query_count; i++) {
         IM::BaseDefine::UserStat* user_stat = msg2.add_user_stat_list();
@@ -321,7 +313,7 @@ void CRouteConn::_UpdateUserStatus(uint32_t user_id, uint32_t status, uint32_t c
             if (pUserInfo != NULL) {
                 pUserInfo->AddRouteConn(this);
                 pUserInfo->AddClientType(client_type);
-                g_user_map.insert(make_pair(user_id, pUserInfo));
+                g_user_map.insert(std::make_pair(user_id, pUserInfo));
             } else {
                 log("new UserInfo failed. ");
             }
@@ -344,8 +336,8 @@ void CRouteConn::_SendPduToUser(uint32_t user_id, CImPdu* pPdu, bool bAll)
 {
     CUserInfo* pUser = GetUserInfo(user_id);
     if (pUser) {
-        set<CRouteConn*>* pUserSet = pUser->GetRouteConn();
-        for (set<CRouteConn*>::iterator it = pUserSet->begin(); it != pUserSet->end(); it++) {
+        std::set<CRouteConn*>* pUserSet = pUser->GetRouteConn();
+        for (std::set<CRouteConn*>::iterator it = pUserSet->begin(); it != pUserSet->end(); it++) {
             CRouteConn* pToConn = *it;
             if (bAll || pToConn != this) {
                 pToConn->Send(pPdu->GetBuffer(), pPdu->GetLength());

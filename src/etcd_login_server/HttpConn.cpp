@@ -1,23 +1,26 @@
-/*
- * HttpConn.cpp
- *
- *  Created on: 2013-9-29
- *      Author: ziteng@mogujie.com
- */
 
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: HttpConn.cpp
+ Update Time: Wed 06 Aug 2025 17:04:01 CST
+ brief: 
+*/
+
+#include "ipparser.h"
 #include "HttpConn.h"
 #include "json/json.h"
 #include "LoginConn.h"
 #include "HttpParserWrapper.h"
-#include "ipparser.h"
+using namespace std;
 
 static HttpConnMap_t g_http_conn_map;
 
-extern map<uint32_t, msg_serv_info_t*>  g_msg_serv_info;
+extern std::map<uint32_t, msg_serv_info_t*>  g_msg_serv_info;
 
 extern IpParser* pIpParser;
-extern string strMsfsUrl;
-extern string strDiscovery;
+extern std::string strMsfsUrl;
+extern std::string strDiscovery;
 
 // conn_handle 从0开始递增，可以防止因socket handle重用引起的一些冲突
 static uint32_t g_conn_handle_generator = 0;
@@ -26,10 +29,8 @@ CHttpConn* FindHttpConnByHandle(uint32_t conn_handle)
 {
     CHttpConn* pConn = NULL;
     HttpConnMap_t::iterator it = g_http_conn_map.find(conn_handle);
-    if (it != g_http_conn_map.end()) {
+    if (it != g_http_conn_map.end())
         pConn = it->second;
-    }
-
     return pConn;
 }
 
@@ -41,9 +42,8 @@ void httpconn_callback(void* callback_data, uint8_t msg, uint32_t handle, uint32
 	// convert void* to uint32_t, oops
 	uint32_t conn_handle = *((uint32_t*)(&callback_data));
     CHttpConn* pConn = FindHttpConnByHandle(conn_handle);
-    if (!pConn) {
+    if (!pConn)
         return;
-    }
 
 	switch (msg)
 	{

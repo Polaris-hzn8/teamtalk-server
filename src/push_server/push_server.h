@@ -1,21 +1,23 @@
-//
-//  push_server.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-4.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: push_server.h
+ Update Time: Sun 10 Aug 2025 12:13:08 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__push_server__
 #define __my_push_server__push_server__
 
+#include <memory>
+#include <string>
 #include <stdio.h>
 #include "socket/tcp_server.h"
-#include "socket/epoll_io_loop.h"
-#include <string>
 #include "push_server_handler.h"
-#include <memory>
+#include "socket/epoll_io_loop.h"
 using namespace std;
+
 class CPushServer : public std::enable_shared_from_this<CPushServer>
 {
 public:
@@ -41,4 +43,5 @@ private:
 };
 
 typedef std::shared_ptr<CPushServer> push_server_ptr;
+
 #endif /* defined(__my_push_server__push_server__) */

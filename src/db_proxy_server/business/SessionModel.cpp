@@ -6,19 +6,18 @@
  brief:
 */
 
-#include "SessionModel.h"
 #include "DBPool.h"
-#include "GroupMessageModel.h"
+#include "SessionModel.h"
 #include "MessageModel.h"
+#include "GroupMessageModel.h"
+using namespace std;
 
 CSessionModel* CSessionModel::m_pInstance = NULL;
 
 CSessionModel* CSessionModel::getInstance()
 {
-    if (!m_pInstance) {
+    if (!m_pInstance)
         m_pInstance = new CSessionModel();
-    }
-
     return m_pInstance;
 }
 

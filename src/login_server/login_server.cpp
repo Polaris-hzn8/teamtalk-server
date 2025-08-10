@@ -6,18 +6,19 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "HttpConn.h"
-#include "LoginConn.h"
-#include "ipparser.h"
 #include "netlib.h"
 #include "version.h"
+#include "HttpConn.h"
+#include "ipparser.h"
+#include "LoginConn.h"
+#include "ConfigFileReader.h"
 
 IpParser* pIpParser = NULL;
-string strMsfsUrl;
-string strDiscovery; // 发现获取地址
+std::string strMsfsUrl;
+std::string strDiscovery; // 发现获取地址
 
-void client_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
+void client_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
+{
     if (msg == NETLIB_MSG_CONNECT) {
         CLoginConn* pConn = new CLoginConn();
         pConn->OnConnect2(handle, LOGIN_CONN_TYPE_CLIENT);
@@ -28,9 +29,9 @@ void client_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pP
 
 // this callback will be replaced by imconn_callback() in OnConnect()
 // msg_server请求连接事件
-void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
+void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
+{
     log("msg_server come in");
-
     if (msg == NETLIB_MSG_CONNECT) {
         CLoginConn* pConn = new CLoginConn();
         pConn->OnConnect2(handle, LOGIN_CONN_TYPE_MSG_SERV);
@@ -40,7 +41,8 @@ void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* 
 }
 
 // Android、IOS、PC等客户端请求连接事件
-void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
+void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
+{
     if (msg == NETLIB_MSG_CONNECT) {
         // 这里是不是觉得很奇怪,为什么new了对象却没有释放?
         // 实际上对象在被Close时使用delete this的方式释放自己
@@ -51,7 +53,8 @@ void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pPar
     }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     if ((argc == 2) && (strcmp(argv[1], "-v") == 0)) {
         log_fatal("Server Version: LoginServer/%s\n", VERSION);
         log_fatal("Server Build: %s %s\n", __DATE__, __TIME__);

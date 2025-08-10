@@ -1,9 +1,11 @@
+
 /*
- * LoginConn.h
- *
- *  Created on: 2013-6-21
- *      Author: jianqingdu
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: LoginConn.h
+ Update Time: Wed 06 Aug 2025 17:06:16 CST
+ brief: 
+*/
 
 #ifndef LOGINCONN_H_
 #define LOGINCONN_H_
@@ -16,12 +18,12 @@ enum {
 };
 
 typedef struct  {
-    string		ip_addr1;	// 电信IP
-    string		ip_addr2;	// 网通IP
-    uint16_t	port;
-    uint32_t	max_conn_cnt;
-    uint32_t	cur_conn_cnt;
-    string 		hostname;	// 消息服务器的主机名
+    std::string		ip_addr1;	// 电信IP
+    std::string		ip_addr2;	// 网通IP
+    uint16_t		port;
+    uint32_t		max_conn_cnt;
+    uint32_t		cur_conn_cnt;
+    std::string 	hostname;	// 消息服务器的主机名
 } msg_serv_info_t;
 
 

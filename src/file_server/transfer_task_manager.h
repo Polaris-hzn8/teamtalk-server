@@ -6,14 +6,14 @@
  brief:
 */
 
-#ifndef FILE_SERVER_TRANSFER_TASK_MANAGER_H_
-#define FILE_SERVER_TRANSFER_TASK_MANAGER_H_
+#ifndef _FILE_SERVER_TRANSFER_TASK_MANAGER_H_
+#define _FILE_SERVER_TRANSFER_TASK_MANAGER_H_
 
-#include "base/singleton.h"
+#include "singleton.h"
+#include "transfer_task.h"
 
-#include "file_server/transfer_task.h"
-
-class TransferTaskManager : public Singleton<TransferTaskManager> {
+class TransferTaskManager : public Singleton<TransferTaskManager>
+{
 public:
     ~TransferTaskManager();
 
@@ -26,15 +26,11 @@ public:
     bool DeleteTransferTask(const std::string& task_id);
     bool DeleteTransferTaskByConnClose(const std::string& task_id);
 
-    BaseTransferTask* FindByTaskID(const std::string& task_id)
-    {
+    BaseTransferTask* FindByTaskID(const std::string& task_id) {
         BaseTransferTask* transfer_task = NULL;
-
         TransferTaskMap::iterator it = transfer_tasks_.find(task_id);
-        if (it != transfer_tasks_.end()) {
+        if (it != transfer_tasks_.end())
             transfer_task = it->second;
-        }
-
         return transfer_task;
     }
 
@@ -47,4 +43,4 @@ private:
     // TransferTaskConnkMap conn_tasks_;
 };
 
-#endif /* defined(FILE_SERVER_TRANSFER_TASK_MANAGER_H_) */
+#endif // _FILE_SERVER_TRANSFER_TASK_MANAGER_H_

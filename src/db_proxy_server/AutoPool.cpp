@@ -6,9 +6,9 @@
  brief:
 */
 
+#include "DBPool.h"
 #include "AutoPool.h"
 #include "CachePool.h"
-#include "DBPool.h"
 
 CAutoDB::CAutoDB(const char* pDBName, CDBConn** pDBConn)
 {

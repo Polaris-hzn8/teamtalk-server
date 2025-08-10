@@ -6,13 +6,11 @@
  brief:
 */
 
-#ifndef FILE_SERVER_OFFLINE_FILE_UTIL_H_
-#define FILE_SERVER_OFFLINE_FILE_UTIL_H_
+#ifndef _FILE_SERVER_OFFLINE_FILE_UTIL_H_
+#define _FILE_SERVER_OFFLINE_FILE_UTIL_H_
 
-// #include "base/ostype.h"
 #include <string.h>
-
-#include "base/UtilPdu.h"
+#include "UtilPdu.h"
 
 struct FileHeader {
     FileHeader()
@@ -98,4 +96,4 @@ struct UploadPackage {
     char* data;
 };
 
-#endif /* defined(FILE_SERVER_OFFLINE_FILE_UTIL_H_) */
+#endif // _FILE_SERVER_OFFLINE_FILE_UTIL_H_

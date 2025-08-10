@@ -1,9 +1,11 @@
+
 /*
- * ServerRegister.h
- *
- *  Created on: 2020-11-09
- *      Author: 0voice Darren
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: ServerRegister.h
+ Update Time: Wed 06 Aug 2025 17:08:12 CST
+ brief: 
+*/
 
 #ifndef SERVER_REGISTER_H_
 #define SERVER_REGISTER_H_
@@ -12,10 +14,10 @@
 
 typedef struct
 {
-    string reg_center_addr;
-    string service_id;  // 作为key
-    string service_dir;
-    string host_ip;
+    std::string reg_center_addr;
+    std::string service_id;  // 作为key
+    std::string service_dir;
+    std::string host_ip;
     int ttl;
     int client_port;
     int http_port;

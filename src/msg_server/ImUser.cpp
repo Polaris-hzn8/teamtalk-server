@@ -7,11 +7,14 @@
 */
 
 #include "ImUser.h"
-#include "IM.Login.pb.h"
-#include "IM.Server.pb.h"
 #include "MsgConn.h"
 #include "RouteServConn.h"
+
+#include "IM.Login.pb.h"
+#include "IM.Server.pb.h"
+
 using namespace ::IM::BaseDefine;
+using namespace std;
 
 CImUser::CImUser(string user_name)
 {
@@ -36,7 +39,6 @@ CMsgConn* CImUser::GetUnValidateMsgConn(uint32_t handle)
             return pConn;
         }
     }
-
     return NULL;
 }
 

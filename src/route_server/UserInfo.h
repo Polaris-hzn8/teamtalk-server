@@ -13,7 +13,6 @@
 #include <set>
 #include <iostream>
 #include "ostype.h"
-using namespace std;
 
 class CRouteConn;
 class CUserInfo
@@ -27,7 +26,7 @@ public:
     void AddRouteConn(CRouteConn* pConn) { m_RouteConnSet.insert(pConn); }
     void RemoveRouteConn(CRouteConn* pConn) { m_RouteConnSet.erase(pConn); }
     void ClearRouteConn() { m_RouteConnSet.clear(); }
-    set<CRouteConn*>* GetRouteConn() { return &m_RouteConnSet; }
+    std::set<CRouteConn*>* GetRouteConn() { return &m_RouteConnSet; }
     bool FindRouteConn(CRouteConn* pConn);
 
     uint32_t GetRouteConnCount() { return m_RouteConnSet.size(); }
@@ -41,8 +40,8 @@ public:
     bool IsMobileClientLogin();
 
 private:
-    set<CRouteConn*> m_RouteConnSet;
-    map<uint32_t /* client_type */, uint32_t /* count */> m_clientTypeList;
+    std::set<CRouteConn*> m_RouteConnSet;
+    std::map<uint32_t /* client_type */, uint32_t /* count */> m_clientTypeList;
 };
 
 #endif /* _ROUTE_SERVER_USERINFO_H_ */

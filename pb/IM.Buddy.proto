@@ -1,3 +1,4 @@
+
 package IM.Buddy;
 import "IM.BaseDefine.proto";
 //option java_outer_classname = "TTIMMessage";

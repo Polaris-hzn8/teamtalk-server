@@ -1,15 +1,16 @@
-//
-//  push_define.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-5.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: push_define.h
+ Update Time: Sun 10 Aug 2025 12:12:16 CST
+ brief: 
+*/
 
 #ifndef my_push_server_push_define_h
 #define my_push_server_push_define_h
 
 #include "slog_api.h"
+
 #define PDU_VERSION     1
 
 #define PUSH_TYPE_NORMAL        1
@@ -49,7 +50,5 @@ extern CSLog g_pushlog;
 {\
     g_pushlog.Trace("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__);\
 }
-
-
 
 #endif

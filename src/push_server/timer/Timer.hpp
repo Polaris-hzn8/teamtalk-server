@@ -6,9 +6,8 @@
 #include <utility>
 #include <assert.h>
 #include <stdio.h>
-#include "../thread/base_thread.hpp"
-#include "../type/base_type.h"
-
+#include "type/base_type.h"
+#include "thread/base_thread.hpp"
 
 #ifdef _WIN32
 #include <windows.h>

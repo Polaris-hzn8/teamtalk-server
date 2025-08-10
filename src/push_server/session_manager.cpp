@@ -1,20 +1,21 @@
-//
-//  session_manager.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-11.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: session_manager.cpp
+ Update Time: Sun 10 Aug 2025 12:16:29 CST
+ brief: 
+*/
 
-#include "session_manager.h"
 #include "push_define.h"
+#include "session_manager.h"
+
 #define TIMER_INDEX_CHECK_PUSHSESSION           1
-
 #define TIME_CHECK_PUSHSESSION                  5000
-
 #define TIMEOUT_PUSHSESSION                     30 * 1000
+
 CSessionManager::CSessionManager()
 {
+
 }
 
 CSessionManager::~CSessionManager()
@@ -64,11 +65,9 @@ push_session_ptr CSessionManager::GetPushSessionBySockID(uint32_t nsockid)
 {
     m_MapIOPushSessionBySockIDMutex.Lock();
     push_session_ptr pSession;
-    hash_map<uint32_t, push_session_ptr>::iterator it = m_MapPushSessionBySockID.find(nsockid);
+    std::unordered_map<uint32_t, push_session_ptr>::iterator it = m_MapPushSessionBySockID.find(nsockid);
     if (it != m_MapPushSessionBySockID.end())
-    {
         pSession = it->second;
-    }
     m_MapIOPushSessionBySockIDMutex.Unlock();
     return pSession;
 }
@@ -81,9 +80,8 @@ void CSessionManager::ClearPushSession()
 void CSessionManager::StopAllPushSession()
 {
     push_session_ptr pSession;
-    hash_map<uint32_t, push_session_ptr>::iterator it, it_old;
-    for (it = m_MapPushSessionBySockID.begin(); it != m_MapPushSessionBySockID.end();)
-    {
+    std::unordered_map<uint32_t, push_session_ptr>::iterator it, it_old;
+    for (it = m_MapPushSessionBySockID.begin(); it != m_MapPushSessionBySockID.end();) {
         it_old = it;
         it++;
         pSession = it_old->second;
@@ -98,8 +96,7 @@ void CSessionManager::_ClearPushSessionForMap()
 
 void CSessionManager::RemoveAPNSClient()
 {
-    if (m_pAPNSClient)
-    {
+    if (m_pAPNSClient) {
         m_pAPNSClient->Stop();
         m_pAPNSClient = nullptr;
     }
@@ -107,8 +104,7 @@ void CSessionManager::RemoveAPNSClient()
 
 void CSessionManager::RemovePushServer()
 {
-    if (m_pPushServer)
-    {
+    if (m_pPushServer) {
         m_pPushServer->Stop();
         m_pPushServer = nullptr;
     }
@@ -116,8 +112,10 @@ void CSessionManager::RemovePushServer()
 
 void CSessionManager::StartCheckPushSession()
 {
-    m_checktimer.StartTimer(TIMER_INDEX_CHECK_PUSHSESSION, CSessionManager::TimerProc,
-                            TIME_CHECK_PUSHSESSION, this);
+    m_checktimer.StartTimer(
+        TIMER_INDEX_CHECK_PUSHSESSION,
+        CSessionManager::TimerProc,
+        TIME_CHECK_PUSHSESSION, this);
 }
 
 void CSessionManager::StopCheckPushSession()
@@ -128,10 +126,10 @@ void CSessionManager::StopCheckPushSession()
 void CSessionManager::CheckPushSessionTimeOut()
 {
     m_MapIOPushSessionBySockIDMutex.Lock();
-    hash_map<uint32_t /* sockid */, push_session_ptr> tmp = m_MapPushSessionBySockID;
+    std::unordered_map<uint32_t /* sockid */, push_session_ptr> tmp = m_MapPushSessionBySockID;
     m_MapIOPushSessionBySockIDMutex.Unlock();
 
-    hash_map<uint32_t /* sockid */, push_session_ptr>::iterator it = tmp.begin();
+    std::unordered_map<uint32_t /* sockid */, push_session_ptr>::iterator it = tmp.begin();
     uint64_t cur_time = S_GetTickCount();
     for (; it != tmp.end(); it++)
     {
@@ -139,8 +137,9 @@ void CSessionManager::CheckPushSessionTimeOut()
         uint64_t last_time = pSession->GetLastHeartBeat();
         if (cur_time - last_time >= TIMEOUT_PUSHSESSION)
         {
-            PUSH_SERVER_WARN("push session time out, remote ip: %s, port: %d.", pSession->GetRemoteIP(),
-                             pSession->GetRemotePort());
+            PUSH_SERVER_WARN("push session time out, remote ip: %s, port: %d.",
+                pSession->GetRemoteIP(),
+                pSession->GetRemotePort());
             pSession->Stop();
         }
     }

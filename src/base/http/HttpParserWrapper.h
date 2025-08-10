@@ -9,7 +9,7 @@
 #ifndef _HTTP_PARSER_WARPPER_H_
 #define _HTTP_PARSER_WARPPER_H_
 
-#include "common/util.h"
+#include "util.h"
 #include "http_parser.h"
 
 class CHttpParserWrapper

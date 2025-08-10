@@ -12,8 +12,8 @@
 #include "ImPduBase.h"
 
 class CMsgConn;
-
-class CFileHandler {
+class CFileHandler
+{
 public:
     virtual ~CFileHandler() { }
 

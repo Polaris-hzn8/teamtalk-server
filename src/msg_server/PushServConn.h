@@ -6,15 +6,16 @@
  brief:
 */
 
-#ifndef PushServConn_H
-#define PushServConn_H
+#ifndef _PUSH_SERVCONN_H_
+#define _PUSH_SERVCONN_H_
 
 #include <iostream>
 
-#include "ServInfo.h"
 #include "imconn.h"
+#include "ServInfo.h"
 
-class CPushServConn : public CImConn {
+class CPushServConn : public CImConn
+{
 public:
     CPushServConn();
     virtual ~CPushServConn();
@@ -34,12 +35,12 @@ private:
     void _HandlePushToUserResponse(CImPdu* pPdu);
 
 private:
-    bool m_bOpen;
-    uint32_t m_serv_idx;
+    bool        m_bOpen;
+    uint32_t    m_serv_idx;
 };
 
-void init_push_serv_conn(serv_info_t* server_list, uint32_t server_count);
 CPushServConn* get_push_serv_conn();
+void init_push_serv_conn(serv_info_t* server_list, uint32_t server_count);
+void build_ios_push_flash(std::string& flash, uint32_t msg_type, uint32_t from_id);
 
-void build_ios_push_flash(string& flash, uint32_t msg_type, uint32_t from_id);
-#endif /* defined(__im_server_TT__PushServConn__) */
+#endif // _PUSH_SERVCONN_H_

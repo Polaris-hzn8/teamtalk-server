@@ -11,7 +11,7 @@
 
 #include <string>
 #include <curl/curl.h>
-#include "common/public_define.h"
+#include "public_define.h"
 
 class CHttpClient
 {

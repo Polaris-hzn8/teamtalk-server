@@ -1,10 +1,11 @@
-//
-//  base_thread.hpp
-//  my-code
-//
-//  Created by luoning on 14-8-4.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: base_thread.hpp
+ Update Time: Sun 10 Aug 2025 12:21:36 CST
+ brief: 
+*/
 
 #ifndef _BASE_THREAD_HPP
 #define _BASE_THREAD_HPP
@@ -18,10 +19,6 @@
 
 typedef void* (*thread_func_cb)(void* param);
 
-
-/**
- *  thread class
- */
 class CBaseThread
 {
 public:
@@ -90,10 +87,6 @@ protected:
 #endif
 };
 
-
-/**
- *  Mutex class
- */
 class CBaseMutex
 {
 public:
@@ -143,30 +136,24 @@ private:
 #else
 	pthread_mutex_t 	m_mutex;
 	pthread_mutexattr_t	m_mutexattr;
-#endif
-    
+#endif    
 };
 
-
-/**
- *  Guard class, bind with Mutex
- */
 class CBaseGuard
 {
 public:
-	CBaseGuard(CBaseMutex* lock)
-	{
+	CBaseGuard(CBaseMutex* lock) {
 		m_lock = lock;
 		if (m_lock)
 			m_lock->Lock();
 	}
     
-	~CBaseGuard()
-	{
+	~CBaseGuard() {
 		if (m_lock)
 			m_lock->Unlock();
 	}
 private:
 	CBaseMutex*	m_lock;
 };
+
 #endif

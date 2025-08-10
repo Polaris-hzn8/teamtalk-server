@@ -6,8 +6,8 @@
  brief:
 */
 
-#include "StringUtils.h"
 #include <string.h>
+#include "StringUtils.h"
 
 namespace msfs {
 
@@ -33,11 +33,8 @@ bool ends_with(const char* s1, const char* s2)
 {
     size_t s1_length = strlen(s1);
     size_t s2_length = strlen(s2);
-
-    if (s2_length > s1_length) {
+    if (s2_length > s1_length)
         return false;
-    }
-
     const char* start = s1 + (s1_length - s2_length);
     return strncmp(start, s2, s2_length) == 0;
 }
@@ -49,9 +46,8 @@ std::string string_trim(const std::string& s)
     std::string::size_type first = s.find_first_not_of(kWhitespace);
     std::string::size_type last = s.find_last_not_of(kWhitespace);
 
-    if (first == std::string::npos || last == std::string::npos) {
+    if (first == std::string::npos || last == std::string::npos)
         return std::string("");
-    }
 
     return s.substr(first, last - first + 1);
 }
@@ -59,19 +55,21 @@ std::string string_trim(const std::string& s)
 std::string string_prefix(const std::string& s, const char* sep)
 {
     std::string::size_type first = s.find_first_of(sep);
-    if (first != std::string::npos)
+    if (first != std::string::npos) {
         return s.substr(0, first);
-    else
+    } else {
         return std::string("");
+    }
 }
 
 std::string string_suffix(const std::string& s, const char* sep)
 {
     std::string::size_type last = s.find_last_of(sep);
-    if (last != std::string::npos)
+    if (last != std::string::npos) {
         return s.substr(last + 1);
-    else
+    } else {
         return std::string("");
+    }
 }
 
 }

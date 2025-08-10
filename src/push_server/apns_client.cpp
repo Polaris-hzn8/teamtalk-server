@@ -1,10 +1,10 @@
-//
-//  apns_client.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-4.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: apns_client.cpp
+ Update Time: Sun 10 Aug 2025 12:06:37 CST
+ brief: 
+*/
 
 #include "apns_client.h"
 #include "push_define.h"

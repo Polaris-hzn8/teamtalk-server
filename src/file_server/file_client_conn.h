@@ -9,20 +9,19 @@
 #ifndef FILE_SERVER_FILE_CLIENT_CONN_H_
 #define FILE_SERVER_FILE_CLIENT_CONN_H_
 
-#include "base/imconn.h"
-#include "file_server/transfer_task.h"
+#include "imconn.h"
+#include "transfer_task.h"
 
 // TODO
 // 异常情况处理
 // 断线、服务器重启等
-class FileClientConn : public CImConn {
+class FileClientConn : public CImConn
+{
 public:
     FileClientConn()
         : auth_(false)
         , user_id_(0)
-        , transfer_task_(NULL)
-    {
-    }
+        , transfer_task_(NULL) {}
 
     virtual ~FileClientConn() { }
 
@@ -37,8 +36,7 @@ public:
     virtual void OnWrite();
     virtual void HandlePdu(CImPdu* pdu);
 
-    void ClearTransferTask()
-    {
+    void ClearTransferTask() {
         user_id_ = 0;
         transfer_task_ = NULL;
     }

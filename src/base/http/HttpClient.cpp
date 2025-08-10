@@ -7,9 +7,9 @@
 */
 
 #include <string>
-#include "HttpClient.h"
+#include "util.h"
 #include "json/json.h"
-#include "common/util.h"
+#include "HttpClient.h"
 
 #define REQUEST_TIMEOUT 3
 #define CONNECT_TIMEOUT 3

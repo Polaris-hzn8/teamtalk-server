@@ -8,6 +8,7 @@
 
 #include "FileModel.h"
 #include "../DBPool.h"
+using namespace std;
 
 CFileModel* CFileModel::m_pInstance = NULL;
 

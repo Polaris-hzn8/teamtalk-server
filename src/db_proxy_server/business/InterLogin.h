@@ -11,7 +11,8 @@
 
 #include "LoginStrategy.h"
 
-class CInterLoginStrategy : public CLoginStrategy {
+class CInterLoginStrategy : public CLoginStrategy
+{
 public:
     virtual bool doLogin(const std::string& strName, const std::string& strPass, IM::BaseDefine::UserInfo& user);
 };

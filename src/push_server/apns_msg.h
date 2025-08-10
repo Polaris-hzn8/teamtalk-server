@@ -1,18 +1,18 @@
-//
-//  apns_msg.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-17.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: apns_msg.h
+ Update Time: Sun 10 Aug 2025 12:07:27 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__apns_msg__
 #define __my_push_server__apns_msg__
 
+#include <list>
+#include <string>
 #include <stdio.h>
 #include "socket/base_msg.h"
-#include <string>
-#include <list>
 using namespace std;
 
 static const char* g_silent_music = "silent.caf";

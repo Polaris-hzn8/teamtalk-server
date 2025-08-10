@@ -1,31 +1,63 @@
 cmake_minimum_required(VERSION 2.6)
-PROJECT(db_proxy_server)
+project(db_proxy_server)
 
-AUX_SOURCE_DIRECTORY(./ SRC_LIST)
-AUX_SOURCE_DIRECTORY(./business SRC_LIST)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_LIST1)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/redis SRC_LIST2)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/business SRC_LIST3)
 
-#SET(LIBRARY_OUTPUT_PATH ./)
-SET(EXECUTABLE_OUTPUT_PATH  ./)
-if(APPLE)
-    SET(PB_LIB_DIR ../base/pb/lib/mac)
-elseif(UNIX)
-    SET(PB_LIB_DIR ../base/pb/lib/linux)
-endif()
+set(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../base)
+set(THIRD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../third)
 
-SET(MYSQL_INCLUDE_DIR /usr/include/mysql)
-SET(MYSQL_LIB /usr/lib64/mysql)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
+file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-ADD_DEFINITIONS( -g -W -Wall -D_REENTRANT -D_FILE_OFFSET_BITS=64 -DAC_HAS_INFO
--DAC_HAS_WARNING -DAC_HAS_ERROR -DAC_HAS_CRITICAL -DTIXML_USE_STL
--DAC_HAS_DEBUG -DLINUX_DAEMON -std=c++11 -DENCRYPT)
+# 编译链接的库文件
+set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
+set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
+set(BASE_LIB_DIR ${BASE_DIR}/bin)
+set(MYSQL_LIB_DIR /usr/lib64/mysql)
 
-INCLUDE_DIRECTORIES(./ ./businiess ../base ../base/jsoncpp ../base/pb/protocol
-../base/pb/ ${MYSQL_INCLUDE_DIR})
-LINK_DIRECTORIES(./ ../base ${PB_LIB_DIR} ${MYSQL_LIB} ../base/slog/lib)
+add_definitions(
+    -g -W -Wall
+    -D_REENTRANT
+    -D_FILE_OFFSET_BITS=64
+    -DAC_HAS_INFO
+    -DAC_HAS_WARNING
+    -DAC_HAS_ERROR
+    -DAC_HAS_CRITICAL
+    -DAC_HAS_DEBUG
+    -DTIXML_USE_STL
+    -DLINUX_DAEMON
+    -DENCRYPT
+    -std=c++11)
 
-#ADD_XXXX必须在TARGET_LINK_LIBRARIES前面，否则会报错
-#ADD_LIBRARY(${PROJECTNAME} SHARED/STATIC ${SRC_LIST})
-ADD_EXECUTABLE(db_proxy_server ${SRC_LIST})
+include_directories(
+    ./
+    ./redis
+    ./business
+    ${BASE_DIR}
+    ${BASE_DIR}/pbgen
+    ${BASE_DIR}/common
+    ${BASE_DIR}/http
+    ${BASE_DIR}/impdu
+    ${BASE_DIR}/jsoncpp
+    ${BASE_DIR}/netlib
+    ${BASE_DIR}/threadpool
+    ${THIRD_DIR}/slog/include
+    ${THIRD_DIR}/protobuf/include
+    ${THIRD_DIR}/libsecurity/include
+    /usr/include/mysql)
 
-TARGET_LINK_LIBRARIES(db_proxy_server pthread base protobuf-lite mysqlclient hiredis curl slog crypto)
- 
+link_directories(
+    ${PB_LIB_DIR}
+    ${SLOG_LIB_DIR}
+    ${BASE_LIB_DIR}
+    ${MYSQL_LIB_DIR})
+
+add_executable(db_proxy_server
+    ${SRC_LIST1}
+    ${SRC_LIST2}
+    ${SRC_LIST3})
+
+target_link_libraries(db_proxy_server pthread base protobuf-lite mysqlclient hiredis curl slog crypto)
+

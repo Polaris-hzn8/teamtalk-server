@@ -9,7 +9,7 @@
 #ifndef BASE_IM_CONN_UTIL_H_
 #define BASE_IM_CONN_UTIL_H_
 
-#include "base/common/ostype.h"
+#include "common/ostype.h"
 
 namespace google {
     namespace protobuf {
@@ -18,7 +18,6 @@ namespace google {
 }
 class CImConn;
 
-// Google Protocol Buffers
 // 将消息对象转换为字节流 并发送给对应的连接
 int SendMessageLite(CImConn* conn, uint16_t sid, uint16_t cid, const ::google::protobuf::MessageLite* message);
 int SendMessageLite(CImConn* conn, uint16_t sid, uint16_t cid, uint16_t seq_num, const ::google::protobuf::MessageLite* message);

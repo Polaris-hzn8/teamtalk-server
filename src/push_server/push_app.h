@@ -1,10 +1,10 @@
-//
-//  push_app.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-4.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: push_app.h
+ Update Time: Sun 10 Aug 2025 12:11:00 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__push_app__
 #define __my_push_server__push_app__
@@ -28,9 +28,8 @@ public:
     
     CEpollIOLoop& GetIOLoop() { return m_io; }
 private:
-    BOOL    m_bInit;
-    CEpollIOLoop m_io;
+    BOOL            m_bInit;
+    CEpollIOLoop    m_io;
 };
-
 
 #endif /* defined(__my_push_server__push_app__) */
