@@ -63,7 +63,7 @@ pack_folder() {
         rm $target_name
     fi
 
-    rm -rf pack_folder
+    rm -f $target_name
     mkdir -p ../$pack_folder
     mkdir -p ../$pack_folder/login_server
     mkdir -p ../$pack_folder/route_server
@@ -99,7 +99,6 @@ pack_folder() {
 
     # copy libs
     cp third/slog/lib/libslog.so  ../$pack_folder/lib/
-    cp -a third/protobuf/lib/libprotobuf-lite.so* ../$pack_folder/lib/
 
     # copy sript
     cp tools/restart.sh ../$pack_folder/

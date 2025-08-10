@@ -34,6 +34,9 @@
 # vscode_folders
 .vscode/
 
+# version
+src/base/version.h
+
 #hiredis
 src/third/hiredis/*
 !src/third/hiredis/hiredis-master.zip
