@@ -34,30 +34,32 @@
 # vscode_folders
 .vscode/
 
-# protobuff
-src/protobuf/*
-!src/protobuf/protobuf-2.6.1.tar.gz
-src/base/pb
-!src/base/pb/protocal
+# version
+src/base/version.h
+
+#hiredis
+src/third/hiredis/*
+!src/third/hiredis/hiredis-master.zip
 
 # log4cxx
-src/log4cxx/*
-!src/log4cxx/apache-log4cxx-0.10.0.tar.gz
-!src/log4cxx/console.cpp
-!src/log4cxx/inputstreamreader.cpp
-!src/log4cxx/socketoutputstream.cpp
-# slog
-src/slog/include
-src/slog/lib
-src/base/lib
-src/base/slog
+src/third/log4cxx/*
+!src/third/log4cxx/apache-log4cxx-0.10.0.tar.gz
+!src/third/log4cxx/console.cpp
+!src/third/log4cxx/inputstreamreader.cpp
+!src/third/log4cxx/socketoutputstream.cpp
+
+# protobuff
+src/third/protobuf/*
+!src/third/protobuf/protobuf-2.6.1.tar.gz
 
 # tools
 src/tools/daeml
 
 # cmake
+bin/
 build/
 
 # output_pack
 im-server-*.tar.gz
 im-server-*/
+pack_folder/

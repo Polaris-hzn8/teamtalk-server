@@ -1,13 +1,14 @@
-//
-//  push_session.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-6.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: push_session.cpp
+ Update Time: Sun 10 Aug 2025 12:14:30 CST
+ brief: 
+*/
 
 #include "push_session.h"
 #include "timer/Timer.hpp"
+
 CPushSession::CPushSession(CEpollIOLoop& io, S_SOCKET sock) : m_io(io)
 {
     m_pSession = new CTCPSessionAsync(&m_io, sock);

@@ -1,16 +1,16 @@
+
 #ifndef _SOCKET_IO_H
 #define _SOCKET_IO_H
 
 #if (defined(_WIN32) || defined(_WIN64))
-#if defined(SOCKET_IO_EXPORTS)
-#define SOCKET_IO_DECLARE_CLASS __declspec(dllexport)
+    #if defined(SOCKET_IO_EXPORTS)
+        #define SOCKET_IO_DECLARE_CLASS __declspec(dllexport)
+    #else
+        #define SOCKET_IO_DECLARE_CLASS __declspec(dllimport)
+    #endif
 #else
-#define SOCKET_IO_DECLARE_CLASS __declspec(dllimport)
+    #define SOCKET_IO_DECLARE_CLASS
 #endif
-#else
-#define SOCKET_IO_DECLARE_CLASS
-#endif
-
 
 //#include "io_loop.h"
 //#include "epoll_io_loop.h"

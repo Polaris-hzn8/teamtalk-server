@@ -6,16 +6,17 @@
  brief:
 */
 
-#ifndef __FileServConn__
-#define __FileServConn__
+#ifndef _FILE_SERVCONN_
+#define _FILE_SERVCONN_
 
 #include <iostream>
-
+#include "imconn.h"
+#include "ServInfo.h"
 #include "BaseSocket.h"
 #include "IM.BaseDefine.pb.h"
-#include "ServInfo.h"
-#include "imconn.h"
-class CFileServConn : public CImConn {
+
+class CFileServConn : public CImConn
+{
 public:
     CFileServConn();
     virtual ~CFileServConn();
@@ -31,20 +32,21 @@ public:
 
     virtual void HandlePdu(CImPdu* pPdu);
 
-    const list<IM::BaseDefine::IpAddr>* GetFileServerIPList() { return &m_ip_list; }
+    const std::list<IM::BaseDefine::IpAddr>* GetFileServerIPList() { return &m_ip_list; }
 
 private:
     void _HandleFileMsgTransRsp(CImPdu* pPdu);
     void _HandleFileServerIPRsp(CImPdu* pPdu);
 
 private:
-    bool m_bOpen;
-    uint32_t m_serv_idx;
-    uint64_t m_connect_time;
-    list<IM::BaseDefine::IpAddr> m_ip_list;
+    bool        m_bOpen;
+    uint32_t    m_serv_idx;
+    uint64_t    m_connect_time;
+    std::list<IM::BaseDefine::IpAddr> m_ip_list;
 };
 
+CFileServConn* get_random_file_serv_conn();
 void init_file_serv_conn(serv_info_t* server_list, uint32_t server_count);
 bool is_file_server_available();
-CFileServConn* get_random_file_serv_conn();
-#endif /* defined(__FileServConn__) */
+
+#endif // _FILE_SERVCONN_

@@ -15,7 +15,6 @@ CDbAttachData::CDbAttachData(uint32_t type, uint32_t handle, uint32_t service_ty
     os << type;
     os << handle;
     os << service_type;
-    wstring wstrIn;
 }
 
 CDbAttachData::CDbAttachData(uchar_t* attach_data, uint32_t attach_len) // 反序列化

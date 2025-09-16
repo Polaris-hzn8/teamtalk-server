@@ -1,30 +1,24 @@
-//
-//  session_manager.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-11.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: session_manager.h
+ Update Time: Sun 10 Aug 2025 12:14:39 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__session_manager__
 #define __my_push_server__session_manager__
 
-#include <stdio.h>
-#include "socket/base_io_stream.h"
-#include "thread/base_thread.hpp"
-#ifdef _WIN32
-#include <hash_map>
 #include <list>
-using namespace stdext;
-#else
-#include <ext/hash_map>
-using namespace __gnu_cxx;
-#endif
+#include <stdio.h>
+#include <unordered_map>
 
-#include "push_session.h"
-#include "apns_client.h"
 #include "push_server.h"
+#include "apns_client.h"
+#include "push_session.h"
 #include "timer/Timer.hpp"
+#include "thread/base_thread.hpp"
+#include "socket/base_io_stream.h"
 
 class CSessionManager
 {
@@ -58,13 +52,11 @@ private:
     void _ClearPushSessionForMap();
     
 private:
-    hash_map<uint32_t /* sockid */, push_session_ptr> m_MapPushSessionBySockID;
-    CBaseMutex m_MapIOPushSessionBySockIDMutex; 
-    
-    apns_client_ptr m_pAPNSClient;
-    push_server_ptr m_pPushServer;
-    
-    CTimer m_checktimer;
+    CBaseMutex          m_MapIOPushSessionBySockIDMutex; 
+    apns_client_ptr     m_pAPNSClient;
+    push_server_ptr     m_pPushServer;    
+    CTimer              m_checktimer;
+    std::unordered_map<uint32_t, push_session_ptr> m_MapPushSessionBySockID;
 };
 
 #endif /* defined(__my_push_server__session_manager__) */

@@ -1,10 +1,10 @@
-//
-//  byte_stream.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-13.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: byte_stream.cpp
+ Update Time: Sun 10 Aug 2025 12:07:40 CST
+ brief: 
+*/
 
 #include "byte_stream.h"
 

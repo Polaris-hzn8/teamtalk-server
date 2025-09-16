@@ -1,16 +1,17 @@
-//
-//  push_session_handler.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-11.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
 
-#include "push_session_handler.h"
-#include "push_define.h"
-#include "session_manager.h"
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: push_session_handler.cpp
+ Update Time: Sun 10 Aug 2025 12:13:49 CST
+ brief: 
+*/
+
 #include "apns_msg.h"
+#include "push_define.h"
 #include "timer/Timer.hpp"
+#include "session_manager.h"
+#include "push_session_handler.h"
 #include "IM.Server.pb.h"
 
 void CPushSessionHandler::OnClose(uint32_t nsockid)

@@ -1,19 +1,19 @@
-//
-//  ssl_client_async.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-14.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: ssl_client_async.h
+ Update Time: Sun 10 Aug 2025 12:24:44 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__ssl_client_async__
 #define __my_push_server__ssl_client_async__
 
+#include <string>
 #include <stdio.h>
-#include "tcp_client_async.h"
 #include <openssl/ssl.h>
 #include <openssl/bio.h>
-#include <string>
+#include "tcp_client_async.h"
 
 class CSSLClientAsync : public CTCPClientAsync
 {

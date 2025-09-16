@@ -1,18 +1,18 @@
-//
-//  push_app.cpp
-//  my_push_server
-//
-//  Created by luoning on 14-11-4.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: push_app.cpp
+ Update Time: Sun 10 Aug 2025 12:11:12 CST
+ brief: 
+*/
 
+#include <openssl/ssl.h>
+#include <openssl/err.h>
 #include "push_app.h"
+#include "slog_api.h"
 #include "push_define.h"
 #include "ConfigFileReader.h"
 #include "session_manager.h"
-#include <openssl/ssl.h>
-#include <openssl/err.h>
-#include "slog_api.h"
 
 CSLog g_pushlog = CSLog(LOG_MODULE_PUSH);
 
@@ -22,7 +22,9 @@ CPushApp::CPushApp()
 }
 
 CPushApp::~CPushApp()
-{}
+{
+
+}
 
 CPushApp* CPushApp::GetInstance()
 {
@@ -42,9 +44,7 @@ BOOL CPushApp::Init()
         
         m_bInit = TRUE;
         PUSH_SERVER_DEBUG("push app init successed.");
-    }
-    else
-    {
+    } else {
         PUSH_SERVER_WARN("warning: push app has inited.");
     }
     
@@ -54,13 +54,10 @@ BOOL CPushApp::Init()
 BOOL CPushApp::UnInit()
 {
     Stop();
-    if (m_bInit)
-    {
+    if (m_bInit) {
         m_bInit = FALSE;
         PUSH_SERVER_DEBUG("push app uninit successed.");
-    }
-    else
-    {
+    } else {
         PUSH_SERVER_WARN("warning: push app has uninited.");
     }
     return TRUE;

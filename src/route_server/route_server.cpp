@@ -6,10 +6,10 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "RouteConn.h"
 #include "netlib.h"
 #include "version.h"
+#include "RouteConn.h"
+#include "ConfigFileReader.h"
 
 // this callback will be replaced by imconn_callback() in OnConnect()
 void route_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
@@ -37,7 +37,6 @@ int main(int argc, char* argv[])
 
     char* listen_ip = config_file.GetConfigName("ListenIP");
     char* str_listen_msg_port = config_file.GetConfigName("ListenMsgPort");
-
     if (!listen_ip || !str_listen_msg_port) {
         log("config item missing, exit... ");
         return -1;
@@ -46,7 +45,6 @@ int main(int argc, char* argv[])
     uint16_t listen_msg_port = atoi(str_listen_msg_port);
 
     int ret = netlib_init();
-
     if (ret == NETLIB_ERROR)
         return ret;
 

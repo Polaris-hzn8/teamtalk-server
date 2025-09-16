@@ -6,12 +6,10 @@
  brief:
 */
 
-#include "file_server/transfer_task.h"
-
 #include <uuid/uuid.h>
-
-#include "base/pb/protocol/IM.BaseDefine.pb.h"
-#include "base/util.h"
+#include "util.h"
+#include "transfer_task.h"
+#include "IM.BaseDefine.pb.h"
 
 // static char g_current_save_path[BUFSIZ];
 

@@ -6,26 +6,29 @@
  brief:
 */
 
-#include "DBServConn.h"
-#include "AttachData.h"
 #include "EncDec.h"
-#include "FileHandler.h"
+#include "ImUser.h"
+#include "MsgConn.h"
+#include "jsonxx.h"
+#include "security.h"
 #include "GroupChat.h"
+#include "ImPduBase.h"
+#include "AttachData.h"
+#include "DBServConn.h"
+#include "FileHandler.h"
+#include "PushServConn.h"
+#include "public_define.h"
+#include "RouteServConn.h"
+
 #include "IM.Buddy.pb.h"
 #include "IM.Group.pb.h"
 #include "IM.Login.pb.h"
 #include "IM.Message.pb.h"
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
-#include "ImPduBase.h"
-#include "ImUser.h"
-#include "MsgConn.h"
-#include "PushServConn.h"
-#include "RouteServConn.h"
-#include "jsonxx.h"
-#include "public_define.h"
-#include "security.h"
+
 using namespace IM::BaseDefine;
+using namespace std;
 
 static ConnMap_t g_db_server_conn_map;
 
@@ -723,7 +726,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu)
 
     IM::Message::IMMsgData msg2;
     CHECK_PB_PARSE_MSG(msg2.ParseFromArray(msg.attach_data().c_str(), msg.attach_data().length()));
-    string msg_data = msg2.msg_data();
+    std::string msg_data = msg2.msg_data();
     uint32_t msg_type = msg2.msg_type();
     uint32_t from_id = msg2.from_user_id();
     uint32_t to_id = msg2.to_session_id();

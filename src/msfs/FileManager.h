@@ -11,28 +11,29 @@
 #ifndef _FILEMANAGER_H_
 #define _FILEMANAGER_H_
 
-#include "CriticalSection.h"
-#include "FileLin.h"
-#include <dirent.h>
-#include <errno.h>
 #include <map>
-#include <stdio.h>
-#include <string.h>
+#include <time.h>
 #include <string>
+#include <stdio.h>
+#include <errno.h>
+#include <dirent.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <time.h>
+#include "FileLin.h"
+#include "CriticalSection.h"
 
 using namespace std;
 
 namespace msfs {
+
 class CriticalSection;
-class FileManager {
+class FileManager
+{
 private:
     FileManager() { }
     FileManager(const char* host, const char* disk,
-        int totFiles, int filesPerDir)
-    {
+        int totFiles, int filesPerDir) {
         m_host = new char[strlen(host) + 1];
         m_disk = new char[strlen(disk) + 1];
         m_host[strlen(host)] = '\0';
@@ -43,8 +44,7 @@ private:
         m_filesPerDir = filesPerDir;
         m_map.clear();
     }
-    ~FileManager()
-    {
+    ~FileManager() {
         if (m_host)
             delete[] m_host;
         m_host = NULL;
@@ -62,13 +62,11 @@ private:
     FileManager operator=(const FileManager&);
 
 public:
-    static FileManager* getInstance(const char* host, const char* disk, int totFiles, int filesPerDir)
-    {
+    static FileManager* getInstance(const char* host, const char* disk, int totFiles, int filesPerDir) {
         return (m_instance) ? m_instance : (new FileManager(host, disk, totFiles, filesPerDir));
     }
 
-    static void destroyInstance()
-    {
+    static void destroyInstance() {
         if (m_instance)
             delete m_instance;
         m_instance = NULL;
@@ -90,24 +88,20 @@ protected:
         time_t m_lastAccess;
         size_t m_fileSize;
         u8* m_fileContent;
-        Entry()
-        {
+        Entry() {
             m_lastAccess = 0;
             m_fileSize = 0;
             m_fileContent = NULL;
         }
-        ~Entry()
-        {
+        ~Entry() {
             if (m_fileContent)
                 delete[] m_fileContent;
             m_fileContent = NULL;
         }
     };
     typedef std::map<std::string, Entry*> EntryMap;
-    int insertEntry(const std::string& url, size_t filesize,
-        const void* content);
-    Entry* getEntry(const std::string& url) const
-    {
+    int insertEntry(const std::string& url, size_t filesize, const void* content);
+    Entry* getEntry(const std::string& url) const {
         return const_cast<FileManager*>(this)->getOrCreateEntry(url, false);
     }
     Entry* getOrCreateEntry(const std::string& url, bool create);

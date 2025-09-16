@@ -6,11 +6,13 @@
  brief:
 */
 
-#include "UserModel.h"
-#include "../CachePool.h"
-#include "../DBPool.h"
 #include "Common.h"
+#include "UserModel.h"
 #include "SyncCenter.h"
+
+#include "../DBPool.h"
+#include "../CachePool.h"
+using namespace std;
 
 CUserModel* CUserModel::m_pInstance = NULL;
 
@@ -35,7 +37,7 @@ void CUserModel::getChangedId(uint32_t& nLastTime, list<uint32_t>& lsIds)
     CDBManager* pDBManager = CDBManager::getInstance();
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
     if (pDBConn) {
-        string strSql;
+        std::string strSql;
         if (nLastTime == 0) {
             strSql = "select id, updated from IMUser where status != 3";
         } else {
@@ -277,7 +279,6 @@ void CUserModel::setCallReport(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefin
 
 bool CUserModel::updateUserSignInfo(uint32_t user_id, const string& sign_info)
 {
-
     if (sign_info.length() > 128) {
         log("updateUserSignInfo: sign_info.length()>128.\n");
         return false;
@@ -333,7 +334,7 @@ bool CUserModel::updatePushShield(uint32_t user_id, uint32_t shield_status)
     CDBConn* db_conn = db_manager->GetDBConn("teamtalk_master");
     if (db_conn) {
         uint32_t now = (uint32_t)time(NULL);
-        string str_sql = "update IMUser set `push_shield_status`=" + int2string(shield_status) + ", `updated`=" + int2string(now) + " where id=" + int2string(user_id);
+        std::string str_sql = "update IMUser set `push_shield_status`=" + int2string(shield_status) + ", `updated`=" + int2string(now) + " where id=" + int2string(user_id);
         rv = db_conn->ExecuteUpdate(str_sql.c_str());
         if (!rv) {
             log("updatePushShield: update failed:%s", str_sql.c_str());
@@ -353,7 +354,7 @@ bool CUserModel::getPushShield(uint32_t user_id, uint32_t* shield_status)
     CDBManager* db_manager = CDBManager::getInstance();
     CDBConn* db_conn = db_manager->GetDBConn("teamtalk_slave");
     if (db_conn) {
-        string str_sql = "select push_shield_status from IMUser where id=" + int2string(user_id);
+        std::string str_sql = "select push_shield_status from IMUser where id=" + int2string(user_id);
         CResultSet* result_set = db_conn->ExecuteQuery(str_sql.c_str());
         if (result_set) {
             if (result_set->Next()) {

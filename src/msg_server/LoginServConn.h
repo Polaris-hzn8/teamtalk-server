@@ -6,13 +6,14 @@
  brief:
 */
 
-#ifndef LOGINSERVCONN_H_
-#define LOGINSERVCONN_H_
+#ifndef _LOGINSERVCONN_H_
+#define _LOGINSERVCONN_H_
 
-#include "ServInfo.h"
 #include "imconn.h"
+#include "ServInfo.h"
 
-class CLoginServConn : public CImConn {
+class CLoginServConn : public CImConn
+{
 public:
     CLoginServConn();
     virtual ~CLoginServConn();
@@ -29,13 +30,19 @@ public:
     virtual void HandlePdu(CImPdu* pPdu);
 
 private:
-    bool m_bOpen;
-    uint32_t m_serv_idx;
+    bool        m_bOpen;
+    uint32_t    m_serv_idx;
 };
 
-void init_login_serv_conn(serv_info_t* server_list, uint32_t server_count, const char* msg_server_ip_addr1,
-    const char* msg_server_ip_addr2, uint16_t msg_server_port, uint32_t max_conn_cnt);
+void init_login_serv_conn(
+    serv_info_t* server_list,
+    uint32_t server_count,
+    const char* msg_server_ip_addr1,
+    const char* msg_server_ip_addr2,
+    uint16_t msg_server_port,
+    uint32_t max_conn_cnt);
+
 bool is_login_server_available();
 void send_to_all_login_server(CImPdu* pPdu);
 
-#endif /* MSGCONN_LS_H_ */
+#endif // _LOGINSERVCONN_H_

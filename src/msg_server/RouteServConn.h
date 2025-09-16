@@ -9,8 +9,8 @@
 #ifndef ROUTESERVCONN_H_
 #define ROUTESERVCONN_H_
 
-#include "ServInfo.h"
 #include "imconn.h"
+#include "ServInfo.h"
 
 class CRouteServConn : public CImConn {
 public:

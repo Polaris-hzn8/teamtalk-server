@@ -1,3 +1,4 @@
+
 #include "io_loop.h"
 #include "socket_io_define.h"
 
@@ -10,10 +11,6 @@ CIOLoop::~CIOLoop(void)
 {
 }
 
-/**	@fn	void CIOLoop::Start()
-*	@brief 
-*	@return	
-*/
 void CIOLoop::Start()
 {
 	if (!m_thread)
@@ -24,10 +21,6 @@ void CIOLoop::Start()
 	}
 }
 
-/**	@fn	void CIOLoop::Stop()
-*	@brief 
-*	@return	
-*/
 void CIOLoop::Stop()
 {
 	m_bCloseRequest = TRUE;
@@ -40,10 +33,6 @@ void CIOLoop::Stop()
 	m_waker.Stop();
 }
 
-/**	@fn	void CIOLoop::Run()
-*	@brief 
-*	@return	
-*/
 void CIOLoop::Run()
 {
 	fd_set fd_read, fd_write, fd_error;
@@ -196,11 +185,6 @@ void CIOLoop::Run()
 	}
 }
 
-/**	@fn	void* CIOLoop::RunThread(void* ptr)
-*	@brief 
-*	@param[in] ptr 
-*	@return	
-*/
 void* CIOLoop::RunThread( void* ptr )
 {
 	CIOLoop* pApp = (CIOLoop*)ptr;
@@ -208,11 +192,6 @@ void* CIOLoop::RunThread( void* ptr )
 	return NULL;
 }
 
-/**	@fn	void CIOLoop::Add_Handler(CBaseIOStream* piostream)
-*	@brief 
-*	@param[in] piostream 
-*	@return	
-*/
 void CIOLoop::Add_Handler( CBaseIOStream* piostream )
 {
 	m_MapMutex.Lock();
@@ -221,11 +200,6 @@ void CIOLoop::Add_Handler( CBaseIOStream* piostream )
 	m_MapMutex.Unlock();
 }
 
-/**	@fn	void CIOLoop::Remove_Handler(CBaseIOStream* piostream)
-*	@brief 
-*	@param[in] piostream 
-*	@return	
-*/
 void CIOLoop::Remove_Handler( CBaseIOStream* piostream )
 {
 	m_MapMutex.Lock();
@@ -234,11 +208,6 @@ void CIOLoop::Remove_Handler( CBaseIOStream* piostream )
 	m_MapMutex.Unlock();
 }
 
-/**	@fn	CBaseIOStream* CIOLoop::_GetHandlerBySock(S_SOCKET sock)
-*	@brief 
-*	@param[in] sock 
-*	@return	
-*/
 CBaseIOStream* CIOLoop::_GetHandlerBySock( S_SOCKET sock )
 {
 	CBaseIOStream* pIOStream = NULL;

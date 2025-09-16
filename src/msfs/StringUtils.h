@@ -9,6 +9,7 @@
 #include <string>
 
 namespace msfs {
+
 // Replaces all occurrences of "search" with "replace".
 void replace_substrs(const char* search,
     size_t search_len,
@@ -27,4 +28,5 @@ std::string string_trim(const std::string& s);
 
 std::string string_prefix(const std::string& s, const char* sep = ".");
 std::string string_suffix(const std::string& s, const char* sep = ".");
+
 }

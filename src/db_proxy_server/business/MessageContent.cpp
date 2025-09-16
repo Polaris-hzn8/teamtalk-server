@@ -6,18 +6,19 @@
  brief:
 */
 
-#include "MessageContent.h"
-#include "../CachePool.h"
-#include "../DBPool.h"
-#include "../ProxyConn.h"
 #include "Common.h"
-#include "GroupMessageModel.h"
-#include "GroupModel.h"
-#include "IM.Message.pb.h"
 #include "ImPduBase.h"
+#include "GroupModel.h"
 #include "MessageModel.h"
-#include "RelationModel.h"
 #include "SessionModel.h"
+#include "RelationModel.h"
+#include "IM.Message.pb.h"
+#include "MessageContent.h"
+#include "GroupMessageModel.h"
+
+#include "../DBPool.h"
+#include "../CachePool.h"
+#include "../ProxyConn.h"
 
 namespace DB_PROXY {
 
@@ -34,7 +35,7 @@ void getMessage(CImPdu* pPdu, uint32_t conn_uuid)
             CImPdu* pPduResp = new CImPdu;
             IM::Message::IMGetMsgListRsp msgResp;
 
-            list<IM::BaseDefine::MsgInfo> lsMsg;
+            std::list<IM::BaseDefine::MsgInfo> lsMsg;
 
             if (nSessionType == IM::BaseDefine::SESSION_TYPE_SINGLE) // 获取个人消息
             {
@@ -78,7 +79,8 @@ void getMessage(CImPdu* pPdu, uint32_t conn_uuid)
 }
 
 //
-void sendMessage(CImPdu* pPdu, uint32_t conn_uuid) {
+void sendMessage(CImPdu* pPdu, uint32_t conn_uuid)
+{
     IM::Message::IMMsgData msg;
     if (msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t nFromId = msg.from_user_id();
@@ -108,7 +110,7 @@ void sendMessage(CImPdu* pPdu, uint32_t conn_uuid) {
                         if (nSessionId != INVALID_VALUE) {
                             nMsgId = pGroupMsgModel->getMsgId(nToId);
                             if (nMsgId != INVALID_VALUE) {
-                                pGroupMsgModel->sendMessage(nFromId, nToId, nMsgType, nCreateTime, nMsgId, (string&)msg.msg_data());
+                                pGroupMsgModel->sendMessage(nFromId, nToId, nMsgType, nCreateTime, nMsgId, (std::string&)msg.msg_data());
                                 CSessionModel::getInstance()->updateSession(nSessionId, nNow);
                             }
                         }
@@ -150,7 +152,7 @@ void sendMessage(CImPdu* pPdu, uint32_t conn_uuid) {
                         if (nSessionId != INVALID_VALUE && nRelateId != INVALID_VALUE) {
                             nMsgId = pMsgModel->getMsgId(nRelateId);
                             if (nMsgId != INVALID_VALUE) {
-                                pMsgModel->sendMessage(nRelateId, nFromId, nToId, nMsgType, nCreateTime, nMsgId, (string&)msg.msg_data());
+                                pMsgModel->sendMessage(nRelateId, nFromId, nToId, nMsgType, nCreateTime, nMsgId, (std::string&)msg.msg_data());
                                 CSessionModel::getInstance()->updateSession(nSessionId, nNow);
                                 CSessionModel::getInstance()->updateSession(nPeerSessionId, nNow);
                             } else {
@@ -218,7 +220,7 @@ void getMessageById(CImPdu* pPdu, uint32_t conn_uuid)
         uint32_t nUserId = msg.user_id();
         IM::BaseDefine::SessionType nType = msg.session_type();
         uint32_t nPeerId = msg.session_id();
-        list<uint32_t> lsMsgId;
+        std::list<uint32_t> lsMsgId;
         uint32_t nCnt = msg.msg_id_list_size();
         for (uint32_t i = 0; i < nCnt; ++i) {
             lsMsgId.push_back(msg.msg_id_list(i));
@@ -227,7 +229,7 @@ void getMessageById(CImPdu* pPdu, uint32_t conn_uuid)
             CImPdu* pPduResp = new CImPdu;
             IM::Message::IMGetMsgByIdRsp msgResp;
 
-            list<IM::BaseDefine::MsgInfo> lsMsg;
+            std::list<IM::BaseDefine::MsgInfo> lsMsg;
             if (IM::BaseDefine::SESSION_TYPE_SINGLE == nType) {
                 CMessageModel::getInstance()->getMsgByMsgId(nUserId, nPeerId, lsMsgId, lsMsg);
             } else if (IM::BaseDefine::SESSION_TYPE_GROUP) {
@@ -274,11 +276,11 @@ void getLatestMsgId(CImPdu* pPdu, uint32_t conn_uuid)
             msgResp.set_session_id(nPeerId);
             uint32_t nMsgId = INVALID_VALUE;
             if (IM::BaseDefine::SESSION_TYPE_SINGLE == nType) {
-                string strMsg;
+                std::string strMsg;
                 IM::BaseDefine::MsgType nMsgType;
                 CMessageModel::getInstance()->getLastMsg(nUserId, nPeerId, nMsgId, strMsg, nMsgType, 1);
             } else {
-                string strMsg;
+                std::string strMsg;
                 IM::BaseDefine::MsgType nMsgType;
                 uint32_t nFromId = INVALID_VALUE;
                 CGroupMessageModel::getInstance()->getLastMsg(nPeerId, nMsgId, strMsg, nMsgType, nFromId);
@@ -299,4 +301,5 @@ void getLatestMsgId(CImPdu* pPdu, uint32_t conn_uuid)
         log("parse pb failed");
     }
 }
-};
+
+}

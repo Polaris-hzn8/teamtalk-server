@@ -9,39 +9,38 @@
 #ifndef __CACHEMANAGER_H__
 #define __CACHEMANAGER_H__
 
-#include <list>
 #include <map>
+#include <list>
 
-#include "Condition.h"
-#include "IM.BaseDefine.pb.h"
-#include "ImPduBase.h"
 #include "Lock.h"
 #include "ostype.h"
+#include "Condition.h"
+#include "ImPduBase.h"
 #include "public_define.h"
+#include "IM.BaseDefine.pb.h"
 
-class CSyncCenter {
+class CSyncCenter
+{
 public:
     static CSyncCenter* getInstance();
 
-    uint32_t getLastUpdate()
-    {
+    uint32_t getLastUpdate() {
         CAutoLock auto_lock(&last_update_lock_);
         return m_nLastUpdate;
     }
-    uint32_t getLastUpdateGroup()
-    {
+    uint32_t getLastUpdateGroup() {
         CAutoLock auto_lock(&last_update_lock_);
         return m_nLastUpdateGroup;
     }
-    string getDeptName(uint32_t nDeptId);
+
+    std::string getDeptName(uint32_t nDeptId);
+    void init();
     void startSync();
     void stopSync();
-    void init();
     void updateTotalUpdate(uint32_t nUpdated);
-
-private:
     void updateLastUpdateGroup(uint32_t nUpdated);
 
+private:
     CSyncCenter();
     ~CSyncCenter();
     static void* doSyncGroupChat(void* arg);
@@ -51,19 +50,21 @@ private:
     DBDeptMap_t* m_pDeptInfo;
 
     static CSyncCenter* m_pInstance;
-    uint32_t m_nLastUpdateGroup;
-    uint32_t m_nLastUpdate;
+    static bool         m_bSyncGroupChatRuning;
 
-    CCondition* m_pCondGroupChat;
-    CLock* m_pLockGroupChat;
-    static bool m_bSyncGroupChatRuning;
-    bool m_bSyncGroupChatWaitting;
+    uint32_t        m_nLastUpdateGroup;
+    uint32_t        m_nLastUpdate;
+
+    CLock*          m_pLockGroupChat;
+    CCondition*     m_pCondGroupChat;
+    CLock           last_update_lock_;
+
+    bool            m_bSyncGroupChatWaitting;
 #ifdef _WIN32
-    DWORD m_nGroupChatThreadId;
+    DWORD           m_nGroupChatThreadId;
 #else
-    pthread_t m_nGroupChatThreadId;
+    pthread_t       m_nGroupChatThreadId;
 #endif
-    CLock last_update_lock_;
 };
 
 #endif /*defined(__CACHEMANAGER_H__) */

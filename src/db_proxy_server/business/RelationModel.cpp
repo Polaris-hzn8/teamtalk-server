@@ -7,11 +7,11 @@
 */
 
 #include <vector>
-
-#include "../DBPool.h"
-#include "GroupMessageModel.h"
 #include "MessageModel.h"
 #include "RelationModel.h"
+#include "GroupMessageModel.h"
+#include "../DBPool.h"
+
 using namespace std;
 
 CRelationModel* CRelationModel::m_pInstance = NULL;
@@ -26,10 +26,8 @@ CRelationModel::~CRelationModel()
 
 CRelationModel* CRelationModel::getInstance()
 {
-    if (!m_pInstance) {
+    if (!m_pInstance)
         m_pInstance = new CRelationModel();
-    }
-
     return m_pInstance;
 }
 

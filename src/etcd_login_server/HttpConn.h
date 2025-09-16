@@ -1,16 +1,19 @@
+
 /*
- * HttpConn.h
- *
- *  Created on: 2013-9-29
- *      Author: ziteng
- */
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: HttpConn.h
+ Update Time: Wed 06 Aug 2025 17:03:48 CST
+ brief: 
+*/
 
 #ifndef __HTTP_CONN_H__
 #define __HTTP_CONN_H__
 
-#include "netlib.h"
 #include "util.h"
+#include "netlib.h"
 #include "HttpParserWrapper.h"
+#include <unordered_map>
 
 #define HTTP_CONN_TIMEOUT			60000
 
@@ -47,7 +50,7 @@ public:
     void OnTimer(uint64_t curr_tick);
     void OnWriteComlete();
 private:
-    void _HandleMsgServRequest(string& url, string& post_data);
+    void _HandleMsgServRequest(std::string& url, std::string& post_data);
 
 protected:
 	net_handle_t	m_sock_handle;
@@ -66,7 +69,7 @@ protected:
     CHttpParserWrapper m_cHttpParser;
 };
 
-typedef hash_map<uint32_t, CHttpConn*> HttpConnMap_t;
+typedef std::unordered_map<uint32_t, CHttpConn*> HttpConnMap_t;
 
 CHttpConn* FindHttpConnByHandle(uint32_t handle);
 void init_http_conn();

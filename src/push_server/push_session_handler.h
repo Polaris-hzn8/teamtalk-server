@@ -1,10 +1,11 @@
-//
-//  push_session_handler.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-11.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: push_session_handler.h
+ Update Time: Sun 10 Aug 2025 12:13:44 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__push_session_handler__
 #define __my_push_server__push_session_handler__

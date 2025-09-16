@@ -1,6 +1,7 @@
+
+#include "io_loop.h"
 #include "base_io_stream.h"
 #include "socket_io_define.h"
-#include "io_loop.h"
 
 CSLog g_socketlog = CSLog(LOG_MODULE_SOCKET);
 
@@ -17,13 +18,6 @@ CBaseIOStream::~CBaseIOStream(void)
     Close();
 }
 
-
-/**	@fn	BOOL CBaseIOStream::Bind(const char* szIP, uint32_t nPort)
-*	@brief 
-*	@param[in] szIP 
-*	@param[in] nPort 
-*	@return	
-*/
 BOOL CBaseIOStream::Bind( const char* szIP, uint32_t nPort ) const
 {
 	if (S_Bind(m_socket, szIP, nPort) == 0)

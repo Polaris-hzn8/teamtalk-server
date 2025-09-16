@@ -21,14 +21,14 @@ typedef struct {
 } msg_ack_t;
 
 class CImUser;
-
-class CMsgConn : public CImConn {
+class CMsgConn : public CImConn
+{
 public:
     CMsgConn();
     virtual ~CMsgConn();
     
     //Getter和Setter函数 用于获取和设置类中的成员变量，如登录名、用户ID、连接句柄等
-    string GetLoginName() { return m_login_name; }
+    std::string GetLoginName() { return m_login_name; }
     uint32_t GetUserId() { return m_user_id; }
     void SetUserId(uint32_t user_id) { m_user_id = user_id; }
     uint32_t GetHandle() { return m_handle; }
@@ -93,22 +93,21 @@ private:
     void _HandleRegistRequest(CImPdu* pPdu);
 
 private:
-    string m_login_name;        //登录名拼音，用于存储用户的登录名
-    uint32_t m_user_id;         //用户ID
-    bool m_bOpen;               //连接是否已打开的标志 当通过数据库验证后，该标志将设置为 true
-    bool m_bKickOff;            //连接是否被踢出的标志 当用户被强制下线时，该标志将设置为true
-    uint64_t m_login_time;      //用户登录时间的时间戳
+    std::string         m_login_name;      //登录名拼音，用于存储用户的登录名
+    uint32_t            m_user_id;         //用户ID
+    bool                m_bOpen;           //连接是否已打开的标志 当通过数据库验证后，该标志将设置为 true
+    bool                m_bKickOff;        //连接是否被踢出的标志 当用户被强制下线时，该标志将设置为true
+    uint64_t            m_login_time;      //用户登录时间的时间戳
 
-    uint32_t m_last_seq_no;     //最后一个序列号，用于消息的顺序处理
-    uint16_t m_pdu_version;     //PDU（协议数据单元）的版本号
-    string m_client_version;    //客户端的版本信息，例如 MAC/2.2 或 WIN/2.2
+    uint32_t            m_last_seq_no;     //最后一个序列号，用于消息的顺序处理
+    uint16_t            m_pdu_version;     //PDU（协议数据单元）的版本号
+    std::string         m_client_version;  //客户端的版本信息，例如 MAC/2.2 或 WIN/2.2
 
-    list<msg_ack_t> m_send_msg_list;    //发送消息列表，用于存储待发送的消息的消息ID和发送者ID
-    uint32_t m_msg_cnt_per_sec;         //每秒发送的消息数
-    uint32_t m_client_type;             //客户端登录方式
-    uint32_t m_online_status;           //在线状态 1-online, 2-off-line, 3-leave
+    std::list<msg_ack_t> m_send_msg_list;    //发送消息列表，用于存储待发送的消息的消息ID和发送者ID
+    uint32_t            m_msg_cnt_per_sec;   //每秒发送的消息数
+    uint32_t            m_client_type;       //客户端登录方式
+    uint32_t            m_online_status;     //在线状态 1-online, 2-off-line, 3-leave
 };
-
 
 void init_msg_conn();
 

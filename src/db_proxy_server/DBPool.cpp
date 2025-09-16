@@ -13,15 +13,16 @@
 
 CDBManager* CDBManager::s_db_manager = NULL;
 
-CResultSet::CResultSet(MYSQL_RES* res) {
+//////////////////////////////////////////////////////////////
+// CResultSet
+CResultSet::CResultSet(MYSQL_RES* res)
+{
     m_res = res;
-
     // map table field key to index in the result array
     int num_fields = mysql_num_fields(m_res);
     MYSQL_FIELD* fields = mysql_fetch_fields(m_res);
-    for (int i = 0; i < num_fields; i++) {
-        m_key_map.insert(make_pair(fields[i].name, i));
-    }
+    for (int i = 0; i < num_fields; i++)
+        m_key_map.insert(std::make_pair(fields[i].name, i));
 }
 
 CResultSet::~CResultSet()
@@ -44,7 +45,7 @@ bool CResultSet::Next()
 
 int CResultSet::_GetIndex(const char* key)
 {
-    map<string, int>::iterator it = m_key_map.find(key);
+    std::map<std::string, int>::iterator it = m_key_map.find(key);
     if (it == m_key_map.end()) {
         return -1;
     } else {
@@ -72,7 +73,8 @@ char* CResultSet::GetString(const char* key)
     }
 }
 
-/////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+// CPrepareStatement
 CPrepareStatement::CPrepareStatement()
 {
     m_stmt = NULL;
@@ -93,7 +95,7 @@ CPrepareStatement::~CPrepareStatement()
     }
 }
 
-bool CPrepareStatement::Init(MYSQL* mysql, string& sql)
+bool CPrepareStatement::Init(MYSQL* mysql, std::string& sql)
 {
     mysql_ping(mysql);
 
@@ -115,7 +117,6 @@ bool CPrepareStatement::Init(MYSQL* mysql, string& sql)
             log("new failed");
             return false;
         }
-
         memset(m_param_bind, 0, sizeof(MYSQL_BIND) * m_param_cnt);
     }
 
@@ -144,7 +145,7 @@ void CPrepareStatement::SetParam(uint32_t index, uint32_t& value)
     m_param_bind[index].buffer = &value;
 }
 
-void CPrepareStatement::SetParam(uint32_t index, string& value)
+void CPrepareStatement::SetParam(uint32_t index, std::string& value)
 {
     if (index >= m_param_cnt) {
         log("index too large: %d", index);
@@ -156,7 +157,7 @@ void CPrepareStatement::SetParam(uint32_t index, string& value)
     m_param_bind[index].buffer_length = value.size();
 }
 
-void CPrepareStatement::SetParam(uint32_t index, const string& value)
+void CPrepareStatement::SetParam(uint32_t index, const std::string& value)
 {
     if (index >= m_param_cnt) {
         log("index too large: %d", index);
@@ -198,7 +199,8 @@ uint32_t CPrepareStatement::GetInsertId()
     return mysql_stmt_insert_id(m_stmt);
 }
 
-/////////////////////
+//////////////////////////////////////////////////////////////
+// CDBConn
 CDBConn::CDBConn(CDBPool* pPool)
 {
     m_pDBPool = pPool;
@@ -286,8 +288,10 @@ uint32_t CDBConn::GetInsertId()
     return (uint32_t)mysql_insert_id(m_mysql);
 }
 
-////////////////
-CDBPool::CDBPool(const char* pool_name, const char* db_server_ip, uint16_t db_server_port,
+//////////////////////////////////////////////////////////////
+// CDBPool
+CDBPool::CDBPool(
+    const char* pool_name, const char* db_server_ip, uint16_t db_server_port,
     const char* username, const char* password, const char* db_name, int max_conn_cnt)
 {
     m_pool_name = pool_name;
@@ -302,11 +306,10 @@ CDBPool::CDBPool(const char* pool_name, const char* db_server_ip, uint16_t db_se
 
 CDBPool::~CDBPool()
 {
-    for (list<CDBConn*>::iterator it = m_free_list.begin(); it != m_free_list.end(); it++) {
+    for (std::list<CDBConn*>::iterator it = m_free_list.begin(); it != m_free_list.end(); it++) {
         CDBConn* pConn = *it;
         delete pConn;
     }
-
     m_free_list.clear();
 }
 
@@ -319,7 +322,6 @@ int CDBPool::Init()
             delete pDBConn;
             return ret;
         }
-
         m_free_list.push_back(pDBConn);
     }
 
@@ -334,7 +336,6 @@ int CDBPool::Init()
 CDBConn* CDBPool::GetDBConn()
 {
     m_free_notify.Lock();
-
     while (m_free_list.empty()) {
         if (m_db_cur_conn_cnt >= m_db_max_conn_cnt) {
             m_free_notify.Wait();
@@ -356,9 +357,7 @@ CDBConn* CDBPool::GetDBConn()
 
     CDBConn* pConn = m_free_list.front();
     m_free_list.pop_front();
-
     m_free_notify.Unlock();
-
     return pConn;
 }
 
@@ -366,22 +365,20 @@ void CDBPool::RelDBConn(CDBConn* pConn)
 {
     m_free_notify.Lock();
 
-    list<CDBConn*>::iterator it = m_free_list.begin();
-    for (; it != m_free_list.end(); it++) {
-        if (*it == pConn) {
+    std::list<CDBConn*>::iterator it = m_free_list.begin();
+    for (; it != m_free_list.end(); it++)
+        if (*it == pConn)
             break;
-        }
-    }
 
-    if (it == m_free_list.end()) {
+    if (it == m_free_list.end())
         m_free_list.push_back(pConn);
-    }
 
     m_free_notify.Signal();
     m_free_notify.Unlock();
 }
 
-/////////////////
+//////////////////////////////////////////////////////////////
+// CDBManager
 CDBManager::CDBManager()
 {
 }
@@ -399,20 +396,18 @@ CDBManager* CDBManager::getInstance()
             s_db_manager = NULL;
         }
     }
-
     return s_db_manager;
 }
+
 /*
  * 2015-01-12
  * modify by ZhangYuanhao :enable config the max connection of every instance
- *
  */
 int CDBManager::Init()
 {
     CConfigFileReader config_file("dbproxyserver.conf");
 
     char* db_instances = config_file.GetConfigName("DBInstances");
-
     if (!db_instances) {
         log("not configure DBInstances");
         return 1;
@@ -454,15 +449,14 @@ int CDBManager::Init()
             log("init db instance failed: %s", pool_name);
             return 3;
         }
-        m_dbpool_map.insert(make_pair(pool_name, pDBPool));
+        m_dbpool_map.insert(std::make_pair(pool_name, pDBPool));
     }
-
     return 0;
 }
 
 CDBConn* CDBManager::GetDBConn(const char* dbpool_name)
 {
-    map<string, CDBPool*>::iterator it = m_dbpool_map.find(dbpool_name);
+    std::map<std::string, CDBPool*>::iterator it = m_dbpool_map.find(dbpool_name);
     if (it == m_dbpool_map.end()) {
         return NULL;
     } else {
@@ -472,12 +466,9 @@ CDBConn* CDBManager::GetDBConn(const char* dbpool_name)
 
 void CDBManager::RelDBConn(CDBConn* pConn)
 {
-    if (!pConn) {
+    if (!pConn)
         return;
-    }
-
-    map<string, CDBPool*>::iterator it = m_dbpool_map.find(pConn->GetPoolName());
-    if (it != m_dbpool_map.end()) {
+    std::map<std::string, CDBPool*>::iterator it = m_dbpool_map.find(pConn->GetPoolName());
+    if (it != m_dbpool_map.end())
         it->second->RelDBConn(pConn);
-    }
 }

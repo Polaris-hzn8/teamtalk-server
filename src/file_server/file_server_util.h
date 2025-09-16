@@ -11,10 +11,9 @@
 #ifndef __FILE_SERVER_UTIL_H__
 #define __FILE_SERVER_TUIL_H__
 
+#include <imconn.h>
 #include <pthread.h>
 #include <uuid/uuid.h>
-
-#include <imconn.h>
 
 typedef struct file_header_t {
     char task_id[128];
@@ -107,13 +106,13 @@ typedef struct upload_package_t {
 
 typedef struct transfer_task_t {
     uint32_t transfer_mode; // FILE_TYPE_ONLINE realtime, FILE_TYPE_OFFLINE offline / mobile
-    string task_id; // uuid_unparse char[37]
+    std::string task_id; // uuid_unparse char[37]
     uint32_t from_user_id;
     uint32_t to_user_id; // if offline or mobile, null
     bool ready_to_recv; //
     bool ready_to_send; //
     uint32_t file_size;
-    string current_block;
+    std::string current_block;
     time_t create_time;
     bool self_destroy;
     CImConn* from_conn;

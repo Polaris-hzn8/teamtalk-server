@@ -6,41 +6,34 @@
  brief:
 */
 
-#include "SyncCenter.h"
-#include "CachePool.h"
-#include "DBPool.h"
-#include "HttpClient.h"
-#include "Lock.h"
-#include "business/Common.h"
-#include "business/GroupModel.h"
-#include "business/SessionModel.h"
-#include "business/UserModel.h"
-#include "json/json.h"
 #include <stdlib.h>
 #include <sys/signal.h>
+
+#include "Lock.h"
+#include "DBPool.h"
+#include "json/json.h"
+#include "CachePool.h"
+#include "SyncCenter.h"
+#include "HttpClient.h"
+#include "business/Common.h"
+#include "business/UserModel.h"
+#include "business/GroupModel.h"
+#include "business/SessionModel.h"
 
 static CLock* g_pLock = new CLock();
 static CRWLock* g_pRWDeptLock = new CRWLock();
 
 CSyncCenter* CSyncCenter::m_pInstance = NULL;
 bool CSyncCenter::m_bSyncGroupChatRuning = false;
-/**
- *  单例
- *
- *  @return 返回CSyncCenter的单例指针
- */
+
 CSyncCenter* CSyncCenter::getInstance()
 {
     CAutoLock autoLock(g_pLock);
-    if (m_pInstance == NULL) {
+    if (m_pInstance == NULL)
         m_pInstance = new CSyncCenter();
-    }
     return m_pInstance;
 }
 
-/**
- *  构造函数
- */
 CSyncCenter::CSyncCenter()
     : m_nGroupChatThreadId(0)
     , m_nLastUpdateGroup(time(NULL))
@@ -51,42 +44,33 @@ CSyncCenter::CSyncCenter()
     m_pCondGroupChat = new CCondition(m_pLockGroupChat);
 }
 
-/**
- *  析构函数
- */
 CSyncCenter::~CSyncCenter()
 {
-    if (m_pLockGroupChat != NULL) {
+    if (m_pLockGroupChat != NULL)
         delete m_pLockGroupChat;
-    }
-    if (m_pCondGroupChat != NULL) {
+    if (m_pCondGroupChat != NULL)
         delete m_pCondGroupChat;
-    }
 }
 
 void CSyncCenter::getDept(uint32_t nDeptId, DBDeptInfo_t** pDept)
 {
     auto it = m_pDeptInfo->find(nDeptId);
-    if (it != m_pDeptInfo->end()) {
+    if (it != m_pDeptInfo->end())
         *pDept = it->second;
-    }
 }
 
-string CSyncCenter::getDeptName(uint32_t nDeptId)
+std::string CSyncCenter::getDeptName(uint32_t nDeptId)
 {
     CAutoRWLock autoLock(g_pRWDeptLock);
     string strDeptName;
     DBDeptInfo_t* pDept = NULL;
-    ;
     getDept(nDeptId, &pDept);
-    if (pDept != NULL) {
+    if (pDept != NULL)
         strDeptName = pDept->strName;
-    }
     return strDeptName;
 }
-/**
- *  开启内网数据同步以及群组聊天记录同步
- */
+
+// 开启内网数据同步以及群组聊天记录同步
 void CSyncCenter::startSync()
 {
 #ifdef _WIN32
@@ -96,21 +80,16 @@ void CSyncCenter::startSync()
 #endif
 }
 
-/**
- *  停止同步，为了"优雅"的同步，使用了条件变量
- */
+// 利用条件变量停止同步
 void CSyncCenter::stopSync()
 {
     m_bSyncGroupChatWaitting = false;
     m_pCondGroupChat->notify();
-    while (m_bSyncGroupChatRuning) {
+    while (m_bSyncGroupChatRuning)
         usleep(500);
-    }
 }
 
-/*
- * 初始化函数，从cache里面加载上次同步的时间信息等
- */
+// 从cache里面加载上次同步的时间信息等
 void CSyncCenter::init()
 {
     // Load total update time
@@ -118,9 +97,8 @@ void CSyncCenter::init()
     // increase message count
     CacheConn* pCacheConn = pCacheManager->GetCacheConn("unread");
     if (pCacheConn) {
-        string strTotalUpdate = pCacheConn->get("total_user_updated");
-
-        string strLastUpdateGroup = pCacheConn->get("last_update_group");
+        std::string strTotalUpdate = pCacheConn->get("total_user_updated");
+        std::string strLastUpdateGroup = pCacheConn->get("last_update_group");
         pCacheManager->RelCacheConn(pCacheConn);
         if (strTotalUpdate != "") {
             m_nLastUpdate = string2int(strTotalUpdate);
@@ -136,12 +114,8 @@ void CSyncCenter::init()
         log("no cache connection to get total_user_updated");
     }
 }
-/**
- *  更新上次同步内网信息时间
- *
- *  @param nUpdated 时间
- */
 
+// 更新上次同步内网信息时间
 void CSyncCenter::updateTotalUpdate(uint32_t nUpdated)
 {
     CacheManager* pCacheManager = CacheManager::getInstance();
@@ -150,7 +124,7 @@ void CSyncCenter::updateTotalUpdate(uint32_t nUpdated)
         last_update_lock_.lock();
         m_nLastUpdate = nUpdated;
         last_update_lock_.unlock();
-        string strUpdated = int2string(nUpdated);
+        std::string strUpdated = int2string(nUpdated);
         pCacheConn->set("total_user_update", strUpdated);
         pCacheManager->RelCacheConn(pCacheConn);
     } else {
@@ -158,11 +132,7 @@ void CSyncCenter::updateTotalUpdate(uint32_t nUpdated)
     }
 }
 
-/**
- *  更新上次同步群组信息时间
- *
- *  @param nUpdated 时间
- */
+// 更新上次同步群组信息时间
 void CSyncCenter::updateLastUpdateGroup(uint32_t nUpdated)
 {
     CacheManager* pCacheManager = CacheManager::getInstance();
@@ -170,7 +140,7 @@ void CSyncCenter::updateLastUpdateGroup(uint32_t nUpdated)
     if (pCacheConn) {
         last_update_lock_.lock();
         m_nLastUpdateGroup = nUpdated;
-        string strUpdated = int2string(nUpdated);
+        std::string strUpdated = int2string(nUpdated);
         last_update_lock_.unlock();
 
         pCacheConn->set("last_update_group", strUpdated);
@@ -180,23 +150,17 @@ void CSyncCenter::updateLastUpdateGroup(uint32_t nUpdated)
     }
 }
 
-/**
- *  同步群组聊天信息
- *
- *  @param arg NULL
- *
- *  @return NULL
- */
+// 同步群组聊天信息
 void* CSyncCenter::doSyncGroupChat(void* arg)
 {
     m_bSyncGroupChatRuning = true;
     CDBManager* pDBManager = CDBManager::getInstance();
-    map<uint32_t, uint32_t> mapChangedGroup;
+    std::map<uint32_t, uint32_t> mapChangedGroup;
     do {
         mapChangedGroup.clear();
         CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
         if (pDBConn) {
-            string strSql = "select id, lastChated from IMGroup where status=0 and lastChated >=" + int2string(m_pInstance->getLastUpdateGroup());
+            std::string strSql = "select id, lastChated from IMGroup where status=0 and lastChated >=" + int2string(m_pInstance->getLastUpdateGroup());
             CResultSet* pResult = pDBConn->ExecuteQuery(strSql.c_str());
             if (pResult) {
                 while (pResult->Next()) {
@@ -215,8 +179,8 @@ void* CSyncCenter::doSyncGroupChat(void* arg)
         m_pInstance->updateLastUpdateGroup(time(NULL));
         for (auto it = mapChangedGroup.begin(); it != mapChangedGroup.end(); ++it) {
             uint32_t nGroupId = it->first;
-            list<uint32_t> lsUsers;
             uint32_t nUpdate = it->second;
+            std::list<uint32_t> lsUsers;
             CGroupModel::getInstance()->getGroupUser(nGroupId, lsUsers);
             for (auto it1 = lsUsers.begin(); it1 != lsUsers.end(); ++it1) {
                 uint32_t nUserId = *it1;

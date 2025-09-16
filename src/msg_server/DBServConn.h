@@ -13,7 +13,8 @@
 #include "ServInfo.h"
 #include "imconn.h"
 
-class CDBServConn : public CImConn {
+class CDBServConn : public CImConn
+{
 public:
     CDBServConn();
     virtual ~CDBServConn();

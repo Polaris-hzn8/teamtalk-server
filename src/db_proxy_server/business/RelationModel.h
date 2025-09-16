@@ -10,14 +10,14 @@
 #define RELATION_SHIP_H_
 
 #include <list>
-
-#include "IM.BaseDefine.pb.h"
-#include "ImPduBase.h"
 #include "util.h"
+#include "ImPduBase.h"
+#include "IM.BaseDefine.pb.h"
 
 using namespace std;
 
-class CRelationModel {
+class CRelationModel
+{
 public:
     virtual ~CRelationModel();
 
@@ -33,4 +33,5 @@ private:
 private:
     static CRelationModel* m_pInstance;
 };
+
 #endif

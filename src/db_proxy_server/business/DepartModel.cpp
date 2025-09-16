@@ -6,12 +6,14 @@
  brief:
 */
 
+#include "DBPool.h"
 #include "DepartModel.h"
-#include "../DBPool.h"
+using namespace std;
 
 CDepartModel* CDepartModel::m_pInstance = NULL;
 
-CDepartModel* CDepartModel::getInstance() {
+CDepartModel* CDepartModel::getInstance()
+{
     if (NULL == m_pInstance) {
         m_pInstance = new CDepartModel();
     }
@@ -19,7 +21,8 @@ CDepartModel* CDepartModel::getInstance() {
 }
 
 //从数据库中获取最近更新时间后发生变化的部门ID列表
-void CDepartModel::getChgedDeptId(uint32_t& nLastTime, list<uint32_t>& lsChangedIds) {
+void CDepartModel::getChgedDeptId(uint32_t& nLastTime, list<uint32_t>& lsChangedIds)
+{
     // 1.获取 CDBManager 的单例实例
     CDBManager* pDBManager = CDBManager::getInstance();
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
@@ -49,7 +52,8 @@ void CDepartModel::getChgedDeptId(uint32_t& nLastTime, list<uint32_t>& lsChanged
 }
 
 //从数据库中获取给定部门ID列表中的部门信息
-void CDepartModel::getDepts(list<uint32_t>& lsDeptIds, list<IM::BaseDefine::DepartInfo>& lsDepts) {
+void CDepartModel::getDepts(list<uint32_t>& lsDeptIds, list<IM::BaseDefine::DepartInfo>& lsDepts)
+{
     if (lsDeptIds.empty()) {
         log("list is empty");
         return;
@@ -106,7 +110,8 @@ void CDepartModel::getDepts(list<uint32_t>& lsDeptIds, list<IM::BaseDefine::Depa
     }
 }
 
-void CDepartModel::getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept) {
+void CDepartModel::getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept)
+{
     CDBManager* pDBManager = CDBManager::getInstance();
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
     if (pDBConn) {

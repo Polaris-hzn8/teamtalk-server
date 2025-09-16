@@ -7,19 +7,18 @@
 */
 
 #include "HttpConn.h"
-#include "HttpParserWrapper.h"
-#include "LoginConn.h"
 #include "ipparser.h"
+#include "LoginConn.h"
 #include "json/json.h"
+#include "HttpParserWrapper.h"
+using namespace std;
 
-static HttpConnMap_t g_http_conn_map;
-
-extern map<uint32_t, msg_serv_info_t*> g_msg_serv_info;
-
+extern std::map<uint32_t, msg_serv_info_t*> g_msg_serv_info;
 extern IpParser* pIpParser;
 extern string strMsfsUrl;
 extern string strDiscovery;
 
+static HttpConnMap_t g_http_conn_map;
 // conn_handle 从0开始递增，可以防止因socket handle重用引起的一些冲突
 static uint32_t g_conn_handle_generator = 0;
 

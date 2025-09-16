@@ -1,8 +1,10 @@
+
 #ifndef _BASE_IO_STREAM_H
 #define _BASE_IO_STREAM_H
-#include "../type/base_type.h"
+
 #include "base_socket.hpp"
-#include "../thread/base_thread.hpp"
+#include "type/base_type.h"
+#include "thread/base_thread.hpp"
 
 class CIOLoop;
 class CEpollIOLoop;

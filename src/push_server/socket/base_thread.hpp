@@ -1,10 +1,10 @@
-//
-//  base_thread.hpp
-//  my-code
-//
-//  Created by shiwei on 14-8-4.
-//  Copyright (c) 2014年 shiwei. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: base_thread.hpp
+ Update Time: Sun 10 Aug 2025 12:28:04 CST
+ brief: 
+*/
 
 #ifndef _BASE_THREAD_HPP
 #define _BASE_THREAD_HPP

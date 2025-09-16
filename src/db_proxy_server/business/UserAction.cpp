@@ -9,14 +9,16 @@
 #include <list>
 #include <map>
 
-#include "../DBPool.h"
-#include "../ProxyConn.h"
-#include "../SyncCenter.h"
+#include "UserModel.h"
+#include "public_define.h"
+
 #include "IM.BaseDefine.pb.h"
 #include "IM.Buddy.pb.h"
 #include "IM.Login.pb.h"
-#include "UserModel.h"
-#include "public_define.h"
+
+#include "DBPool.h"
+#include "ProxyConn.h"
+#include "SyncCenter.h"
 
 namespace DB_PROXY {
 
@@ -36,7 +38,7 @@ void getUserInfo(CImPdu* pPdu, uint32_t conn_uuid)
         std::list<IM::BaseDefine::UserInfo> lsUser;
         CUserModel::getInstance()->getUsers(idList, lsUser);
         msgResp.set_user_id(from_user_id);
-        for (list<IM::BaseDefine::UserInfo>::iterator it = lsUser.begin();
+        for (std::list<IM::BaseDefine::UserInfo>::iterator it = lsUser.begin();
              it != lsUser.end(); ++it) {
             IM::BaseDefine::UserInfo* pUser = msgResp.add_user_info_list();
             //            *pUser = *it;
@@ -77,16 +79,16 @@ void getChangedUser(CImPdu* pPdu, uint32_t conn_uuid)
         uint32_t nLastTime = msg.latest_update_time();
         uint32_t nLastUpdate = CSyncCenter::getInstance()->getLastUpdate();
 
-        list<IM::BaseDefine::UserInfo> lsUsers;
+        std::list<IM::BaseDefine::UserInfo> lsUsers;
         if (nLastUpdate > nLastTime) {
-            list<uint32_t> lsIds;
+            std::list<uint32_t> lsIds;
             CUserModel::getInstance()->getChangedId(nLastTime, lsIds);
             CUserModel::getInstance()->getUsers(lsIds, lsUsers);
         }
         msgResp.set_user_id(nReqId);
         msgResp.set_latest_update_time(nLastTime);
-        for (list<IM::BaseDefine::UserInfo>::iterator it = lsUsers.begin();
-             it != lsUsers.end(); ++it) {
+        for (std::list<IM::BaseDefine::UserInfo>::iterator it = lsUsers.begin();
+            it != lsUsers.end(); ++it) {
             IM::BaseDefine::UserInfo* pUser = msgResp.add_user_list();
             //            *pUser = *it;
             pUser->set_user_id(it->user_id());
@@ -119,7 +121,7 @@ void changeUserSignInfo(CImPdu* pPdu, uint32_t conn_uuid)
     IM::Buddy::IMChangeSignInfoRsp resp;
     if (req.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength())) {
         uint32_t user_id = req.user_id();
-        const string& sign_info = req.sign_info();
+        const std::string& sign_info = req.sign_info();
 
         bool result = CUserModel::getInstance()->updateUserSignInfo(user_id, sign_info);
 
@@ -144,6 +146,7 @@ void changeUserSignInfo(CImPdu* pPdu, uint32_t conn_uuid)
         log("changeUserSignInfo: IMChangeSignInfoReq ParseFromArray failed!!!");
     }
 }
+
 void doPushShield(CImPdu* pPdu, uint32_t conn_uuid)
 {
     IM::Login::IMPushShieldReq req;
@@ -207,4 +210,5 @@ void doQueryPushShield(CImPdu* pPdu, uint32_t conn_uuid)
         log("doQueryPushShield: IMQueryPushShieldReq ParseFromArray failed!!!");
     }
 }
-};
+
+}

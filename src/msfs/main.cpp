@@ -6,13 +6,13 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "FileManager.h"
-#include "HttpConn.h"
-#include "ThreadPool.h"
-#include "netlib.h"
 #include <iostream>
 #include <signal.h>
+#include "netlib.h"
+#include "HttpConn.h"
+#include "ThreadPool.h"
+#include "FileManager.h"
+#include "ConfigFileReader.h"
 
 using namespace std;
 using namespace msfs;
@@ -26,7 +26,6 @@ CThreadPool g_GetThreadPool;
 void closeall(int fd)
 {
     int fdlimit = sysconf(_SC_OPEN_MAX);
-
     while (fd < fdlimit)
         close(fd++);
 }

@@ -6,17 +6,21 @@
  brief:
 */
 
-#include "FileServConn.h"
+#include "util.h"
+#include "ImUser.h"
+#include "MsgConn.h"
 #include "AttachData.h"
 #include "FileHandler.h"
+#include "FileServConn.h"
+#include "RouteServConn.h"
+
 #include "IM.File.pb.h"
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
-#include "ImUser.h"
-#include "MsgConn.h"
-#include "RouteServConn.h"
-#include "util.h"
+
 using namespace IM::BaseDefine;
+using namespace std;
+
 static ConnMap_t g_file_server_conn_map;
 
 static serv_info_t* g_file_server_list;
@@ -54,7 +58,6 @@ void init_file_serv_conn(serv_info_t* server_list, uint32_t server_count)
 bool is_file_server_available()
 {
     CFileServConn* pConn = NULL;
-
     for (uint32_t i = 0; i < g_file_server_count; i++) {
         pConn = (CFileServConn*)g_file_server_list[i].serv_conn;
         if (pConn && pConn->IsOpen()) {

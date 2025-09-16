@@ -6,12 +6,13 @@
  brief:
 */
 
-#ifndef ROUTECONN_H_
-#define ROUTECONN_H_
+#ifndef _ROUTECONN_H_
+#define _ROUTECONN_H_
 
 #include "imconn.h"
 
-class CRouteConn : public CImConn {
+class CRouteConn : public CImConn
+{
 public:
     CRouteConn();
     virtual ~CRouteConn();
@@ -46,4 +47,4 @@ private:
 
 void init_routeconn_timer_callback();
 
-#endif /* ROUTECONN_H_ */
+#endif /* _ROUTECONN_H_ */

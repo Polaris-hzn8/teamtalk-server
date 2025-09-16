@@ -1,24 +1,22 @@
-//
-//  pdu_msg.h
-//  my_push_server
-//
-//  Created by luoning on 14-11-12.
-//  Copyright (c) 2014年 luoning. All rights reserved.
-//
+/*
+ Reviser: Polaris_hzn8
+ Email: lch2022fox@163.com
+ filename: pdu_msg.h
+ Update Time: Sun 10 Aug 2025 12:10:04 CST
+ brief: 
+*/
 
 #ifndef __my_push_server__pdu_msg__
 #define __my_push_server__pdu_msg__
 
-#include <stdio.h>
-#include "socket/base_msg.h"
-#include "type/base_type.h"
-#include "push_define.h"
 #include <list>
 #include <string>
+#include <stdio.h>
+#include "push_define.h"
+#include "type/base_type.h"
+#include "socket/base_msg.h"
 #include "google/protobuf/message_lite.h"
-
 using namespace std;
-
 
 #define HEAD_LENGTH     16
 
