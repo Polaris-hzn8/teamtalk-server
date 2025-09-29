@@ -101,12 +101,13 @@ pack_folder() {
     cp third/slog/lib/libslog.so  ../$pack_folder/lib/
 
     # copy sript
-    cp tools/restart.sh ../$pack_folder/
+    cp tools/server_manager.sh ../$pack_folder/
     cp tools/monitor.sh ../$pack_folder/
-    cp tools/ttopen.sh ../$pack_folder/
+    
     cp tools/setup.sh ../$pack_folder/
 
     # copy sql
+    cp tools/ttopen.sh ../$pack_folder/
     cp tools/ttopen.sql ../$pack_folder/
 
     # copy daeml
@@ -163,14 +164,18 @@ clean() {
     rm -rf build bin
     cd ../push_server
     rm -rf build bin
+    cd ../etcd_login_server
+    rm -rf build bin
+    cd ../msfs
+    rm -rf build bin
     cd ../
 }
 
 print_help() {
     echo "Usage: "
-    echo "  $0 clean --- clean all build"
-    echo "  $0 distclean --- clean all build and cmakecache"
-    echo "  $0 version version_str --- build a version"
+    echo "  $0 clean                --- clean all build"
+    echo "  $0 version version_str  --- build a version"
+    echo "  $0 server_name          --- build a server"
 }
 
 case $1 in
