@@ -28,7 +28,7 @@ static void close_all_fds(int fd)
  * @param asroot   1 = keep root privileges, 0 = drop to UID 1
  * @return int     0 = success, -1 = failure
  */
-static int daemon(int nochdir, int noclose, int asroot)
+static int create_daemon(int nochdir, int noclose, int asroot)
 {
     // fork
     pid_t pid;
@@ -74,51 +74,48 @@ static int daemon(int nochdir, int noclose, int asroot)
     return 0;
 }
 
-#define TEXT(a) a
-void PrintUsage(char* name)
+static void PrintUsage(const char* prog_name)
 {
-    printf (
-            TEXT("\n ----- \n\n")
-            TEXT("Usage:\n")
-            TEXT("   	%s program_name \n\n")
-            TEXT("Where:\n")
-            TEXT("   	%s - Name of this Daemon loader.\n")
-            TEXT("   	program_name - Name (including path) of the program you want to load as daemon.\n\n")
-            TEXT("Example:\n")
-            TEXT("   	%s ./atprcmgr - Launch program 'atprcmgr' in current directory as daemon. \n\n\n\n"),
-            name, name, name
-            );
+    fprintf(stdout,
+        "\n-----\n\n"
+        "Usage:\n"
+        "    %s program_name [args...]\n\n"
+        "Where:\n"
+        "    %s - This daemon loader program.\n"
+        "    program_name - Program (with path) to run as daemon.\n\n"
+        "Example:\n"
+        "    %s ./myprog - Run 'myprog' as daemon.\n\n",
+        prog_name, prog_name, prog_name
+    );
 }
 
+// ./daemon_loader <program_path> [program_args...]
 int main(int argc, char* argv[])
 {
-    printf(
-           TEXT("\n")
-           TEXT("Daemon loader\n")
-           TEXT("- Launch specified program as daemon.\n")
-           //TEXT("- Require root privilege to launch successfully.\n\n\n")
-           );
-    
-    if (argc < 2)
-    {
-        printf("* Missing parameter : daemon program name not specified!\n");
+    if (argc < 2) {
+        fprintf(stderr, "Error: Missing program name to run as daemon!\n");
         PrintUsage(argv[0]);
-        exit(0);
+        exit(EXIT_FAILURE);
+    }
+
+    const char* loader_name = argv[0];  // 守护进程加载器
+    const char* target_path = argv[1];  // 要启动的目标程序路径
+    char **target_argv = argv + 1;      // 要传给目标程序的参数列表
+
+    fprintf(stdout, "Daemon loader: Launching '%s' as daemon...\n", target_path);
+    
+    if (create_daemon(0, 0, 1) < 0) {
+        fprintf(stderr, "Error: Failed to create daemon process.\n");
+        return EXIT_FAILURE;
     }
     
-    printf("- Loading %s as daemon, please wait ......\n\n\n", argv[1]);
+    signal(SIGCHLD, SIG_IGN);// 忽略子进程终止信号，避免僵尸进程
     
-    if (daemon(1, 0, 1) >= 0)
-    {
-        signal(SIGCHLD, SIG_IGN);
-        
-        //execl(argv[1], argv[1], NULL);
-        execv(argv[1], argv + 1);
-        printf("! Excute daemon programm %s failed. \n", argv[1]);
-        
-        exit(0);
-    }
+    execv(target_path, target_argv);// 目标程序 替换当前进程镜像
+    //execl(argv[1], argv[1], NULL);
+
+    // execv 失败
+    fprintf(stderr, "Error: Failed to execute '%s', errno=%d\n", target_path, errno);
     
-    printf("! Create daemon error. Please check if you have 'root' privilege. \n");
-    return 0;
+    return EXIT_FAILURE;
 }
