@@ -47,3 +47,9 @@ link_directories(
 add_executable(route_server ${SRC_LIST})
 
 target_link_libraries(route_server base slog protobuf-lite pthread)
+
+# rpath动态库查找
+set_target_properties(route_server PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)

@@ -54,3 +54,9 @@ link_directories(
 add_executable(login_server ${SRC_LIST})
 
 target_link_libraries(login_server base slog yajl cetcd protobuf-lite pthread) 
+
+# rpath动态库查找
+set_target_properties(login_server PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)

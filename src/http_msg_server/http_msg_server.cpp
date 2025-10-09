@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 
     log("MsgServer max files can open: %d ", getdtablesize());
 
-    CConfigFileReader config_file("httpmsgserver.conf");
+    CConfigFileReader config_file("http_msg_server.conf");
 
     char* listen_ip = config_file.GetConfigName("ListenIP");
     char* str_listen_port = config_file.GetConfigName("ListenPort");

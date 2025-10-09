@@ -52,14 +52,13 @@ src/third/log4cxx/*
 src/third/protobuf/*
 !src/third/protobuf/protobuf-2.6.1.tar.gz
 
-# tools
-src/tools/daeml
+# daeml
+src/daeml/daeml
 
 # cmake
 bin/
 build/
 
 # output_pack
-im-server-*.tar.gz
-im-server-*/
-pack_folder/
+src/im-server-*.tar.gz
+im_server_pack/
