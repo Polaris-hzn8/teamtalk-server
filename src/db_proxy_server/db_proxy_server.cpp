@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
         return -1;
 
     // 服务配置读取
-    CConfigFileReader config_file("dbproxyserver.conf");
+    CConfigFileReader config_file("db_proxy_server.conf");
     char* listen_ip = config_file.GetConfigName("ListenIP");            //监听ip地址
     char* str_listen_port = config_file.GetConfigName("ListenPort");    //端口号
     char* str_thread_num = config_file.GetConfigName("ThreadNum");      //线程数量

@@ -44,3 +44,9 @@ link_directories(
 add_executable(push_server ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} ${SRC_LIST4} ${SRC_LIST5})
 
 target_link_libraries(push_server base slog pthread protobuf-lite ssl)
+
+# rpath动态库查找
+set_target_properties(push_server PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)

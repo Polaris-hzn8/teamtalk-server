@@ -58,4 +58,4 @@ add_library(base STATIC
     ${SRC_LIST6}
     ${SRC_LIST7})
 
-target_link_libraries(base slog crypto pthread)
+target_link_libraries(base protobuf slog crypto pthread)

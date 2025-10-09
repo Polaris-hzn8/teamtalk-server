@@ -46,3 +46,8 @@ add_executable(msfs ${SRC_LIST})
 
 target_link_libraries(msfs base slog pthread)
  
+# rpath动态库查找
+set_target_properties(msfs PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)

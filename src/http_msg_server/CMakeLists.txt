@@ -47,3 +47,9 @@ link_directories(
 add_executable(http_msg_server ${SRC_LIST})
 
 target_link_libraries(http_msg_server slog base protobuf-lite pthread)
+
+# rpath动态库查找
+set_target_properties(http_msg_server PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)
