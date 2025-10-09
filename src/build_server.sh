@@ -4,8 +4,6 @@ set -e
 
 # 配置变量
 LIB_DIR="lib"
-CONF_DIR="conf"
-SCRIPT_DIR="scripts"
 PACK_FOLDER_NAME="im_server_pack"
 
 # 全局变量（打包目录和包名）
@@ -137,7 +135,7 @@ prepare_pack_directory() {
     rm -f "$TARGET_NAME"
     
     # 创建目录结构（base不需要在打包目录中创建子目录）
-    mkdir -p "$PACK_DIR"/{$LIB_DIR,$CONF_DIR,$SCRIPT_DIR}
+    mkdir -p "$PACK_DIR/$LIB_DIR"
 
     # 为其他服务器创建目录
     for server in "${SERVERS[@]}"; do
@@ -154,28 +152,20 @@ prepare_pack_directory() {
 copy_files_to_pack() {
     echo ">>> Copying files to pack directory..."
     
-    # 复制可执行文件
+    LOG4CXX_CONFIG="third/slog/log4cxx.properties"
     for server in "${SERVERS[@]}"; do
         if [ "$server" != "base" ] && [ -f "$server/bin/$server" ]; then
+            # 复制可执行文件
             cp "$server/bin/$server" "$PACK_DIR/$server/"
             echo "  Copied $server/bin/$server"
-        fi
-    done
-    
-    # 复制服务器配置文件
-    for server in "${SERVERS[@]}"; do
-        if [ "$server" != "base" ] && [ -f "$server/${server}.conf" ]; then
-            cp "$server/${server}.conf" "$PACK_DIR/$CONF_DIR/"
+            # 复制服务器配置文件
+            cp "$server/${server}.conf" "$PACK_DIR/$server/"
             echo "  Copied $server/${server}.conf"
+            # 复制日志配置文件
+            cp "$LOG4CXX_CONFIG" "$PACK_DIR/$server/"
+            echo "  Copied $server/log4cxx.properties"
         fi
     done
-    
-    # 复制日志配置文件
-    LOG4CXX_CONFIG="third/slog/log4cxx.properties"
-    if [ -f "$LOG4CXX_CONFIG" ]; then
-        cp "$LOG4CXX_CONFIG" "$PACK_DIR/$CONF_DIR/"
-        echo "  Copied $LOG4CXX_CONFIG"
-    fi
     
     #######################################################################
     # 复制库文件
@@ -214,7 +204,7 @@ copy_files_to_pack() {
     # 复制脚本文件
     for script in scripts/server_manager.sh scripts/server_monitor.sh scripts/init.sh scripts/init.sql; do
         if [ -f "$script" ]; then
-            cp "$script" "$PACK_DIR/$SCRIPT_DIR/"
+            cp "$script" "$PACK_DIR/"
             echo "  Copied $script"
         fi
     done
@@ -223,7 +213,7 @@ copy_files_to_pack() {
     if [ -d "daeml" ]; then
         echo ">>> Building daeml..."
         if make -C daeml clean && make -C daeml; then
-            cp "daeml/daeml" "$PACK_DIR/$SCRIPT_DIR/"
+            cp "daeml/daeml" "$PACK_DIR/"
             echo "  Copied daeml/daeml"
         else
             echo "Warning: Failed to build daeml"
