@@ -3,6 +3,10 @@
 # 服务器进程组管理脚本
 
 #########################################################################
+## 脚本目录
+BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+#########################################################################
 ## 服务器配置变量
 readonly FILE_SERVER=file_server
 readonly LOGIN_SERVER=login_server
@@ -71,8 +75,8 @@ check_environment() {
     # 用蓝色显示系统信息
     print_color "$BLUE" "OS: $OS_VERSION, $OS_BIT bit"
     # 检查必要的目录和文件
-    if [ ! -d "./lib" ]; then
-        print_color "$RED" "Error: lib or conf directory not found"
+    if [ ! -d "$BASE_DIR/lib" ]; then
+        print_color "$RED" "Error: lib directory not found"
         exit 1
     fi
 }
@@ -80,11 +84,11 @@ check_environment() {
 #########################################################################
 ## 设置权限
 setup_permissions() {
-    chmod +x ./server_manager.sh ./server_monitor.sh ./init.sh ./daeml 2>/dev/null || true
+    chmod +x "$BASE_DIR/server_manager.sh" "$BASE_DIR/server_monitor.sh" "$BASE_DIR/init.sh" "$BASE_DIR/daeml" 2>/dev/null || true
     # 所有 server 可执行文件
     for srv in "${ALL_SERVERS[@]}"; do
-        if [ -f "./$srv/$srv" ]; then
-            chmod +x "./$srv/$srv"
+        if [ -f "$BASE_DIR/$srv/$srv" ]; then
+            chmod +x "$BASE_DIR/$srv/$srv"
         fi
     done
     print_color "$GREEN" "Set executable permissions"
@@ -94,8 +98,8 @@ setup_permissions() {
 ## 服务操作函数
 restart_server() {
     local server=$1
-    local server_dir="./$server"
-    local deaml="$(pwd)/daeml"
+    local server_dir="$BASE_DIR/$server"
+    local deaml="$BASE_DIR/daeml"
 
     if [ ! -d "$server_dir" ]; then
         print_color "$RED" "Error: Server directory $server_dir not found"
@@ -144,18 +148,18 @@ restart_server() {
 
     # 启动服务器
     print_color "$GREEN" "Starting $server..."
-    if "$deaml" "./$server"; then
+    if "$deaml" "$BASE_DIR/$server/$server"; then
         print_color "$GREEN" "$server started successfully"
     else
         print_color "$RED" "Failed to start $server"
     fi
 
-    cd ..
+    cd "$BASE_DIR"
 }
 
 stop_server() {
     local server=$1
-    local server_dir="./$server"
+    local server_dir="$BASE_DIR/$server"
 
     if [ ! -d "$server_dir" ]; then
         print_color "$RED" "Error: Server directory $server_dir not found"
@@ -186,12 +190,12 @@ stop_server() {
         print_color "$YELLOW" "$server is not running (no server.pid found)"
     fi
 
-    cd ..
+    cd "$BASE_DIR"
 }
 
 status_server() {
     local server=$1
-    local server_dir="./$server"
+    local server_dir="$BASE_DIR/$server"
 
     if [ ! -d "$server_dir" ]; then
         print_color "$RED" "Error: Server directory $server_dir not found"
@@ -213,7 +217,7 @@ status_server() {
         print_color "$RED" "$server is not running"
     fi
 
-    cd ..
+    cd "$BASE_DIR"
 }
 
 manage_all_servers() {

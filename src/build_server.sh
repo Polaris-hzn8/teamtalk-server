@@ -266,6 +266,9 @@ build_pack() {
     # 复制文件
     copy_files_to_pack
     
+    # 调试使用
+    chmod +x ../im_server_pack/server_manager.sh
+
     # 创建压缩包
     if create_package; then
         echo ">>> Build completed successfully!"

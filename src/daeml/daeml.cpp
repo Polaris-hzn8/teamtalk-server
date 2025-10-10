@@ -30,28 +30,36 @@ static void close_all_fds(int fd)
  */
 static int create_daemon(int nochdir, int noclose, int asroot)
 {
-    // fork
+    // 第一次fork，脱离终端
     pid_t pid;
     pid = fork();
-    if (pid < 0)
+    if (pid < 0) {
+        perror("Failed to first fork");
         return -1;
-    if (pid > 0)
+    } else if (pid > 0) {
         _exit(EXIT_SUCCESS); // 父进程退出
+    }
 
-    // 创建新会话
-    if (setsid() < 0)
+    // 子进程成为新会话组长，脱离终端
+    if (setsid() < 0) {
+        perror("Failed to setsid");
         return -1;
+    }
     
     // 可选降权限
-    if (!asroot && setuid(1) < 0)
+    if (!asroot && setuid(1) < 0) {
+        perror("Failed to setuid");
         return -1;
+    }
 
-    // fork
+    // 第二次fork，禁止进程重新打开控制终端
     pid = fork();
-    if (pid < 0)
+    if (pid < 0) {
+        perror("Failed to second fork");
         return -1;
-    if (pid > 0)
+    } else if (pid > 0) {
         _exit(EXIT_SUCCESS);
+    }   
 
     // 切换目录
     if (!nochdir)
@@ -62,7 +70,7 @@ static int create_daemon(int nochdir, int noclose, int asroot)
         close_all_fds(0);
         int fd = open("/dev/null", O_RDWR, 0);
         if (fd < 0) {
-            fprintf(stderr, "Failed to open /dev/null, errno=%d\n", errno);
+            printf("Failed to open /dev/null, errno=%d\n", errno);
             return -1;
         }
         dup2(fd, STDIN_FILENO);
@@ -93,7 +101,7 @@ static void PrintUsage(const char* prog_name)
 int main(int argc, char* argv[])
 {
     if (argc < 2) {
-        fprintf(stderr, "Error: Missing program name to run as daemon!\n");
+        printf("Error: Missing program name to run as daemon!\n");
         PrintUsage(argv[0]);
         exit(EXIT_FAILURE);
     }
@@ -104,8 +112,8 @@ int main(int argc, char* argv[])
 
     fprintf(stdout, "Daemon loader: Launching '%s' as daemon...\n", target_path);
     
-    if (create_daemon(0, 0, 1) < 0) {
-        fprintf(stderr, "Error: Failed to create daemon process.\n");
+    if (create_daemon(1, 0, 1) < 0) {
+        perror("Error: Failed to create daemon process.\n");
         return EXIT_FAILURE;
     }
     
@@ -115,7 +123,6 @@ int main(int argc, char* argv[])
     //execl(argv[1], argv[1], NULL);
 
     // execv 失败
-    fprintf(stderr, "Error: Failed to execute '%s', errno=%d\n", target_path, errno);
-    
+    fprintf(stdout, "Error: Failed to execute '%s', errno=%d\n", target_path, errno);
     return EXIT_FAILURE;
 }
