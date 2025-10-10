@@ -132,6 +132,43 @@ build_single_server() {
     return 0
 }
 
+# 快速调试使用
+sync_im_server_pack() {
+    PACK_DIR="../${PACK_FOLDER_NAME}"
+
+    local server=$1
+    local CURPWD=$PWD
+
+    color_echo "$BLUE" ">>> [Sync] Syncing server: $server"
+
+    if [ ! -d "$server" ]; then
+        color_echo "$RED" "Error: Server directory '$server' not found"
+        return 1
+    fi
+
+    if [ -z "$PACK_DIR" ] || [ ! -d "$PACK_DIR" ]; then
+        color_echo "$RED" "Error: PACK_DIR is not set or not found: $PACK_DIR"
+        return 1
+    fi
+
+    mkdir -p "$PACK_DIR/$server"
+    # 同步可执行文件
+    cp "$server/bin/$server" "$PACK_DIR/$server/"
+    echo "  Copied $server/bin/$server"
+
+    # 复制服务器配置文件
+    cp "$server/${server}.conf" "$PACK_DIR/$server/"
+    echo "  Copied $server/${server}.conf"
+
+    # 重启运行中的服务
+    cd "$PACK_DIR"
+    chmod +x server_manager.sh
+    ./server_manager.sh restart $server
+    
+    cd "$CURPWD"
+    return 0
+}
+
 # ================================================
 # 构建所有服务器
 build_all_servers() {
@@ -383,9 +420,10 @@ Available servers:
   ${SERVERS[*]}
 
 Examples:
+  $0 clean                # Clean all build files
   $0 version 1.0.0        # Build complete package version 1.0.0
   $0 pack 1.0.0           # Only package existing binaries
-  $0 clean                # Clean all build files
+  $0 sync login_server    # copy existing binaries and restart server for debug.
   $0 login_server         # Build only login_server
   $0 base                 # Build only base library
 EOF
@@ -414,6 +452,9 @@ main() {
             [ $# -ne 2 ] && { color_echo "$RED" "Error: Version number required"; print_help; exit 1; }
             pack_clean
             pack_existing "$2"
+            ;;
+        sync)
+            sync_im_server_pack "$2"
             ;;
         *)
             if [[ " ${SERVERS[@]} " =~ " $1 " ]]; then
