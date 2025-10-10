@@ -49,3 +49,8 @@ add_executable(file_server ${SRC_LIST1} ${SRC_LIST2})
 
 target_link_libraries(file_server base slog pthread protobuf-lite uuid)
  
+# rpath动态库查找
+set_target_properties(file_server PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)

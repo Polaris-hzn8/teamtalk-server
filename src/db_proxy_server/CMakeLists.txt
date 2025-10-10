@@ -61,3 +61,8 @@ add_executable(db_proxy_server
 
 target_link_libraries(db_proxy_server pthread base protobuf-lite mysqlclient hiredis curl slog crypto)
 
+# rpath动态库查找
+set_target_properties(db_proxy_server PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)

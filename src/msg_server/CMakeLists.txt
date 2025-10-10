@@ -55,3 +55,8 @@ add_executable(msg_server ${SRC_LIST})
 
 target_link_libraries(msg_server base slog protobuf-lite crypto pthread)
  
+# rpath动态库查找
+set_target_properties(msg_server PROPERTIES
+    INSTALL_RPATH "$ORIGIN/../lib"
+    BUILD_WITH_INSTALL_RPATH TRUE
+)

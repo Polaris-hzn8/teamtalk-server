@@ -1,198 +1,471 @@
 #!/bin/bash
 
-pack_folder() {
-    CURPWD=$PWD
+set -e
 
-    echo $CURPWD
+# ================================================
+# TeamTalk Server Build & Packaging Script
+# 支持：
+#   1. 全量编译打包：   ./build_server.sh version <version>
+#   2. 仅打包已编译结果：./build_server.sh pack <version>
+#   3. 清理：           ./build_server.sh clean
+#   4. 单独编译某个 server
+# ================================================
 
-    # 环境变量设置
-    # base
-    export CPLUS_INCLUDE_PATH=$PWD/base:$CPLUS_INCLUDE_PATH
-    export LD_LIBRARY_PATH=$PWD/base/bin:$LD_LIBRARY_PATH
-    export LIBRARY_PATH=$PWD/base/bin:$LIBRARY_PATH
+# 配置变量
+LIB_DIR="lib"
+PACK_FOLDER_NAME="im_server_pack"
+
+# 全局变量（打包目录和包名）
+PACK_DIR=""
+TARGET_NAME=""
+
+# 服务器列表
+SERVERS=(
+    "base"
+    "login_server"
+    "msg_server"
+    "http_msg_server"
+    "file_server"
+    "route_server"
+    "db_proxy_server"
+    "msfs"
+    "push_server")
+
+# ================================================
+# 颜色输出
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+color_echo() {
+    echo -e "${1}${2}${NC}"
+}
+
+# ================================================
+# 环境设置
+setup_environment() {
+    local CURPWD=$PWD
+    # 基础路径
+    export CPLUS_INCLUDE_PATH=$CURPWD/base:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$CURPWD/base/bin:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$CURPWD/base/bin:$LIBRARY_PATH
+    
     # slog
-    export CPLUS_INCLUDE_PATH=$PWD/third/slog/include:$CPLUS_INCLUDE_PATH
-    export LD_LIBRARY_PATH=$PWD/third/slog/lib:$LD_LIBRARY_PATH
-    export LIBRARY_PATH=$PWD/third/slog/lib:$LIBRARY_PATH
+    export CPLUS_INCLUDE_PATH=$CURPWD/third/slog/include:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$CURPWD/third/slog/lib:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$CURPWD/third/slog/lib:$LIBRARY_PATH
+    
     # protobuf
-    export CPLUS_INCLUDE_PATH=$PWD/third//protobuf/include:$CPLUS_INCLUDE_PATH
-    export LD_LIBRARY_PATH=$PWD/third//protobuf/lib:$LD_LIBRARY_PATH
-    export LIBRARY_PATH=$PWD/third//protobuf/lib:$LIBRARY_PATH
+    export CPLUS_INCLUDE_PATH=$CURPWD/third/protobuf/include:$CPLUS_INCLUDE_PATH
+    export LD_LIBRARY_PATH=$CURPWD/third/protobuf/lib:$LD_LIBRARY_PATH
+    export LIBRARY_PATH=$CURPWD/third/protobuf/lib:$LIBRARY_PATH
+}
 
-    ###################################################################################
-    # step1.版本信息写入
-    rm -f base/version.h
-    echo "#ifndef __VERSION_H__" > base/version.h
-    echo "#define __VERSION_H__" >> base/version.h
-    echo "#define VERSION \"$1\"" >> base/version.h
-    echo "#endif" >> base/version.h
-
-    ###################################################################################
-    # step2.所有业务服务器编译
-    # login_server msg_server route_server
-    # msfs file_server db_proxy_server http_msg_server
-    # push_server
-    cd $CURPWD
-    for i in base route_server msg_server http_msg_server file_server push_server db_proxy_server msfs login_server; do
-        cd $CURPWD/$i
-
-        if [ ! -d build ]
-        then
-            mkdir build
+# ================================================
+# 文件检查
+check_required_files() {
+    local missing_files=()
+    
+    # 检查配置文件
+    [ ! -f "third/slog/log4cxx.properties" ] && missing_files+=("third/slog/log4cxx.properties")
+    
+    # 检查服务器配置文件（base不需要配置文件）
+    for server in "${SERVERS[@]}"; do
+        if [ "$server" != "base" ]; then
+            local conf_file="${server}/${server}.conf"
+            [ ! -f "$conf_file" ] && missing_files+=("$conf_file")
         fi
+    done
+    
+    if [ ${#missing_files[@]} -ne 0 ]; then
+        echo "Error: Missing required files:"
+        printf '  %s\n' "${missing_files[@]}"
+        return 1
+    fi
+    
+    return 0
+}
 
-        cd build
-        cmake ../
-        make
-        if [ $? -eq 0 ]; then
-            echo ">>> makeout: $i succeed~";
-        else
-            echo ">>> makeout: $i failed!";
-            exit;
+# ================================================
+# 创建版本文件
+create_version_file() {
+    local version=$1
+    cat > base/version.h << EOF
+#ifndef __VERSION_H__
+#define __VERSION_H__
+#define VERSION "$version"
+#endif
+EOF
+    echo ">>> Created version.h with version: $version"
+}
+
+# ================================================
+# 构建单个服务器
+build_single_server() {
+    local server=$1
+    local CURPWD=$PWD
+    
+    echo ">>> Building $server..."
+    
+    if [ ! -d "$server" ]; then
+        echo "Error: Server directory '$server' not found"
+        return 1
+    fi
+    
+    cd "$server"
+    
+    # 清理并创建构建目录
+    rm -rf build bin
+    mkdir -p build
+    cd build
+    
+    # 编译
+    if cmake ../ && make; then
+        echo ">>> Build $server: SUCCESS"
+    else
+        echo ">>> Build $server: FAILED"
+        return 1
+    fi
+    
+    cd "$CURPWD"
+    return 0
+}
+
+# 快速调试使用
+sync_im_server_pack() {
+    PACK_DIR="../${PACK_FOLDER_NAME}"
+
+    local server=$1
+    local CURPWD=$PWD
+
+    color_echo "$BLUE" ">>> [Sync] Syncing server: $server"
+
+    if [ ! -d "$server" ]; then
+        color_echo "$RED" "Error: Server directory '$server' not found"
+        return 1
+    fi
+
+    if [ -z "$PACK_DIR" ] || [ ! -d "$PACK_DIR" ]; then
+        color_echo "$RED" "Error: PACK_DIR is not set or not found: $PACK_DIR"
+        return 1
+    fi
+
+    mkdir -p "$PACK_DIR/$server"
+    # 同步可执行文件
+    cp "$server/bin/$server" "$PACK_DIR/$server/"
+    echo "  Copied $server/bin/$server"
+
+    # 复制服务器配置文件
+    cp "$server/${server}.conf" "$PACK_DIR/$server/"
+    echo "  Copied $server/${server}.conf"
+
+    # 重启运行中的服务
+    cd "$PACK_DIR"
+    chmod +x server_manager.sh
+    ./server_manager.sh restart $server
+    
+    cd "$CURPWD"
+    return 0
+}
+
+# ================================================
+# 构建所有服务器
+build_all_servers() {
+    echo ">>> Building all servers..."
+    
+    for server in "${SERVERS[@]}"; do
+        if ! build_single_server "$server"; then
+            return 1
+        fi
+    done
+    
+    echo ">>> All servers built successfully"
+    return 0
+}
+
+# ================================================
+# 准备打包目录
+prepare_pack_directory() {
+    local version=$1
+
+    PACK_DIR="../${PACK_FOLDER_NAME}"
+    TARGET_NAME="im-server-${version}.tar.gz"
+    
+    echo ">>> Preparing pack directory..."
+    
+    # 清理旧文件
+    rm -rf "$PACK_DIR"
+    rm -f "$TARGET_NAME"
+    
+    # 创建目录结构（base不需要在打包目录中创建子目录）
+    mkdir -p "$PACK_DIR/$LIB_DIR"
+
+    # 为其他服务器创建目录
+    for server in "${SERVERS[@]}"; do
+        if [ "$server" != "base" ]; then
+            mkdir -p "$PACK_DIR/$server"
         fi
     done
 
-    cd $CURPWD
+    echo "$PACK_DIR"
+    echo "$TARGET_NAME"
+}
 
-    ###################################################################################
-    # step3.打包所有编译结果与配置文件
-    # copy executables and configs to im-server-$version
-    pack_folder=pack_folder
-    target_name=im-server-$1.tar.gz
-    if [ -e "$target_name" ]; then
-        rm $target_name
-    fi
-
-    rm -f $target_name
-    mkdir -p ../$pack_folder
-    mkdir -p ../$pack_folder/login_server
-    mkdir -p ../$pack_folder/route_server
-    mkdir -p ../$pack_folder/msg_server
-    mkdir -p ../$pack_folder/file_server
-    mkdir -p ../$pack_folder/msfs
-    mkdir -p ../$pack_folder/http_msg_server
-    mkdir -p ../$pack_folder/push_server
-    mkdir -p ../$pack_folder/db_proxy_server
-    mkdir -p ../$pack_folder/lib
-    mkdir -p ../$pack_folder/conf
-
-    # copy executables
-    cp login_server/bin/login_server ../$pack_folder/login_server/
-    cp route_server/bin/route_server ../$pack_folder/route_server/
-    cp msg_server/bin/msg_server ../$pack_folder/msg_server/
-    cp http_msg_server/bin/http_msg_server ../$pack_folder/http_msg_server/
-    cp file_server/bin/file_server ../$pack_folder/file_server/
-    cp push_server/bin/push_server ../$pack_folder/push_server/
-    cp db_proxy_server/bin/db_proxy_server ../$pack_folder/db_proxy_server/
-    cp msfs/bin/msfs ../$pack_folder/msfs/
-
-    # copy conf
-    cp login_server/loginserver.conf ../$pack_folder/conf/
-    cp route_server/routeserver.conf ../$pack_folder/conf/
-    cp msg_server/msgserver.conf ../$pack_folder/conf/
-    cp http_msg_server/httpmsgserver.conf ../$pack_folder/conf/
-    cp file_server/fileserver.conf ../$pack_folder/conf/
-    cp push_server/pushserver.conf ../$pack_folder/conf/
-    cp db_proxy_server/dbproxyserver.conf ../$pack_folder/conf/
-    cp msfs/msfs.conf ../$pack_folder/conf/
-    cp slog/log4cxx.properties ../$pack_folder/conf/
-
-    # copy libs
-    cp third/slog/lib/libslog.so  ../$pack_folder/lib/
-
-    # copy sript
-    cp tools/restart.sh ../$pack_folder/
-    cp tools/monitor.sh ../$pack_folder/
-    cp tools/ttopen.sh ../$pack_folder/
-    cp tools/setup.sh ../$pack_folder/
-
-    # copy sql
-    cp tools/ttopen.sql ../$pack_folder/
-
-    # copy daeml
-    cp tools/daeml ../$pack_folder/
-
-    cd ../
+# ================================================
+# 复制文件到打包目录
+copy_files_to_pack() {
+    echo ">>> Copying files to pack directory..."
     
-    tar zcvf $target_name $pack_folder
-}
-
-build() {
-    CURPWD=$PWD
-    if [ ! -d $1 ]
-    then
-        echo "build failed: folder[$1] not exist."
-        exit;
-    fi
-    
-    cd $1
-    rm -rf build bin
-    mkdir build
-    cd build
-    cmake ../
-    make
-    if [ $? -eq 0 ]; then
-        echo ">>> module build: $1 succeed~";
-    else
-        echo ">>> module build: $1 failed!";
-        exit;
-    fi
-
-    cd $CURPWD
-
-    # 同步到打包目录下
-    # cp $1/bin/$1 ../im-server-1.0/$1
-}
-
-clean() {
-    cd base
-    rm -rf build bin
-    cd ../login_server
-    rm -rf build bin
-    cd ../route_server
-    rm -rf build bin
-    cd ../msg_server
-    rm -rf build bin
-    cd ../http_msg_server
-    rm -rf build bin
-    cd ../file_server
-    rm -rf build bin
-    cd ../push_server
-    rm -rf build bin
-    cd ../db_proxy_server
-    rm -rf build bin
-    cd ../push_server
-    rm -rf build bin
-    cd ../
-}
-
-print_help() {
-    echo "Usage: "
-    echo "  $0 clean --- clean all build"
-    echo "  $0 distclean --- clean all build and cmakecache"
-    echo "  $0 version version_str --- build a version"
-}
-
-case $1 in
-    clean)
-        echo "clean all build..."
-        clean
-        ;;
-    version)
-        if [ $# != 2 ]; then 
-            echo $#
-            print_help
-            exit
+    LOG4CXX_CONFIG="third/slog/log4cxx.properties"
+    for server in "${SERVERS[@]}"; do
+        if [ "$server" != "base" ] && [ -f "$server/bin/$server" ]; then
+            # 复制可执行文件
+            cp "$server/bin/$server" "$PACK_DIR/$server/"
+            echo "  Copied $server/bin/$server"
+            # 复制服务器配置文件
+            cp "$server/${server}.conf" "$PACK_DIR/$server/"
+            echo "  Copied $server/${server}.conf"
+            # 复制日志配置文件
+            cp "$LOG4CXX_CONFIG" "$PACK_DIR/$server/"
+            echo "  Copied $server/log4cxx.properties"
         fi
-        clean
-        echo "version $2 in building..."
-        pack_folder $2
-        ;;
-    login_server|msg_server|route_server|http_msg_server|file_server|push_server|db_proxy_server|msfs|base)
-        build "$1"
-        ;;
-    *)
-        print_help
-        ;;
-esac
+    done
+    
+    #######################################################################
+    # 复制库文件
+    # slog
+    SLOG_LIB="third/slog/lib/libslog.so"
+    if [ -f "$SLOG_LIB" ]; then
+        cp "$SLOG_LIB" "$PACK_DIR/$LIB_DIR/"
+        echo "  Copied $SLOG_LIB"
+    fi
 
+    # log4cxx
+    LOG4CXX_DIR="third/log4cxx/lib"
+    LOG4CXX_LIBS=("liblog4cxx.so.10" "liblog4cxx.so.10.0.0")
+    for f in "${LOG4CXX_LIBS[@]}"; do
+        if [ -f "$LOG4CXX_DIR/$f" ]; then
+            cp "$LOG4CXX_DIR/$f" "$PACK_DIR/$LIB_DIR/"
+            echo "  Copied $LOG4CXX_DIR/$f"
+        else
+            echo "Warning: $f not found in $LOG4CXX_DIR!"
+        fi
+    done
+    
+    # protobuff
+    PROTOBUF_DIR="third/protobuf/lib"
+    PROTOBUF_LIBS=("libprotobuf-lite.so.9" "libprotobuf-lite.so.9.0.1"
+                    "libprotobuf.so.9" "libprotobuf.so.9.0.1")
+    for f in "${PROTOBUF_LIBS[@]}"; do
+        if [ -f "$PROTOBUF_DIR/$f" ]; then
+            cp "$PROTOBUF_DIR/$f" "$PACK_DIR/$LIB_DIR/"
+            echo "  Copied $PROTOBUF_DIR/$f"
+        else
+            echo "Warning: $f not found in $PROTOBUF_DIR!"
+        fi
+    done
+
+    # 复制脚本文件
+    for script in scripts/server_manager.sh scripts/server_monitor.sh scripts/init.sh scripts/init.sql; do
+        if [ -f "$script" ]; then
+            cp "$script" "$PACK_DIR/"
+            echo "  Copied $script"
+        fi
+    done
+
+    # 构建并复制daeml
+    if [ -d "daeml" ]; then
+        color_echo "$BLUE" ">>> Rebuilding daeml..."
+        echo ">>> Building daeml..."
+        if make -C daeml clean && make -C daeml; then
+            cp "daeml/daeml" "$PACK_DIR/"
+            color_echo "$GREEN" "  daeml built successfully"
+            color_echo "$GREEN" "  Copied daeml/daeml"
+        else
+            color_echo "$YELLOW" "Warning: Failed to build daeml"
+        fi
+    fi
+}
+
+# ================================================
+# 创建压缩包
+create_package() {
+    echo ">>> Creating package: $TARGET_NAME"
+    
+    if tar zcvf "$TARGET_NAME" -C "$(dirname "$PACK_DIR")" "$(basename "$PACK_DIR")"; then
+        color_echo "$GREEN" ">>> Package created successfully: $TARGET_NAME"
+        return 0
+    else
+        color_echo "$YELLOW" ">>> Failed to create package"
+        return 1
+    fi
+}
+
+# ================================================
+# 全量构建 + 打包
+build_pack() {
+    local version=$1
+    local CURPWD=$PWD
+    
+    echo ">>> Starting build process for version: $version"
+    echo ">>> Current directory: $CURPWD"
+    
+    # 设置环境
+    setup_environment
+    
+    # 检查必要文件
+    if ! check_required_files; then
+        echo ">>> Build failed: Required files missing"
+        return 1
+    fi
+    
+    # 创建版本文件
+    create_version_file "$version"
+    
+    # 构建所有服务器
+    if ! build_all_servers; then
+        echo ">>> Build failed: Server compilation error"
+        return 1
+    fi
+    
+    # 准备打包
+    prepare_pack_directory "$version"
+    
+    # 复制文件
+    copy_files_to_pack
+
+    # 调试使用
+    chmod +x "$PACK_DIR/server_manager.sh"
+
+    # 创建压缩包
+    if create_package; then
+        echo ">>> Build completed successfully!"
+        return 0
+    else
+        return 1
+    fi
+}
+
+# ================================================
+# 仅打包现有结果（不编译 server）
+pack_existing() {
+    local version=$1
+    local CURPWD=$PWD
+
+    color_echo "$BLUE" ">>> Packaging existing build for version: $version"
+    setup_environment
+
+    if ! check_required_files; then
+        color_echo "$RED" ">>> Packaging failed: Required files missing"
+        return 1
+    fi
+
+    # 创建版本文件
+    create_version_file "$version"
+
+    # 准备打包
+    prepare_pack_directory "$version"
+
+    # 复制文件
+    copy_files_to_pack
+
+    # 调试使用
+    chmod +x "$PACK_DIR/server_manager.sh"
+
+    # 创建压缩包
+    if create_package; then
+        color_echo "$GREEN" ">>> quick_pack succeed!"
+        return 0
+    else
+        return 1
+    fi
+}
+
+# 清理函数
+pack_clean() {
+    local CURPWD=$PWD
+    echo ">>> Cleaning pack files..."
+    cd ..
+    rm -f im-server-*
+    rm -rf "$PACK_FOLDER_NAME"
+    echo ">>> Pack cleanup completed"
+    cd $CURPWD
+}
+
+cmake_clean() {
+    echo ">>> Cleaning build directories..."
+    make -C daeml clean
+    for server in "${SERVERS[@]}"; do
+        if [ -d "$server" ]; then
+            cd "$server"
+            rm -rf build bin
+            cd ..
+            echo "  Cleaned $server"
+        fi
+    done
+    echo ">>> Build cleanup completed"
+}
+
+# 显示帮助信息
+print_help() {
+    cat << EOF
+Usage:
+  $0 clean                --- clean all build files
+  $0 version <version>    --- build complete package with version (compile all servers)
+  $0 pack <version>       --- package existing binaries (rebuild daeml only)
+  $0 <server_name>        --- build single server
+
+Available servers:
+  ${SERVERS[*]}
+
+Examples:
+  $0 clean                # Clean all build files
+  $0 version 1.0.0        # Build complete package version 1.0.0
+  $0 pack 1.0.0           # Only package existing binaries
+  $0 sync login_server    # copy existing binaries and restart server for debug.
+  $0 login_server         # Build only login_server
+  $0 base                 # Build only base library
+EOF
+}
+
+# 主程序
+main() {
+    case $1 in
+        clean)
+            echo ">>> Cleaning all build files..."
+            cmake_clean
+            pack_clean
+            ;;
+        version)
+            if [ $# -ne 2 ]; then
+                echo "Error: Version number required"
+                print_help
+                exit 1
+            fi
+            echo ">>> Building version: $2"
+            cmake_clean
+            pack_clean
+            build_pack "$2"
+            ;;
+        pack)
+            [ $# -ne 2 ] && { color_echo "$RED" "Error: Version number required"; print_help; exit 1; }
+            pack_clean
+            pack_existing "$2"
+            ;;
+        sync)
+            sync_im_server_pack "$2"
+            ;;
+        *)
+            if [[ " ${SERVERS[@]} " =~ " $1 " ]]; then
+                build_single_server "$1"
+            else
+                print_help
+                exit 1
+            fi
+            ;;
+    esac
+}
+
+# 运行主程序
+main "$@"
