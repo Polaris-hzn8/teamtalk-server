@@ -115,7 +115,7 @@ CImPdu* CImPdu::ReadPdu(uchar_t* buf, uint32_t len)
     uint16_t command_id = CByteStream::ReadUint16(buf + 10);
     
     CImPdu* pPdu = new CImPdu();
-    if (new CImPdu()) {
+    if (pPdu) {
         pPdu->Write(buf, pdu_len);                      // 消息体
         pPdu->ReadPduHeader(buf, IM_PDU_HEADER_LEN);    // 消息头
     }
@@ -157,7 +157,9 @@ int CImPdu::ReadPduHeader(uchar_t* buf, uint32_t len)
 // 将消息序列化为二进制数据 写入到缓冲区中
 bool CImPdu::SetPBMsg(const google::protobuf::MessageLite* msg)
 {
+    // 读空缓冲区
     m_buf.Read(NULL, m_buf.GetWriteOffset());
+    // 扩容缓冲区
     m_buf.Write(NULL, sizeof(PduHeader_t));
 
     uint32_t msg_size = msg->ByteSize();

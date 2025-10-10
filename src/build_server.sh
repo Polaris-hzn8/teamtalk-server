@@ -336,7 +336,7 @@ build_pack() {
     copy_files_to_pack
 
     # 调试使用
-    chmod +x ../im_server_pack/server_manager.sh
+    chmod +x "$PACK_DIR/server_manager.sh"
 
     # 创建压缩包
     if create_package; then
@@ -371,7 +371,7 @@ pack_existing() {
     copy_files_to_pack
 
     # 调试使用
-    chmod +x ../im_server_pack/server_manager.sh
+    chmod +x "$PACK_DIR/server_manager.sh"
 
     # 创建压缩包
     if create_package; then

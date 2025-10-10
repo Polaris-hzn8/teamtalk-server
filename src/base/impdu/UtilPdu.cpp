@@ -32,18 +32,16 @@ CSimpleBuffer::~CSimpleBuffer()
     }
 }
 
+// increase by 1/4 allocate size
 bool CSimpleBuffer::Extend(uint32_t len)
 {
-    if (m_write_offset + len < m_write_offset)
-        return false;//溢出
-
     // new_size
     uint32_t new_size = m_write_offset + len;
     new_size += new_size >> 2;
 
     // new_buf
     uchar_t* new_buf = (uchar_t*)realloc(m_buffer, new_size);
-    if (!new_buf)
+    if (new_buf == nullptr)
         return false;
         
     m_buffer = new_buf;
@@ -51,9 +49,10 @@ bool CSimpleBuffer::Extend(uint32_t len)
     return true;
 }
 
+// 扩容缓冲区
 uint32_t CSimpleBuffer::Write(void* buf, uint32_t len)
 {
-    if (!buf || len <= 0)
+    if (len <= 0)
         return 0;
     
     if (len > UINT32_MAX - m_write_offset)
@@ -64,24 +63,27 @@ uint32_t CSimpleBuffer::Write(void* buf, uint32_t len)
             return 0;
 
     // data write
-    memcpy(m_buffer + m_write_offset, buf, len);
+    if (buf) {
+        memcpy(m_buffer + m_write_offset, buf, len);
+    }
     m_write_offset += len;
     return len;
 }
 
+// 清空缓冲区
 uint32_t CSimpleBuffer::Read(void* buf, uint32_t len)
 {
-    if (!buf || !m_buffer || len == 0 || m_write_offset == 0)
+    if (len == 0 || m_write_offset == 0 || !m_buffer)
         return 0;
 
-    // data read
     len = std::min(len, m_write_offset);
-    memcpy(buf, m_buffer, len);
+    // data read
+    if (buf) {
+        memcpy(buf, m_buffer, len);
+    }
 
     m_write_offset -= len;
-    if (m_write_offset)
-        memmove(m_buffer, m_buffer + len, m_write_offset);//向前移动len字节(有剩余数据)
-
+    memmove(m_buffer, m_buffer + len, m_write_offset);//向前移动len字节(有剩余数据)
     return len;
 }
 
