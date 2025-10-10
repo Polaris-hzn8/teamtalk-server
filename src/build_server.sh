@@ -2,6 +2,15 @@
 
 set -e
 
+# ================================================
+# TeamTalk Server Build & Packaging Script
+# 支持：
+#   1. 全量编译打包：   ./build_server.sh version <version>
+#   2. 仅打包已编译结果：./build_server.sh pack <version>
+#   3. 清理：           ./build_server.sh clean
+#   4. 单独编译某个 server
+# ================================================
+
 # 配置变量
 LIB_DIR="lib"
 PACK_FOLDER_NAME="im_server_pack"
@@ -22,6 +31,19 @@ SERVERS=(
     "msfs"
     "push_server")
 
+# ================================================
+# 颜色输出
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+color_echo() {
+    echo -e "${1}${2}${NC}"
+}
+
+# ================================================
+# 环境设置
 setup_environment() {
     local CURPWD=$PWD
     # 基础路径
@@ -40,7 +62,8 @@ setup_environment() {
     export LIBRARY_PATH=$CURPWD/third/protobuf/lib:$LIBRARY_PATH
 }
 
-# 检查必要文件
+# ================================================
+# 文件检查
 check_required_files() {
     local missing_files=()
     
@@ -64,6 +87,7 @@ check_required_files() {
     return 0
 }
 
+# ================================================
 # 创建版本文件
 create_version_file() {
     local version=$1
@@ -76,6 +100,7 @@ EOF
     echo ">>> Created version.h with version: $version"
 }
 
+# ================================================
 # 构建单个服务器
 build_single_server() {
     local server=$1
@@ -107,6 +132,7 @@ build_single_server() {
     return 0
 }
 
+# ================================================
 # 构建所有服务器
 build_all_servers() {
     echo ">>> Building all servers..."
@@ -121,6 +147,7 @@ build_all_servers() {
     return 0
 }
 
+# ================================================
 # 准备打包目录
 prepare_pack_directory() {
     local version=$1
@@ -148,6 +175,7 @@ prepare_pack_directory() {
     echo "$TARGET_NAME"
 }
 
+# ================================================
 # 复制文件到打包目录
 copy_files_to_pack() {
     echo ">>> Copying files to pack directory..."
@@ -208,33 +236,37 @@ copy_files_to_pack() {
             echo "  Copied $script"
         fi
     done
-    
+
     # 构建并复制daeml
     if [ -d "daeml" ]; then
+        color_echo "$BLUE" ">>> Rebuilding daeml..."
         echo ">>> Building daeml..."
         if make -C daeml clean && make -C daeml; then
             cp "daeml/daeml" "$PACK_DIR/"
-            echo "  Copied daeml/daeml"
+            color_echo "$GREEN" "  daeml built successfully"
+            color_echo "$GREEN" "  Copied daeml/daeml"
         else
-            echo "Warning: Failed to build daeml"
+            color_echo "$YELLOW" "Warning: Failed to build daeml"
         fi
     fi
 }
 
+# ================================================
 # 创建压缩包
 create_package() {
     echo ">>> Creating package: $TARGET_NAME"
     
     if tar zcvf "$TARGET_NAME" -C "$(dirname "$PACK_DIR")" "$(basename "$PACK_DIR")"; then
-        echo ">>> Package created successfully: $TARGET_NAME"
+        color_echo "$GREEN" ">>> Package created successfully: $TARGET_NAME"
         return 0
     else
-        echo ">>> Failed to create package"
+        color_echo "$YELLOW" ">>> Failed to create package"
         return 1
     fi
 }
 
-# 主构建函数
+# ================================================
+# 全量构建 + 打包
 build_pack() {
     local version=$1
     local CURPWD=$PWD
@@ -265,13 +297,48 @@ build_pack() {
     
     # 复制文件
     copy_files_to_pack
-    
+
     # 调试使用
     chmod +x ../im_server_pack/server_manager.sh
 
     # 创建压缩包
     if create_package; then
         echo ">>> Build completed successfully!"
+        return 0
+    else
+        return 1
+    fi
+}
+
+# ================================================
+# 仅打包现有结果（不编译 server）
+pack_existing() {
+    local version=$1
+    local CURPWD=$PWD
+
+    color_echo "$BLUE" ">>> Packaging existing build for version: $version"
+    setup_environment
+
+    if ! check_required_files; then
+        color_echo "$RED" ">>> Packaging failed: Required files missing"
+        return 1
+    fi
+
+    # 创建版本文件
+    create_version_file "$version"
+
+    # 准备打包
+    prepare_pack_directory "$version"
+
+    # 复制文件
+    copy_files_to_pack
+
+    # 调试使用
+    chmod +x ../im_server_pack/server_manager.sh
+
+    # 创建压缩包
+    if create_package; then
+        color_echo "$GREEN" ">>> quick_pack succeed!"
         return 0
     else
         return 1
@@ -308,7 +375,8 @@ print_help() {
     cat << EOF
 Usage:
   $0 clean                --- clean all build files
-  $0 version <version>    --- build complete package with version
+  $0 version <version>    --- build complete package with version (compile all servers)
+  $0 pack <version>       --- package existing binaries (rebuild daeml only)
   $0 <server_name>        --- build single server
 
 Available servers:
@@ -316,9 +384,10 @@ Available servers:
 
 Examples:
   $0 version 1.0.0        # Build complete package version 1.0.0
-  $0 base                 # Build only base library
-  $0 login_server         # Build only login_server
+  $0 pack 1.0.0           # Only package existing binaries
   $0 clean                # Clean all build files
+  $0 login_server         # Build only login_server
+  $0 base                 # Build only base library
 EOF
 }
 
@@ -340,6 +409,11 @@ main() {
             cmake_clean
             pack_clean
             build_pack "$2"
+            ;;
+        pack)
+            [ $# -ne 2 ] && { color_echo "$RED" "Error: Version number required"; print_help; exit 1; }
+            pack_clean
+            pack_existing "$2"
             ;;
         *)
             if [[ " ${SERVERS[@]} " =~ " $1 " ]]; then

@@ -95,6 +95,37 @@ setup_permissions() {
 }
 
 #########################################################################
+## 清理日志和core文件
+clean_logs() {
+    print_header "Cleaning logs and core dumps"
+
+    local cleaned=0
+    for srv in "${ALL_SERVERS[@]}"; do
+        local srv_dir="$BASE_DIR/$srv"
+
+        if [ -d "$srv_dir" ]; then
+            # 删除日志文件
+            find "$srv_dir/log" -type f -name "*.log" -o -name "*.txt" 2>/dev/null | while read -r logf; do
+                rm -f "$logf" && print_color "$GREEN" "Removed log file: $logf"
+                cleaned=1
+            done
+
+            # 删除 core 文件
+            find "$srv_dir" -maxdepth 1 -type f -name "core.*" 2>/dev/null | while read -r coref; do
+                rm -f "$coref" && print_color "$YELLOW" "Removed core dump: $coref"
+                cleaned=1
+            done
+        fi
+    done
+
+    if [ "$cleaned" -eq 0 ]; then
+        print_color "$BLUE" "No log or core files found."
+    else
+        print_color "$GREEN" "All logs and core dumps cleaned successfully."
+    fi
+}
+
+#########################################################################
 ## 服务操作函数
 restart_server() {
     local server=$1
@@ -193,6 +224,31 @@ stop_server() {
     cd "$BASE_DIR"
 }
 
+force_kill_server() {
+    local server=$1
+    local killed=0
+
+    # 查找匹配的进程
+    local pids
+    pids=$(ps -ef | grep "$server" | grep -v grep | grep "$BASE_DIR" | awk '{print $2}')
+
+    if [ -n "$pids" ]; then
+        print_color "$YELLOW" "Force killing $server (PIDs: $pids)"
+        kill -9 $pids 2>/dev/null && print_color "$GREEN" "$server killed"
+        killed=1
+    else
+        print_color "$BLUE" "$server is not running"
+    fi
+
+    # 清理遗留 pid 文件
+    if [ -f "$BASE_DIR/$server/server.pid" ]; then
+        rm -f "$BASE_DIR/$server/server.pid"
+        print_color "$GREEN" "Removed stale pid file for $server"
+    fi
+
+    return $killed
+}
+
 status_server() {
     local server=$1
     local server_dir="$BASE_DIR/$server"
@@ -240,17 +296,18 @@ manage_all_servers() {
 print_help() {
     echo "TeamTalk Server Management Script"
     echo ""
-    echo "Usage: $0 {start|stop|restart|status|install|check|clean}"
+    echo "Usage: $0 {start|stop|restart|status|install|check|clean|clean_logs}"
     echo ""
     echo "Commands:"
     echo "  start     - Start all servers"
     echo "  stop      - Stop all servers"
+    echo "  kill      - Force kill all server processes (or single server)"
     echo "  restart   - Restart all servers"
     echo "  status    - Show status of all servers"
     echo "  install   - Full installation (sync + start)"
     echo "  check     - Check environment"
     echo "  clean     - Remove server config from server directories"
-    echo "  sync      - Sync server configurations only"
+    echo "  clean_logs  Clean all log/*.log and core.* files"
     echo ""
     echo "Single server operations:"
     echo "  $0 {start|stop|restart|status} <server_name>"
@@ -277,6 +334,15 @@ case "${1:-}" in
             manage_all_servers "stop"
         fi
         ;;
+    kill)
+        print_header "Force Killing"
+        check_user
+        if [ -n "$2" ]; then
+            force_kill_server "$2"
+        else
+            manage_all_servers "force_kill"
+        fi
+        ;;
     restart)
         print_header "Restarting"
         check_user
@@ -299,6 +365,11 @@ case "${1:-}" in
         check_user
         check_environment
         setup_permissions
+
+        print_color "$YELLOW" "Killing all existing servers before installation..."
+        manage_all_servers "force_kill"
+
+        print_color "$GREEN" "All old server processes have been killed. Starting fresh installation..."
         manage_all_servers "restart"
         ;;
     check)
@@ -308,6 +379,9 @@ case "${1:-}" in
     clean)
         print_header "Cleaning"
         check_user
+        ;;
+    clean_logs)
+        clean_logs
         ;;
     *)
         print_help
