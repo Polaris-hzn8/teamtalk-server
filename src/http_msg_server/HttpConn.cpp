@@ -72,7 +72,7 @@ void init_http_conn()
     netlib_register_timer(http_conn_timer_callback, NULL, 1000);
 }
 
-//////////////////////////
+//////////////////////////////////////////////////////////////////////
 CHttpConn::CHttpConn()
 {
     m_busy = false;

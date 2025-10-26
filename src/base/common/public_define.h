@@ -17,21 +17,25 @@
 
 #define XIAO_T_UID  99999999
 
-enum {
+enum
+{
     USER_CNT_INC = 1,
     USER_CNT_DEC = 2,
 };
 
-enum {
+enum
+{
     IM_GROUP_SETTING_PUSH = 1,
 };
 
-enum {
+enum
+{
     IM_PUSH_TYPE_NORMAL = 1,
     IM_PUSH_TYPE_SILENT = 2,
 };
 
-enum {
+enum
+{
     IM_PC_LOGIN_STATUS_ON = 1,
     IM_PC_LOGIN_STATUS_OFF = 0,
 };

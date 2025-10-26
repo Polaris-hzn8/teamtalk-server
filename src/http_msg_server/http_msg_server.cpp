@@ -45,30 +45,44 @@ int main(int argc, char* argv[])
 
     CConfigFileReader config_file("http_msg_server.conf");
 
+    // http服务监听ip端口
     char* listen_ip = config_file.GetConfigName("ListenIP");
     char* str_listen_port = config_file.GetConfigName("ListenPort");
 
+    // DBServer
+    // 读取数据库服务连接设置
     uint32_t db_server_count = 0;
     serv_info_t* db_server_list = read_server_config(&config_file, "DBServerIP", "DBServerPort", db_server_count);
 
+    // RouteServer
+    // 读取路由服务连接设置
     uint32_t route_server_count = 0;
     serv_info_t* route_server_list = read_server_config(&config_file, "RouteServerIP", "RouteServerPort", route_server_count);
 
-    // 到BusinessServer的开多个并发的连接
+    // 读取并发连接设置
     uint32_t concurrent_db_conn_cnt = DEFAULT_CONCURRENT_DB_CONN_CNT;
-    uint32_t db_server_count2 = db_server_count * DEFAULT_CONCURRENT_DB_CONN_CNT;
     char* concurrent_db_conn = config_file.GetConfigName("ConcurrentDBConnCnt");
     if (concurrent_db_conn) {
         concurrent_db_conn_cnt = atoi(concurrent_db_conn);
-        db_server_count2 = db_server_count * concurrent_db_conn_cnt;
     }
 
-    serv_info_t* db_server_list2 = NULL;
-    if (db_server_count2 > 0) {
-        db_server_list2 = new serv_info_t[db_server_count2];
-        for (uint32_t i = 0; i < db_server_count2; i++) {
-            db_server_list2[i].server_ip = db_server_list[i / concurrent_db_conn_cnt].server_ip.c_str();
-            db_server_list2[i].server_port = db_server_list[i / concurrent_db_conn_cnt].server_port;
+    // 计算总连接数量(用于日志与调试)
+    uint32_t expanded_db_conn_cnt = 0;
+    if (db_server_count > 0) {
+        expanded_db_conn_cnt = db_server_count * concurrent_db_conn_cnt;
+        log("DB db_server_count: %u concurrent_db_conn_cnt: %u expanded_db_conn_cnt: %u.\n", 
+            db_server_count, concurrent_db_conn_cnt, expanded_db_conn_cnt);
+    }
+
+    // 创建扩展的服务器列表
+    serv_info_t* db_server_list_expanded = NULL;
+    if (expanded_db_conn_cnt > 0)
+    {
+        db_server_list_expanded  = new serv_info_t[expanded_db_conn_cnt];
+        for (uint32_t i = 0; i < expanded_db_conn_cnt; i++) {
+            uint32_t server_index = i / concurrent_db_conn_cnt;
+            db_server_list_expanded[i].server_ip = db_server_list[server_index].server_ip.c_str();
+            db_server_list_expanded[i].server_port = db_server_list[server_index].server_port;
         }
     }
 
@@ -80,7 +94,6 @@ int main(int argc, char* argv[])
     uint16_t listen_port = atoi(str_listen_port);
 
     int ret = netlib_init();
-
     if (ret == NETLIB_ERROR)
         return ret;
 
@@ -96,7 +109,7 @@ int main(int argc, char* argv[])
     init_http_conn();
 
     if (db_server_count > 0) {
-        HTTP::init_db_serv_conn(db_server_list2, db_server_count2, concurrent_db_conn_cnt);
+        HTTP::init_db_serv_conn(db_server_list_expanded, expanded_db_conn_cnt, concurrent_db_conn_cnt);
     }
 
     if (route_server_count > 0) {
