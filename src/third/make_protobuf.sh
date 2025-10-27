@@ -1,23 +1,7 @@
 #!/bin/bash
 
-LOG4CXX=apache-log4cxx-0.10.0
-LOG4CXX_PATH=http://mirror.bit.edu.cn/apache/logging/log4cxx/0.10.0/$LOG4CXX.tar.gz
+PROTOBUF=protobuf-2.6.1
 CUR_DIR=
-download() {
-    if [ -f "$1" ]; then
-        echo "$1 existed."
-    else
-        echo "$1 not existed, begin to download..."
-        wget $2
-        if [ $? -eq 0 ]; then
-            echo "download $1 successed";
-        else
-            echo "Error: download $1 failed";
-            return 1;
-        fi
-    fi
-    return 0
-}
 
 check_user() {
     if [ $(id -u) != "0" ]; then
@@ -27,7 +11,6 @@ check_user() {
 }
 
 get_cur_dir() {
-    # Get the fully qualified path to the script
     case $0 in
         /*)
             SCRIPT="$0"
@@ -75,26 +58,17 @@ get_cur_dir() {
     CUR_DIR=$(dirname "${REALPATH}")
 }
 
-build_log4cxx(){
-    #yum -y install apr-devel
-    #yum -y install apr-util-devel
-    apt-get -y install liblog4cxx-dev
-    cd log4cxx
-    #download $LOG4CXX.tar.gz $LOG4CXX_PATH
-    tar -xf $LOG4CXX.tar.gz
-    cd $LOG4CXX
-    ./configure --prefix=$CUR_DIR/log4cxx --with-apr=/usr --with-apr-util=/usr 
-    cp ../inputstreamreader.cpp ./src/main/cpp/
-    cp ../socketoutputstream.cpp ./src/main/cpp/
-    cp ../console.cpp ./src/examples/cpp/
+build_protobuf(){
+    cd protobuf
+    tar -zxvf $PROTOBUF.tar.gz
+    cd $PROTOBUF
+    ./configure --prefix=$CUR_DIR/protobuf
+    # ./configure --prefix=/home/lch/teamtalk-server/src/third/protobuf
+    # make & make install
     make
     make install
-    cd ../../
-    cp -rf log4cxx/include slog/
-    mkdir -p slog/lib/
-    cp -f log4cxx/lib/liblog4cxx.so* slog/lib/
 }
 
 check_user
 get_cur_dir
-build_log4cxx
+build_protobuf
