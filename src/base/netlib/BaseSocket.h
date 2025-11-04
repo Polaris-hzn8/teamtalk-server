@@ -19,7 +19,8 @@
 #include "common/util.h"
 #include "common/ostype.h"
 
-enum {
+enum
+{
 	SOCKET_STATE_IDLE,
 	SOCKET_STATE_LISTENING,
 	SOCKET_STATE_CONNECTING,

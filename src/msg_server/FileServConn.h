@@ -10,7 +10,7 @@
 #define _FILE_SERVCONN_
 
 #include <iostream>
-#include "imconn.h"
+#include "im_conn.h"
 #include "ServInfo.h"
 #include "BaseSocket.h"
 #include "IM.BaseDefine.pb.h"

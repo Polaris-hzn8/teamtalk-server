@@ -18,7 +18,7 @@
 #include "IM.Server.pb.h"
 #include "IPacketCallback.h"
 #include "SeqAlloctor.h"
-#include "imconn.h"
+#include "im_conn.h"
 
 class ClientConn : public CImConn {
 public:

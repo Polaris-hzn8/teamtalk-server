@@ -6,7 +6,7 @@
  brief: 
 */
 
-#include "imconn.h"
+#include "im_conn.h"
 #include "ImPduBase.h"
 #include "im_conn_util.h"
 

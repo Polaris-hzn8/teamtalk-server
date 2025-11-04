@@ -9,7 +9,7 @@
 #ifndef _LOGINSERVCONN_H_
 #define _LOGINSERVCONN_H_
 
-#include "imconn.h"
+#include "im_conn.h"
 #include "ServInfo.h"
 
 class CLoginServConn : public CImConn

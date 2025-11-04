@@ -10,7 +10,7 @@
 #define PROXYCONN_H_
 
 #include "util.h"
-#include "imconn.h"
+#include "im_conn.h"
 #include <curl/curl.h>
 
 typedef struct {

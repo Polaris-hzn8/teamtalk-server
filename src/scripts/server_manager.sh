@@ -306,8 +306,7 @@ print_help() {
     echo "  status    - Show status of all servers"
     echo "  install   - Full installation (sync + start)"
     echo "  check     - Check environment"
-    echo "  clean     - Remove server config from server directories"
-    echo "  clean_logs  Clean all log/*.log and core.* files"
+    echo "  clean     - Clean all log/*.log and core.* files"
     echo ""
     echo "Single server operations:"
     echo "  $0 {start|stop|restart|status} <server_name>"
@@ -379,8 +378,6 @@ case "${1:-}" in
     clean)
         print_header "Cleaning"
         check_user
-        ;;
-    clean_logs)
         clean_logs
         ;;
     *)

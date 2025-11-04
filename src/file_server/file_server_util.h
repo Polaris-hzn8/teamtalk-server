@@ -11,7 +11,7 @@
 #ifndef __FILE_SERVER_UTIL_H__
 #define __FILE_SERVER_TUIL_H__
 
-#include <imconn.h>
+#include <im_conn.h>
 #include <pthread.h>
 #include <uuid/uuid.h>
 

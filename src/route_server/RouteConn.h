@@ -9,7 +9,7 @@
 #ifndef _ROUTECONN_H_
 #define _ROUTECONN_H_
 
-#include "imconn.h"
+#include "im_conn.h"
 
 class CRouteConn : public CImConn
 {

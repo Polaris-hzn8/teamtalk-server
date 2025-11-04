@@ -10,7 +10,7 @@
 #ifndef SERVER_REGISTER_H_
 #define SERVER_REGISTER_H_
 
-#include "imconn.h"
+#include "im_conn.h"
 
 typedef struct
 {
