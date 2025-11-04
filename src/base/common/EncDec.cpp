@@ -8,7 +8,7 @@
 
 #include "EncDec.h"
 #include "Base64.h"
-#include "impdu/UtilPdu.h"
+#include "ImPduUtil.h"
 #include <stdio.h>
 #include <string.h>
 

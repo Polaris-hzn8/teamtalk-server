@@ -9,7 +9,8 @@
 #ifndef _IMPDUBASE_H_
 #define _IMPDUBASE_H_
 
-#include "UtilPdu.h"
+#include "ostype.h"
+#include "ImPduUtil.h"
 #include "google/protobuf/message_lite.h"
 
 #define IM_PDU_HEADER_LEN		16
@@ -27,16 +28,6 @@
         return;\
     }\
 }
-
-#ifdef WIN32
-    #ifdef BUILD_PDU
-        #define DLL_MODIFIER __declspec(dllexport)
-    #else
-        #define DLL_MODIFIER __declspec(dllimport)1
-    #endif
-#else
-    #define DLL_MODIFIER
-#endif
 
 typedef struct {
     uint32_t 	length;     // 协议包长度

@@ -6,8 +6,8 @@
  brief:
 */
 
+#include "util.h"
 #include "ImPduBase.h"
-#include "common/util.h"
 #include "IM.BaseDefine.pb.h"
 using namespace IM::BaseDefine;
 

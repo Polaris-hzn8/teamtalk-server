@@ -14,10 +14,10 @@
 #include <string.h>
 #include <assert.h>
 #include <sys/stat.h>
+
 #include "Lock.h"
 #include "ostype.h"
-#include "UtilPdu.h"
-#include "slog_api.h"
+#include "ImPduUtil.h"
 
 #ifdef _WIN32
 #define snprintf sprintf_s
@@ -32,11 +32,12 @@
 #define _CRT_SECURE_NO_DEPRECATE // remove warning C4996,
 #define NOTUSED_ARG(v) ((void)v) // remove warning C4100, unreferenced parameter
 
+//////////////////////////////////////////////////////////////
+// 日志输出
+#include "slog_api.h"
 #define LOG_MODULE_IM "IM"
 
-// 日志输出中只显示文件名
 #define __FILENAME__ (strrchr(__FILE__, '/') ? (strrchr(__FILE__, '/') + 1) : __FILE__)
-
 #if defined(_WIN32) || defined(_WIN64)
 #define log(fmt, ...) g_imlog.Info("<%s>\t<%d>\t<%s>," fmt, __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 #else
@@ -49,6 +50,7 @@
 
 extern CSLog g_imlog;
 
+////////////////////////////////////////////////////////////////////
 class CRefObject
 {
 public:

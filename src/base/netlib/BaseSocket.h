@@ -16,8 +16,8 @@
 #ifndef __SOCKET_H__
 #define __SOCKET_H__
 
-#include "common/util.h"
-#include "common/ostype.h"
+#include "util.h"
+#include "ostype.h"
 
 enum
 {

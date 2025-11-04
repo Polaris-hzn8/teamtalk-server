@@ -90,12 +90,14 @@ const uint32_t INVALID_VALUE = 0;
 
 #define NETLIB_INVALID_HANDLE	-1
 
-enum {
+enum
+{
 	NETLIB_OK		= 0,
 	NETLIB_ERROR	= -1
 };
 
-enum {
+enum
+{
 	NETLIB_MSG_CONNECT = 1,
 	NETLIB_MSG_CONFIRM,
 	NETLIB_MSG_READ,
@@ -106,6 +108,16 @@ enum {
 };
 
 typedef void (*callback_t)(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
+
+#ifdef WIN32
+	#ifdef BUILD_PDU
+		#define DLL_MODIFIER __declspec(dllexport)
+	#else
+		#define DLL_MODIFIER __declspec(dllimport)
+	#endif
+#else
+	#define DLL_MODIFIER
+#endif
 
 #endif
 

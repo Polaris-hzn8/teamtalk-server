@@ -12,7 +12,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "UtilPdu.h"
+#include "ImPduUtil.h"
 
 ///////////// CSimpleBuffer ////////////////
 CSimpleBuffer::CSimpleBuffer()

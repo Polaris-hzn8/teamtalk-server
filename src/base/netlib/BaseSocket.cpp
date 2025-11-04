@@ -18,8 +18,9 @@
 #include <unordered_map>
 using namespace std;
 
+// key - socketfd
+// value - CBaseSocket
 typedef unordered_map<net_handle_t, CBaseSocket*> SocketMap;
-
 SocketMap g_socket_map;
 
 void AddBaseSocket(CBaseSocket* pSocket)

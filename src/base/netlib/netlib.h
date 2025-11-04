@@ -11,7 +11,7 @@
 #ifndef __NETLIB_H__
 #define __NETLIB_H__
 
-#include "common/ostype.h"
+#include "ostype.h"
 
 // 网络库相关操作
 #define NETLIB_OPT_SET_CALLBACK			1	

@@ -6,6 +6,7 @@
  brief: 
 */
 
+#include "util.h"
 #include "ConfigFileReader.h"
 
 CConfigFileReader::CConfigFileReader(const char* file_path)

@@ -32,9 +32,9 @@ include_directories(
     ${BASE_DIR}/pbgen
     ${BASE_DIR}/common
     ${BASE_DIR}/http
-    ${BASE_DIR}/impdu
     ${BASE_DIR}/jsoncpp
     ${BASE_DIR}/netlib
+    ${BASE_DIR}/netlib/impdu
     ${BASE_DIR}/threadpool
     ${THIRD_DIR}/slog/include
     ${THIRD_DIR}/protobuf/include

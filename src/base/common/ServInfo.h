@@ -13,7 +13,7 @@
 #define SERVINFO_H_
 
 #include "util.h"
-#include "impdu/im_conn.h"
+#include "im_conn.h"
 #include "ConfigFileReader.h"
 
 #define MAX_RECONNECT_CNT 64    //最大重连次数

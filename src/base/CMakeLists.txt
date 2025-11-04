@@ -4,9 +4,9 @@ project(base)
 aux_source_directory(./pbgen SRC_LIST1)
 aux_source_directory(./jsoncpp SRC_LIST2)
 aux_source_directory(./http SRC_LIST3)
-aux_source_directory(./impdu SRC_LIST4)
-aux_source_directory(./common SRC_LIST5)
-aux_source_directory(./netlib SRC_LIST6)
+aux_source_directory(./common SRC_LIST4)
+aux_source_directory(./netlib SRC_LIST5)
+aux_source_directory(./netlib/impdu SRC_LIST6)
 aux_source_directory(./threadpool SRC_LIST7)
 
 set(THIRD_DIR ../third)
@@ -37,11 +37,11 @@ include_directories(
     ./
     ./common
     ./http
-    ./impdu
     ./jsoncpp
-    ./netlib
     ./pbgen
     ./threadpool
+    ./netlib
+    ./netlib/impdu
     ${THIRD_DIR}/slog/include
     ${THIRD_DIR}/protobuf/include)
 

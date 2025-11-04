@@ -6,9 +6,9 @@
  brief:
 */
 
-#include <stdlib.h>
+#include "ostype.h"
 #include "ThreadPool.h"
-#include "common/util.h"
+#include <stdlib.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // CWorkerThread

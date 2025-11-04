@@ -22,7 +22,6 @@
  * IN THE SOFTWARE.
  */
 
-//利用ngnix的http_parse解析库
 #include <assert.h>
 #include <stddef.h>
 #include <ctype.h>

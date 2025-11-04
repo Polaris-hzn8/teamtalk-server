@@ -10,7 +10,7 @@
 #define _FILE_SERVER_OFFLINE_FILE_UTIL_H_
 
 #include <string.h>
-#include "UtilPdu.h"
+#include "ImPduUtil.h"
 
 struct FileHeader {
     FileHeader()

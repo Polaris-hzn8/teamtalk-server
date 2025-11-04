@@ -15,17 +15,7 @@
 #include <map>
 #include <list>
 #include <string>
-#include "common/ostype.h"
-
-#ifdef WIN32
-	#ifdef BUILD_PDU
-		#define DLL_MODIFIER __declspec(dllexport)
-	#else
-		#define DLL_MODIFIER __declspec(dllimport)
-	#endif
-#else
-	#define DLL_MODIFIER
-#endif
+#include "ostype.h"
 
 // exception code
 #define ERROR_CODE_PARSE_FAILED 		1
