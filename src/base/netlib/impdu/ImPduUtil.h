@@ -24,6 +24,16 @@
 #define ERROR_CODE_ALLOC_FAILED			4
 #define ERROR_CODE_OTHERS				5
 
+#ifdef WIN32
+	#ifndef BUILD_PDU
+		#define DLL_MODIFIER __declspec(dllexport)
+	#else
+		#define DLL_MODIFIER __declspec(dllimport)
+	#endif
+#else
+	#define DLL_MODIFIER
+#endif
+
 class CPduException
 {
 public:

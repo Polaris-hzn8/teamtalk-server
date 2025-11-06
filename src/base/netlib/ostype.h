@@ -43,31 +43,16 @@
     #endif
 #endif
 
-// #ifdef __GNUC__
-//     #include <ext/hash_map>
-//     using namespace __gnu_cxx;
-//     namespace __gnu_cxx {
-//         template<> struct hash<std::string> {
-//             size_t operator()(const std::string& x) const {
-//                 return hash<const char*>()(x.c_str());
-//             }
-//         };
-//     }
-// #else
-//     #include <hash_map>
-//     using namespace stdext;
-// #endif
-
 #ifdef _WIN32
-    typedef char			int8_t;
-    typedef short			int16_t;
-    typedef int				int32_t;
-    typedef	long long		int64_t;
-    typedef unsigned char	uint8_t;
-    typedef unsigned short	uint16_t;
-    typedef unsigned int	uint32_t;
-    typedef	unsigned long long	uint64_t;
-    typedef int				socklen_t;
+    //typedef char			        int8_t;
+    //typedef short			        int16_t;
+    //typedef int				        int32_t;
+    //typedef	long long		        int64_t;
+    //typedef unsigned char	        uint8_t;
+    //typedef unsigned short	        uint16_t;
+    //typedef unsigned int	        uint32_t;
+    //typedef	unsigned long long	    uint64_t;
+    typedef int				        socklen_t;
 #else
     typedef int	SOCKET;
     typedef int BOOL;
@@ -109,14 +94,12 @@ enum
 
 typedef void (*callback_t)(void* callback_data, uint8_t msg, uint32_t handle, void* pParam);
 
-#ifdef WIN32
-	#ifdef BUILD_PDU
-		#define DLL_MODIFIER __declspec(dllexport)
-	#else
-		#define DLL_MODIFIER __declspec(dllimport)
-	#endif
+#ifdef _WIN32
+    #define SOCKOPT_CAST(x) reinterpret_cast<const char*>(x)
+    #define SOCKOPT_PTR(x) reinterpret_cast<char*>(x)
 #else
-	#define DLL_MODIFIER
+    #define SOCKOPT_CAST(x) (x)
+    #define SOCKOPT_PTR(x) (x)
 #endif
 
 #endif

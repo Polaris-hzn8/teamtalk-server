@@ -9,8 +9,6 @@
 #include "util.h"
 #include <sstream>
 
-CSLog g_imlog = CSLog(LOG_MODULE_IM);
-
 ///////////////////////////////////////////////////////////////////////////////////////////
 // CRefObject
 CRefObject::CRefObject()

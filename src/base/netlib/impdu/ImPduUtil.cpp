@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <algorithm>
 #include "ImPduUtil.h"
 
 ///////////// CSimpleBuffer ////////////////
@@ -76,7 +77,7 @@ uint32_t CSimpleBuffer::Read(void* buf, uint32_t len)
     if (len == 0 || m_write_offset == 0 || !m_buffer)
         return 0;
 
-    len = std::min(len, m_write_offset);
+    len = (std::min)(len, m_write_offset);
     // data read
     if (buf) {
         memcpy(buf, m_buffer, len);

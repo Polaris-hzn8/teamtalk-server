@@ -10,7 +10,15 @@
 #define __CONDITION_H__
 
 #include "Lock.h"
+#include <stdint.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <pthread.h>
+#include <time.h>
+#include <errno.h>
+#endif
 
 class CCondition
 {
@@ -24,7 +32,11 @@ public:
     void notifyAll();
 private:
     CLock*          m_pLock;
-    pthread_cond_t  m_cond;
+#ifdef _WIN32
+    CONDITION_VARIABLE m_cond;
+#else
+    pthread_cond_t m_cond;
+#endif
 };
 
 #endif

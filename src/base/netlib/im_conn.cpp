@@ -7,6 +7,7 @@
 */
 
 #include "im_conn.h"
+#include "crosslog.h"
 
 // static uint64_t g_send_pkt_cnt = 0;		// 发送数据包总数
 // static uint64_t g_recv_pkt_cnt = 0;		// 接收数据包总数

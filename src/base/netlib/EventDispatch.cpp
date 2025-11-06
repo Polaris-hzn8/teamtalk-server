@@ -6,6 +6,7 @@
  brief: 事件调度器 处理事件的调度与触发
 */
 
+#include "crosslog.h"
 #include "BaseSocket.h"
 #include "EventDispatch.h"
 using namespace std;
@@ -182,7 +183,7 @@ void CEventDispatch::StartDispatch(uint32_t wait_timeout)
 
         // read_set
         for (u_int i = 0; i < read_set.fd_count; i++) {
-            // log("select return read count=%d\n", read_set.fd_count);
+            // log_info("select return read count=%d\n", read_set.fd_count);
             SOCKET fd = read_set.fd_array[i];
             CBaseSocket* pSocket = FindBaseSocket((net_handle_t)fd);
             if (pSocket) {
@@ -193,7 +194,7 @@ void CEventDispatch::StartDispatch(uint32_t wait_timeout)
 
         // write_set
         for (u_int i = 0; i < write_set.fd_count; i++) {
-            // log("select return write count=%d\n", write_set.fd_count);
+            // log_info("select return write count=%d\n", write_set.fd_count);
             SOCKET fd = write_set.fd_array[i];
             CBaseSocket* pSocket = FindBaseSocket((net_handle_t)fd);
             if (pSocket) {
@@ -204,7 +205,7 @@ void CEventDispatch::StartDispatch(uint32_t wait_timeout)
 
         // excep_set
         for (u_int i = 0; i < excep_set.fd_count; i++) {
-            // log("select return exception count=%d\n", excep_set.fd_count);
+            // log_info("select return exception count=%d\n", excep_set.fd_count);
             SOCKET fd = excep_set.fd_array[i];
             CBaseSocket* pSocket = FindBaseSocket((net_handle_t)fd);
             if (pSocket) {
@@ -273,12 +274,12 @@ void CEventDispatch::StartDispatch(uint32_t wait_timeout)
             if (!pSocket) continue;
 
             if (events[i].filter == EVFILT_READ) {
-                // log("OnRead, socket=%d\n", ev_fd);
+                // log_info("OnRead, socket=%d\n", ev_fd);
                 pSocket->OnRead();
             }
 
             if (events[i].filter == EVFILT_WRITE) {
-                // log("OnWrite, socket=%d\n", ev_fd);
+                // log_info("OnWrite, socket=%d\n", ev_fd);
                 pSocket->OnWrite();
             }
 
@@ -333,25 +334,25 @@ void CEventDispatch::StartDispatch(uint32_t wait_timeout)
 #ifdef EPOLLRDHUP
             // 对端关闭
             if (events[i].events & EPOLLRDHUP) {
-				// log("On Peer Close, socket=%d, ev_fd);
+				// log_info("On Peer Close, socket=%d, ev_fd);
 				pSocket->OnClose();
 			}
 #endif
 			// EPOLLIN
             if (events[i].events & EPOLLIN) {
-                // log("OnRead, socket=%d\n", ev_fd);
+                // log_info("OnRead, socket=%d\n", ev_fd);
                 pSocket->OnRead();
             }
 
 			// EPOLLOUT
             if (events[i].events & EPOLLOUT) {
-                // log("OnWrite, socket=%d\n", ev_fd);
+                // log_info("OnWrite, socket=%d\n", ev_fd);
                 pSocket->OnWrite();
             }
 
             // EPOLLPRI、EPOLLERR、EPOLLHUP
             if (events[i].events & (EPOLLPRI | EPOLLERR | EPOLLHUP)) {
-                // log("OnClose, socket=%d\n", ev_fd);
+                // log_info("OnClose, socket=%d\n", ev_fd);
                 pSocket->OnClose();
             }
 

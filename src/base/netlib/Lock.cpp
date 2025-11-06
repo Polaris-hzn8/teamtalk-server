@@ -45,12 +45,14 @@ void CLock::unlock()
 #endif
 }
 
-#ifndef _WIN32
 bool CLock::try_lock()
 {
+#ifdef _WIN32
+    return TryEnterCriticalSection(&m_critical_section);
+#else
     return pthread_mutex_trylock(&m_lock) == 0;
-}
 #endif
+}
 
 ////////////////////////////CAutoLock/////////////////////////////////////
 CAutoLock::CAutoLock(CLock* pLock)

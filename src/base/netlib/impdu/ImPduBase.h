@@ -3,7 +3,7 @@
  Email: 3453851623@qq.com
  filename: ImPduBase.h
  Update Time: Mon 12 Jun 2023 23:48:57 CST
- brief: 通信数据包读取与解析
+ brief: 通信协议数据包定于与解析
 */
 
 #ifndef _IMPDUBASE_H_

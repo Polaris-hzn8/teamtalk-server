@@ -19,10 +19,14 @@ public:
 
     void lock();
     void unlock();
+    bool try_lock();
+
+#ifdef _WIN32
+    CRITICAL_SECTION& getMutex() { return m_critical_section; }
+#else
     pthread_mutex_t& getMutex() { return m_lock; }
-#ifndef _WIN32
-    virtual bool try_lock();
 #endif
+
 private:
 #ifdef _WIN32
 	CRITICAL_SECTION    m_critical_section;

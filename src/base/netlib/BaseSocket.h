@@ -81,7 +81,7 @@ private:
 	void _SetReuseAddr(SOCKET fd);
 	void _SetNoDelay(SOCKET fd);
 	void _SetAddr(const char* ip, const uint16_t port, sockaddr_in* pAddr);
-	
+
 	void _AcceptNewSocket();
 private:
 	std::string		m_remote_ip;		//远程IP地址
