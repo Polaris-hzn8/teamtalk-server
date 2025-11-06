@@ -24,7 +24,7 @@
             LOG__(NET, "[%s:%d %s] %s", file, line, func, buf);
         }
     };
-    // ¾²Ì¬ÊµÀı
+    // é™æ€å®ä¾‹
     std::unique_ptr<ILogger> g_logger = std::make_unique<WinLogger>();
 #else
     #include "slog_api.h"

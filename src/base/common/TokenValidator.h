@@ -9,7 +9,11 @@
 #ifndef TOKENVALIDATOR_H_
 #define TOKENVALIDATOR_H_
 
-#include "netlib/util.h"
+#include <stdio.h>
+#include <time.h>
+#include <memory>
+#include <stdint.h>
+#include <string.h>
 
 // 生成令牌token
 int genToken(unsigned int uid, time_t time_offset, char* md5_str_buf);

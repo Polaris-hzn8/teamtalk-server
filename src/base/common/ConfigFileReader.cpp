@@ -7,6 +7,7 @@
 */
 
 #include "util.h"
+#include "crosslog.h"
 #include "ConfigFileReader.h"
 
 CConfigFileReader::CConfigFileReader(const char* file_path)

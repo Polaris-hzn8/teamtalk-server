@@ -12,7 +12,6 @@
 #ifndef SERVINFO_H_
 #define SERVINFO_H_
 
-#include "util.h"
 #include "im_conn.h"
 #include "ConfigFileReader.h"
 

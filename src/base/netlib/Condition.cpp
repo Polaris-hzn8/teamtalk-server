@@ -6,6 +6,7 @@
  brief: 
 */
 
+#include <chrono>
 #include <assert.h>
 #include "Condition.h"
 
@@ -36,11 +37,11 @@ void CCondition::wait()
 #endif
 }
 
-// ∫¡√Î
+// ÊØ´Áßí
 bool CCondition::waitTime(uint64_t nWaitTime)
 {
 #ifdef _WIN32
-    // Windows µ•Œª «∫¡√Î
+    // Windows Âçï‰ΩçÊòØÊØ´Áßí
     BOOL ret = SleepConditionVariableCS(&m_cond, &m_pLock->getMutex(), (DWORD)nWaitTime);
     return (ret != 0);
 #else
@@ -48,7 +49,7 @@ bool CCondition::waitTime(uint64_t nWaitTime)
     time_point<system_clock> now = system_clock::now();
     time_point<system_clock> timeout_time = now + milliseconds(nWaitTime);
 
-    // ◊™ªªŒ™ timespec
+    // ËΩ¨Êç¢‰∏∫ timespec
     time_point<system_clock, seconds> sec = time_point_cast<seconds>(timeout_time);
 
     struct timespec ts;

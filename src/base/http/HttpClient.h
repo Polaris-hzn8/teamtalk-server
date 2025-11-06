@@ -11,6 +11,7 @@
 
 #include <string>
 #include <curl/curl.h>
+#include "crosslog.h"
 #include "public_define.h"
 
 class CHttpClient
