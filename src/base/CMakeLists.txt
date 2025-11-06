@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.6)
 project(base)
 
-aux_source_directory(./pbgen SRC_LIST1)
-aux_source_directory(./jsoncpp SRC_LIST2)
-aux_source_directory(./http SRC_LIST3)
-aux_source_directory(./common SRC_LIST4)
-aux_source_directory(./netlib SRC_LIST5)
-aux_source_directory(./netlib/impdu SRC_LIST6)
+aux_source_directory(./jsoncpp SRC_LIST1)
+aux_source_directory(./http SRC_LIST2)
+aux_source_directory(./common SRC_LIST3)
+aux_source_directory(./netlib SRC_LIST4)
+aux_source_directory(./netlib/impdu SRC_LIST5)
+aux_source_directory(./netlib/pbgen SRC_LIST6)
 aux_source_directory(./threadpool SRC_LIST7)
 
 set(THIRD_DIR ../third)
@@ -38,10 +38,10 @@ include_directories(
     ./common
     ./http
     ./jsoncpp
-    ./pbgen
     ./threadpool
     ./netlib
     ./netlib/impdu
+    ./netlib/pbgen
     ${THIRD_DIR}/slog/include
     ${THIRD_DIR}/protobuf/include)
 
