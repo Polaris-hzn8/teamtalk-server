@@ -94,12 +94,12 @@ CHttpConn::CHttpConn()
         m_conn_handle = ++g_conn_handle_generator;
     }
 
-    // log("CHttpConn, handle=%u\n", m_conn_handle);
+    // log_info("CHttpConn, handle=%u\n", m_conn_handle);
 }
 
 CHttpConn::~CHttpConn()
 {
-    log("~CHttpConn, handle=%u\n", m_conn_handle);
+    log_info("~CHttpConn, handle=%u\n", m_conn_handle);
 }
 
 int CHttpConn::Send(void* data, int len)
@@ -118,7 +118,7 @@ int CHttpConn::Send(void* data, int len)
     if (ret < len) {
         m_out_buf.Write((char*)data + ret, len - ret);
         m_busy = true;
-        // log("not send all, remain=%d\n", m_out_buf.GetWriteOffset());
+        // log_info("not send all, remain=%d\n", m_out_buf.GetWriteOffset());
     } else {
         OnWriteComlete();
     }
@@ -138,7 +138,7 @@ void CHttpConn::Close()
 
 void CHttpConn::OnConnect(net_handle_t handle)
 {
-    log("OnConnect, handle=%d\n", handle);
+    log_info("OnConnect, handle=%d\n", handle);
     m_sock_handle = handle;
     m_state = CONN_STATE_CONNECTED;
     g_http_conn_map.insert(make_pair(m_conn_handle, this));
@@ -177,7 +177,7 @@ void CHttpConn::OnRead()
         return;
     }
 
-    // log("OnRead, buf_len=%u, conn_handle=%u\n", buf_len, m_conn_handle); // for debug
+    // log_info("OnRead, buf_len=%u, conn_handle=%u\n", buf_len, m_conn_handle); // for debug
 
     // 解析http数据
     m_cHttpParser.ParseHttpContent(in_buf, buf_len);
@@ -235,7 +235,7 @@ void CHttpConn::_HandleMsgServRequest(string& url, string& post_data) {
     uint32_t min_user_cnt = (uint32_t)-1;
     map<uint32_t, msg_serv_info_t*>::iterator it_min_conn = g_msg_serv_info.end();
     map<uint32_t, msg_serv_info_t*>::iterator it;
-    log("url:%s, post_data:%s", url.c_str(), post_data.c_str());
+    log_info("url:%s, post_data:%s", url.c_str(), post_data.c_str());
 
     if (g_msg_serv_info.size() <= 0) // 没有可用的msg_server
     {
@@ -260,7 +260,7 @@ void CHttpConn::_HandleMsgServRequest(string& url, string& post_data) {
     }
 
     if (it_min_conn == g_msg_serv_info.end()) {
-        log("All TCP MsgServer are full ");
+        log_info("All TCP MsgServer are full ");
         Json::Value value;
         value["code"] = 2;
         value["msg"] = "负载过高";
@@ -299,6 +299,6 @@ void CHttpConn::_HandleMsgServRequest(string& url, string& post_data) {
 
 void CHttpConn::OnWriteComlete()
 {
-    log("write complete ");
+    log_info("write complete ");
     Close();
 }

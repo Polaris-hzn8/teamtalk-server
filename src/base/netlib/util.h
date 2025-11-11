@@ -17,6 +17,7 @@
 
 #include "Lock.h"
 #include "ostype.h"
+#include "crosslog.h"
 #include "ImPduUtil.h"
 
 #ifdef _WIN32

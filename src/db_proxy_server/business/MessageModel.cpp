@@ -68,22 +68,22 @@ void CMessageModel::getMessage(
                         cMsg.set_msg_data(pResultSet->GetString("content"));
                         lsMsg.push_back(cMsg);
                     } else {
-                        log("invalid msgType. userId=%u, peerId=%u, msgId=%u, msgCnt=%u, msgType=%u", nUserId, nPeerId, nMsgId, nMsgCnt, nMsgType);
+                        log_info("invalid msgType. userId=%u, peerId=%u, msgId=%u, msgCnt=%u, msgType=%u", nUserId, nPeerId, nMsgId, nMsgCnt, nMsgType);
                     }
                 }
                 delete pResultSet;
             } else {
-                log("no result set: %s", strSql.c_str());
+                log_info("no result set: %s", strSql.c_str());
             }
             pDBManager->RelDBConn(pDBConn);
             if (!lsMsg.empty()) {
                 CAudioModel::getInstance()->readAudios(lsMsg);
             }
         } else {
-            log("no db connection for teamtalk_slave");
+            log_info("no db connection for teamtalk_slave");
         }
     } else {
-        log("no relation between %lu and %lu", nUserId, nPeerId);
+        log_info("no relation between %lu and %lu", nUserId, nPeerId);
     }
 }
 
@@ -102,7 +102,7 @@ bool CMessageModel::sendMessage(
 {
     bool bRet = false;
     if (nFromId == 0 || nToId == 0) {
-        log("invalied userId.%u->%u", nFromId, nToId);
+        log_info("invalied userId.%u->%u", nFromId, nToId);
         return bRet;
     }
 
@@ -134,10 +134,10 @@ bool CMessageModel::sendMessage(
             uint32_t nNow = (uint32_t)time(NULL);
             incMsgCount(nFromId, nToId);
         } else {
-            log("insert message failed: %s", strSql.c_str());
+            log_info("insert message failed: %s", strSql.c_str());
         }
     } else {
-        log("no db connection for teamtalk_master");
+        log_info("no db connection for teamtalk_master");
     }
     return bRet;
 }
@@ -174,7 +174,7 @@ void CMessageModel::incMsgCount(uint32_t nFromId, uint32_t nToId)
         pCacheConn->hincrBy("unread_" + int2string(nToId), int2string(nFromId), 1);
         pCacheManager->RelCacheConn(pCacheConn);
     } else {
-        log("no cache connection to increase unread count: %d->%d", nFromId, nToId);
+        log_info("no cache connection to increase unread count: %d->%d", nFromId, nToId);
     }
 }
 
@@ -207,14 +207,14 @@ void CMessageModel::getUnreadMsgCount(
                     lsUnreadCount.push_back(cUnreadInfo);
                     nTotalCnt += cUnreadInfo.unread_cnt();
                 } else {
-                    log("invalid msgType. userId=%u, peerId=%u, msgType=%u", nUserId, cUnreadInfo.session_id(), nMsgType);
+                    log_info("invalid msgType. userId=%u, peerId=%u, msgType=%u", nUserId, cUnreadInfo.session_id(), nMsgType);
                 }
             }
         } else {
-            log("hgetall %s failed!", strKey.c_str());
+            log_info("hgetall %s failed!", strKey.c_str());
         }
     } else {
-        log("no cache connection for unread");
+        log_info("no cache connection for unread");
     }
 }
 
@@ -271,14 +271,14 @@ void CMessageModel::getLastMsg(
                 }
                 delete pResultSet;
             } else {
-                log("no result set: %s", strSql.c_str());
+                log_info("no result set: %s", strSql.c_str());
             }
             pDBManager->RelDBConn(pDBConn);
         } else {
-            log("no db connection_slave");
+            log_info("no db connection_slave");
         }
     } else {
-        log("no relation between %lu and %lu", nFromId, nToId);
+        log_info("no relation between %lu and %lu", nFromId, nToId);
     }
 }
 
@@ -297,10 +297,10 @@ void CMessageModel::getUnReadCntAll(uint32_t nUserId, uint32_t& nTotalCnt)
                 nTotalCnt += atoi(it->second.c_str());
             }
         } else {
-            log("hgetall %s failed!", strKey.c_str());
+            log_info("hgetall %s failed!", strKey.c_str());
         }
     } else {
-        log("no cache connection for unread");
+        log_info("no cache connection for unread");
     }
 }
 
@@ -314,7 +314,7 @@ void CMessageModel::getMsgByMsgId(
 
     uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(nUserId, nPeerId, false);
     if (nRelateId == INVALID_VALUE) {
-        log("invalid relation id between %u and %u", nUserId, nPeerId);
+        log_info("invalid relation id between %u and %u", nUserId, nPeerId);
         return;
     }
 
@@ -347,19 +347,19 @@ void CMessageModel::getMsgByMsgId(
                     msg.set_msg_data(pResultSet->GetString("content"));
                     lsMsg.push_back(msg);
                 } else {
-                    log("invalid msgType. userId=%u, peerId=%u, msgType=%u, msgId=%u", nUserId, nPeerId, nMsgType, msg.msg_id());
+                    log_info("invalid msgType. userId=%u, peerId=%u, msgType=%u, msgId=%u", nUserId, nPeerId, nMsgType, msg.msg_id());
                 }
             }
             delete pResultSet;
         } else {
-            log("no result set for sql:%s", strSql.c_str());
+            log_info("no result set for sql:%s", strSql.c_str());
         }
         pDBManager->RelDBConn(pDBConn);
         if (!lsMsg.empty()) {
             CAudioModel::getInstance()->readAudios(lsMsg);
         }
     } else {
-        log("no db connection for teamtalk_slave");
+        log_info("no db connection for teamtalk_slave");
     }
 }
 

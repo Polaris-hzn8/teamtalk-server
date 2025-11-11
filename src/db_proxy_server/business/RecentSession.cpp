@@ -50,7 +50,7 @@ void getRecentSession(CImPdu* pPdu, uint32_t conn_uuid)
             pContact->set_latest_msg_from_user_id(it->latest_msg_from_user_id());
         }
 
-        log("userId=%u, last_time=%u, count=%u", nUserId, nLastTime, msgResp.contact_session_list_size());
+        log_info("userId=%u, last_time=%u, count=%u", nUserId, nLastTime, msgResp.contact_session_list_size());
 
         msgResp.set_attach_data(msg.attach_data());
         pPduResp->SetPBMsg(&msgResp);
@@ -59,7 +59,7 @@ void getRecentSession(CImPdu* pPdu, uint32_t conn_uuid)
         pPduResp->SetCommandId(IM::BaseDefine::CID_BUDDY_LIST_RECENT_CONTACT_SESSION_RESPONSE);
         CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -84,7 +84,7 @@ void deleteRecentSession(CImPdu* pPdu, uint32_t conn_uuid)
                     CUserModel::getInstance()->clearUserCounter(nUserId, nPeerId, nType);
                 }
             }
-            log("userId=%d, peerId=%d, result=%s", nUserId, nPeerId, bRet ? "success" : "failed");
+            log_info("userId=%d, peerId=%d, result=%s", nUserId, nPeerId, bRet ? "success" : "failed");
 
             msgResp.set_attach_data(msg.attach_data());
             msgResp.set_user_id(nUserId);
@@ -97,10 +97,10 @@ void deleteRecentSession(CImPdu* pPdu, uint32_t conn_uuid)
             pPduResp->SetCommandId(IM::BaseDefine::CID_BUDDY_LIST_REMOVE_SESSION_RES);
             CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
         } else {
-            log("invalied session_type. userId=%u, peerId=%u, seseionType=%u", nUserId, nPeerId, nType);
+            log_info("invalied session_type. userId=%u, peerId=%u, seseionType=%u", nUserId, nPeerId, nType);
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 

@@ -113,7 +113,7 @@ CPushServConn::~CPushServConn()
 
 void CPushServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx)
 {
-    // log("Connecting to Push Server %s:%d ", server_ip, server_port);
+    // log_info("Connecting to Push Server %s:%d ", server_ip, server_port);
 
     m_serv_idx = serv_idx;
     m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_push_server_conn_map);
@@ -140,7 +140,7 @@ void CPushServConn::Close()
 
 void CPushServConn::OnConfirm()
 {
-    log("connect to push server success ");
+    log_info("connect to push server success ");
     m_bOpen = true;
     g_push_server_list[m_serv_idx].reconnect_cnt = MIN_RECONNECT_CNT / 2;
     g_master_push_conn = this;
@@ -148,7 +148,7 @@ void CPushServConn::OnConfirm()
 
 void CPushServConn::OnClose()
 {
-    // log("onclose from push server handle=%d ", m_handle);
+    // log_info("onclose from push server handle=%d ", m_handle);
     Close();
 }
 
@@ -164,7 +164,7 @@ void CPushServConn::OnTimer(uint64_t curr_tick)
     }
 
     if (curr_tick > m_last_recv_tick + SERVER_TIMEOUT) {
-        log("conn to push server timeout ");
+        log_info("conn to push server timeout ");
         Close();
     }
 }
@@ -173,13 +173,13 @@ void CPushServConn::HandlePdu(CImPdu* pPdu)
 {
     switch (pPdu->GetCommandId()) {
     case CID_OTHER_HEARTBEAT:
-        // log("push server heart beat. ");
+        // log_info("push server heart beat. ");
         break;
     case CID_OTHER_PUSH_TO_USER_RSP:
         _HandlePushToUserResponse(pPdu);
         break;
     default:
-        log("push server, wrong cmd id=%d ", pPdu->GetCommandId());
+        log_info("push server, wrong cmd id=%d ", pPdu->GetCommandId());
     }
 }
 
@@ -187,5 +187,5 @@ void CPushServConn::_HandlePushToUserResponse(CImPdu* pPdu)
 {
     // uint32_t result_cnt = pPdu->GetUserCnt();
     // push_result_t* push_result_list = pPdu->GetUserTokenList();
-    log("HandlePushToUserResponse ");
+    log_info("HandlePushToUserResponse ");
 }

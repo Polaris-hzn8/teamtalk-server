@@ -133,7 +133,7 @@ void CSyncCenter::init()
             updateLastUpdateGroup(time(NULL));
         }
     } else {
-        log("no cache connection to get total_user_updated");
+        log_info("no cache connection to get total_user_updated");
     }
 }
 /**
@@ -154,7 +154,7 @@ void CSyncCenter::updateTotalUpdate(uint32_t nUpdated)
         pCacheConn->set("total_user_update", strUpdated);
         pCacheManager->RelCacheConn(pCacheConn);
     } else {
-        log("no cache connection to get total_user_updated");
+        log_info("no cache connection to get total_user_updated");
     }
 }
 
@@ -176,7 +176,7 @@ void CSyncCenter::updateLastUpdateGroup(uint32_t nUpdated)
         pCacheConn->set("last_update_group", strUpdated);
         pCacheManager->RelCacheConn(pCacheConn);
     } else {
-        log("no cache connection to get total_user_updated");
+        log_info("no cache connection to get total_user_updated");
     }
 }
 
@@ -210,7 +210,7 @@ void* CSyncCenter::doSyncGroupChat(void* arg)
             }
             pDBManager->RelDBConn(pDBConn);
         } else {
-            log("no db connection for teamtalk_slave");
+            log_info("no db connection for teamtalk_slave");
         }
         m_pInstance->updateLastUpdateGroup(time(NULL));
         for (auto it = mapChangedGroup.begin(); it != mapChangedGroup.end(); ++it) {

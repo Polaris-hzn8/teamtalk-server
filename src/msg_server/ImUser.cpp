@@ -18,7 +18,7 @@ using namespace std;
 
 CImUser::CImUser(string user_name)
 {
-    // log("ImUser, userId=%u\n", user_id);
+    // log_info("ImUser, userId=%u\n", user_id);
     m_login_name = user_name;
     m_bValidate = false;
     m_user_id = 0;
@@ -28,7 +28,7 @@ CImUser::CImUser(string user_name)
 
 CImUser::~CImUser()
 {
-    // log("~ImUser, userId=%u\n", m_user_id);
+    // log_info("~ImUser, userId=%u\n", m_user_id);
 }
 
 CMsgConn* CImUser::GetUnValidateMsgConn(uint32_t handle)
@@ -135,7 +135,7 @@ void CImUser::HandleKickUser(CMsgConn* pConn, uint32_t reason)
     if (it != m_conn_map.end()) {
         CMsgConn* pConn = it->second;
         if (pConn) {
-            log("kick service user, user_id=%u.", m_user_id);
+            log_info("kick service user, user_id=%u.", m_user_id);
             IM::Login::IMKickUser msg;
             msg.set_user_id(m_user_id);
             msg.set_kick_reason((::IM::BaseDefine::KickReasonType)reason);

@@ -31,7 +31,7 @@ void client_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pP
 // msg_server请求连接事件
 void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
-    log("msg_server come in");
+    log_info("msg_server come in");
     if (msg == NETLIB_MSG_CONNECT) {
         CLoginConn* pConn = new CLoginConn();
         pConn->OnConnect2(handle, LOGIN_CONN_TYPE_MSG_SERV);
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
 
     if (!msg_server_listen_ip || !str_msg_server_port || !http_listen_ip
         || !str_http_port || !str_msfs_url || !str_discovery) {
-        log("config item missing, exit... ");
+        log_info("config item missing, exit... ");
         return -1;
     }
 
@@ -117,12 +117,12 @@ int main(int argc, char* argv[])
             return ret;
     }
 
-    log("server start listen on:\nFor client %s:%d\nFor MsgServer: %s:%d\nFor http:%s:%d\n",
+    log_info("server start listen on:\nFor client %s:%d\nFor MsgServer: %s:%d\nFor http:%s:%d\n",
         client_listen_ip, client_port, msg_server_listen_ip, msg_server_port, http_listen_ip, http_port);
     init_login_conn();
     init_http_conn();
 
-    log("now enter the event loop...\n");
+    log_info("now enter the event loop...\n");
 
     writePid();
 

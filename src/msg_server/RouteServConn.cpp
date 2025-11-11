@@ -138,7 +138,7 @@ CRouteServConn::~CRouteServConn()
 
 void CRouteServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t idx)
 {
-    log("Connecting to RouteServer %s:%d ", server_ip, server_port);
+    log_info("Connecting to RouteServer %s:%d ", server_ip, server_port);
 
     m_serv_idx = idx;
     m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_route_server_conn_map);
@@ -167,7 +167,7 @@ void CRouteServConn::Close()
 
 void CRouteServConn::OnConfirm()
 {
-    log("connect to route server success ");
+    log_info("connect to route server success ");
     m_bOpen = true;
     m_connect_time = get_tick_count();
     g_route_server_list[m_serv_idx].reconnect_cnt = MIN_RECONNECT_CNT / 2;
@@ -195,7 +195,7 @@ void CRouteServConn::OnConfirm()
 
 void CRouteServConn::OnClose()
 {
-    log("onclose from route server handle=%d ", m_handle);
+    log_info("onclose from route server handle=%d ", m_handle);
     Close();
 }
 
@@ -211,7 +211,7 @@ void CRouteServConn::OnTimer(uint64_t curr_tick)
     }
 
     if (curr_tick > m_last_recv_tick + SERVER_TIMEOUT) {
-        log("conn to route server timeout ");
+        log_info("conn to route server timeout ");
         Close();
     }
 }
@@ -255,7 +255,7 @@ void CRouteServConn::HandlePdu(CImPdu* pPdu)
         break;
         break;
     default:
-        log("unknown cmd id=%d ", pPdu->GetCommandId());
+        log_info("unknown cmd id=%d ", pPdu->GetCommandId());
         break;
     }
 }
@@ -268,7 +268,7 @@ void CRouteServConn::_HandleKickUser(CImPdu* pPdu)
     uint32_t user_id = msg.user_id();
     uint32_t client_type = msg.client_type();
     uint32_t reason = msg.reason();
-    log("HandleKickUser, user_id=%u, client_type=%u, reason=%u. ", user_id, client_type, reason);
+    log_info("HandleKickUser, user_id=%u, client_type=%u, reason=%u. ", user_id, client_type, reason);
 
     CImUser* pUser = CImUserManager::GetInstance()->GetImUserById(user_id);
     if (pUser) {
@@ -284,7 +284,7 @@ void CRouteServConn::_HandleStatusNotify(CImPdu* pPdu)
 
     IM::BaseDefine::UserStat user_stat = msg.user_stat();
 
-    log("HandleFriendStatusNotify, user_id=%u, status=%u ", user_stat.user_id(), user_stat.status());
+    log_info("HandleFriendStatusNotify, user_id=%u, status=%u ", user_stat.user_id(), user_stat.status());
 
     // send friend online message to client
     CImUserManager::GetInstance()->BroadcastPdu(pPdu, CLIENT_TYPE_FLAG_PC);
@@ -301,7 +301,7 @@ void CRouteServConn::_HandleMsgData(CImPdu* pPdu)
     uint32_t from_user_id = msg.from_user_id();
     uint32_t to_user_id = msg.to_session_id();
     uint32_t msg_id = msg.msg_id();
-    log("HandleMsgData, %u->%u, msg_id=%u. ", from_user_id, to_user_id, msg_id);
+    log_info("HandleMsgData, %u->%u, msg_id=%u. ", from_user_id, to_user_id, msg_id);
 
     CImUser* pFromImUser = CImUserManager::GetInstance()->GetImUserById(from_user_id);
     if (pFromImUser) {
@@ -324,7 +324,7 @@ void CRouteServConn::_HandleMsgReadNotify(CImPdu* pPdu)
     uint32_t msg_id = msg.msg_id();
     uint32_t session_type = msg.session_type();
 
-    log("HandleMsgReadNotify, user_id=%u, session_id=%u, session_type=%u, msg_id=%u. ", req_id, session_id, session_type, msg_id);
+    log_info("HandleMsgReadNotify, user_id=%u, session_id=%u, session_type=%u, msg_id=%u. ", req_id, session_id, session_type, msg_id);
     CImUser* pUser = CImUserManager::GetInstance()->GetImUserById(req_id);
     if (pUser) {
         pUser->BroadcastPdu(pPdu);
@@ -339,7 +339,7 @@ void CRouteServConn::_HandleP2PMsg(CImPdu* pPdu)
     uint32_t from_user_id = msg.from_user_id();
     uint32_t to_user_id = msg.to_user_id();
 
-    log("HandleP2PMsg, %u->%u ", from_user_id, to_user_id);
+    log_info("HandleP2PMsg, %u->%u ", from_user_id, to_user_id);
 
     CImUser* pFromImUser = CImUserManager::GetInstance()->GetImUserById(from_user_id);
     CImUser* pToImUser = CImUserManager::GetInstance()->GetImUserById(to_user_id);
@@ -360,7 +360,7 @@ void CRouteServConn::_HandleUsersStatusResponse(CImPdu* pPdu)
 
     uint32_t user_id = msg.user_id();
     uint32_t result_count = msg.user_stat_list_size();
-    log("HandleUsersStatusResp, user_id=%u, query_count=%u ", user_id, result_count);
+    log_info("HandleUsersStatusResp, user_id=%u, query_count=%u ", user_id, result_count);
 
     CPduAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
     if (attach_data.GetType() == ATTACH_TYPE_HANDLE) {
@@ -380,10 +380,10 @@ void CRouteServConn::_HandleUsersStatusResponse(CImPdu* pPdu)
         // pc client登录，则为勿打扰式推送
         if (user_stat.status() == IM::BaseDefine::USER_STATUS_ONLINE) {
             user_token->set_push_type(IM_PUSH_TYPE_SILENT);
-            log("HandleUsersStatusResponse, user id: %d, push type: normal. ", user_stat.user_id());
+            log_info("HandleUsersStatusResponse, user id: %d, push type: normal. ", user_stat.user_id());
         } else {
             user_token->set_push_type(IM_PUSH_TYPE_NORMAL);
-            log("HandleUsersStatusResponse, user id: %d, push type: normal. ", user_stat.user_id());
+            log_info("HandleUsersStatusResponse, user id: %d, push type: normal. ", user_stat.user_id());
         }
         CImPdu pdu;
         pdu.SetPBMsg(&msg2);
@@ -414,7 +414,7 @@ void CRouteServConn::_HandleUsersStatusResponse(CImPdu* pPdu)
         if (pConn) {
             pConn->SendPdu(&pdu);
         } else {
-            log("no file server ");
+            log_info("no file server ");
             IM::File::IMFileRsp msg4;
             msg4.set_result_code(1);
             msg4.set_from_user_id(msg3.from_user_id());
@@ -442,7 +442,7 @@ void CRouteServConn::_HandleRemoveSessionNotify(CImPdu* pPdu)
 
     uint32_t user_id = msg.user_id();
     uint32_t session_id = msg.session_id();
-    log("HandleRemoveSessionNotify, user_id=%u, session_id=%u ", user_id, session_id);
+    log_info("HandleRemoveSessionNotify, user_id=%u, session_id=%u ", user_id, session_id);
     CImUser* pUser = CImUserManager::GetInstance()->GetImUserById(user_id);
     if (pUser) {
         pUser->BroadcastPdu(pPdu);
@@ -456,7 +456,7 @@ void CRouteServConn::_HandlePCLoginStatusNotify(CImPdu* pPdu)
 
     uint32_t user_id = msg.user_id();
     uint32_t login_status = msg.login_status();
-    log("HandlePCLoginStatusNotify, user_id=%u, login_status=%u ", user_id, login_status);
+    log_info("HandlePCLoginStatusNotify, user_id=%u, login_status=%u ", user_id, login_status);
 
     CImUser* pUser = CImUserManager::GetInstance()->GetImUserById(user_id);
     if (pUser) {
@@ -481,7 +481,7 @@ void CRouteServConn::_HandleSignInfoChangedNotify(CImPdu* pPdu)
     IM::Buddy::IMSignInfoChangedNotify msg;
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
-    log("HandleSignInfoChangedNotify, changed_user_id=%u, sign_info=%s ", msg.changed_user_id(), msg.sign_info().c_str());
+    log_info("HandleSignInfoChangedNotify, changed_user_id=%u, sign_info=%s ", msg.changed_user_id(), msg.sign_info().c_str());
 
     // send friend online message to client
     CImUserManager::GetInstance()->BroadcastPdu(pPdu, CLIENT_TYPE_FLAG_BOTH);

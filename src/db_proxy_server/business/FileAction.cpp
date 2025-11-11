@@ -36,7 +36,7 @@ void hasOfflineFile(CImPdu* pPdu, uint32_t conn_uuid)
             pInfo->set_file_size(it->file_size());
         }
 
-        log("userId=%u, count=%u", nUserId, msgResp.offline_file_list_size());
+        log_info("userId=%u, count=%u", nUserId, msgResp.offline_file_list_size());
 
         msgResp.set_attach_data(msg.attach_data());
         pPduRes->SetPBMsg(&msgResp);
@@ -45,7 +45,7 @@ void hasOfflineFile(CImPdu* pPdu, uint32_t conn_uuid)
         pPduRes->SetCommandId(IM::BaseDefine::CID_FILE_HAS_OFFLINE_RES);
         CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -60,7 +60,7 @@ void addOfflineFile(CImPdu* pPdu, uint32_t conn_uuid)
         uint32_t nFileSize = msg.file_size();
         CFileModel* pModel = CFileModel::getInstance();
         pModel->addOfflineFile(nUserId, nToId, strTaskId, strFileName, nFileSize);
-        log("fromId=%u, toId=%u, taskId=%s, fileName=%s, fileSize=%u", nUserId, nToId, strTaskId.c_str(), strFileName.c_str(), nFileSize);
+        log_info("fromId=%u, toId=%u, taskId=%s, fileName=%s, fileSize=%u", nUserId, nToId, strTaskId.c_str(), strFileName.c_str(), nFileSize);
     }
 }
 
@@ -73,7 +73,7 @@ void delOfflineFile(CImPdu* pPdu, uint32_t conn_uuid)
         std::string strTaskId = msg.task_id();
         CFileModel* pModel = CFileModel::getInstance();
         pModel->delOfflineFile(nUserId, nToId, strTaskId);
-        log("fromId=%u, toId=%u, taskId=%s", nUserId, nToId, strTaskId.c_str());
+        log_info("fromId=%u, toId=%u, taskId=%s", nUserId, nToId, strTaskId.c_str());
     }
 }
 

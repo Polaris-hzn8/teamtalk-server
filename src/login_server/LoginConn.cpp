@@ -104,7 +104,7 @@ void CLoginConn::Close()
                 // 4-2.从总在线用户数 g_total_online_user_cnt 中减去该消息服务器的当前连接数
                 g_total_online_user_cnt -= pMsgServInfo->cur_conn_cnt;
                 // 4-3.输出日志信息，表示从消息服务器断开连接
-                log("onclose from MsgServer: %s:%u ", pMsgServInfo->hostname.c_str(), pMsgServInfo->port);
+                log_info("onclose from MsgServer: %s:%u ", pMsgServInfo->hostname.c_str(), pMsgServInfo->port);
                 // 4-4.删除消息服务器信息对象，并释放内存
                 delete pMsgServInfo;
                 // 4-5.从 g_msg_serv_info 中移除消息服务器信息
@@ -176,7 +176,7 @@ void CLoginConn::OnTimer(uint64_t curr_tick)
         // 2-2.再次判断当前时间戳 curr_tick 是否超过上次接收数据的时间戳加上消息服务器超时时间 SERVER_TIMEOUT
         if (curr_tick > m_last_recv_tick + SERVER_TIMEOUT) {
             //如果超时，则输出日志信息并调用Close()函数关闭连接
-            log("connection to MsgServer timeout ");
+            log_info("connection to MsgServer timeout ");
             Close();
         }
     }
@@ -189,7 +189,7 @@ void CLoginConn::OnTimer(uint64_t curr_tick)
 */
 void CLoginConn::HandlePdu(CImPdu* pPdu)
 {
-    log("HandlePdu = %u", pPdu->GetCommandId());
+    log_info("HandlePdu = %u", pPdu->GetCommandId());
     switch (pPdu->GetCommandId()) {
     case CID_OTHER_HEARTBEAT:
         break;
@@ -203,7 +203,7 @@ void CLoginConn::HandlePdu(CImPdu* pPdu)
         _HandleMsgServRequest(pPdu);
         break;
     default:
-        log("wrong msg, cmd id=%d ", pPdu->GetCommandId());
+        log_info("wrong msg, cmd id=%d ", pPdu->GetCommandId());
         break;
     }
 }
@@ -227,7 +227,7 @@ void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu)
 
     g_total_online_user_cnt += pMsgServInfo->cur_conn_cnt;
 
-    log("MsgServInfo, ip_addr1=%s, ip_addr2=%s, port=%d, max_conn_cnt=%d, cur_conn_cnt=%d, "
+    log_info("MsgServInfo, ip_addr1=%s, ip_addr2=%s, port=%d, max_conn_cnt=%d, cur_conn_cnt=%d, "
         "hostname: %s. ",
         pMsgServInfo->ip_addr1.c_str(), pMsgServInfo->ip_addr2.c_str(), pMsgServInfo->port, pMsgServInfo->max_conn_cnt,
         pMsgServInfo->cur_conn_cnt, pMsgServInfo->hostname.c_str());
@@ -253,7 +253,7 @@ void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu)
             g_total_online_user_cnt--;
         }
 
-        log("%s:%d, cur_cnt=%u, total_cnt=%u ", pMsgServInfo->hostname.c_str(),
+        log_info("%s:%d, cur_cnt=%u, total_cnt=%u ", pMsgServInfo->hostname.c_str(),
             pMsgServInfo->port, pMsgServInfo->cur_conn_cnt, g_total_online_user_cnt);
     }
 }
@@ -266,7 +266,7 @@ void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu)
     IM::Login::IMMsgServReq msg;
     msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
 
-    log("HandleMsgServReq. ");
+    log_info("HandleMsgServReq. ");
 
     // no MessageServer available
     if (g_msg_serv_info.size() == 0) {
@@ -296,7 +296,7 @@ void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu)
     }
 
     if (it_min_conn == g_msg_serv_info.end()) {
-        log("All TCP MsgServer are full ");
+        log_info("All TCP MsgServer are full ");
         IM::Login::IMMsgServRsp msg;
         msg.set_result_code(::IM::BaseDefine::REFUSE_REASON_MSG_SERVER_FULL);
         CImPdu pdu;

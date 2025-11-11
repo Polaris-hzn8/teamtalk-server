@@ -40,7 +40,7 @@ void createGroup(CImPdu* pPdu, uint32_t conn_uuid)
                 uint32_t nUserId = msg.member_id_list(i);
                 setMember.insert(nUserId);
             }
-            log("createGroup.%d create %s, userCnt=%u", nUserId, strGroupName.c_str(), setMember.size());
+            log_info("createGroup.%d create %s, userCnt=%u", nUserId, strGroupName.c_str(), setMember.size());
 
             uint32_t nGroupId = CGroupModel::getInstance()->createGroup(nUserId, strGroupName, strGroupAvatar, nGroupType, setMember);
             msgResp.set_user_id(nUserId);
@@ -55,7 +55,7 @@ void createGroup(CImPdu* pPdu, uint32_t conn_uuid)
                 msgResp.set_result_code(1);
             }
 
-            log("createGroup.%d create %s, userCnt=%u, result:%d", nUserId, strGroupName.c_str(), setMember.size(), msgResp.result_code());
+            log_info("createGroup.%d create %s, userCnt=%u, result:%d", nUserId, strGroupName.c_str(), setMember.size(), msgResp.result_code());
 
             msgResp.set_attach_data(msg.attach_data());
             pPduRes->SetPBMsg(&msgResp);
@@ -64,10 +64,10 @@ void createGroup(CImPdu* pPdu, uint32_t conn_uuid)
             pPduRes->SetCommandId(IM::BaseDefine::CID_GROUP_CREATE_RESPONSE);
             CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
         } else {
-            log("invalid group type.userId=%u, groupType=%u, groupName=%s", nUserId, nGroupType, strGroupName.c_str());
+            log_info("invalid group type.userId=%u, groupType=%u, groupName=%s", nUserId, nGroupType, strGroupName.c_str());
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -95,7 +95,7 @@ void getNormalGroupList(CImPdu* pPdu, uint32_t conn_uuid)
             pGroupVersion->set_version(it->version());
         }
 
-        log("getNormalGroupList. userId=%u, count=%d", nUserId, msgResp.group_version_list_size());
+        log_info("getNormalGroupList. userId=%u, count=%d", nUserId, msgResp.group_version_list_size());
 
         msgResp.set_attach_data(msg.attach_data());
         pPduRes->SetPBMsg(&msgResp);
@@ -104,7 +104,7 @@ void getNormalGroupList(CImPdu* pPdu, uint32_t conn_uuid)
         pPduRes->SetCommandId(IM::BaseDefine::CID_GROUP_NORMAL_LIST_RESPONSE);
         CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -151,7 +151,7 @@ void getGroupInfo(CImPdu* pPdu, uint32_t conn_uuid)
             }
         }
 
-        log("userId=%u, requestCount=%u", nUserId, nGroupCnt);
+        log_info("userId=%u, requestCount=%u", nUserId, nGroupCnt);
 
         msgResp.set_attach_data(msg.attach_data());
         pPduRes->SetPBMsg(&msgResp);
@@ -160,7 +160,7 @@ void getGroupInfo(CImPdu* pPdu, uint32_t conn_uuid)
         pPduRes->SetCommandId(IM::BaseDefine::CID_GROUP_INFO_RESPONSE);
         CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -202,7 +202,7 @@ void modifyMember(CImPdu* pPdu, uint32_t conn_uuid)
                     msgResp.add_cur_user_id_list(*it);
                 }
             }
-            log("userId=%u, groupId=%u, result=%u, changeCount:%u, currentCount=%u", nUserId, nGroupId, bRet ? 0 : 1, msgResp.chg_user_id_list_size(), msgResp.cur_user_id_list_size());
+            log_info("userId=%u, groupId=%u, result=%u, changeCount:%u, currentCount=%u", nUserId, nGroupId, bRet ? 0 : 1, msgResp.chg_user_id_list_size(), msgResp.cur_user_id_list_size());
             msgResp.set_attach_data(msg.attach_data());
             pPduRes->SetPBMsg(&msgResp);
             pPduRes->SetSeqNum(pPdu->GetSeqNum());
@@ -210,10 +210,10 @@ void modifyMember(CImPdu* pPdu, uint32_t conn_uuid)
             pPduRes->SetCommandId(IM::BaseDefine::CID_GROUP_CHANGE_MEMBER_RESPONSE);
             CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
         } else {
-            log("invalid groupModifyType or groupId. userId=%u, groupId=%u, groupModifyType=%u", nUserId, nGroupId, nType);
+            log_info("invalid groupModifyType or groupId. userId=%u, groupId=%u, groupModifyType=%u", nUserId, nGroupId, nType);
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -240,7 +240,7 @@ void setGroupPush(CImPdu* pPdu, uint32_t conn_uuid)
             msgResp.set_group_id(nGroupId);
             msgResp.set_result_code(bRet ? 0 : 1);
 
-            log("userId=%u, groupId=%u, result=%u", nUserId, nGroupId, msgResp.result_code());
+            log_info("userId=%u, groupId=%u, result=%u", nUserId, nGroupId, msgResp.result_code());
 
             msgResp.set_attach_data(msg.attach_data());
             pPduRes->SetPBMsg(&msgResp);
@@ -249,10 +249,10 @@ void setGroupPush(CImPdu* pPdu, uint32_t conn_uuid)
             pPduRes->SetCommandId(IM::BaseDefine::CID_GROUP_SHIELD_GROUP_RESPONSE);
             CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
         } else {
-            log("Invalid group.userId=%u, groupId=%u", nUserId, nGroupId);
+            log_info("Invalid group.userId=%u, groupId=%u", nUserId, nGroupId);
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -287,7 +287,7 @@ void getGroupPush(CImPdu* pPdu, uint32_t conn_uuid)
                 pStatus->set_shield_status(it->shield_status());
             }
 
-            log("groupId=%u, count=%u", nGroupId, nUserCnt);
+            log_info("groupId=%u, count=%u", nGroupId, nUserCnt);
 
             msgResp.set_attach_data(msg.attach_data());
             pPduRes->SetPBMsg(&msgResp);
@@ -296,10 +296,10 @@ void getGroupPush(CImPdu* pPdu, uint32_t conn_uuid)
             pPduRes->SetCommandId(IM::BaseDefine::CID_OTHER_GET_SHIELD_RSP);
             CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
         } else {
-            log("Invalid groupId. nGroupId=%u", nGroupId);
+            log_info("Invalid groupId. nGroupId=%u", nGroupId);
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 

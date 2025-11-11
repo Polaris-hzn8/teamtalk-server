@@ -154,13 +154,13 @@ typedef struct transfer_task_t {
 
     void lock(int n)
     {
-        //    	log("++++++++++++++++++++++ lock %d %s\n", n, task_id.c_str());
+        //    	log_info("++++++++++++++++++++++ lock %d %s\n", n, task_id.c_str());
         pthread_rwlock_wrlock(&task_lock);
     }
 
     void unlock(int n)
     {
-        //    	log("++++++++++++++++++++++unlock %d %s\n", n, task_id.c_str());
+        //    	log_info("++++++++++++++++++++++unlock %d %s\n", n, task_id.c_str());
         pthread_rwlock_unlock(&task_lock);
     }
 

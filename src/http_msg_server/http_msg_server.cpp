@@ -26,7 +26,7 @@ void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pPar
         CHttpConn* pConn = new CHttpConn();
         pConn->OnConnect(handle);
     } else {
-        log("!!!error msg: %d ", msg);
+        log_info("!!!error msg: %d ", msg);
     }
 }
 
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     signal(SIGPIPE, SIG_IGN);
     srand(time(NULL));
 
-    log("MsgServer max files can open: %d ", getdtablesize());
+    log_info("MsgServer max files can open: %d ", getdtablesize());
 
     CConfigFileReader config_file("http_msg_server.conf");
 
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
     uint32_t expanded_db_conn_cnt = 0;
     if (db_server_count > 0) {
         expanded_db_conn_cnt = db_server_count * concurrent_db_conn_cnt;
-        log("DB db_server_count: %u concurrent_db_conn_cnt: %u expanded_db_conn_cnt: %u.\n", 
+        log_info("DB db_server_count: %u concurrent_db_conn_cnt: %u expanded_db_conn_cnt: %u.\n", 
             db_server_count, concurrent_db_conn_cnt, expanded_db_conn_cnt);
     }
 
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
     }
 
     if (!listen_ip || !str_listen_port) {
-        log("config file miss, exit... ");
+        log_info("config file miss, exit... ");
         return -1;
     }
 

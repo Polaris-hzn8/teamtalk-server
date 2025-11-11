@@ -95,7 +95,7 @@ build_log4cxx(){
     make install
 
     # slog
-    cd ../slog
+    cd slog
     if [ -d "build" ]; then
         rm -rf build
     fi

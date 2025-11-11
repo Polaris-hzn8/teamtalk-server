@@ -32,7 +32,7 @@ add_definitions(
 
 include_directories(
     ./
-    ${BASE_DIR}/pbgen
+    ${BASE_DIR}/netlib/pbgen
     ${THIRD_DIR}/slog/include
     ${THIRD_DIR}/protobuf/include)
 
