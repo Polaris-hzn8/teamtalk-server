@@ -9,9 +9,10 @@
 #ifndef LOGINCONN_H_
 #define LOGINCONN_H_
 
-#include "imconn.h"
+#include "im_conn.h"
 
-enum {
+enum
+{
     LOGIN_CONN_TYPE_CLIENT = 1,
     LOGIN_CONN_TYPE_MSG_SERV
 };

@@ -50,7 +50,7 @@ void getUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid)
             pInfo->set_latest_msg_from_user_id(it->latest_msg_from_user_id());
         }
 
-        log("userId=%d, unreadCnt=%u, totalCount=%u", nUserId, msgResp.unreadinfo_list_size(), nTotalCnt);
+        log_info("userId=%d, unreadCnt=%u, totalCount=%u", nUserId, msgResp.unreadinfo_list_size(), nTotalCnt);
         msgResp.set_attach_data(msg.attach_data());
         pPduResp->SetPBMsg(&msgResp);
         pPduResp->SetSeqNum(pPdu->GetSeqNum());
@@ -58,7 +58,7 @@ void getUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid)
         pPduResp->SetCommandId(IM::BaseDefine::CID_MSG_UNREAD_CNT_RESPONSE);
         CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -70,9 +70,9 @@ void clearUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid)
         uint32_t nFromId = msg.session_id();
         IM::BaseDefine::SessionType nSessionType = msg.session_type();
         CUserModel::getInstance()->clearUserCounter(nUserId, nFromId, nSessionType);
-        log("userId=%u, peerId=%u, type=%u", nFromId, nUserId, nSessionType);
+        log_info("userId=%u, peerId=%u, type=%u", nFromId, nUserId, nSessionType);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -114,13 +114,13 @@ void setDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
             std::string strNewValue = int2string(nUserId);
             pCacheConn->set("device_" + strToken, strNewValue);
 
-            log("setDeviceToken. userId=%u, deviceToken=%s", nUserId, strToken.c_str());
+            log_info("setDeviceToken. userId=%u, deviceToken=%s", nUserId, strToken.c_str());
             pCacheManager->RelCacheConn(pCacheConn);
         } else {
-            log("no cache connection for token");
+            log_info("no cache connection for token");
         }
 
-        log("setDeviceToken. userId=%u, deviceToken=%s", nUserId, strToken.c_str());
+        log_info("setDeviceToken. userId=%u, deviceToken=%s", nUserId, strToken.c_str());
         msgResp.set_attach_data(msg.attach_data());
         msgResp.set_user_id(nUserId);
         pPduResp->SetPBMsg(&msgResp);
@@ -129,7 +129,7 @@ void setDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
         pPduResp->SetCommandId(IM::BaseDefine::CID_LOGIN_RES_DEVICETOKEN);
         CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -203,23 +203,23 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
                                 pToken->set_push_count(nTotalCnt);
                                 pToken->set_push_type(1);
                             } else {
-                                log("invalid clientType.clientType=%u", nClientType);
+                                log_info("invalid clientType.clientType=%u", nClientType);
                             }
                         } else {
-                            log("invalid value. value=%s", strValue.c_str());
+                            log_info("invalid value. value=%s", strValue.c_str());
                         }
                     } else {
-                        log("invalid key.key=%s", strKey.c_str());
+                        log_info("invalid key.key=%s", strKey.c_str());
                     }
                 }
             } else {
-                log("mget failed!");
+                log_info("mget failed!");
             }
         } else {
-            log("no cache connection for token");
+            log_info("no cache connection for token");
         }
 
-        log("req devices token.reqCnt=%u, resCnt=%u", nCnt, msgResp.user_token_info_size());
+        log_info("req devices token.reqCnt=%u, resCnt=%u", nCnt, msgResp.user_token_info_size());
 
         msgResp.set_attach_data(msg.attach_data());
         pPduResp->SetPBMsg(&msgResp);
@@ -228,7 +228,7 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid)
         pPduResp->SetCommandId(IM::BaseDefine::CID_OTHER_GET_DEVICE_TOKEN_RSP);
         CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 

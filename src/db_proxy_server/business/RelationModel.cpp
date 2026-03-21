@@ -44,7 +44,7 @@ uint32_t CRelationModel::getRelationId(uint32_t nUserAId, uint32_t nUserBId, boo
 {
     uint32_t nRelationId = INVALID_VALUE;
     if (nUserAId == 0 || nUserBId == 0) {
-        log("invalied user id:%u->%u", nUserAId, nUserBId);
+        log_info("invalied user id:%u->%u", nUserAId, nUserBId);
         return nRelationId;
     }
     CDBManager* pDBManager = CDBManager::getInstance();
@@ -61,14 +61,14 @@ uint32_t CRelationModel::getRelationId(uint32_t nUserAId, uint32_t nUserBId, boo
             }
             delete pResultSet;
         } else {
-            log("there is no result for sql:%s", strSql.c_str());
+            log_info("there is no result for sql:%s", strSql.c_str());
         }
         pDBManager->RelDBConn(pDBConn);
         if (nRelationId == INVALID_VALUE && bAdd) {
             nRelationId = addRelation(nSmallId, nBigId);
         }
     } else {
-        log("no db connection for teamtalk_slave");
+        log_info("no db connection for teamtalk_slave");
     }
     return nRelationId;
 }
@@ -89,7 +89,7 @@ uint32_t CRelationModel::addRelation(uint32_t nSmallId, uint32_t nBigId)
             if (!bRet) {
                 nRelationId = INVALID_VALUE;
             }
-            log("has relation ship set status");
+            log_info("has relation ship set status");
             delete pResultSet;
         } else {
             strSql = "insert into IMRelationShip (`smallId`,`bigId`,`status`,`created`,`updated`) values(?,?,?,?,?)";
@@ -107,20 +107,20 @@ uint32_t CRelationModel::addRelation(uint32_t nSmallId, uint32_t nBigId)
                 if (bRet) {
                     nRelationId = pDBConn->GetInsertId();
                 } else {
-                    log("insert message failed. %s", strSql.c_str());
+                    log_info("insert message failed. %s", strSql.c_str());
                 }
             }
             if (nRelationId != INVALID_VALUE) {
                 // 初始化msgId
                 if (!CMessageModel::getInstance()->resetMsgId(nRelationId)) {
-                    log("reset msgId failed. smallId=%u, bigId=%u.", nSmallId, nBigId);
+                    log_info("reset msgId failed. smallId=%u, bigId=%u.", nSmallId, nBigId);
                 }
             }
             delete stmt;
         }
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_master");
+        log_info("no db connection for teamtalk_master");
     }
     return nRelationId;
 }
@@ -135,7 +135,7 @@ bool CRelationModel::updateRelation(uint32_t nRelationId, uint32_t nUpdateTime)
         bRet = pDBConn->ExecuteUpdate(strSql.c_str());
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_master");
+        log_info("no db connection for teamtalk_master");
     }
     return bRet;
 }
@@ -151,7 +151,7 @@ bool CRelationModel::removeRelation(uint32_t nRelationId)
         bRet = pDBConn->ExecuteUpdate(strSql.c_str());
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_master");
+        log_info("no db connection for teamtalk_master");
     }
     return bRet;
 }

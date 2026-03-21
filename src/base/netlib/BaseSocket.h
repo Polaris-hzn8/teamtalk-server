@@ -16,10 +16,11 @@
 #ifndef __SOCKET_H__
 #define __SOCKET_H__
 
-#include "common/util.h"
-#include "common/ostype.h"
+#include "util.h"
+#include "ostype.h"
 
-enum {
+enum
+{
 	SOCKET_STATE_IDLE,
 	SOCKET_STATE_LISTENING,
 	SOCKET_STATE_CONNECTING,
@@ -80,7 +81,7 @@ private:
 	void _SetReuseAddr(SOCKET fd);
 	void _SetNoDelay(SOCKET fd);
 	void _SetAddr(const char* ip, const uint16_t port, sockaddr_in* pAddr);
-	
+
 	void _AcceptNewSocket();
 private:
 	std::string		m_remote_ip;		//远程IP地址

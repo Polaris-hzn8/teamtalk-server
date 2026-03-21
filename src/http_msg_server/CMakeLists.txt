@@ -29,12 +29,12 @@ add_definitions(
 include_directories(
     ./
     ${BASE_DIR}
-    ${BASE_DIR}/pbgen
     ${BASE_DIR}/common
     ${BASE_DIR}/http
-    ${BASE_DIR}/impdu
     ${BASE_DIR}/jsoncpp
     ${BASE_DIR}/netlib
+    ${BASE_DIR}/netlib/impdu
+    ${BASE_DIR}/netlib/pbgen
     ${BASE_DIR}/threadpool
     ${THIRD_DIR}/slog/include
     ${THIRD_DIR}/protobuf/include)
@@ -46,7 +46,7 @@ link_directories(
 
 add_executable(http_msg_server ${SRC_LIST})
 
-target_link_libraries(http_msg_server slog base protobuf-lite pthread)
+target_link_libraries(http_msg_server base slog protobuf-lite pthread)
 
 # rpath动态库查找
 set_target_properties(http_msg_server PROPERTIES

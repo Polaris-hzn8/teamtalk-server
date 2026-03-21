@@ -83,16 +83,16 @@ bool CGroupMessageModel::sendMessage(uint32_t nFromId, uint32_t nGroupId, IM::Ba
                     incMessageCount(nFromId, nGroupId);
                     clearMessageCount(nFromId, nGroupId);
                 } else {
-                    log("insert message failed: %s", strSql.c_str());
+                    log_info("insert message failed: %s", strSql.c_str());
                 }
             }
             delete pStmt;
             pDBManager->RelDBConn(pDBConn);
         } else {
-            log("no db connection for teamtalk_master");
+            log_info("no db connection for teamtalk_master");
         }
     } else {
-        log("not in the group.fromId=%u, groupId=%u", nFromId, nGroupId);
+        log_info("not in the group.fromId=%u, groupId=%u", nFromId, nGroupId);
     }
     return bRet;
 }
@@ -117,7 +117,7 @@ bool CGroupMessageModel::sendAudioMessage(uint32_t nFromId, uint32_t nGroupId, I
         return false;
 
     if (!CGroupModel::getInstance()->isInGroup(nFromId, nGroupId)) {
-        log("not in the group.fromId=%u, groupId=%u", nFromId, nGroupId);
+        log_info("not in the group.fromId=%u, groupId=%u", nFromId, nGroupId);
         return false;
     }
 
@@ -157,15 +157,15 @@ bool CGroupMessageModel::clearMessageCount(uint32_t nUserId, uint32_t nGroupId)
             std::string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) + GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
             std::string strReply = pCacheConn->hmset(strUserKey, mapGroupCount);
             if (strReply.empty()) {
-                log("hmset %s failed !", strUserKey.c_str());
+                log_info("hmset %s failed !", strUserKey.c_str());
             } else {
                 bRet = true;
             }
         } else {
-            log("hgetAll %s failed !", strGroupKey.c_str());
+            log_info("hgetAll %s failed !", strGroupKey.c_str());
         }
     } else {
-        log("no cache connection for unread");
+        log_info("no cache connection for unread");
     }
     return bRet;
 }
@@ -194,14 +194,14 @@ bool CGroupMessageModel::incMessageCount(uint32_t nUserId, uint32_t nGroupId)
             if (!strReply.empty()) {
                 bRet = true;
             } else {
-                log("hmset %s failed !", strUserKey.c_str());
+                log_info("hmset %s failed !", strUserKey.c_str());
             }
         } else {
-            log("hgetAll %s failed!", strGroupKey.c_str());
+            log_info("hgetAll %s failed!", strGroupKey.c_str());
         }
         pCacheManager->RelCacheConn(pCacheConn);
     } else {
-        log("no cache connection for unread");
+        log_info("no cache connection for unread");
     }
     return bRet;
 }
@@ -246,19 +246,19 @@ void CGroupMessageModel::getMessage(uint32_t nUserId, uint32_t nGroupId, uint32_
                     msg.set_msg_data(pResultSet->GetString("content"));
                     lsMsg.push_back(msg);
                 } else {
-                    log("invalid msgType. userId=%u, groupId=%u, msgType=%u", nUserId, nGroupId, nMsgType);
+                    log_info("invalid msgType. userId=%u, groupId=%u, msgType=%u", nUserId, nGroupId, nMsgType);
                 }
             }
             delete pResultSet;
         } else {
-            log("no result set for sql: %s", strSql.c_str());
+            log_info("no result set for sql: %s", strSql.c_str());
         }
         pDBManager->RelDBConn(pDBConn);
         if (!lsMsg.empty()) {
             CAudioModel::getInstance()->readAudios(lsMsg);
         }
     } else {
-        log("no db connection for teamtalk_slave");
+        log_info("no db connection for teamtalk_slave");
     }
 }
 
@@ -283,7 +283,7 @@ void CGroupMessageModel::getUnreadMsgCount(uint32_t nUserId, uint32_t& nTotalCnt
             std::string strGroupKey = int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
             std::string strGroupCnt = pCacheConn->hget(strGroupKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
             if (strGroupCnt.empty()) {
-                //                log("hget %s : count failed !", strGroupKey.c_str());
+                //                log_info("hget %s : count failed !", strGroupKey.c_str());
                 continue;
             }
             uint32_t nGroupCnt = (uint32_t)(atoi(strGroupCnt.c_str()));
@@ -313,13 +313,13 @@ void CGroupMessageModel::getUnreadMsgCount(uint32_t nUserId, uint32_t& nTotalCnt
                     cUnreadInfo.set_latest_msg_from_user_id(nFromId);
                     lsUnreadCount.push_back(cUnreadInfo);
                 } else {
-                    log("invalid msgType. userId=%u, groupId=%u, msgType=%u, msgId=%u", nUserId, nGroupId, nType, nMsgId);
+                    log_info("invalid msgType. userId=%u, groupId=%u, msgType=%u, msgId=%u", nUserId, nGroupId, nType, nMsgId);
                 }
             }
         }
         pCacheManager->RelCacheConn(pCacheConn);
     } else {
-        log("no cache connection for unread");
+        log_info("no cache connection for unread");
     }
 }
 
@@ -340,7 +340,7 @@ uint32_t CGroupMessageModel::getMsgId(uint32_t nGroupId)
         nMsgId = pCacheConn->incrBy(strKey, 1);
         pCacheManager->RelCacheConn(pCacheConn);
     } else {
-        log("no cache connection for unread");
+        log_info("no cache connection for unread");
     }
     return nMsgId;
 }
@@ -377,11 +377,11 @@ void CGroupMessageModel::getLastMsg(uint32_t nGroupId, uint32_t& nMsgId, std::st
             }
             delete pResultSet;
         } else {
-            log("no result set for sql: %s", strSql.c_str());
+            log_info("no result set for sql: %s", strSql.c_str());
         }
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_slave");
+        log_info("no db connection for teamtalk_slave");
     }
 }
 
@@ -405,7 +405,7 @@ void CGroupMessageModel::getUnReadCntAll(uint32_t nUserId, uint32_t& nTotalCnt)
             std::string strGroupKey = int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
             std::string strGroupCnt = pCacheConn->hget(strGroupKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
             if (strGroupCnt.empty()) {
-                //                log("hget %s : count failed !", strGroupKey.c_str());
+                //                log_info("hget %s : count failed !", strGroupKey.c_str());
                 continue;
             }
             uint32_t nGroupCnt = (uint32_t)(atoi(strGroupCnt.c_str()));
@@ -423,7 +423,7 @@ void CGroupMessageModel::getUnReadCntAll(uint32_t nUserId, uint32_t& nTotalCnt)
         }
         pCacheManager->RelCacheConn(pCacheConn);
     } else {
-        log("no cache connection for unread");
+        log_info("no cache connection for unread");
     }
 }
 
@@ -461,25 +461,25 @@ void CGroupMessageModel::getMsgByMsgId(uint32_t nUserId, uint32_t nGroupId, cons
                             msg.set_msg_data(pResultSet->GetString("content"));
                             lsMsg.push_back(msg);
                         } else {
-                            log("invalid msgType. userId=%u, groupId=%u, msgType=%u", nUserId, nGroupId, nMsgType);
+                            log_info("invalid msgType. userId=%u, groupId=%u, msgType=%u", nUserId, nGroupId, nMsgType);
                         }
                     }
                     delete pResultSet;
                 } else {
-                    log("no result set for sql:%s", strSql.c_str());
+                    log_info("no result set for sql:%s", strSql.c_str());
                 }
                 pDBManager->RelDBConn(pDBConn);
                 if (!lsMsg.empty()) {
                     CAudioModel::getInstance()->readAudios(lsMsg);
                 }
             } else {
-                log("no db connection for teamtalk_slave");
+                log_info("no db connection for teamtalk_slave");
             }
         } else {
-            log("%u is not in group:%u", nUserId, nGroupId);
+            log_info("%u is not in group:%u", nUserId, nGroupId);
         }
     } else {
-        log("msgId is empty.");
+        log_info("msgId is empty.");
     }
 }
 

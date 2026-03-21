@@ -18,7 +18,8 @@
 
 #define READ_BUF_SIZE 2048
 
-enum {
+enum
+{
     CONN_STATE_IDLE,
     CONN_STATE_CONNECTED,
     CONN_STATE_OPEN,

@@ -10,7 +10,6 @@
 #define _CONFIGFILEREADER_H_
 
 #include <map>
-#include "util.h"
 
 class CConfigFileReader
 {

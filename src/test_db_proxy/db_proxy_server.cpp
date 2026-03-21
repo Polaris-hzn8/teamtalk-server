@@ -33,7 +33,7 @@ void proxy_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void
         CProxyConn* pConn = new CProxyConn();
         pConn->OnConnect(handle);
     } else {
-        log("!!!error msg: %d", msg);
+        log_info("!!!error msg: %d", msg);
     }
 }
 
@@ -189,7 +189,7 @@ static void sendMessage(uint32_t from_user_id, uint32_t to_session_id, IM::BaseD
                         }
                     }
                 } else {
-                    log("invalid groupId. fromId=%u, groupId=%u", nFromId, nToId);
+                    log_info("invalid groupId. fromId=%u, groupId=%u", nFromId, nToId);
                     delete pPduResp;
                     return;
                 }
@@ -208,7 +208,7 @@ static void sendMessage(uint32_t from_user_id, uint32_t to_session_id, IM::BaseD
                         }
                     }
                 } else {
-                    log("invalid groupId. fromId=%u, groupId=%u", nFromId, nToId);
+                    log_info("invalid groupId. fromId=%u, groupId=%u", nFromId, nToId);
                     delete pPduResp;
                     return;
                 }
@@ -230,13 +230,13 @@ static void sendMessage(uint32_t from_user_id, uint32_t to_session_id, IM::BaseD
                             CSessionModel::getInstance()->updateSession(nSessionId, nNow);
                             CSessionModel::getInstance()->updateSession(nPeerSessionId, nNow);
                         } else {
-                            log("msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                            log_info("msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
                         }
                     } else {
-                        log("sessionId or relateId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                        log_info("sessionId or relateId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
                     }
                 } else {
-                    log("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
+                    log_info("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
                 }
 
             } else if (nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO) {
@@ -258,22 +258,22 @@ static void sendMessage(uint32_t from_user_id, uint32_t to_session_id, IM::BaseD
                             CSessionModel::getInstance()->updateSession(nSessionId, nNow);
                             CSessionModel::getInstance()->updateSession(nPeerSessionId, nNow);
                         } else {
-                            log("msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                            log_info("msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
                         }
                     } else {
-                        log("sessionId or relateId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                        log_info("sessionId or relateId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
                     }
                 } else {
-                    log("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
+                    log_info("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
                 }
             }
 
-            log("fromId=%u, toId=%u, type=%u, msgId=%u, sessionId=%u", nFromId, nToId, nMsgType, nMsgId, nSessionId);
+            log_info("fromId=%u, toId=%u, type=%u, msgId=%u, sessionId=%u", nFromId, nToId, nMsgType, nMsgId, nSessionId);
         } else {
-            log("msgLen error. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
+            log_info("msgLen error. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
         }
     } else {
-        log("invalid msgType.fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
+        log_info("invalid msgType.fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
     }
 }
 
@@ -295,10 +295,10 @@ static void getLatestMsgId(uint32_t user_id, uint32_t session_id, IM::BaseDefine
             uint32_t nFromId = INVALID_VALUE;
             CGroupMessageModel::getInstance()->getLastMsg(nPeerId, nMsgId, strMsg, nMsgType, nFromId);
         }
-        log("userId=%u, peerId=%u, sessionType=%u, msgId=%u", nUserId, nPeerId, nType, nMsgId);
+        log_info("userId=%u, peerId=%u, sessionType=%u, msgId=%u", nUserId, nPeerId, nType, nMsgId);
 
     } else {
-        log("invalid sessionType. userId=%u, peerId=%u, sessionType=%u", nUserId, nPeerId, nType);
+        log_info("invalid sessionType. userId=%u, peerId=%u, sessionType=%u", nUserId, nPeerId, nType);
     }
 }
 
@@ -315,13 +315,13 @@ int main(int argc, char* argv[])
 
     CacheManager* pCacheManager = CacheManager::getInstance();
     if (!pCacheManager) {
-        log("CacheManager init failed");
+        log_info("CacheManager init failed");
         return -1;
     }
 
     CDBManager* pDBManager = CDBManager::getInstance();
     if (!pDBManager) {
-        log("DBManager init failed");
+        log_info("DBManager init failed");
         return -1;
     }
     puts("db init success");
@@ -367,12 +367,12 @@ int main(int argc, char* argv[])
     char* str_aes_key = config_file.GetConfigName("aesKey");
 
     if (!listen_ip || !str_listen_port || !str_thread_num || !str_file_site || !str_aes_key) {
-        log("missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...");
+        log_info("missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...");
         return -1;
     }
 
     if (strlen(str_aes_key) != 32) {
-        log("aes key is invalied");
+        log_info("aes key is invalied");
         return -2;
     }
     string strAesKey(str_aes_key, 32);

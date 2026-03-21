@@ -9,7 +9,7 @@
 #ifndef _DBSERVCONN_H_
 #define _DBSERVCONN_H_
 
-#include "imconn.h"
+#include "im_conn.h"
 #include "ServInfo.h"
 #include "RouteServConn.h"
 

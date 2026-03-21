@@ -9,8 +9,8 @@
 #ifndef PROXYCONN_H_
 #define PROXYCONN_H_
 
-#include "../base/util.h"
-#include "imconn.h"
+#include "im_conn.h"
+#include "common/util.h"
 #include <curl/curl.h>
 
 typedef struct {

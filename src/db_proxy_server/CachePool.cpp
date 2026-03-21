@@ -49,13 +49,13 @@ int CacheConn::Init()
     m_pContext = redisConnectWithTimeout(m_pCachePool->GetServerIP(), m_pCachePool->GetServerPort(), timeout);
     if (!m_pContext || m_pContext->err) {
         if (m_pContext) {
-            log("erro occur : m_pContext->err is %d not zero.", m_pContext->err);
-            log("redisConnect failed: %s", m_pContext->errstr);
+            log_info("erro occur : m_pContext->err is %d not zero.", m_pContext->err);
+            log_info("redisConnect failed: %s", m_pContext->errstr);
             redisFree(m_pContext);
             m_pContext = NULL;
         } else {
-            log("erro occur : m_pContext is a nullprt.");
-            log("redisConnect failed");
+            log_info("erro occur : m_pContext is a nullprt.");
+            log_info("redisConnect failed");
         }
         return 1;
     }
@@ -65,7 +65,7 @@ int CacheConn::Init()
         freeReplyObject(reply);
         return 0;
     } else {
-        log("select cache db failed");
+        log_info("select cache db failed");
         return 2;
     }
 }
@@ -84,7 +84,7 @@ std::string CacheConn::get(string key)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "GET %s", key.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return value;
@@ -105,7 +105,7 @@ std::string CacheConn::setex(string key, int timeout, string value)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "SETEX %s %d %s", key.c_str(), timeout, value.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return ret_value;
@@ -124,7 +124,7 @@ std::string CacheConn::set(std::string key, std::string& value)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "SET %s %s", key.c_str(), value.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return ret_value;
@@ -158,7 +158,7 @@ bool CacheConn::mget(const std::vector<string>& keys, std::map<std::string, std:
     strKey = "MGET " + strKey;
     redisReply* reply = (redisReply*)redisCommand(m_pContext, strKey.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return false;
@@ -182,7 +182,7 @@ bool CacheConn::isExists(std::string& key)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "EXISTS %s", key.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         return false;
     }
@@ -202,7 +202,7 @@ long CacheConn::hdel(std::string key, std::string field)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "HDEL %s %s", key.c_str(), field.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return 0;
@@ -221,7 +221,7 @@ std::string CacheConn::hget(std::string key, std::string field)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "HGET %s %s", key.c_str(), field.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return ret_value;
@@ -242,7 +242,7 @@ bool CacheConn::hgetAll(std::string key, map<std::string, std::string>& ret_valu
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "HGETALL %s", key.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return false;
@@ -270,7 +270,7 @@ long CacheConn::hset(std::string key, std::string field, std::string value)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "HSET %s %s %s", key.c_str(), field.c_str(), value.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return -1;
@@ -288,7 +288,7 @@ long CacheConn::hincrBy(std::string key, std::string field, long value)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "HINCRBY %s %s %ld", key.c_str(), field.c_str(), value);
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return -1;
@@ -306,7 +306,7 @@ long CacheConn::incrBy(std::string key, long value)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "INCRBY %s %ld", key.c_str(), value);
     if (!reply) {
-        log("redis Command failed:%s", m_pContext->errstr);
+        log_info("redis Command failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return -1;
@@ -337,7 +337,7 @@ std::string CacheConn::hmset(std::string key, std::map<std::string, std::string>
 
     redisReply* reply = (redisReply*)redisCommandArgv(m_pContext, argc, argv, NULL);
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         delete[] argv;
 
         redisFree(m_pContext);
@@ -371,7 +371,7 @@ bool CacheConn::hmget(std::string key, std::list<std::string>& fields, std::list
 
     redisReply* reply = (redisReply*)redisCommandArgv(m_pContext, argc, (const char**)argv, NULL);
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         delete[] argv;
 
         redisFree(m_pContext);
@@ -400,7 +400,7 @@ long CacheConn::incr(string key)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "INCR %s", key.c_str());
     if (!reply) {
-        log("redis Command failed:%s", m_pContext->errstr);
+        log_info("redis Command failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return -1;
@@ -417,7 +417,7 @@ long CacheConn::decr(string key)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "DECR %s", key.c_str());
     if (!reply) {
-        log("redis Command failed:%s", m_pContext->errstr);
+        log_info("redis Command failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return -1;
@@ -434,7 +434,7 @@ long CacheConn::lpush(string key, string value)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "LPUSH %s %s", key.c_str(), value.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return -1;
@@ -452,7 +452,7 @@ long CacheConn::rpush(string key, string value)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "RPUSH %s %s", key.c_str(), value.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return -1;
@@ -470,7 +470,7 @@ long CacheConn::llen(string key)
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "LLEN %s", key.c_str());
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return -1;
@@ -488,7 +488,7 @@ bool CacheConn::lrange(string key, long start, long end, list<string>& ret_value
 
     redisReply* reply = (redisReply*)redisCommand(m_pContext, "LRANGE %s %d %d", key.c_str(), start, end);
     if (!reply) {
-        log("redisCommand failed:%s", m_pContext->errstr);
+        log_info("redisCommand failed:%s", m_pContext->errstr);
         redisFree(m_pContext);
         m_pContext = NULL;
         return false;
@@ -543,7 +543,7 @@ int CachePool::Init()
         m_free_list.push_back(pConn);
     }
 
-    log("cache pool: %s, list size: %lu", m_pool_name.c_str(), m_free_list.size());
+    log_info("cache pool: %s, list size: %lu", m_pool_name.c_str(), m_free_list.size());
     return 0;
 }
 
@@ -558,14 +558,14 @@ CacheConn* CachePool::GetCacheConn()
             CacheConn* pCacheConn = new CacheConn(this);
             int ret = pCacheConn->Init();
             if (ret) {
-                log("Init CacheConn failed");
+                log_info("Init CacheConn failed");
                 delete pCacheConn;
                 m_free_notify.Unlock();
                 return NULL;
             } else {
                 m_free_list.push_back(pCacheConn);
                 m_cur_conn_cnt++;
-                log("new cache connection: %s, conn_cnt: %d", m_pool_name.c_str(), m_cur_conn_cnt);
+                log_info("new cache connection: %s, conn_cnt: %d", m_pool_name.c_str(), m_cur_conn_cnt);
             }
         }
     }
@@ -622,7 +622,7 @@ int CacheManager::Init()
     CConfigFileReader config_file("db_proxy_server.conf");
     char* cache_instances = config_file.GetConfigName("CacheInstances");
     if (!cache_instances) {
-        log("not configure CacheIntance");
+        log_info("not configure CacheIntance");
         return 1;
     }
 
@@ -644,16 +644,16 @@ int CacheManager::Init()
         char* str_cache_db = config_file.GetConfigName(db);
         char* str_max_conn_cnt = config_file.GetConfigName(maxconncnt);
         if (!cache_host || !str_cache_port || !str_cache_db || !str_max_conn_cnt) {
-            log("not configure cache instance: %s", pool_name);
+            log_info("not configure cache instance: %s", pool_name);
             return 2;
         }
 
-        log("Connecting cache instance: host[%s] port[%s] db[%s] maxconnect[%s]", cache_host, str_cache_port, str_cache_db, str_max_conn_cnt);
+        log_info("Connecting cache instance: host[%s] port[%s] db[%s] maxconnect[%s]", cache_host, str_cache_port, str_cache_db, str_max_conn_cnt);
 
         CachePool* pCachePool = new CachePool(pool_name, cache_host, atoi(str_cache_port),
             atoi(str_cache_db), atoi(str_max_conn_cnt));
         if (pCachePool->Init()) {
-            log("Init cache pool failed");
+            log_info("Init cache pool failed");
             return 3;
         }
 

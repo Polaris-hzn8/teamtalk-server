@@ -35,7 +35,7 @@ void proxy_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void
         CProxyConn* pConn = new CProxyConn();
         pConn->OnConnect(handle);
     } else {
-        log("!!!error msg: %d", msg);
+        log_info("!!!error msg: %d", msg);
     }
 }
 
@@ -54,18 +54,18 @@ int main(int argc, char* argv[])
     // CacheManager初始化 Redis相关
     CacheManager* pCacheManager = CacheManager::getInstance();
     if (!pCacheManager) {
-        log("CacheManager init failed");
+        log_info("CacheManager init failed");
         return -1;
     }
 
     // CDBManager初始化 MySQL相关
     CDBManager* pDBManager = CDBManager::getInstance();
     if (!pDBManager) {
-        log("DBManager init failed");
+        log_info("DBManager init failed");
         return -1;
     }
 
-    log("db init success");
+    log_info("db init success");
 
     // 初始化各单例对象
     if (!CAudioModel::getInstance())
@@ -93,11 +93,11 @@ int main(int argc, char* argv[])
     char* str_file_site = config_file.GetConfigName("MsfsSite");        //msfs多媒体文件存储服务器地址
     char* str_aes_key = config_file.GetConfigName("aesKey");            //AES密钥
     if (!listen_ip || !str_listen_port || !str_thread_num || !str_file_site || !str_aes_key) {
-        log("missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...");
+        log_info("missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...");
         return -1;
     }
     if (strlen(str_aes_key) != 32) {
-        log("aes key is invalied");
+        log_info("aes key is invalied");
         return -2;
     }
 

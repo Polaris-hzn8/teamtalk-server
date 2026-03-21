@@ -48,7 +48,7 @@ void getChgedDepart(CImPdu* pPdu, uint32_t conn_uuid)
             pDeptInfo->set_parent_dept_id(it->parent_dept_id());
             pDeptInfo->set_dept_status(it->dept_status());
         }
-        log("userId=%u, last_update=%u, cnt=%u", nUserId, nLastUpdate, lsDeparts.size());
+        log_info("userId=%u, last_update=%u, cnt=%u", nUserId, nLastUpdate, lsDeparts.size());
 
         msgResp.set_attach_data(msg.attach_data());             //设置附加消息
         pPduRes->SetPBMsg(&msgResp);                            //设置消息体
@@ -59,7 +59,7 @@ void getChgedDepart(CImPdu* pPdu, uint32_t conn_uuid)
         // 添加到响应消息队列中
         CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 

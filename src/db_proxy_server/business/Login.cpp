@@ -78,7 +78,7 @@ void doLogin(CImPdu* pPdu, uint32_t conn_uuid)
             }
         } while (false);
 
-        log("%s request login.", strDomain.c_str());
+        log_info("%s request login.", strDomain.c_str());
 
         // 登录验证
         IM::BaseDefine::UserInfo cUser;
@@ -116,7 +116,7 @@ void doLogin(CImPdu* pPdu, uint32_t conn_uuid)
             msgResp.set_result_code(1);
             msgResp.set_result_string("用户名/密码错误");
 
-            log("get result false");
+            log_info("get result false");
         }
     } else {
         msgResp.set_result_code(2);

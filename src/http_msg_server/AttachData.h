@@ -11,7 +11,8 @@
 
 #include "util.h"
 
-enum {
+enum
+{
     ATTACH_TYPE_PDU_FOR_XIAOT = 1,
     ATTACH_TYPE_PDU_FOR_INTERNAL = 2,
     ATTACH_TYPE_HANDLE = 3,

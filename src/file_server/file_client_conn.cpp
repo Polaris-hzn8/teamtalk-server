@@ -22,7 +22,7 @@ void FileClientConnCallback(void* callback_data, uint8_t msg, uint32_t handle, v
         FileClientConn* conn = new FileClientConn();
         conn->OnConnect(handle);
     } else {
-        log("!!!error msg: %d ", msg);
+        log_info("!!!error msg: %d ", msg);
     }
 }
 
@@ -50,16 +50,16 @@ void InitializeFileClientConn()
 #if 0
     char work_path[BUFSIZ];
     if(!getcwd(work_path, BUFSIZ)) {
-        log("getcwd failed");
+        log_info("getcwd failed");
     } else {
         snprintf(g_current_save_path, BUFSIZ, "%s/offline_file", work_path);
     }
     
-    log("save offline files to %s", g_current_save_path);
+    log_info("save offline files to %s", g_current_save_path);
     
     int ret = mkdir(g_current_save_path, 0755);
     if ( (ret != 0) && (errno != EEXIST) ) {
-        log("!!!mkdir failed to save offline files");
+        log_info("!!!mkdir failed to save offline files");
     }
 #endif
 
@@ -69,7 +69,7 @@ void InitializeFileClientConn()
 
 void FileClientConn::Close()
 {
-    log("close client, handle %d", m_handle);
+    log_info("close client, handle %d", m_handle);
 
     if (transfer_task_) {
         if (transfer_task_->GetTransMode() == FILE_TYPE_ONLINE) {
@@ -112,7 +112,7 @@ void FileClientConn::Close()
 
 #if 0
 void FileClientConn::Close2() {
-    log("close2 client, handle %d", m_handle);
+    log_info("close2 client, handle %d", m_handle);
     
     auth_ = false;
 
@@ -167,7 +167,7 @@ void FileClientConn::OnConnect(net_handle_t handle)
 
 void FileClientConn::OnClose()
 {
-    log("client onclose: handle=%d", m_handle);
+    log_info("client onclose: handle=%d", m_handle);
     Close();
 }
 
@@ -176,7 +176,7 @@ void FileClientConn::OnTimer(uint64_t curr_tick)
 
     if (transfer_task_ && transfer_task_->GetTransMode() == FILE_TYPE_ONLINE) {
         if (transfer_task_->state() == kTransferTaskStateInvalid) {
-            log("Close another online conn, user_id=%d", user_id_);
+            log_info("Close another online conn, user_id=%d", user_id_);
             Close();
             return;
         }
@@ -184,7 +184,7 @@ void FileClientConn::OnTimer(uint64_t curr_tick)
     // transfer_task_->set_state(kTransferTaskStateInvalid);
 
     if (curr_tick > m_last_recv_tick + CLIENT_TIMEOUT) {
-        log("client timeout, user_id=%u", user_id_);
+        log_info("client timeout, user_id=%u", user_id_);
         Close();
     }
 }
@@ -215,7 +215,7 @@ void FileClientConn::HandlePdu(CImPdu* pdu)
         break;
 
     default:
-        log("no such cmd id: %u", pdu->GetCommandId());
+        log_info("no such cmd id: %u", pdu->GetCommandId());
         break;
     }
 }
@@ -234,7 +234,7 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu)
     std::string task_id = login_req.task_id();
     IM::BaseDefine::ClientFileRole mode = login_req.file_role();
 
-    log("Client login, user_id=%d, task_id=%s, file_role=%d", user_id, task_id.c_str(), mode);
+    log_info("Client login, user_id=%d, task_id=%s, file_role=%d", user_id, task_id.c_str(), mode);
 
     BaseTransferTask* transfer_task = NULL;
 
@@ -250,12 +250,12 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu)
                 transfer_task = TransferTaskManager::GetInstance()->NewTransferTask(task_id, user_id);
                 if (transfer_task == NULL) {
                     // 需要再次判断是否加载成功
-                    log("Find task id failed, user_id=%u, taks_id=%s, mode=%d", user_id, task_id.c_str(), mode);
+                    log_info("Find task id failed, user_id=%u, taks_id=%s, mode=%d", user_id, task_id.c_str(), mode);
                     break;
                 }
             } else {
                 // 异常文件任务id
-                log("Can't find task_id, user_id=%u, taks_id=%s, mode=%d", user_id, task_id.c_str(), mode);
+                log_info("Can't find task_id, user_id=%u, taks_id=%s, mode=%d", user_id, task_id.c_str(), mode);
                 break;
             }
         }
@@ -288,7 +288,7 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu)
                 if (conn)
                     _StatesNotify(CLIENT_FILE_PEER_READY, task_id, transfer_task_->from_user_id(), conn);
                 else {
-                    log("to_conn is close, close me!!!");
+                    log_info("to_conn is close, close me!!!");
                     Close();
                 }
                 // _StatesNotify(CLIENT_FILE_PEER_READY, task_id, user_id, this);
@@ -306,7 +306,7 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu)
                 pull_data_req.set_offset(0);
                 pull_data_req.set_data_size(offline->GetNextSegmentBlockSize());
                 ::SendMessageLite(this, SID_FILE, CID_FILE_PULL_DATA_REQ, &pull_data_req);
-                log("Pull Data Req");
+                log_info("Pull Data Req");
             }
         }
     } else {
@@ -319,7 +319,7 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu)
 void FileClientConn::_HandleClientFileStates(CImPdu* pdu)
 {
     if (!auth_ || !transfer_task_) {
-        log("Recv a client_file_state, but auth is false");
+        log_info("Recv a client_file_state, but auth is false");
         return;
     }
 
@@ -330,20 +330,20 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu)
     uint32_t user_id = file_state.user_id();
     uint32_t file_stat = file_state.state();
 
-    log("Recv FileState, user_id=%d, task_id=%s, file_stat=%d", user_id, task_id.c_str(), file_stat);
+    log_info("Recv FileState, user_id=%d, task_id=%s, file_stat=%d", user_id, task_id.c_str(), file_stat);
 
     // FilePullFileRsp
     bool rv = false;
     do {
         // 检查user_id
         if (user_id != user_id_) {
-            log("Received user_id valid, recv_user_id = %d, transfer_task.user_id = %d, user_id_ = %d", user_id, transfer_task_->from_user_id(), user_id_);
+            log_info("Received user_id valid, recv_user_id = %d, transfer_task.user_id = %d, user_id_ = %d", user_id, transfer_task_->from_user_id(), user_id_);
             break;
         }
 
         // 检查task_id
         if (transfer_task_->task_id() != task_id) {
-            log("Received task_id valid, recv_task_id = %s, this_task_id = %s", task_id.c_str(), transfer_task_->task_id().c_str());
+            log_info("Received task_id valid, recv_task_id = %s, this_task_id = %s", task_id.c_str(), transfer_task_->task_id().c_str());
             break;
         }
 
@@ -354,7 +354,7 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu)
             CImConn* im_conn = transfer_task_->GetOpponentConn(user_id);
             if (im_conn) {
                 im_conn->SendPdu(pdu);
-                log("Task %s %d by user_id %d notify %d, erased", task_id.c_str(), file_stat, user_id, transfer_task_->GetOpponent(user_id));
+                log_info("Task %s %d by user_id %d notify %d, erased", task_id.c_str(), file_stat, user_id, transfer_task_->GetOpponent(user_id));
             }
             // notify other client
             // CFileConn* pConn = (CFileConn*)t->GetOpponentConn(user_id);
@@ -367,7 +367,7 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu)
         }
 
         default:
-            log("Recv valid file_stat: file_state = %d, user_id=%d, task_id=%s", file_stat, user_id_, task_id.c_str());
+            log_info("Recv valid file_stat: file_state = %d, user_id=%d, task_id=%s", file_stat, user_id_, task_id.c_str());
             break;
         }
 
@@ -389,7 +389,7 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu)
             CImConn* im_conn = transfer_task->GetConnByUserID(user_id);
             if (im_conn) {
                 im_conn->SendPdu(pdu);
-                log("Task %s %d by user_id %d notify %d, erased", task_id.c_str(), file_stat, user_id, transfer_task->GetOpponent(user_id));
+                log_info("Task %s %d by user_id %d notify %d, erased", task_id.c_str(), file_stat, user_id, transfer_task->GetOpponent(user_id));
             }
             // notify other client
             // CFileConn* pConn = (CFileConn*)t->GetOpponentConn(user_id);
@@ -417,7 +417,7 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu)
     // 1.检查是否已进行身份验证auth_ 和 是否存在该传输任务transfer_task_
     // 如果身份验证失败 或 没有该项传输任务 直接返回false
     if (!auth_ || !transfer_task_) {
-        log("Recv a client_file_state, but auth is false");
+        log_info("Recv a client_file_state, but auth is false");
         return;
     }
 
@@ -430,7 +430,7 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu)
     uint32_t offset = pull_data_req.offset(); // 文件传输偏移量
     uint32_t datasize = pull_data_req.data_size(); // 文件数据
 
-    log("Recv FilePullFileReq, user_id=%d, task_id=%s, file_role=%d, offset=%d, datasize=%d",
+    log_info("Recv FilePullFileReq, user_id=%d, task_id=%s, file_role=%d, offset=%d, datasize=%d",
         user_id, task_id.c_str(), mode, offset, datasize);
 
     // 3.组装response响应消息 接收端 -> file_server -> 发送端
@@ -460,7 +460,7 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu)
         // user_id 是从IM::File::IMFilePullDataReq消息中解析出来的字段，表示文件传输请求的用户ID
         // user_id_ 是 FileClientConn 类的成员变量，表示当前连接的用户ID
         if (user_id != user_id_) {
-            log("Received user_id valid, recv_user_id = %d, transfer_task.user_id = %d, user_id_ = %d",
+            log_info("Received user_id valid, recv_user_id = %d, transfer_task.user_id = %d, user_id_ = %d",
                 user_id, transfer_task_->from_user_id(), user_id_);
             break;
         }
@@ -469,7 +469,7 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu)
         // task_id 从收到的文件传输请求中解析出 是一个字符串，用于标识特定的文件传输任务
         // transfer_task_->task_id() 用于获取当前连接的传输任务的任务标识符 调用了当前连接所关联的传输任务对象
         if (transfer_task_->task_id() != task_id) {
-            log("Received task_id valid, recv_task_id = %s, this_task_id = %s",
+            log_info("Received task_id valid, recv_task_id = %s, this_task_id = %s",
                 task_id.c_str(), transfer_task_->task_id().c_str());
             break;
         }
@@ -478,7 +478,7 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu)
         // user_id 从消息中解析出来的字段 表示文件传输请求的user_id
         // user_id 是否为 transfer_task.to_user_id
         if (!transfer_task_->CheckToUserID(user_id)) {
-            log("user_id equal transfer_task.to_user_id, but user_id=%d, transfer_task.to_user_id=%d",
+            log_info("user_id equal transfer_task.to_user_id, but user_id=%d, transfer_task.to_user_id=%d",
                 user_id, transfer_task_->to_user_id());
             break;
         }
@@ -538,7 +538,7 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu)
 {
     // 1.首先进行认证和传输任务的检查，确保认证和传输任务对象存在。
     if (!auth_ || !transfer_task_) {
-        log("auth is false");
+        log_info("auth is false");
         return;
     }
 
@@ -554,9 +554,9 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu)
     uint32_t data_size = static_cast<uint32_t>(pull_data_rsp.file_data().length()); // 数据大小
     const char* data = pull_data_rsp.file_data().data(); // 数据内容
 
-    // log("Recv FilePullFileRsp, user_id=%d, task_id=%s, file_role=%d, offset=%d,
+    // log_info("Recv FilePullFileRsp, user_id=%d, task_id=%s, file_role=%d, offset=%d,
     // datasize=%d", user_id, task_id.c_str(), mode, offset, datasize);
-    log("Recv FilePullFileRsp, task_id=%s, user_id=%u, offset=%u, data_size=%d",
+    log_info("Recv FilePullFileRsp, task_id=%s, user_id=%u, offset=%u, data_size=%d",
         task_id.c_str(), user_id, offset, data_size);
 
     int rv = -1;
@@ -566,7 +566,7 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu)
         //  user_id 是从IM::File::IMFilePullDataReq消息中解析出来的字段，表示文件传输请求的用户ID
         //  user_id_ 是 FileClientConn 类的成员变量，表示当前连接的用户ID
         if (user_id != user_id_) {
-            log("Received user_id valid, recv_user_id = %d, transfer_task.user_id = %d, user_id_ = %d",
+            log_info("Received user_id valid, recv_user_id = %d, transfer_task.user_id = %d, user_id_ = %d",
                 user_id, transfer_task_->from_user_id(), user_id_);
             break;
         }
@@ -575,7 +575,7 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu)
         // task_id 从收到的文件传输请求中解析出 是一个字符串，用于标识特定的文件传输任务
         // transfer_task_->task_id() 用于获取当前连接的传输任务的任务标识符 调用了当前连接所关联的传输任务对象
         if (transfer_task_->task_id() != task_id) {
-            log("Received task_id valid, recv_task_id = %s, this_task_id = %s",
+            log_info("Received task_id valid, recv_task_id = %s, this_task_id = %s",
                 task_id.c_str(), transfer_task_->task_id().c_str());
             break;
         }
@@ -616,7 +616,7 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu)
                 pull_data_req.set_data_size(offline->GetNextSegmentBlockSize());
 
                 ::SendMessageLite(this, SID_FILE, CID_FILE_PULL_DATA_REQ, &pull_data_req);
-                // log("size not match");
+                // log_info("size not match");
             }
         }
     } while (0);
@@ -640,6 +640,6 @@ int FileClientConn::_StatesNotify(int state, const std::string& task_id, uint32_
 
     ::SendMessageLite(conn, SID_FILE, CID_FILE_STATE, &file_msg);
 
-    log("notify to user %d state %d task %s", user_id, state, task_id.c_str());
+    log_info("notify to user %d state %d task %s", user_id, state, task_id.c_str());
     return 0;
 }

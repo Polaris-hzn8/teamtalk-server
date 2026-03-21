@@ -42,19 +42,19 @@ void CSessionModel::getRecentSession(uint32_t nUserId, uint32_t lastTime, list<I
                     cRelate.set_updated_time(pResultSet->GetInt("updated"));
                     lsContact.push_back(cRelate);
                 } else {
-                    log("invalid sessionType. userId=%u, peerId=%u, sessionType=%u", nUserId, nPeerId, nSessionType);
+                    log_info("invalid sessionType. userId=%u, peerId=%u, sessionType=%u", nUserId, nPeerId, nSessionType);
                 }
             }
             delete pResultSet;
         } else {
-            log("no result set for sql: %s", strSql.c_str());
+            log_info("no result set for sql: %s", strSql.c_str());
         }
         pDBManager->RelDBConn(pDBConn);
         if (!lsContact.empty()) {
             fillSessionMsg(nUserId, lsContact);
         }
     } else {
-        log("no db connection for teamtalk_slave");
+        log_info("no db connection for teamtalk_slave");
     }
 }
 
@@ -80,7 +80,7 @@ uint32_t CSessionModel::getSessionId(uint32_t nUserId, uint32_t nPeerId, uint32_
         }
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_slave");
+        log_info("no db connection for teamtalk_slave");
     }
     return nSessionId;
 }
@@ -95,7 +95,7 @@ bool CSessionModel::updateSession(uint32_t nSessionId, uint32_t nUpdateTime)
         bRet = pDBConn->ExecuteUpdate(strSql.c_str());
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_master");
+        log_info("no db connection for teamtalk_master");
     }
     return bRet;
 }
@@ -111,7 +111,7 @@ bool CSessionModel::removeSession(uint32_t nSessionId)
         bRet = pDBConn->ExecuteUpdate(strSql.c_str());
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_master");
+        log_info("no db connection for teamtalk_master");
     }
     return bRet;
 }
@@ -131,7 +131,7 @@ uint32_t CSessionModel::addSession(uint32_t nUserId, uint32_t nPeerId, uint32_t 
             if (!bRet) {
                 nSessionId = INVALID_VALUE;
             }
-            log("has relation ship set status");
+            log_info("has relation ship set status");
         } else {
             string strSql = "insert into IMRecentSession (`userId`,`peerId`,`type`,`status`,`created`,`updated`) values(?,?,?,?,?,?)";
             // 必须在释放连接前delete CPrepareStatement对象，否则有可能多个线程操作mysql对象，会crash
@@ -149,14 +149,14 @@ uint32_t CSessionModel::addSession(uint32_t nUserId, uint32_t nPeerId, uint32_t 
                 if (bRet) {
                     nSessionId = pDBConn->GetInsertId();
                 } else {
-                    log("insert message failed. %s", strSql.c_str());
+                    log_info("insert message failed. %s", strSql.c_str());
                 }
             }
             delete stmt;
         }
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_master");
+        log_info("no db connection for teamtalk_master");
     }
     return nSessionId;
 }

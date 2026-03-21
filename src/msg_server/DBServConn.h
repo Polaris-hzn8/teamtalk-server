@@ -11,7 +11,7 @@
 
 #include "RouteServConn.h"
 #include "ServInfo.h"
-#include "imconn.h"
+#include "im_conn.h"
 
 class CDBServConn : public CImConn
 {

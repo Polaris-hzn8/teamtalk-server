@@ -12,7 +12,6 @@
 #include <iostream>
 #include <openssl/aes.h>
 #include <openssl/md5.h>
-#include "ostype.h"
 
 class CAes
 {

@@ -59,10 +59,10 @@ void getMessage(CImPdu* pPdu, uint32_t conn_uuid)
                 pMsg->set_create_time(it->create_time());
                 pMsg->set_msg_type(it->msg_type());
                 pMsg->set_msg_data(it->msg_data());
-                //                    log("userId=%u, peerId=%u, msgId=%u", nUserId, nPeerId, it->msg_id());
+                //                    log_info("userId=%u, peerId=%u, msgId=%u", nUserId, nPeerId, it->msg_id());
             }
 
-            log("userId=%u, peerId=%u, msgId=%u, msgCnt=%u, count=%u", nUserId, nPeerId, nMsgId, nMsgCnt, msgResp.msg_list_size());
+            log_info("userId=%u, peerId=%u, msgId=%u, msgCnt=%u, count=%u", nUserId, nPeerId, nMsgId, nMsgCnt, msgResp.msg_list_size());
             msgResp.set_attach_data(msg.attach_data());
             pPduResp->SetPBMsg(&msgResp);
             pPduResp->SetSeqNum(pPdu->GetSeqNum());
@@ -70,11 +70,11 @@ void getMessage(CImPdu* pPdu, uint32_t conn_uuid)
             pPduResp->SetCommandId(IM::BaseDefine::CID_MSG_LIST_RESPONSE);
             CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
         } else {
-            log("invalid sessionType. userId=%u, peerId=%u, msgId=%u, msgCnt=%u, sessionType=%u",
+            log_info("invalid sessionType. userId=%u, peerId=%u, msgId=%u, msgCnt=%u, sessionType=%u",
                 nUserId, nPeerId, nMsgId, nMsgCnt, nSessionType);
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -115,7 +115,7 @@ void sendMessage(CImPdu* pPdu, uint32_t conn_uuid)
                             }
                         }
                     } else {
-                        log("invalid groupId. fromId=%u, groupId=%u", nFromId, nToId);
+                        log_info("invalid groupId. fromId=%u, groupId=%u", nFromId, nToId);
                         delete pPduResp;
                         return;
                     }
@@ -134,7 +134,7 @@ void sendMessage(CImPdu* pPdu, uint32_t conn_uuid)
                             }
                         }
                     } else {
-                        log("invalid groupId. fromId=%u, groupId=%u", nFromId, nToId);
+                        log_info("invalid groupId. fromId=%u, groupId=%u", nFromId, nToId);
                         delete pPduResp;
                         return;
                     }
@@ -156,13 +156,13 @@ void sendMessage(CImPdu* pPdu, uint32_t conn_uuid)
                                 CSessionModel::getInstance()->updateSession(nSessionId, nNow);
                                 CSessionModel::getInstance()->updateSession(nPeerSessionId, nNow);
                             } else {
-                                log("msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                                log_info("msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
                             }
                         } else {
-                            log("sessionId or relateId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                            log_info("sessionId or relateId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
                         }
                     } else {
-                        log("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
+                        log_info("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
                     }
 
                 } else if (nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO) {
@@ -184,17 +184,17 @@ void sendMessage(CImPdu* pPdu, uint32_t conn_uuid)
                                 CSessionModel::getInstance()->updateSession(nSessionId, nNow);
                                 CSessionModel::getInstance()->updateSession(nPeerSessionId, nNow);
                             } else {
-                                log("msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                                log_info("msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
                             }
                         } else {
-                            log("sessionId or relateId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                            log_info("sessionId or relateId is invalid. fromId=%u, toId=%u, nRelateId=%u, nSessionId=%u, nMsgType=%u", nFromId, nToId, nRelateId, nSessionId, nMsgType);
                         }
                     } else {
-                        log("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
+                        log_info("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
                     }
                 }
 
-                log("fromId=%u, toId=%u, type=%u, msgId=%u, sessionId=%u", nFromId, nToId, nMsgType, nMsgId, nSessionId);
+                log_info("fromId=%u, toId=%u, type=%u, msgId=%u, sessionId=%u", nFromId, nToId, nMsgType, nMsgId, nSessionId);
 
                 msg.set_msg_id(nMsgId);
                 pPduResp->SetPBMsg(&msg);
@@ -203,13 +203,13 @@ void sendMessage(CImPdu* pPdu, uint32_t conn_uuid)
                 pPduResp->SetCommandId(IM::BaseDefine::CID_MSG_DATA);
                 CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
             } else {
-                log("msgLen error. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
+                log_info("msgLen error. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
             }
         } else {
-            log("invalid msgType.fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
+            log_info("invalid msgType.fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -246,7 +246,7 @@ void getMessageById(CImPdu* pPdu, uint32_t conn_uuid)
                 pMsg->set_msg_type(it->msg_type());
                 pMsg->set_msg_data(it->msg_data());
             }
-            log("userId=%u, peerId=%u, sessionType=%u, reqMsgCnt=%u, resMsgCnt=%u", nUserId, nPeerId, nType, msg.msg_id_list_size(), msgResp.msg_list_size());
+            log_info("userId=%u, peerId=%u, sessionType=%u, reqMsgCnt=%u, resMsgCnt=%u", nUserId, nPeerId, nType, msg.msg_id_list_size(), msgResp.msg_list_size());
             msgResp.set_attach_data(msg.attach_data());
             pPduResp->SetPBMsg(&msgResp);
             pPduResp->SetSeqNum(pPdu->GetSeqNum());
@@ -254,10 +254,10 @@ void getMessageById(CImPdu* pPdu, uint32_t conn_uuid)
             pPduResp->SetCommandId(IM::BaseDefine::CID_MSG_GET_BY_MSG_ID_RES);
             CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
         } else {
-            log("invalid sessionType. fromId=%u, toId=%u, sessionType=%u, msgCnt=%u", nUserId, nPeerId, nType, nCnt);
+            log_info("invalid sessionType. fromId=%u, toId=%u, sessionType=%u, msgCnt=%u", nUserId, nPeerId, nType, nCnt);
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 
@@ -286,7 +286,7 @@ void getLatestMsgId(CImPdu* pPdu, uint32_t conn_uuid)
                 CGroupMessageModel::getInstance()->getLastMsg(nPeerId, nMsgId, strMsg, nMsgType, nFromId);
             }
             msgResp.set_latest_msg_id(nMsgId);
-            log("userId=%u, peerId=%u, sessionType=%u, msgId=%u", nUserId, nPeerId, nType, nMsgId);
+            log_info("userId=%u, peerId=%u, sessionType=%u, msgId=%u", nUserId, nPeerId, nType, nMsgId);
             msgResp.set_attach_data(msg.attach_data());
             pPduResp->SetPBMsg(&msgResp);
             pPduResp->SetSeqNum(pPdu->GetSeqNum());
@@ -295,10 +295,10 @@ void getLatestMsgId(CImPdu* pPdu, uint32_t conn_uuid)
             CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
 
         } else {
-            log("invalid sessionType. userId=%u, peerId=%u, sessionType=%u", nUserId, nPeerId, nType);
+            log_info("invalid sessionType. userId=%u, peerId=%u, sessionType=%u", nUserId, nPeerId, nType);
         }
     } else {
-        log("parse pb failed");
+        log_info("parse pb failed");
     }
 }
 

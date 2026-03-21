@@ -47,7 +47,7 @@ void CDepartModel::getChgedDeptId(uint32_t& nLastTime, list<uint32_t>& lsChanged
         pDBManager->RelDBConn(pDBConn);
     } else {
         // 3.如果未能获取到数据库连接对象 记录错误日志
-        log("no db connection for teamtalk_slave.");
+        log_info("no db connection for teamtalk_slave.");
     }
 }
 
@@ -55,7 +55,7 @@ void CDepartModel::getChgedDeptId(uint32_t& nLastTime, list<uint32_t>& lsChanged
 void CDepartModel::getDepts(list<uint32_t>& lsDeptIds, list<IM::BaseDefine::DepartInfo>& lsDepts)
 {
     if (lsDeptIds.empty()) {
-        log("list is empty");
+        log_info("list is empty");
         return;
     }
 
@@ -106,7 +106,7 @@ void CDepartModel::getDepts(list<uint32_t>& lsDeptIds, list<IM::BaseDefine::Depa
         pDBManager->RelDBConn(pDBConn);
     } else {
         // 3.未能获取到数据库连接对象 则记录日志
-        log("no db connection for teamtalk_slave");
+        log_info("no db connection for teamtalk_slave");
     }
 }
 
@@ -136,6 +136,6 @@ void CDepartModel::getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept)
         }
         pDBManager->RelDBConn(pDBConn);
     } else {
-        log("no db connection for teamtalk_slave");
+        log_info("no db connection for teamtalk_slave");
     }
 }

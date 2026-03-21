@@ -9,7 +9,7 @@
 #ifndef MSGCONN_H_
 #define MSGCONN_H_
 
-#include "imconn.h"
+#include "im_conn.h"
 
 #define KICK_FROM_ROUTE_SERVER 1
 #define MAX_ONLINE_FRIEND_CNT 100 // 通知好友状态通知的最多个数

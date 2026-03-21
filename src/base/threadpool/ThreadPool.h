@@ -13,7 +13,6 @@
 #include <pthread.h>
 #include "Task.h"
 #include "Thread.h"
-#include "common/ostype.h"
 
 class CWorkerThread
 {

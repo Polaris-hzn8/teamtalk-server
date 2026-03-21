@@ -11,7 +11,7 @@
 #ifndef __FILE_SERVER_UTIL_H__
 #define __FILE_SERVER_TUIL_H__
 
-#include <imconn.h>
+#include <im_conn.h>
 #include <pthread.h>
 #include <uuid/uuid.h>
 
@@ -154,13 +154,13 @@ typedef struct transfer_task_t {
 
     void lock(int n)
     {
-        //    	log("++++++++++++++++++++++ lock %d %s\n", n, task_id.c_str());
+        //    	log_info("++++++++++++++++++++++ lock %d %s\n", n, task_id.c_str());
         pthread_rwlock_wrlock(&task_lock);
     }
 
     void unlock(int n)
     {
-        //    	log("++++++++++++++++++++++unlock %d %s\n", n, task_id.c_str());
+        //    	log_info("++++++++++++++++++++++unlock %d %s\n", n, task_id.c_str());
         pthread_rwlock_unlock(&task_lock);
     }
 

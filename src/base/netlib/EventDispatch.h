@@ -12,11 +12,12 @@
 #ifndef __EVENT_DISPATCH_H__
 #define __EVENT_DISPATCH_H__
 
-#include "common/util.h"
-#include "common/Lock.h"
-#include "common/ostype.h"
+#include "util.h"
+#include "Lock.h"
+#include "ostype.h"
 
-enum {
+enum
+{
 	SOCKET_READ		= 0x1,
 	SOCKET_WRITE	= 0x2,
 	SOCKET_EXCEP	= 0x4,

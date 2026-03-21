@@ -40,7 +40,7 @@ void CFileHandler::HandleClientFileRequest(CMsgConn* pMsgConn, CImPdu* pPdu)
     std::string file_name = msg.file_name();
     uint32_t file_size = msg.file_size();
     uint32_t trans_mode = msg.trans_mode();
-    log("HandleClientFileRequest, %u->%u, fileName: %s, trans_mode: %u.", from_id, to_id, file_name.c_str(), trans_mode);
+    log_info("HandleClientFileRequest, %u->%u, fileName: %s, trans_mode: %u.", from_id, to_id, file_name.c_str(), trans_mode);
 
     CDbAttachData attach(ATTACH_TYPE_HANDLE, pMsgConn->GetHandle());
     CFileServConn* pFileConn = get_random_file_serv_conn();
@@ -86,7 +86,7 @@ void CFileHandler::HandleClientFileRequest(CMsgConn* pMsgConn, CImPdu* pPdu)
             }
         }
     } else {
-        log("HandleClientFileRequest, no file server.   ");
+        log_info("HandleClientFileRequest, no file server.   ");
         IM::File::IMFileRsp msg2;
         msg2.set_result_code(1);
         msg2.set_from_user_id(from_id);
@@ -106,7 +106,7 @@ void CFileHandler::HandleClientFileRequest(CMsgConn* pMsgConn, CImPdu* pPdu)
 void CFileHandler::HandleClientFileHasOfflineReq(CMsgConn* pMsgConn, CImPdu* pPdu)
 {
     uint32_t req_user_id = pMsgConn->GetUserId();
-    log("HandleClientFileHasOfflineReq, req_id=%u   ", req_user_id);
+    log_info("HandleClientFileHasOfflineReq, req_id=%u   ", req_user_id);
 
     CDbAttachData attach_data(ATTACH_TYPE_HANDLE, pMsgConn->GetHandle(), 0);
     CDBServConn* pDbConn = get_db_serv_conn();
@@ -118,7 +118,7 @@ void CFileHandler::HandleClientFileHasOfflineReq(CMsgConn* pMsgConn, CImPdu* pPd
         pPdu->SetPBMsg(&msg);
         pDbConn->SendPdu(pPdu);
     } else {
-        log("warning no DB connection available ");
+        log_info("warning no DB connection available ");
         IM::File::IMFileHasOfflineRsp msg;
         msg.set_user_id(req_user_id);
         CImPdu pdu;
@@ -140,7 +140,7 @@ void CFileHandler::HandleClientFileAddOfflineReq(CMsgConn* pMsgConn, CImPdu* pPd
     string task_id = msg.task_id();
     string file_name = msg.file_name();
     uint32_t file_size = msg.file_size();
-    log("HandleClientFileAddOfflineReq, %u->%u, task_id: %s, file_name: %s, size: %u  ",
+    log_info("HandleClientFileAddOfflineReq, %u->%u, task_id: %s, file_name: %s, size: %u  ",
         from_id, to_id, task_id.c_str(), file_name.c_str(), file_size);
 
     CDBServConn* pDbConn = get_db_serv_conn();
@@ -193,7 +193,7 @@ void CFileHandler::HandleClientFileDelOfflineReq(CMsgConn* pMsgConn, CImPdu* pPd
     uint32_t from_id = msg.from_user_id();
     uint32_t to_id = msg.to_user_id();
     string task_id = msg.task_id();
-    log("HandleClientFileDelOfflineReq, %u->%u, task_id=%s ", from_id, to_id, task_id.c_str());
+    log_info("HandleClientFileDelOfflineReq, %u->%u, task_id=%s ", from_id, to_id, task_id.c_str());
 
     CDBServConn* pDbConn = get_db_serv_conn();
     if (pDbConn) {
@@ -211,7 +211,7 @@ void CFileHandler::HandleFileHasOfflineRes(CImPdu* pPdu)
     uint32_t req_user_id = msg.user_id();
     uint32_t file_cnt = msg.offline_file_list_size();
     CDbAttachData attach((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
-    log("HandleFileHasOfflineRes, req_id=%u, file_cnt=%u ", req_user_id, file_cnt);
+    log_info("HandleFileHasOfflineRes, req_id=%u, file_cnt=%u ", req_user_id, file_cnt);
 
     CMsgConn* pConn = CImUserManager::GetInstance()->GetMsgConnByHandle(req_user_id,
         attach.GetHandle());
@@ -226,7 +226,7 @@ void CFileHandler::HandleFileHasOfflineRes(CImPdu* pPdu)
             ip_addr->set_port(ip_addr_tmp.port());
         }
     } else {
-        log("HandleFileHasOfflineRes, no file server. ");
+        log_info("HandleFileHasOfflineRes, no file server. ");
     }
     if (pConn) {
         pPdu->SetPBMsg(&msg);
@@ -247,7 +247,7 @@ void CFileHandler::HandleFileNotify(CImPdu* pPdu)
     uint32_t ip_addr_cnt = msg.ip_addr_list_size();
     uint32_t trans_mode = msg.trans_mode();
     uint32_t offline_ready = msg.offline_ready();
-    log("HandleFileNotify, from_id: %u, to_id: %u, file_name: %s, task_id: %s, trans_mode: %u,\
+    log_info("HandleFileNotify, from_id: %u, to_id: %u, file_name: %s, task_id: %s, trans_mode: %u,\
         offline_ready: %u. ",
         from_user_id, to_user_id, file_name.c_str(), task_id.c_str(),
         trans_mode, offline_ready);

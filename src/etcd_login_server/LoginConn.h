@@ -10,7 +10,7 @@
 #ifndef LOGINCONN_H_
 #define LOGINCONN_H_
 
-#include "imconn.h"
+#include "im_conn.h"
 
 enum {
 	LOGIN_CONN_TYPE_CLIENT = 1,
