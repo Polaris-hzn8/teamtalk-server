@@ -6,16 +6,16 @@
  brief: 
 */
 
-#ifndef THREADPOOL_H_
-#define THREADPOOL_H_
+#ifndef _THREADPOOL_H_
+#define _THREADPOOL_H_
 
 #include <list>
 #include <pthread.h>
+
 #include "Task.h"
 #include "Thread.h"
 
-class CWorkerThread
-{
+class CWorkerThread {
 public:
 	CWorkerThread();
 	~CWorkerThread();
@@ -34,8 +34,7 @@ private:
 	std::list<CTask*>	m_task_list;		//线程任务队列
 };
 
-class CThreadPool
-{
+class CThreadPool {
 public:
 	CThreadPool();
 	virtual ~CThreadPool();

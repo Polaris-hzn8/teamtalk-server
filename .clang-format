@@ -1,0 +1,2 @@
+# Google C/C++ style — used by scripts/format_google_style.sh and clang-format IDEs.
+BasedOnStyle: Google
