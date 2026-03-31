@@ -19,17 +19,17 @@
 #error regenerate this file with a newer version of protoc.
 #endif
 
+#include <google/protobuf/extension_set.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>
-#include <google/protobuf/extension_set.h>
 // @@protoc_insertion_point(includes)
 
 namespace IM {
 namespace SwitchService {
 
 // Internal implementation detail -- do not call these.
-void  protobuf_AddDesc_IM_2eSwitchService_2eproto();
+void protobuf_AddDesc_IM_2eSwitchService_2eproto();
 void protobuf_AssignDesc_IM_2eSwitchService_2eproto();
 void protobuf_ShutdownFile_IM_2eSwitchService_2eproto();
 
@@ -53,13 +53,11 @@ class IMP2PCmdMsg : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMP2PCmdMsg& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -67,7 +65,7 @@ class IMP2PCmdMsg : public ::google::protobuf::MessageLite {
   static inline const IMP2PCmdMsg* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMP2PCmdMsg* other);
 
@@ -87,11 +85,13 @@ class IMP2PCmdMsg : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -140,11 +140,11 @@ class IMP2PCmdMsg : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 from_user_id_;
   ::google::protobuf::uint32 to_user_id_;
   ::std::string* cmd_msg_data_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eSwitchService_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eSwitchService_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eSwitchService_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eSwitchService_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eSwitchService_2eproto();
   friend void protobuf_ShutdownFile_IM_2eSwitchService_2eproto();
 
@@ -152,7 +152,6 @@ class IMP2PCmdMsg : public ::google::protobuf::MessageLite {
   static IMP2PCmdMsg* default_instance_;
 };
 // ===================================================================
-
 
 // ===================================================================
 
@@ -186,9 +185,7 @@ inline void IMP2PCmdMsg::set_from_user_id(::google::protobuf::uint32 value) {
 inline bool IMP2PCmdMsg::has_to_user_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMP2PCmdMsg::set_has_to_user_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMP2PCmdMsg::set_has_to_user_id() { _has_bits_[0] |= 0x00000002u; }
 inline void IMP2PCmdMsg::clear_has_to_user_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
@@ -217,7 +214,8 @@ inline void IMP2PCmdMsg::clear_has_cmd_msg_data() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMP2PCmdMsg::clear_cmd_msg_data() {
-  if (cmd_msg_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (cmd_msg_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     cmd_msg_data_->clear();
   }
   clear_has_cmd_msg_data();
@@ -228,7 +226,8 @@ inline const ::std::string& IMP2PCmdMsg::cmd_msg_data() const {
 }
 inline void IMP2PCmdMsg::set_cmd_msg_data(const ::std::string& value) {
   set_has_cmd_msg_data();
-  if (cmd_msg_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (cmd_msg_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     cmd_msg_data_ = new ::std::string;
   }
   cmd_msg_data_->assign(value);
@@ -236,7 +235,8 @@ inline void IMP2PCmdMsg::set_cmd_msg_data(const ::std::string& value) {
 }
 inline void IMP2PCmdMsg::set_cmd_msg_data(const char* value) {
   set_has_cmd_msg_data();
-  if (cmd_msg_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (cmd_msg_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     cmd_msg_data_ = new ::std::string;
   }
   cmd_msg_data_->assign(value);
@@ -244,7 +244,8 @@ inline void IMP2PCmdMsg::set_cmd_msg_data(const char* value) {
 }
 inline void IMP2PCmdMsg::set_cmd_msg_data(const char* value, size_t size) {
   set_has_cmd_msg_data();
-  if (cmd_msg_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (cmd_msg_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     cmd_msg_data_ = new ::std::string;
   }
   cmd_msg_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -252,7 +253,8 @@ inline void IMP2PCmdMsg::set_cmd_msg_data(const char* value, size_t size) {
 }
 inline ::std::string* IMP2PCmdMsg::mutable_cmd_msg_data() {
   set_has_cmd_msg_data();
-  if (cmd_msg_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (cmd_msg_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     cmd_msg_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.SwitchService.IMP2PCmdMsg.cmd_msg_data)
@@ -260,16 +262,20 @@ inline ::std::string* IMP2PCmdMsg::mutable_cmd_msg_data() {
 }
 inline ::std::string* IMP2PCmdMsg::release_cmd_msg_data() {
   clear_has_cmd_msg_data();
-  if (cmd_msg_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (cmd_msg_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = cmd_msg_data_;
-    cmd_msg_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    cmd_msg_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMP2PCmdMsg::set_allocated_cmd_msg_data(::std::string* cmd_msg_data) {
-  if (cmd_msg_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMP2PCmdMsg::set_allocated_cmd_msg_data(
+    ::std::string* cmd_msg_data) {
+  if (cmd_msg_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete cmd_msg_data_;
   }
   if (cmd_msg_data) {
@@ -277,11 +283,11 @@ inline void IMP2PCmdMsg::set_allocated_cmd_msg_data(::std::string* cmd_msg_data)
     cmd_msg_data_ = cmd_msg_data;
   } else {
     clear_has_cmd_msg_data();
-    cmd_msg_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    cmd_msg_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.SwitchService.IMP2PCmdMsg.cmd_msg_data)
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

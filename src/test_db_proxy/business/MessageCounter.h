@@ -17,6 +17,6 @@ void clearUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid);
 
 void setDevicesToken(CImPdu* pPdu, uint32_t conn_uuid);
 void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid);
-};
+};  // namespace DB_PROXY
 
 #endif /* MESSAGECOUNTER_H_ */

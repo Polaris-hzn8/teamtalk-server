@@ -6,11 +6,11 @@
 
 #include <algorithm>
 
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/once.h>
-#include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
-#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 // @@protoc_insertion_point(includes)
 
 namespace IM {
@@ -34,14 +34,16 @@ void protobuf_AddDesc_IM_2eSwitchService_2eproto() {
 #endif
   IMP2PCmdMsg::default_instance_ = new IMP2PCmdMsg();
   IMP2PCmdMsg::default_instance_->InitAsDefaultInstance();
-  ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_IM_2eSwitchService_2eproto);
+  ::google::protobuf::internal::OnShutdown(
+      &protobuf_ShutdownFile_IM_2eSwitchService_2eproto);
 }
 
 #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_IM_2eSwitchService_2eproto_once_);
 void protobuf_AddDesc_IM_2eSwitchService_2eproto() {
-  ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_IM_2eSwitchService_2eproto_once_,
-                 &protobuf_AddDesc_IM_2eSwitchService_2eproto_impl);
+  ::google::protobuf::GoogleOnceInit(
+      &protobuf_AddDesc_IM_2eSwitchService_2eproto_once_,
+      &protobuf_AddDesc_IM_2eSwitchService_2eproto_impl);
 }
 #else
 // Force AddDescriptors() to be called at static initialization time.
@@ -60,17 +62,15 @@ const int IMP2PCmdMsg::kToUserIdFieldNumber;
 const int IMP2PCmdMsg::kCmdMsgDataFieldNumber;
 #endif  // !_MSC_VER
 
-IMP2PCmdMsg::IMP2PCmdMsg()
-  : ::google::protobuf::MessageLite() {
+IMP2PCmdMsg::IMP2PCmdMsg() : ::google::protobuf::MessageLite() {
   SharedCtor();
   // @@protoc_insertion_point(constructor:IM.SwitchService.IMP2PCmdMsg)
 }
 
-void IMP2PCmdMsg::InitAsDefaultInstance() {
-}
+void IMP2PCmdMsg::InitAsDefaultInstance() {}
 
 IMP2PCmdMsg::IMP2PCmdMsg(const IMP2PCmdMsg& from)
-  : ::google::protobuf::MessageLite() {
+    : ::google::protobuf::MessageLite() {
   SharedCtor();
   MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:IM.SwitchService.IMP2PCmdMsg)
@@ -81,7 +81,8 @@ void IMP2PCmdMsg::SharedCtor() {
   _cached_size_ = 0;
   from_user_id_ = 0u;
   to_user_id_ = 0u;
-  cmd_msg_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  cmd_msg_data_ = const_cast< ::std::string*>(
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -91,14 +92,15 @@ IMP2PCmdMsg::~IMP2PCmdMsg() {
 }
 
 void IMP2PCmdMsg::SharedDtor() {
-  if (cmd_msg_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (cmd_msg_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete cmd_msg_data_;
   }
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   if (this != &default_instance()) {
-  #else
+#else
   if (this != default_instance_) {
-  #endif
+#endif
   }
 }
 
@@ -118,25 +120,25 @@ const IMP2PCmdMsg& IMP2PCmdMsg::default_instance() {
 
 IMP2PCmdMsg* IMP2PCmdMsg::default_instance_ = NULL;
 
-IMP2PCmdMsg* IMP2PCmdMsg::New() const {
-  return new IMP2PCmdMsg;
-}
+IMP2PCmdMsg* IMP2PCmdMsg::New() const { return new IMP2PCmdMsg; }
 
 void IMP2PCmdMsg::Clear() {
-#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
-  &reinterpret_cast<IMP2PCmdMsg*>(16)->f) - \
+#define OFFSET_OF_FIELD_(f)                                          \
+  (reinterpret_cast<char*>(&reinterpret_cast<IMP2PCmdMsg*>(16)->f) - \
    reinterpret_cast<char*>(16))
 
-#define ZR_(first, last) do {                              \
-    size_t f = OFFSET_OF_FIELD_(first);                    \
-    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
-    ::memset(&first, 0, n);                                \
+#define ZR_(first, last)                                  \
+  do {                                                    \
+    size_t f = OFFSET_OF_FIELD_(first);                   \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last); \
+    ::memset(&first, 0, n);                               \
   } while (0)
 
   if (_has_bits_[0 / 32] & 7) {
     ZR_(from_user_id_, to_user_id_);
     if (has_cmd_msg_data()) {
-      if (cmd_msg_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+      if (cmd_msg_data_ !=
+          &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         cmd_msg_data_->clear();
       }
     }
@@ -151,7 +153,8 @@ void IMP2PCmdMsg::Clear() {
 
 bool IMP2PCmdMsg::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+#define DO_(EXPRESSION) \
+  if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
   ::google::protobuf::io::StringOutputStream unknown_fields_string(
       mutable_unknown_fields());
@@ -159,16 +162,19 @@ bool IMP2PCmdMsg::MergePartialFromCodedStream(
       &unknown_fields_string);
   // @@protoc_insertion_point(parse_start:IM.SwitchService.IMP2PCmdMsg)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p =
+        input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
-    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+    switch (
+        ::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
       // required uint32 from_user_id = 1;
       case 1: {
         if (tag == 8) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &from_user_id_)));
+               ::google::protobuf::uint32,
+               ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+              input, &from_user_id_)));
           set_has_from_user_id();
         } else {
           goto handle_unusual;
@@ -180,10 +186,11 @@ bool IMP2PCmdMsg::MergePartialFromCodedStream(
       // required uint32 to_user_id = 2;
       case 2: {
         if (tag == 16) {
-         parse_to_user_id:
+        parse_to_user_id:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &to_user_id_)));
+               ::google::protobuf::uint32,
+               ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+              input, &to_user_id_)));
           set_has_to_user_id();
         } else {
           goto handle_unusual;
@@ -195,9 +202,9 @@ bool IMP2PCmdMsg::MergePartialFromCodedStream(
       // required string cmd_msg_data = 3;
       case 3: {
         if (tag == 26) {
-         parse_cmd_msg_data:
+        parse_cmd_msg_data:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_cmd_msg_data()));
+              input, this->mutable_cmd_msg_data()));
         } else {
           goto handle_unusual;
         }
@@ -209,7 +216,8 @@ bool IMP2PCmdMsg::MergePartialFromCodedStream(
       handle_unusual:
         if (tag == 0 ||
             ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+                ::google::protobuf::internal::WireFormatLite::
+                    WIRETYPE_END_GROUP) {
           goto success;
         }
         DO_(::google::protobuf::internal::WireFormatLite::SkipField(
@@ -232,22 +240,23 @@ void IMP2PCmdMsg::SerializeWithCachedSizes(
   // @@protoc_insertion_point(serialize_start:IM.SwitchService.IMP2PCmdMsg)
   // required uint32 from_user_id = 1;
   if (has_from_user_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->from_user_id(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+        1, this->from_user_id(), output);
   }
 
   // required uint32 to_user_id = 2;
   if (has_to_user_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->to_user_id(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+        2, this->to_user_id(), output);
   }
 
   // required string cmd_msg_data = 3;
   if (has_cmd_msg_data()) {
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->cmd_msg_data(), output);
+        3, this->cmd_msg_data(), output);
   }
 
-  output->WriteRaw(unknown_fields().data(),
-                   unknown_fields().size());
+  output->WriteRaw(unknown_fields().data(), unknown_fields().size());
   // @@protoc_insertion_point(serialize_end:IM.SwitchService.IMP2PCmdMsg)
 }
 
@@ -257,25 +266,24 @@ int IMP2PCmdMsg::ByteSize() const {
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     // required uint32 from_user_id = 1;
     if (has_from_user_id()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->from_user_id());
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::UInt32Size(
+                  this->from_user_id());
     }
 
     // required uint32 to_user_id = 2;
     if (has_to_user_id()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->to_user_id());
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::UInt32Size(
+                  this->to_user_id());
     }
 
     // required string cmd_msg_data = 3;
     if (has_cmd_msg_data()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->cmd_msg_data());
+      total_size +=
+          1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                  this->cmd_msg_data());
     }
-
   }
   total_size += unknown_fields().size();
 
@@ -332,7 +340,6 @@ void IMP2PCmdMsg::Swap(IMP2PCmdMsg* other) {
 ::std::string IMP2PCmdMsg::GetTypeName() const {
   return "IM.SwitchService.IMP2PCmdMsg";
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

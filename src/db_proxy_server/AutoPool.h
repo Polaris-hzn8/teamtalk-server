@@ -13,22 +13,22 @@ class CDBConn;
 class CacheConn;
 
 // 数据库连接管理
-class CAutoDB
-{
-public:
-    CAutoDB(const char* pDBName, CDBConn** pDBConn);
-    ~CAutoDB();
-private:
-    CDBConn* m_pDBConn;
+class CAutoDB {
+ public:
+  CAutoDB(const char* pDBName, CDBConn** pDBConn);
+  ~CAutoDB();
+
+ private:
+  CDBConn* m_pDBConn;
 };
 
 // 缓存连接管理
-class CAutoCache
-{
-    CAutoCache(const char* pCacheName, CacheConn** pCacheConn);
-    ~CAutoCache();
-private:
-    CacheConn* m_pCacheConn;
+class CAutoCache {
+  CAutoCache(const char* pCacheName, CacheConn** pCacheConn);
+  ~CAutoCache();
+
+ private:
+  CacheConn* m_pCacheConn;
 };
 
 #endif

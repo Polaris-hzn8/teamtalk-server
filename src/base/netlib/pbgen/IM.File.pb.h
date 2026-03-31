@@ -19,10 +19,10 @@
 #error regenerate this file with a newer version of protoc.
 #endif
 
+#include <google/protobuf/extension_set.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>
-#include <google/protobuf/extension_set.h>
 #include "IM.BaseDefine.pb.h"
 // @@protoc_insertion_point(includes)
 
@@ -30,7 +30,7 @@ namespace IM {
 namespace File {
 
 // Internal implementation detail -- do not call these.
-void  protobuf_AddDesc_IM_2eFile_2eproto();
+void protobuf_AddDesc_IM_2eFile_2eproto();
 void protobuf_AssignDesc_IM_2eFile_2eproto();
 void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -65,13 +65,11 @@ class IMFileLoginReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileLoginReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -79,7 +77,7 @@ class IMFileLoginReq : public ::google::protobuf::MessageLite {
   static inline const IMFileLoginReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileLoginReq* other);
 
@@ -99,11 +97,13 @@ class IMFileLoginReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -152,11 +152,11 @@ class IMFileLoginReq : public ::google::protobuf::MessageLite {
   ::std::string* task_id_;
   ::google::protobuf::uint32 user_id_;
   int file_role_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -181,13 +181,11 @@ class IMFileLoginRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileLoginRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -195,7 +193,7 @@ class IMFileLoginRsp : public ::google::protobuf::MessageLite {
   static inline const IMFileLoginRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileLoginRsp* other);
 
@@ -215,11 +213,13 @@ class IMFileLoginRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -258,11 +258,11 @@ class IMFileLoginRsp : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::std::string* task_id_;
   ::google::protobuf::uint32 result_code_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -287,13 +287,11 @@ class IMFileState : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileState& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -301,7 +299,7 @@ class IMFileState : public ::google::protobuf::MessageLite {
   static inline const IMFileState* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileState* other);
 
@@ -321,11 +319,13 @@ class IMFileState : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -374,11 +374,11 @@ class IMFileState : public ::google::protobuf::MessageLite {
   ::std::string* task_id_;
   int state_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -403,13 +403,11 @@ class IMFilePullDataReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFilePullDataReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -417,7 +415,7 @@ class IMFilePullDataReq : public ::google::protobuf::MessageLite {
   static inline const IMFilePullDataReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFilePullDataReq* other);
 
@@ -437,11 +435,13 @@ class IMFilePullDataReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -510,11 +510,11 @@ class IMFilePullDataReq : public ::google::protobuf::MessageLite {
   int trans_mode_;
   ::google::protobuf::uint32 offset_;
   ::google::protobuf::uint32 data_size_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -539,13 +539,11 @@ class IMFilePullDataRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFilePullDataRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -553,7 +551,7 @@ class IMFilePullDataRsp : public ::google::protobuf::MessageLite {
   static inline const IMFilePullDataRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFilePullDataRsp* other);
 
@@ -573,11 +571,13 @@ class IMFilePullDataRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -651,11 +651,11 @@ class IMFilePullDataRsp : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 user_id_;
   ::std::string* file_data_;
   ::google::protobuf::uint32 offset_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -680,13 +680,11 @@ class IMFileReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -694,7 +692,7 @@ class IMFileReq : public ::google::protobuf::MessageLite {
   static inline const IMFileReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileReq* other);
 
@@ -714,11 +712,13 @@ class IMFileReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -787,11 +787,11 @@ class IMFileReq : public ::google::protobuf::MessageLite {
   ::std::string* file_name_;
   ::google::protobuf::uint32 file_size_;
   int trans_mode_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -816,13 +816,11 @@ class IMFileRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -830,7 +828,7 @@ class IMFileRsp : public ::google::protobuf::MessageLite {
   static inline const IMFileRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileRsp* other);
 
@@ -850,11 +848,13 @@ class IMFileRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -913,10 +913,10 @@ class IMFileRsp : public ::google::protobuf::MessageLite {
   inline const ::IM::BaseDefine::IpAddr& ip_addr_list(int index) const;
   inline ::IM::BaseDefine::IpAddr* mutable_ip_addr_list(int index);
   inline ::IM::BaseDefine::IpAddr* add_ip_addr_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >&
-      ip_addr_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >*
-      mutable_ip_addr_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>&
+  ip_addr_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>*
+  mutable_ip_addr_list();
 
   // required .IM.BaseDefine.TransferFileType trans_mode = 7;
   inline bool has_trans_mode() const;
@@ -950,12 +950,12 @@ class IMFileRsp : public ::google::protobuf::MessageLite {
   ::std::string* task_id_;
   ::google::protobuf::uint32 to_user_id_;
   int trans_mode_;
-  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr > ip_addr_list_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr> ip_addr_list_;
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -980,13 +980,11 @@ class IMFileNotify : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileNotify& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -994,7 +992,7 @@ class IMFileNotify : public ::google::protobuf::MessageLite {
   static inline const IMFileNotify* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileNotify* other);
 
@@ -1014,11 +1012,13 @@ class IMFileNotify : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1077,10 +1077,10 @@ class IMFileNotify : public ::google::protobuf::MessageLite {
   inline const ::IM::BaseDefine::IpAddr& ip_addr_list(int index) const;
   inline ::IM::BaseDefine::IpAddr* mutable_ip_addr_list(int index);
   inline ::IM::BaseDefine::IpAddr* add_ip_addr_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >&
-      ip_addr_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >*
-      mutable_ip_addr_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>&
+  ip_addr_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>*
+  mutable_ip_addr_list();
 
   // required .IM.BaseDefine.TransferFileType trans_mode = 7;
   inline bool has_trans_mode() const;
@@ -1123,13 +1123,13 @@ class IMFileNotify : public ::google::protobuf::MessageLite {
   ::std::string* task_id_;
   ::google::protobuf::uint32 file_size_;
   int trans_mode_;
-  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr > ip_addr_list_;
+  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr> ip_addr_list_;
   ::google::protobuf::uint32 offline_ready_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -1154,13 +1154,11 @@ class IMFileHasOfflineReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileHasOfflineReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1168,7 +1166,7 @@ class IMFileHasOfflineReq : public ::google::protobuf::MessageLite {
   static inline const IMFileHasOfflineReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileHasOfflineReq* other);
 
@@ -1188,11 +1186,13 @@ class IMFileHasOfflineReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1231,11 +1231,11 @@ class IMFileHasOfflineReq : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -1260,13 +1260,11 @@ class IMFileHasOfflineRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileHasOfflineRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1274,7 +1272,7 @@ class IMFileHasOfflineRsp : public ::google::protobuf::MessageLite {
   static inline const IMFileHasOfflineRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileHasOfflineRsp* other);
 
@@ -1294,11 +1292,13 @@ class IMFileHasOfflineRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1316,13 +1316,17 @@ class IMFileHasOfflineRsp : public ::google::protobuf::MessageLite {
   inline int offline_file_list_size() const;
   inline void clear_offline_file_list();
   static const int kOfflineFileListFieldNumber = 2;
-  inline const ::IM::BaseDefine::OfflineFileInfo& offline_file_list(int index) const;
-  inline ::IM::BaseDefine::OfflineFileInfo* mutable_offline_file_list(int index);
+  inline const ::IM::BaseDefine::OfflineFileInfo& offline_file_list(
+      int index) const;
+  inline ::IM::BaseDefine::OfflineFileInfo* mutable_offline_file_list(
+      int index);
   inline ::IM::BaseDefine::OfflineFileInfo* add_offline_file_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::OfflineFileInfo >&
-      offline_file_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::OfflineFileInfo >*
-      mutable_offline_file_list();
+  inline const ::google::protobuf::RepeatedPtrField<
+      ::IM::BaseDefine::OfflineFileInfo>&
+  offline_file_list() const;
+  inline ::google::protobuf::RepeatedPtrField<
+      ::IM::BaseDefine::OfflineFileInfo>*
+  mutable_offline_file_list();
 
   // repeated .IM.BaseDefine.IpAddr ip_addr_list = 3;
   inline int ip_addr_list_size() const;
@@ -1331,10 +1335,10 @@ class IMFileHasOfflineRsp : public ::google::protobuf::MessageLite {
   inline const ::IM::BaseDefine::IpAddr& ip_addr_list(int index) const;
   inline ::IM::BaseDefine::IpAddr* mutable_ip_addr_list(int index);
   inline ::IM::BaseDefine::IpAddr* add_ip_addr_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >&
-      ip_addr_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >*
-      mutable_ip_addr_list();
+  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>&
+  ip_addr_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>*
+  mutable_ip_addr_list();
 
   // optional bytes attach_data = 20;
   inline bool has_attach_data() const;
@@ -1359,15 +1363,16 @@ class IMFileHasOfflineRsp : public ::google::protobuf::MessageLite {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::OfflineFileInfo > offline_file_list_;
-  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr > ip_addr_list_;
+  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::OfflineFileInfo>
+      offline_file_list_;
+  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr> ip_addr_list_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -1392,13 +1397,11 @@ class IMFileAddOfflineReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileAddOfflineReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1406,7 +1409,7 @@ class IMFileAddOfflineReq : public ::google::protobuf::MessageLite {
   static inline const IMFileAddOfflineReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileAddOfflineReq* other);
 
@@ -1426,11 +1429,13 @@ class IMFileAddOfflineReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1504,11 +1509,11 @@ class IMFileAddOfflineReq : public ::google::protobuf::MessageLite {
   ::std::string* task_id_;
   ::std::string* file_name_;
   ::google::protobuf::uint32 file_size_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -1533,13 +1538,11 @@ class IMFileDelOfflineReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMFileDelOfflineReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1547,7 +1550,7 @@ class IMFileDelOfflineReq : public ::google::protobuf::MessageLite {
   static inline const IMFileDelOfflineReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMFileDelOfflineReq* other);
 
@@ -1567,11 +1570,13 @@ class IMFileDelOfflineReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1620,11 +1625,11 @@ class IMFileDelOfflineReq : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 from_user_id_;
   ::google::protobuf::uint32 to_user_id_;
   ::std::string* task_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eFile_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eFile_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eFile_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eFile_2eproto();
   friend void protobuf_ShutdownFile_IM_2eFile_2eproto();
 
@@ -1632,7 +1637,6 @@ class IMFileDelOfflineReq : public ::google::protobuf::MessageLite {
   static IMFileDelOfflineReq* default_instance_;
 };
 // ===================================================================
-
 
 // ===================================================================
 
@@ -1642,9 +1646,7 @@ class IMFileDelOfflineReq : public ::google::protobuf::MessageLite {
 inline bool IMFileLoginReq::has_user_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMFileLoginReq::set_has_user_id() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMFileLoginReq::set_has_user_id() { _has_bits_[0] |= 0x00000001u; }
 inline void IMFileLoginReq::clear_has_user_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
@@ -1666,14 +1668,13 @@ inline void IMFileLoginReq::set_user_id(::google::protobuf::uint32 value) {
 inline bool IMFileLoginReq::has_task_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMFileLoginReq::set_has_task_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMFileLoginReq::set_has_task_id() { _has_bits_[0] |= 0x00000002u; }
 inline void IMFileLoginReq::clear_has_task_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMFileLoginReq::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -1684,7 +1685,8 @@ inline const ::std::string& IMFileLoginReq::task_id() const {
 }
 inline void IMFileLoginReq::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -1692,7 +1694,8 @@ inline void IMFileLoginReq::set_task_id(const ::std::string& value) {
 }
 inline void IMFileLoginReq::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -1700,7 +1703,8 @@ inline void IMFileLoginReq::set_task_id(const char* value) {
 }
 inline void IMFileLoginReq::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -1708,7 +1712,8 @@ inline void IMFileLoginReq::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFileLoginReq::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileLoginReq.task_id)
@@ -1716,16 +1721,19 @@ inline ::std::string* IMFileLoginReq::mutable_task_id() {
 }
 inline ::std::string* IMFileLoginReq::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileLoginReq::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -1733,7 +1741,8 @@ inline void IMFileLoginReq::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileLoginReq.task_id)
 }
@@ -1754,9 +1763,10 @@ inline void IMFileLoginReq::clear_file_role() {
 }
 inline ::IM::BaseDefine::ClientFileRole IMFileLoginReq::file_role() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileLoginReq.file_role)
-  return static_cast< ::IM::BaseDefine::ClientFileRole >(file_role_);
+  return static_cast< ::IM::BaseDefine::ClientFileRole>(file_role_);
 }
-inline void IMFileLoginReq::set_file_role(::IM::BaseDefine::ClientFileRole value) {
+inline void IMFileLoginReq::set_file_role(
+    ::IM::BaseDefine::ClientFileRole value) {
   assert(::IM::BaseDefine::ClientFileRole_IsValid(value));
   set_has_file_role();
   file_role_ = value;
@@ -1795,14 +1805,13 @@ inline void IMFileLoginRsp::set_result_code(::google::protobuf::uint32 value) {
 inline bool IMFileLoginRsp::has_task_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMFileLoginRsp::set_has_task_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMFileLoginRsp::set_has_task_id() { _has_bits_[0] |= 0x00000002u; }
 inline void IMFileLoginRsp::clear_has_task_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMFileLoginRsp::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -1813,7 +1822,8 @@ inline const ::std::string& IMFileLoginRsp::task_id() const {
 }
 inline void IMFileLoginRsp::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -1821,7 +1831,8 @@ inline void IMFileLoginRsp::set_task_id(const ::std::string& value) {
 }
 inline void IMFileLoginRsp::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -1829,7 +1840,8 @@ inline void IMFileLoginRsp::set_task_id(const char* value) {
 }
 inline void IMFileLoginRsp::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -1837,7 +1849,8 @@ inline void IMFileLoginRsp::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFileLoginRsp::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileLoginRsp.task_id)
@@ -1845,16 +1858,19 @@ inline ::std::string* IMFileLoginRsp::mutable_task_id() {
 }
 inline ::std::string* IMFileLoginRsp::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileLoginRsp::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -1862,7 +1878,8 @@ inline void IMFileLoginRsp::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileLoginRsp.task_id)
 }
@@ -1875,19 +1892,15 @@ inline void IMFileLoginRsp::set_allocated_task_id(::std::string* task_id) {
 inline bool IMFileState::has_state() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMFileState::set_has_state() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void IMFileState::clear_has_state() {
-  _has_bits_[0] &= ~0x00000001u;
-}
+inline void IMFileState::set_has_state() { _has_bits_[0] |= 0x00000001u; }
+inline void IMFileState::clear_has_state() { _has_bits_[0] &= ~0x00000001u; }
 inline void IMFileState::clear_state() {
   state_ = 0;
   clear_has_state();
 }
 inline ::IM::BaseDefine::ClientFileState IMFileState::state() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileState.state)
-  return static_cast< ::IM::BaseDefine::ClientFileState >(state_);
+  return static_cast< ::IM::BaseDefine::ClientFileState>(state_);
 }
 inline void IMFileState::set_state(::IM::BaseDefine::ClientFileState value) {
   assert(::IM::BaseDefine::ClientFileState_IsValid(value));
@@ -1900,14 +1913,11 @@ inline void IMFileState::set_state(::IM::BaseDefine::ClientFileState value) {
 inline bool IMFileState::has_task_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMFileState::set_has_task_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void IMFileState::clear_has_task_id() {
-  _has_bits_[0] &= ~0x00000002u;
-}
+inline void IMFileState::set_has_task_id() { _has_bits_[0] |= 0x00000002u; }
+inline void IMFileState::clear_has_task_id() { _has_bits_[0] &= ~0x00000002u; }
 inline void IMFileState::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -1918,7 +1928,8 @@ inline const ::std::string& IMFileState::task_id() const {
 }
 inline void IMFileState::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -1926,7 +1937,8 @@ inline void IMFileState::set_task_id(const ::std::string& value) {
 }
 inline void IMFileState::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -1934,7 +1946,8 @@ inline void IMFileState::set_task_id(const char* value) {
 }
 inline void IMFileState::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -1942,7 +1955,8 @@ inline void IMFileState::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFileState::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileState.task_id)
@@ -1950,16 +1964,19 @@ inline ::std::string* IMFileState::mutable_task_id() {
 }
 inline ::std::string* IMFileState::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileState::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -1967,7 +1984,8 @@ inline void IMFileState::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileState.task_id)
 }
@@ -1976,12 +1994,8 @@ inline void IMFileState::set_allocated_task_id(::std::string* task_id) {
 inline bool IMFileState::has_user_id() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void IMFileState::set_has_user_id() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void IMFileState::clear_has_user_id() {
-  _has_bits_[0] &= ~0x00000004u;
-}
+inline void IMFileState::set_has_user_id() { _has_bits_[0] |= 0x00000004u; }
+inline void IMFileState::clear_has_user_id() { _has_bits_[0] &= ~0x00000004u; }
 inline void IMFileState::clear_user_id() {
   user_id_ = 0u;
   clear_has_user_id();
@@ -2011,7 +2025,8 @@ inline void IMFilePullDataReq::clear_has_task_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
 inline void IMFilePullDataReq::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -2022,7 +2037,8 @@ inline const ::std::string& IMFilePullDataReq::task_id() const {
 }
 inline void IMFilePullDataReq::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -2030,7 +2046,8 @@ inline void IMFilePullDataReq::set_task_id(const ::std::string& value) {
 }
 inline void IMFilePullDataReq::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -2038,7 +2055,8 @@ inline void IMFilePullDataReq::set_task_id(const char* value) {
 }
 inline void IMFilePullDataReq::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -2046,7 +2064,8 @@ inline void IMFilePullDataReq::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFilePullDataReq::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFilePullDataReq.task_id)
@@ -2054,16 +2073,19 @@ inline ::std::string* IMFilePullDataReq::mutable_task_id() {
 }
 inline ::std::string* IMFilePullDataReq::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFilePullDataReq::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -2071,7 +2093,8 @@ inline void IMFilePullDataReq::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFilePullDataReq.task_id)
 }
@@ -2114,11 +2137,13 @@ inline void IMFilePullDataReq::clear_trans_mode() {
   trans_mode_ = 1;
   clear_has_trans_mode();
 }
-inline ::IM::BaseDefine::TransferFileType IMFilePullDataReq::trans_mode() const {
+inline ::IM::BaseDefine::TransferFileType IMFilePullDataReq::trans_mode()
+    const {
   // @@protoc_insertion_point(field_get:IM.File.IMFilePullDataReq.trans_mode)
-  return static_cast< ::IM::BaseDefine::TransferFileType >(trans_mode_);
+  return static_cast< ::IM::BaseDefine::TransferFileType>(trans_mode_);
 }
-inline void IMFilePullDataReq::set_trans_mode(::IM::BaseDefine::TransferFileType value) {
+inline void IMFilePullDataReq::set_trans_mode(
+    ::IM::BaseDefine::TransferFileType value) {
   assert(::IM::BaseDefine::TransferFileType_IsValid(value));
   set_has_trans_mode();
   trans_mode_ = value;
@@ -2195,7 +2220,8 @@ inline ::google::protobuf::uint32 IMFilePullDataRsp::result_code() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFilePullDataRsp.result_code)
   return result_code_;
 }
-inline void IMFilePullDataRsp::set_result_code(::google::protobuf::uint32 value) {
+inline void IMFilePullDataRsp::set_result_code(
+    ::google::protobuf::uint32 value) {
   set_has_result_code();
   result_code_ = value;
   // @@protoc_insertion_point(field_set:IM.File.IMFilePullDataRsp.result_code)
@@ -2212,7 +2238,8 @@ inline void IMFilePullDataRsp::clear_has_task_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMFilePullDataRsp::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -2223,7 +2250,8 @@ inline const ::std::string& IMFilePullDataRsp::task_id() const {
 }
 inline void IMFilePullDataRsp::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -2231,7 +2259,8 @@ inline void IMFilePullDataRsp::set_task_id(const ::std::string& value) {
 }
 inline void IMFilePullDataRsp::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -2239,7 +2268,8 @@ inline void IMFilePullDataRsp::set_task_id(const char* value) {
 }
 inline void IMFilePullDataRsp::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -2247,7 +2277,8 @@ inline void IMFilePullDataRsp::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFilePullDataRsp::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFilePullDataRsp.task_id)
@@ -2255,16 +2286,19 @@ inline ::std::string* IMFilePullDataRsp::mutable_task_id() {
 }
 inline ::std::string* IMFilePullDataRsp::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFilePullDataRsp::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -2272,7 +2306,8 @@ inline void IMFilePullDataRsp::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFilePullDataRsp.task_id)
 }
@@ -2336,7 +2371,8 @@ inline void IMFilePullDataRsp::clear_has_file_data() {
   _has_bits_[0] &= ~0x00000010u;
 }
 inline void IMFilePullDataRsp::clear_file_data() {
-  if (file_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_data_->clear();
   }
   clear_has_file_data();
@@ -2347,7 +2383,8 @@ inline const ::std::string& IMFilePullDataRsp::file_data() const {
 }
 inline void IMFilePullDataRsp::set_file_data(const ::std::string& value) {
   set_has_file_data();
-  if (file_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_data_ = new ::std::string;
   }
   file_data_->assign(value);
@@ -2355,7 +2392,8 @@ inline void IMFilePullDataRsp::set_file_data(const ::std::string& value) {
 }
 inline void IMFilePullDataRsp::set_file_data(const char* value) {
   set_has_file_data();
-  if (file_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_data_ = new ::std::string;
   }
   file_data_->assign(value);
@@ -2363,7 +2401,8 @@ inline void IMFilePullDataRsp::set_file_data(const char* value) {
 }
 inline void IMFilePullDataRsp::set_file_data(const void* value, size_t size) {
   set_has_file_data();
-  if (file_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_data_ = new ::std::string;
   }
   file_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -2371,7 +2410,8 @@ inline void IMFilePullDataRsp::set_file_data(const void* value, size_t size) {
 }
 inline ::std::string* IMFilePullDataRsp::mutable_file_data() {
   set_has_file_data();
-  if (file_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFilePullDataRsp.file_data)
@@ -2379,16 +2419,20 @@ inline ::std::string* IMFilePullDataRsp::mutable_file_data() {
 }
 inline ::std::string* IMFilePullDataRsp::release_file_data() {
   clear_has_file_data();
-  if (file_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = file_data_;
-    file_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMFilePullDataRsp::set_allocated_file_data(::std::string* file_data) {
-  if (file_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMFilePullDataRsp::set_allocated_file_data(
+    ::std::string* file_data) {
+  if (file_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete file_data_;
   }
   if (file_data) {
@@ -2396,7 +2440,8 @@ inline void IMFilePullDataRsp::set_allocated_file_data(::std::string* file_data)
     file_data_ = file_data;
   } else {
     clear_has_file_data();
-    file_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFilePullDataRsp.file_data)
 }
@@ -2409,9 +2454,7 @@ inline void IMFilePullDataRsp::set_allocated_file_data(::std::string* file_data)
 inline bool IMFileReq::has_from_user_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMFileReq::set_has_from_user_id() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMFileReq::set_has_from_user_id() { _has_bits_[0] |= 0x00000001u; }
 inline void IMFileReq::clear_has_from_user_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
@@ -2433,12 +2476,8 @@ inline void IMFileReq::set_from_user_id(::google::protobuf::uint32 value) {
 inline bool IMFileReq::has_to_user_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMFileReq::set_has_to_user_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void IMFileReq::clear_has_to_user_id() {
-  _has_bits_[0] &= ~0x00000002u;
-}
+inline void IMFileReq::set_has_to_user_id() { _has_bits_[0] |= 0x00000002u; }
+inline void IMFileReq::clear_has_to_user_id() { _has_bits_[0] &= ~0x00000002u; }
 inline void IMFileReq::clear_to_user_id() {
   to_user_id_ = 0u;
   clear_has_to_user_id();
@@ -2457,14 +2496,11 @@ inline void IMFileReq::set_to_user_id(::google::protobuf::uint32 value) {
 inline bool IMFileReq::has_file_name() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void IMFileReq::set_has_file_name() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void IMFileReq::clear_has_file_name() {
-  _has_bits_[0] &= ~0x00000004u;
-}
+inline void IMFileReq::set_has_file_name() { _has_bits_[0] |= 0x00000004u; }
+inline void IMFileReq::clear_has_file_name() { _has_bits_[0] &= ~0x00000004u; }
 inline void IMFileReq::clear_file_name() {
-  if (file_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_->clear();
   }
   clear_has_file_name();
@@ -2475,7 +2511,8 @@ inline const ::std::string& IMFileReq::file_name() const {
 }
 inline void IMFileReq::set_file_name(const ::std::string& value) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(value);
@@ -2483,7 +2520,8 @@ inline void IMFileReq::set_file_name(const ::std::string& value) {
 }
 inline void IMFileReq::set_file_name(const char* value) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(value);
@@ -2491,7 +2529,8 @@ inline void IMFileReq::set_file_name(const char* value) {
 }
 inline void IMFileReq::set_file_name(const char* value, size_t size) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -2499,7 +2538,8 @@ inline void IMFileReq::set_file_name(const char* value, size_t size) {
 }
 inline ::std::string* IMFileReq::mutable_file_name() {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileReq.file_name)
@@ -2507,16 +2547,19 @@ inline ::std::string* IMFileReq::mutable_file_name() {
 }
 inline ::std::string* IMFileReq::release_file_name() {
   clear_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = file_name_;
-    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileReq::set_allocated_file_name(::std::string* file_name) {
-  if (file_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete file_name_;
   }
   if (file_name) {
@@ -2524,7 +2567,8 @@ inline void IMFileReq::set_allocated_file_name(::std::string* file_name) {
     file_name_ = file_name;
   } else {
     clear_has_file_name();
-    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileReq.file_name)
 }
@@ -2533,12 +2577,8 @@ inline void IMFileReq::set_allocated_file_name(::std::string* file_name) {
 inline bool IMFileReq::has_file_size() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void IMFileReq::set_has_file_size() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void IMFileReq::clear_has_file_size() {
-  _has_bits_[0] &= ~0x00000008u;
-}
+inline void IMFileReq::set_has_file_size() { _has_bits_[0] |= 0x00000008u; }
+inline void IMFileReq::clear_has_file_size() { _has_bits_[0] &= ~0x00000008u; }
 inline void IMFileReq::clear_file_size() {
   file_size_ = 0u;
   clear_has_file_size();
@@ -2557,21 +2597,18 @@ inline void IMFileReq::set_file_size(::google::protobuf::uint32 value) {
 inline bool IMFileReq::has_trans_mode() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void IMFileReq::set_has_trans_mode() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void IMFileReq::clear_has_trans_mode() {
-  _has_bits_[0] &= ~0x00000010u;
-}
+inline void IMFileReq::set_has_trans_mode() { _has_bits_[0] |= 0x00000010u; }
+inline void IMFileReq::clear_has_trans_mode() { _has_bits_[0] &= ~0x00000010u; }
 inline void IMFileReq::clear_trans_mode() {
   trans_mode_ = 1;
   clear_has_trans_mode();
 }
 inline ::IM::BaseDefine::TransferFileType IMFileReq::trans_mode() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileReq.trans_mode)
-  return static_cast< ::IM::BaseDefine::TransferFileType >(trans_mode_);
+  return static_cast< ::IM::BaseDefine::TransferFileType>(trans_mode_);
 }
-inline void IMFileReq::set_trans_mode(::IM::BaseDefine::TransferFileType value) {
+inline void IMFileReq::set_trans_mode(
+    ::IM::BaseDefine::TransferFileType value) {
   assert(::IM::BaseDefine::TransferFileType_IsValid(value));
   set_has_trans_mode();
   trans_mode_ = value;
@@ -2586,9 +2623,7 @@ inline void IMFileReq::set_trans_mode(::IM::BaseDefine::TransferFileType value) 
 inline bool IMFileRsp::has_result_code() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMFileRsp::set_has_result_code() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMFileRsp::set_has_result_code() { _has_bits_[0] |= 0x00000001u; }
 inline void IMFileRsp::clear_has_result_code() {
   _has_bits_[0] &= ~0x00000001u;
 }
@@ -2610,9 +2645,7 @@ inline void IMFileRsp::set_result_code(::google::protobuf::uint32 value) {
 inline bool IMFileRsp::has_from_user_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMFileRsp::set_has_from_user_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMFileRsp::set_has_from_user_id() { _has_bits_[0] |= 0x00000002u; }
 inline void IMFileRsp::clear_has_from_user_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
@@ -2634,12 +2667,8 @@ inline void IMFileRsp::set_from_user_id(::google::protobuf::uint32 value) {
 inline bool IMFileRsp::has_to_user_id() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void IMFileRsp::set_has_to_user_id() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void IMFileRsp::clear_has_to_user_id() {
-  _has_bits_[0] &= ~0x00000004u;
-}
+inline void IMFileRsp::set_has_to_user_id() { _has_bits_[0] |= 0x00000004u; }
+inline void IMFileRsp::clear_has_to_user_id() { _has_bits_[0] &= ~0x00000004u; }
 inline void IMFileRsp::clear_to_user_id() {
   to_user_id_ = 0u;
   clear_has_to_user_id();
@@ -2658,14 +2687,11 @@ inline void IMFileRsp::set_to_user_id(::google::protobuf::uint32 value) {
 inline bool IMFileRsp::has_file_name() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void IMFileRsp::set_has_file_name() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void IMFileRsp::clear_has_file_name() {
-  _has_bits_[0] &= ~0x00000008u;
-}
+inline void IMFileRsp::set_has_file_name() { _has_bits_[0] |= 0x00000008u; }
+inline void IMFileRsp::clear_has_file_name() { _has_bits_[0] &= ~0x00000008u; }
 inline void IMFileRsp::clear_file_name() {
-  if (file_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_->clear();
   }
   clear_has_file_name();
@@ -2676,7 +2702,8 @@ inline const ::std::string& IMFileRsp::file_name() const {
 }
 inline void IMFileRsp::set_file_name(const ::std::string& value) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(value);
@@ -2684,7 +2711,8 @@ inline void IMFileRsp::set_file_name(const ::std::string& value) {
 }
 inline void IMFileRsp::set_file_name(const char* value) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(value);
@@ -2692,7 +2720,8 @@ inline void IMFileRsp::set_file_name(const char* value) {
 }
 inline void IMFileRsp::set_file_name(const char* value, size_t size) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -2700,7 +2729,8 @@ inline void IMFileRsp::set_file_name(const char* value, size_t size) {
 }
 inline ::std::string* IMFileRsp::mutable_file_name() {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileRsp.file_name)
@@ -2708,16 +2738,19 @@ inline ::std::string* IMFileRsp::mutable_file_name() {
 }
 inline ::std::string* IMFileRsp::release_file_name() {
   clear_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = file_name_;
-    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileRsp::set_allocated_file_name(::std::string* file_name) {
-  if (file_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete file_name_;
   }
   if (file_name) {
@@ -2725,7 +2758,8 @@ inline void IMFileRsp::set_allocated_file_name(::std::string* file_name) {
     file_name_ = file_name;
   } else {
     clear_has_file_name();
-    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileRsp.file_name)
 }
@@ -2734,14 +2768,11 @@ inline void IMFileRsp::set_allocated_file_name(::std::string* file_name) {
 inline bool IMFileRsp::has_task_id() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void IMFileRsp::set_has_task_id() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void IMFileRsp::clear_has_task_id() {
-  _has_bits_[0] &= ~0x00000010u;
-}
+inline void IMFileRsp::set_has_task_id() { _has_bits_[0] |= 0x00000010u; }
+inline void IMFileRsp::clear_has_task_id() { _has_bits_[0] &= ~0x00000010u; }
 inline void IMFileRsp::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -2752,7 +2783,8 @@ inline const ::std::string& IMFileRsp::task_id() const {
 }
 inline void IMFileRsp::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -2760,7 +2792,8 @@ inline void IMFileRsp::set_task_id(const ::std::string& value) {
 }
 inline void IMFileRsp::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -2768,7 +2801,8 @@ inline void IMFileRsp::set_task_id(const char* value) {
 }
 inline void IMFileRsp::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -2776,7 +2810,8 @@ inline void IMFileRsp::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFileRsp::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileRsp.task_id)
@@ -2784,16 +2819,19 @@ inline ::std::string* IMFileRsp::mutable_task_id() {
 }
 inline ::std::string* IMFileRsp::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileRsp::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -2801,19 +2839,17 @@ inline void IMFileRsp::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileRsp.task_id)
 }
 
 // repeated .IM.BaseDefine.IpAddr ip_addr_list = 6;
-inline int IMFileRsp::ip_addr_list_size() const {
-  return ip_addr_list_.size();
-}
-inline void IMFileRsp::clear_ip_addr_list() {
-  ip_addr_list_.Clear();
-}
-inline const ::IM::BaseDefine::IpAddr& IMFileRsp::ip_addr_list(int index) const {
+inline int IMFileRsp::ip_addr_list_size() const { return ip_addr_list_.size(); }
+inline void IMFileRsp::clear_ip_addr_list() { ip_addr_list_.Clear(); }
+inline const ::IM::BaseDefine::IpAddr& IMFileRsp::ip_addr_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileRsp.ip_addr_list)
   return ip_addr_list_.Get(index);
 }
@@ -2825,12 +2861,12 @@ inline ::IM::BaseDefine::IpAddr* IMFileRsp::add_ip_addr_list() {
   // @@protoc_insertion_point(field_add:IM.File.IMFileRsp.ip_addr_list)
   return ip_addr_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >&
+inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>&
 IMFileRsp::ip_addr_list() const {
   // @@protoc_insertion_point(field_list:IM.File.IMFileRsp.ip_addr_list)
   return ip_addr_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >*
+inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>*
 IMFileRsp::mutable_ip_addr_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.File.IMFileRsp.ip_addr_list)
   return &ip_addr_list_;
@@ -2840,21 +2876,18 @@ IMFileRsp::mutable_ip_addr_list() {
 inline bool IMFileRsp::has_trans_mode() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline void IMFileRsp::set_has_trans_mode() {
-  _has_bits_[0] |= 0x00000040u;
-}
-inline void IMFileRsp::clear_has_trans_mode() {
-  _has_bits_[0] &= ~0x00000040u;
-}
+inline void IMFileRsp::set_has_trans_mode() { _has_bits_[0] |= 0x00000040u; }
+inline void IMFileRsp::clear_has_trans_mode() { _has_bits_[0] &= ~0x00000040u; }
 inline void IMFileRsp::clear_trans_mode() {
   trans_mode_ = 1;
   clear_has_trans_mode();
 }
 inline ::IM::BaseDefine::TransferFileType IMFileRsp::trans_mode() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileRsp.trans_mode)
-  return static_cast< ::IM::BaseDefine::TransferFileType >(trans_mode_);
+  return static_cast< ::IM::BaseDefine::TransferFileType>(trans_mode_);
 }
-inline void IMFileRsp::set_trans_mode(::IM::BaseDefine::TransferFileType value) {
+inline void IMFileRsp::set_trans_mode(
+    ::IM::BaseDefine::TransferFileType value) {
   assert(::IM::BaseDefine::TransferFileType_IsValid(value));
   set_has_trans_mode();
   trans_mode_ = value;
@@ -2893,9 +2926,7 @@ inline void IMFileNotify::set_from_user_id(::google::protobuf::uint32 value) {
 inline bool IMFileNotify::has_to_user_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMFileNotify::set_has_to_user_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMFileNotify::set_has_to_user_id() { _has_bits_[0] |= 0x00000002u; }
 inline void IMFileNotify::clear_has_to_user_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
@@ -2917,14 +2948,13 @@ inline void IMFileNotify::set_to_user_id(::google::protobuf::uint32 value) {
 inline bool IMFileNotify::has_file_name() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void IMFileNotify::set_has_file_name() {
-  _has_bits_[0] |= 0x00000004u;
-}
+inline void IMFileNotify::set_has_file_name() { _has_bits_[0] |= 0x00000004u; }
 inline void IMFileNotify::clear_has_file_name() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMFileNotify::clear_file_name() {
-  if (file_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_->clear();
   }
   clear_has_file_name();
@@ -2935,7 +2965,8 @@ inline const ::std::string& IMFileNotify::file_name() const {
 }
 inline void IMFileNotify::set_file_name(const ::std::string& value) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(value);
@@ -2943,7 +2974,8 @@ inline void IMFileNotify::set_file_name(const ::std::string& value) {
 }
 inline void IMFileNotify::set_file_name(const char* value) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(value);
@@ -2951,7 +2983,8 @@ inline void IMFileNotify::set_file_name(const char* value) {
 }
 inline void IMFileNotify::set_file_name(const char* value, size_t size) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -2959,7 +2992,8 @@ inline void IMFileNotify::set_file_name(const char* value, size_t size) {
 }
 inline ::std::string* IMFileNotify::mutable_file_name() {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileNotify.file_name)
@@ -2967,16 +3001,19 @@ inline ::std::string* IMFileNotify::mutable_file_name() {
 }
 inline ::std::string* IMFileNotify::release_file_name() {
   clear_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = file_name_;
-    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileNotify::set_allocated_file_name(::std::string* file_name) {
-  if (file_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete file_name_;
   }
   if (file_name) {
@@ -2984,7 +3021,8 @@ inline void IMFileNotify::set_allocated_file_name(::std::string* file_name) {
     file_name_ = file_name;
   } else {
     clear_has_file_name();
-    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileNotify.file_name)
 }
@@ -2993,9 +3031,7 @@ inline void IMFileNotify::set_allocated_file_name(::std::string* file_name) {
 inline bool IMFileNotify::has_file_size() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void IMFileNotify::set_has_file_size() {
-  _has_bits_[0] |= 0x00000008u;
-}
+inline void IMFileNotify::set_has_file_size() { _has_bits_[0] |= 0x00000008u; }
 inline void IMFileNotify::clear_has_file_size() {
   _has_bits_[0] &= ~0x00000008u;
 }
@@ -3017,14 +3053,11 @@ inline void IMFileNotify::set_file_size(::google::protobuf::uint32 value) {
 inline bool IMFileNotify::has_task_id() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void IMFileNotify::set_has_task_id() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void IMFileNotify::clear_has_task_id() {
-  _has_bits_[0] &= ~0x00000010u;
-}
+inline void IMFileNotify::set_has_task_id() { _has_bits_[0] |= 0x00000010u; }
+inline void IMFileNotify::clear_has_task_id() { _has_bits_[0] &= ~0x00000010u; }
 inline void IMFileNotify::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -3035,7 +3068,8 @@ inline const ::std::string& IMFileNotify::task_id() const {
 }
 inline void IMFileNotify::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -3043,7 +3077,8 @@ inline void IMFileNotify::set_task_id(const ::std::string& value) {
 }
 inline void IMFileNotify::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -3051,7 +3086,8 @@ inline void IMFileNotify::set_task_id(const char* value) {
 }
 inline void IMFileNotify::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -3059,7 +3095,8 @@ inline void IMFileNotify::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFileNotify::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileNotify.task_id)
@@ -3067,16 +3104,19 @@ inline ::std::string* IMFileNotify::mutable_task_id() {
 }
 inline ::std::string* IMFileNotify::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileNotify::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -3084,7 +3124,8 @@ inline void IMFileNotify::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileNotify.task_id)
 }
@@ -3093,10 +3134,9 @@ inline void IMFileNotify::set_allocated_task_id(::std::string* task_id) {
 inline int IMFileNotify::ip_addr_list_size() const {
   return ip_addr_list_.size();
 }
-inline void IMFileNotify::clear_ip_addr_list() {
-  ip_addr_list_.Clear();
-}
-inline const ::IM::BaseDefine::IpAddr& IMFileNotify::ip_addr_list(int index) const {
+inline void IMFileNotify::clear_ip_addr_list() { ip_addr_list_.Clear(); }
+inline const ::IM::BaseDefine::IpAddr& IMFileNotify::ip_addr_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileNotify.ip_addr_list)
   return ip_addr_list_.Get(index);
 }
@@ -3108,12 +3148,12 @@ inline ::IM::BaseDefine::IpAddr* IMFileNotify::add_ip_addr_list() {
   // @@protoc_insertion_point(field_add:IM.File.IMFileNotify.ip_addr_list)
   return ip_addr_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >&
+inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>&
 IMFileNotify::ip_addr_list() const {
   // @@protoc_insertion_point(field_list:IM.File.IMFileNotify.ip_addr_list)
   return ip_addr_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >*
+inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>*
 IMFileNotify::mutable_ip_addr_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.File.IMFileNotify.ip_addr_list)
   return &ip_addr_list_;
@@ -3123,9 +3163,7 @@ IMFileNotify::mutable_ip_addr_list() {
 inline bool IMFileNotify::has_trans_mode() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline void IMFileNotify::set_has_trans_mode() {
-  _has_bits_[0] |= 0x00000040u;
-}
+inline void IMFileNotify::set_has_trans_mode() { _has_bits_[0] |= 0x00000040u; }
 inline void IMFileNotify::clear_has_trans_mode() {
   _has_bits_[0] &= ~0x00000040u;
 }
@@ -3135,9 +3173,10 @@ inline void IMFileNotify::clear_trans_mode() {
 }
 inline ::IM::BaseDefine::TransferFileType IMFileNotify::trans_mode() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileNotify.trans_mode)
-  return static_cast< ::IM::BaseDefine::TransferFileType >(trans_mode_);
+  return static_cast< ::IM::BaseDefine::TransferFileType>(trans_mode_);
 }
-inline void IMFileNotify::set_trans_mode(::IM::BaseDefine::TransferFileType value) {
+inline void IMFileNotify::set_trans_mode(
+    ::IM::BaseDefine::TransferFileType value) {
   assert(::IM::BaseDefine::TransferFileType_IsValid(value));
   set_has_trans_mode();
   trans_mode_ = value;
@@ -3207,7 +3246,8 @@ inline void IMFileHasOfflineReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMFileHasOfflineReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3218,7 +3258,8 @@ inline const ::std::string& IMFileHasOfflineReq::attach_data() const {
 }
 inline void IMFileHasOfflineReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3226,15 +3267,18 @@ inline void IMFileHasOfflineReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMFileHasOfflineReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.File.IMFileHasOfflineReq.attach_data)
 }
-inline void IMFileHasOfflineReq::set_attach_data(const void* value, size_t size) {
+inline void IMFileHasOfflineReq::set_attach_data(const void* value,
+                                                 size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3242,7 +3286,8 @@ inline void IMFileHasOfflineReq::set_attach_data(const void* value, size_t size)
 }
 inline ::std::string* IMFileHasOfflineReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileHasOfflineReq.attach_data)
@@ -3250,16 +3295,20 @@ inline ::std::string* IMFileHasOfflineReq::mutable_attach_data() {
 }
 inline ::std::string* IMFileHasOfflineReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMFileHasOfflineReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMFileHasOfflineReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3267,7 +3316,8 @@ inline void IMFileHasOfflineReq::set_allocated_attach_data(::std::string* attach
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileHasOfflineReq.attach_data)
 }
@@ -3307,24 +3357,28 @@ inline int IMFileHasOfflineRsp::offline_file_list_size() const {
 inline void IMFileHasOfflineRsp::clear_offline_file_list() {
   offline_file_list_.Clear();
 }
-inline const ::IM::BaseDefine::OfflineFileInfo& IMFileHasOfflineRsp::offline_file_list(int index) const {
+inline const ::IM::BaseDefine::OfflineFileInfo&
+IMFileHasOfflineRsp::offline_file_list(int index) const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileHasOfflineRsp.offline_file_list)
   return offline_file_list_.Get(index);
 }
-inline ::IM::BaseDefine::OfflineFileInfo* IMFileHasOfflineRsp::mutable_offline_file_list(int index) {
+inline ::IM::BaseDefine::OfflineFileInfo*
+IMFileHasOfflineRsp::mutable_offline_file_list(int index) {
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileHasOfflineRsp.offline_file_list)
   return offline_file_list_.Mutable(index);
 }
-inline ::IM::BaseDefine::OfflineFileInfo* IMFileHasOfflineRsp::add_offline_file_list() {
+inline ::IM::BaseDefine::OfflineFileInfo*
+IMFileHasOfflineRsp::add_offline_file_list() {
   // @@protoc_insertion_point(field_add:IM.File.IMFileHasOfflineRsp.offline_file_list)
   return offline_file_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::OfflineFileInfo >&
+inline const ::google::protobuf::RepeatedPtrField<
+    ::IM::BaseDefine::OfflineFileInfo>&
 IMFileHasOfflineRsp::offline_file_list() const {
   // @@protoc_insertion_point(field_list:IM.File.IMFileHasOfflineRsp.offline_file_list)
   return offline_file_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::OfflineFileInfo >*
+inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::OfflineFileInfo>*
 IMFileHasOfflineRsp::mutable_offline_file_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.File.IMFileHasOfflineRsp.offline_file_list)
   return &offline_file_list_;
@@ -3334,14 +3388,14 @@ IMFileHasOfflineRsp::mutable_offline_file_list() {
 inline int IMFileHasOfflineRsp::ip_addr_list_size() const {
   return ip_addr_list_.size();
 }
-inline void IMFileHasOfflineRsp::clear_ip_addr_list() {
-  ip_addr_list_.Clear();
-}
-inline const ::IM::BaseDefine::IpAddr& IMFileHasOfflineRsp::ip_addr_list(int index) const {
+inline void IMFileHasOfflineRsp::clear_ip_addr_list() { ip_addr_list_.Clear(); }
+inline const ::IM::BaseDefine::IpAddr& IMFileHasOfflineRsp::ip_addr_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileHasOfflineRsp.ip_addr_list)
   return ip_addr_list_.Get(index);
 }
-inline ::IM::BaseDefine::IpAddr* IMFileHasOfflineRsp::mutable_ip_addr_list(int index) {
+inline ::IM::BaseDefine::IpAddr* IMFileHasOfflineRsp::mutable_ip_addr_list(
+    int index) {
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileHasOfflineRsp.ip_addr_list)
   return ip_addr_list_.Mutable(index);
 }
@@ -3349,12 +3403,12 @@ inline ::IM::BaseDefine::IpAddr* IMFileHasOfflineRsp::add_ip_addr_list() {
   // @@protoc_insertion_point(field_add:IM.File.IMFileHasOfflineRsp.ip_addr_list)
   return ip_addr_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >&
+inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>&
 IMFileHasOfflineRsp::ip_addr_list() const {
   // @@protoc_insertion_point(field_list:IM.File.IMFileHasOfflineRsp.ip_addr_list)
   return ip_addr_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr >*
+inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::IpAddr>*
 IMFileHasOfflineRsp::mutable_ip_addr_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.File.IMFileHasOfflineRsp.ip_addr_list)
   return &ip_addr_list_;
@@ -3371,7 +3425,8 @@ inline void IMFileHasOfflineRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMFileHasOfflineRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3382,7 +3437,8 @@ inline const ::std::string& IMFileHasOfflineRsp::attach_data() const {
 }
 inline void IMFileHasOfflineRsp::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3390,15 +3446,18 @@ inline void IMFileHasOfflineRsp::set_attach_data(const ::std::string& value) {
 }
 inline void IMFileHasOfflineRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.File.IMFileHasOfflineRsp.attach_data)
 }
-inline void IMFileHasOfflineRsp::set_attach_data(const void* value, size_t size) {
+inline void IMFileHasOfflineRsp::set_attach_data(const void* value,
+                                                 size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3406,7 +3465,8 @@ inline void IMFileHasOfflineRsp::set_attach_data(const void* value, size_t size)
 }
 inline ::std::string* IMFileHasOfflineRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileHasOfflineRsp.attach_data)
@@ -3414,16 +3474,20 @@ inline ::std::string* IMFileHasOfflineRsp::mutable_attach_data() {
 }
 inline ::std::string* IMFileHasOfflineRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMFileHasOfflineRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMFileHasOfflineRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3431,7 +3495,8 @@ inline void IMFileHasOfflineRsp::set_allocated_attach_data(::std::string* attach
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileHasOfflineRsp.attach_data)
 }
@@ -3458,7 +3523,8 @@ inline ::google::protobuf::uint32 IMFileAddOfflineReq::from_user_id() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileAddOfflineReq.from_user_id)
   return from_user_id_;
 }
-inline void IMFileAddOfflineReq::set_from_user_id(::google::protobuf::uint32 value) {
+inline void IMFileAddOfflineReq::set_from_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_from_user_id();
   from_user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.File.IMFileAddOfflineReq.from_user_id)
@@ -3482,7 +3548,8 @@ inline ::google::protobuf::uint32 IMFileAddOfflineReq::to_user_id() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileAddOfflineReq.to_user_id)
   return to_user_id_;
 }
-inline void IMFileAddOfflineReq::set_to_user_id(::google::protobuf::uint32 value) {
+inline void IMFileAddOfflineReq::set_to_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_to_user_id();
   to_user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.File.IMFileAddOfflineReq.to_user_id)
@@ -3499,7 +3566,8 @@ inline void IMFileAddOfflineReq::clear_has_task_id() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMFileAddOfflineReq::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -3510,7 +3578,8 @@ inline const ::std::string& IMFileAddOfflineReq::task_id() const {
 }
 inline void IMFileAddOfflineReq::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -3518,7 +3587,8 @@ inline void IMFileAddOfflineReq::set_task_id(const ::std::string& value) {
 }
 inline void IMFileAddOfflineReq::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -3526,7 +3596,8 @@ inline void IMFileAddOfflineReq::set_task_id(const char* value) {
 }
 inline void IMFileAddOfflineReq::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -3534,7 +3605,8 @@ inline void IMFileAddOfflineReq::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFileAddOfflineReq::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileAddOfflineReq.task_id)
@@ -3542,16 +3614,19 @@ inline ::std::string* IMFileAddOfflineReq::mutable_task_id() {
 }
 inline ::std::string* IMFileAddOfflineReq::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileAddOfflineReq::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -3559,7 +3634,8 @@ inline void IMFileAddOfflineReq::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileAddOfflineReq.task_id)
 }
@@ -3575,7 +3651,8 @@ inline void IMFileAddOfflineReq::clear_has_file_name() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMFileAddOfflineReq::clear_file_name() {
-  if (file_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_->clear();
   }
   clear_has_file_name();
@@ -3586,7 +3663,8 @@ inline const ::std::string& IMFileAddOfflineReq::file_name() const {
 }
 inline void IMFileAddOfflineReq::set_file_name(const ::std::string& value) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(value);
@@ -3594,7 +3672,8 @@ inline void IMFileAddOfflineReq::set_file_name(const ::std::string& value) {
 }
 inline void IMFileAddOfflineReq::set_file_name(const char* value) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(value);
@@ -3602,7 +3681,8 @@ inline void IMFileAddOfflineReq::set_file_name(const char* value) {
 }
 inline void IMFileAddOfflineReq::set_file_name(const char* value, size_t size) {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   file_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -3610,7 +3690,8 @@ inline void IMFileAddOfflineReq::set_file_name(const char* value, size_t size) {
 }
 inline ::std::string* IMFileAddOfflineReq::mutable_file_name() {
   set_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     file_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileAddOfflineReq.file_name)
@@ -3618,16 +3699,20 @@ inline ::std::string* IMFileAddOfflineReq::mutable_file_name() {
 }
 inline ::std::string* IMFileAddOfflineReq::release_file_name() {
   clear_has_file_name();
-  if (file_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (file_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = file_name_;
-    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMFileAddOfflineReq::set_allocated_file_name(::std::string* file_name) {
-  if (file_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMFileAddOfflineReq::set_allocated_file_name(
+    ::std::string* file_name) {
+  if (file_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete file_name_;
   }
   if (file_name) {
@@ -3635,7 +3720,8 @@ inline void IMFileAddOfflineReq::set_allocated_file_name(::std::string* file_nam
     file_name_ = file_name;
   } else {
     clear_has_file_name();
-    file_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    file_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileAddOfflineReq.file_name)
 }
@@ -3658,7 +3744,8 @@ inline ::google::protobuf::uint32 IMFileAddOfflineReq::file_size() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileAddOfflineReq.file_size)
   return file_size_;
 }
-inline void IMFileAddOfflineReq::set_file_size(::google::protobuf::uint32 value) {
+inline void IMFileAddOfflineReq::set_file_size(
+    ::google::protobuf::uint32 value) {
   set_has_file_size();
   file_size_ = value;
   // @@protoc_insertion_point(field_set:IM.File.IMFileAddOfflineReq.file_size)
@@ -3686,7 +3773,8 @@ inline ::google::protobuf::uint32 IMFileDelOfflineReq::from_user_id() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileDelOfflineReq.from_user_id)
   return from_user_id_;
 }
-inline void IMFileDelOfflineReq::set_from_user_id(::google::protobuf::uint32 value) {
+inline void IMFileDelOfflineReq::set_from_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_from_user_id();
   from_user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.File.IMFileDelOfflineReq.from_user_id)
@@ -3710,7 +3798,8 @@ inline ::google::protobuf::uint32 IMFileDelOfflineReq::to_user_id() const {
   // @@protoc_insertion_point(field_get:IM.File.IMFileDelOfflineReq.to_user_id)
   return to_user_id_;
 }
-inline void IMFileDelOfflineReq::set_to_user_id(::google::protobuf::uint32 value) {
+inline void IMFileDelOfflineReq::set_to_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_to_user_id();
   to_user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.File.IMFileDelOfflineReq.to_user_id)
@@ -3727,7 +3816,8 @@ inline void IMFileDelOfflineReq::clear_has_task_id() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMFileDelOfflineReq::clear_task_id() {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_->clear();
   }
   clear_has_task_id();
@@ -3738,7 +3828,8 @@ inline const ::std::string& IMFileDelOfflineReq::task_id() const {
 }
 inline void IMFileDelOfflineReq::set_task_id(const ::std::string& value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -3746,7 +3837,8 @@ inline void IMFileDelOfflineReq::set_task_id(const ::std::string& value) {
 }
 inline void IMFileDelOfflineReq::set_task_id(const char* value) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(value);
@@ -3754,7 +3846,8 @@ inline void IMFileDelOfflineReq::set_task_id(const char* value) {
 }
 inline void IMFileDelOfflineReq::set_task_id(const char* value, size_t size) {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   task_id_->assign(reinterpret_cast<const char*>(value), size);
@@ -3762,7 +3855,8 @@ inline void IMFileDelOfflineReq::set_task_id(const char* value, size_t size) {
 }
 inline ::std::string* IMFileDelOfflineReq::mutable_task_id() {
   set_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     task_id_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.File.IMFileDelOfflineReq.task_id)
@@ -3770,16 +3864,19 @@ inline ::std::string* IMFileDelOfflineReq::mutable_task_id() {
 }
 inline ::std::string* IMFileDelOfflineReq::release_task_id() {
   clear_has_task_id();
-  if (task_id_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = task_id_;
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMFileDelOfflineReq::set_allocated_task_id(::std::string* task_id) {
-  if (task_id_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (task_id_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete task_id_;
   }
   if (task_id) {
@@ -3787,11 +3884,11 @@ inline void IMFileDelOfflineReq::set_allocated_task_id(::std::string* task_id) {
     task_id_ = task_id;
   } else {
     clear_has_task_id();
-    task_id_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    task_id_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.File.IMFileDelOfflineReq.task_id)
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

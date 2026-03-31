@@ -20,6 +20,6 @@ void sendMessage(CImPdu* pPdu, uint32_t conn_uuid);
 void getMessageById(CImPdu* pPdu, uint32_t conn_uuid);
 
 void getLatestMsgId(CImPdu* pPdu, uint32_t conn_uuid);
-};
+};  // namespace DB_PROXY
 
 #endif /* MESSAGECOUTENT_H_ */

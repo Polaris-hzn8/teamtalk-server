@@ -60,7 +60,7 @@ typedef char UIntToStringBuffer[uintToStringBufferSize];
  * @param current Input/Output string buffer.
  *        Must have at least uintToStringBufferSize chars free.
  */
-static inline void uintToString(LargestUInt value, char *&current) {
+static inline void uintToString(LargestUInt value, char*& current) {
   *--current = 0;
   do {
     *--current = char(value % 10) + '0';
@@ -82,7 +82,7 @@ static inline void fixNumericLocale(char* begin, char* end) {
   }
 }
 
-} // namespace Json {
+}  // namespace Json
 
-#endif // LIB_JSONCPP_JSON_TOOL_H_INCLUDED
+#endif  // LIB_JSONCPP_JSON_TOOL_H_INCLUDED
 // vim: et ts=2 sts=2 sw=2 tw=0

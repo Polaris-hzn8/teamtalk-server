@@ -9,23 +9,23 @@
 #ifndef HANDLERMAP_H_
 #define HANDLERMAP_H_
 
-#include "util.h"
 #include "ProxyTask.h"
+#include "util.h"
 
 typedef std::map<uint32_t, pdu_handler_t> HandlerMap_t;
 
-class CHandlerMap
-{
-public:
-    virtual ~CHandlerMap();
-    static CHandlerMap* getInstance();
+class CHandlerMap {
+ public:
+  virtual ~CHandlerMap();
+  static CHandlerMap* getInstance();
 
-    void Init();
-    pdu_handler_t GetHandler(uint32_t pdu_type);
-private:
-    CHandlerMap();
-    static CHandlerMap* s_handler_instance;
-    HandlerMap_t m_handler_map;
+  void Init();
+  pdu_handler_t GetHandler(uint32_t pdu_type);
+
+ private:
+  CHandlerMap();
+  static CHandlerMap* s_handler_instance;
+  HandlerMap_t m_handler_map;
 };
 
 #endif

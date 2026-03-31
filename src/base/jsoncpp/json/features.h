@@ -8,7 +8,7 @@
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "forwards.h"
-#endif // if !defined(JSON_IS_AMALGAMATION)
+#endif  // if !defined(JSON_IS_AMALGAMATION)
 
 namespace Json {
 
@@ -17,7 +17,7 @@ namespace Json {
  * to behave in a standard conforming way.
  */
 class JSON_API Features {
-public:
+ public:
   /** \brief A configuration that allows all features and assumes all strings
    * are UTF-8.
    * - C & C++ comments are allowed
@@ -52,6 +52,6 @@ public:
   bool allowNumericKeys_;
 };
 
-} // namespace Json
+}  // namespace Json
 
-#endif // CPPTL_JSON_FEATURES_H_INCLUDED
+#endif  // CPPTL_JSON_FEATURES_H_INCLUDED

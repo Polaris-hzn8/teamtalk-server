@@ -17,6 +17,6 @@ void getRecentSession(CImPdu* pPdu, uint32_t conn_uuid);
 
 void deleteRecentSession(CImPdu* pPdu, uint32_t conn_uuid);
 
-};
+};  // namespace DB_PROXY
 
 #endif /* FRIEND_SHIP_H_ */

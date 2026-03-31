@@ -19,10 +19,10 @@
 #error regenerate this file with a newer version of protoc.
 #endif
 
+#include <google/protobuf/extension_set.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>
-#include <google/protobuf/extension_set.h>
 #include "IM.BaseDefine.pb.h"
 // @@protoc_insertion_point(includes)
 
@@ -30,7 +30,7 @@ namespace IM {
 namespace Group {
 
 // Internal implementation detail -- do not call these.
-void  protobuf_AddDesc_IM_2eGroup_2eproto();
+void protobuf_AddDesc_IM_2eGroup_2eproto();
 void protobuf_AssignDesc_IM_2eGroup_2eproto();
 void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -64,13 +64,11 @@ class IMNormalGroupListReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMNormalGroupListReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -78,7 +76,7 @@ class IMNormalGroupListReq : public ::google::protobuf::MessageLite {
   static inline const IMNormalGroupListReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMNormalGroupListReq* other);
 
@@ -98,11 +96,13 @@ class IMNormalGroupListReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -141,11 +141,11 @@ class IMNormalGroupListReq : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -170,13 +170,11 @@ class IMNormalGroupListRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMNormalGroupListRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -184,7 +182,7 @@ class IMNormalGroupListRsp : public ::google::protobuf::MessageLite {
   static inline const IMNormalGroupListRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMNormalGroupListRsp* other);
 
@@ -204,11 +202,13 @@ class IMNormalGroupListRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -226,13 +226,17 @@ class IMNormalGroupListRsp : public ::google::protobuf::MessageLite {
   inline int group_version_list_size() const;
   inline void clear_group_version_list();
   static const int kGroupVersionListFieldNumber = 2;
-  inline const ::IM::BaseDefine::GroupVersionInfo& group_version_list(int index) const;
-  inline ::IM::BaseDefine::GroupVersionInfo* mutable_group_version_list(int index);
+  inline const ::IM::BaseDefine::GroupVersionInfo& group_version_list(
+      int index) const;
+  inline ::IM::BaseDefine::GroupVersionInfo* mutable_group_version_list(
+      int index);
   inline ::IM::BaseDefine::GroupVersionInfo* add_group_version_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo >&
-      group_version_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo >*
-      mutable_group_version_list();
+  inline const ::google::protobuf::RepeatedPtrField<
+      ::IM::BaseDefine::GroupVersionInfo>&
+  group_version_list() const;
+  inline ::google::protobuf::RepeatedPtrField<
+      ::IM::BaseDefine::GroupVersionInfo>*
+  mutable_group_version_list();
 
   // optional bytes attach_data = 20;
   inline bool has_attach_data() const;
@@ -257,14 +261,15 @@ class IMNormalGroupListRsp : public ::google::protobuf::MessageLite {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo > group_version_list_;
+  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo>
+      group_version_list_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -289,13 +294,11 @@ class IMGroupInfoListReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupInfoListReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -303,7 +306,7 @@ class IMGroupInfoListReq : public ::google::protobuf::MessageLite {
   static inline const IMGroupInfoListReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupInfoListReq* other);
 
@@ -323,11 +326,13 @@ class IMGroupInfoListReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -345,13 +350,17 @@ class IMGroupInfoListReq : public ::google::protobuf::MessageLite {
   inline int group_version_list_size() const;
   inline void clear_group_version_list();
   static const int kGroupVersionListFieldNumber = 2;
-  inline const ::IM::BaseDefine::GroupVersionInfo& group_version_list(int index) const;
-  inline ::IM::BaseDefine::GroupVersionInfo* mutable_group_version_list(int index);
+  inline const ::IM::BaseDefine::GroupVersionInfo& group_version_list(
+      int index) const;
+  inline ::IM::BaseDefine::GroupVersionInfo* mutable_group_version_list(
+      int index);
   inline ::IM::BaseDefine::GroupVersionInfo* add_group_version_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo >&
-      group_version_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo >*
-      mutable_group_version_list();
+  inline const ::google::protobuf::RepeatedPtrField<
+      ::IM::BaseDefine::GroupVersionInfo>&
+  group_version_list() const;
+  inline ::google::protobuf::RepeatedPtrField<
+      ::IM::BaseDefine::GroupVersionInfo>*
+  mutable_group_version_list();
 
   // optional bytes attach_data = 20;
   inline bool has_attach_data() const;
@@ -376,14 +385,15 @@ class IMGroupInfoListReq : public ::google::protobuf::MessageLite {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo > group_version_list_;
+  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo>
+      group_version_list_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -408,13 +418,11 @@ class IMGroupInfoListRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupInfoListRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -422,7 +430,7 @@ class IMGroupInfoListRsp : public ::google::protobuf::MessageLite {
   static inline const IMGroupInfoListRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupInfoListRsp* other);
 
@@ -442,11 +450,13 @@ class IMGroupInfoListRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -467,10 +477,11 @@ class IMGroupInfoListRsp : public ::google::protobuf::MessageLite {
   inline const ::IM::BaseDefine::GroupInfo& group_info_list(int index) const;
   inline ::IM::BaseDefine::GroupInfo* mutable_group_info_list(int index);
   inline ::IM::BaseDefine::GroupInfo* add_group_info_list();
-  inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo >&
-      group_info_list() const;
-  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo >*
-      mutable_group_info_list();
+  inline const ::google::protobuf::RepeatedPtrField<
+      ::IM::BaseDefine::GroupInfo>&
+  group_info_list() const;
+  inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo>*
+  mutable_group_info_list();
 
   // optional bytes attach_data = 20;
   inline bool has_attach_data() const;
@@ -495,14 +506,15 @@ class IMGroupInfoListRsp : public ::google::protobuf::MessageLite {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo > group_info_list_;
+  ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo>
+      group_info_list_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -527,13 +539,11 @@ class IMGroupCreateReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupCreateReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -541,7 +551,7 @@ class IMGroupCreateReq : public ::google::protobuf::MessageLite {
   static inline const IMGroupCreateReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupCreateReq* other);
 
@@ -561,11 +571,13 @@ class IMGroupCreateReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -579,7 +591,8 @@ class IMGroupCreateReq : public ::google::protobuf::MessageLite {
   inline ::google::protobuf::uint32 user_id() const;
   inline void set_user_id(::google::protobuf::uint32 value);
 
-  // required .IM.BaseDefine.GroupType group_type = 2 [default = GROUP_TYPE_TMP];
+  // required .IM.BaseDefine.GroupType group_type = 2 [default =
+  // GROUP_TYPE_TMP];
   inline bool has_group_type() const;
   inline void clear_group_type();
   static const int kGroupTypeFieldNumber = 2;
@@ -617,10 +630,10 @@ class IMGroupCreateReq : public ::google::protobuf::MessageLite {
   inline ::google::protobuf::uint32 member_id_list(int index) const;
   inline void set_member_id_list(int index, ::google::protobuf::uint32 value);
   inline void add_member_id_list(::google::protobuf::uint32 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      member_id_list() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_member_id_list();
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
+  member_id_list() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
+  mutable_member_id_list();
 
   // optional bytes attach_data = 20;
   inline bool has_attach_data() const;
@@ -655,13 +668,14 @@ class IMGroupCreateReq : public ::google::protobuf::MessageLite {
   int group_type_;
   ::std::string* group_name_;
   ::std::string* group_avatar_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > member_id_list_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32>
+      member_id_list_;
   ::std::string* attach_data_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -686,13 +700,11 @@ class IMGroupCreateRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupCreateRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -700,7 +712,7 @@ class IMGroupCreateRsp : public ::google::protobuf::MessageLite {
   static inline const IMGroupCreateRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupCreateRsp* other);
 
@@ -720,11 +732,13 @@ class IMGroupCreateRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -771,10 +785,10 @@ class IMGroupCreateRsp : public ::google::protobuf::MessageLite {
   inline ::google::protobuf::uint32 user_id_list(int index) const;
   inline void set_user_id_list(int index, ::google::protobuf::uint32 value);
   inline void add_user_id_list(::google::protobuf::uint32 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      user_id_list() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_user_id_list();
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
+  user_id_list() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
+  mutable_user_id_list();
 
   // optional bytes attach_data = 20;
   inline bool has_attach_data() const;
@@ -808,14 +822,14 @@ class IMGroupCreateRsp : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 user_id_;
   ::google::protobuf::uint32 result_code_;
   ::std::string* group_name_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > user_id_list_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32> user_id_list_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 group_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -840,13 +854,11 @@ class IMGroupChangeMemberReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupChangeMemberReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -854,7 +866,7 @@ class IMGroupChangeMemberReq : public ::google::protobuf::MessageLite {
   static inline const IMGroupChangeMemberReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupChangeMemberReq* other);
 
@@ -874,11 +886,13 @@ class IMGroupChangeMemberReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -913,10 +927,10 @@ class IMGroupChangeMemberReq : public ::google::protobuf::MessageLite {
   inline ::google::protobuf::uint32 member_id_list(int index) const;
   inline void set_member_id_list(int index, ::google::protobuf::uint32 value);
   inline void add_member_id_list(::google::protobuf::uint32 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      member_id_list() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_member_id_list();
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
+  member_id_list() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
+  mutable_member_id_list();
 
   // optional bytes attach_data = 20;
   inline bool has_attach_data() const;
@@ -947,14 +961,15 @@ class IMGroupChangeMemberReq : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::google::protobuf::uint32 user_id_;
   int change_type_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > member_id_list_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32>
+      member_id_list_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 group_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -979,13 +994,11 @@ class IMGroupChangeMemberRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupChangeMemberRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -993,7 +1006,7 @@ class IMGroupChangeMemberRsp : public ::google::protobuf::MessageLite {
   static inline const IMGroupChangeMemberRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupChangeMemberRsp* other);
 
@@ -1013,11 +1026,13 @@ class IMGroupChangeMemberRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1059,10 +1074,10 @@ class IMGroupChangeMemberRsp : public ::google::protobuf::MessageLite {
   inline ::google::protobuf::uint32 cur_user_id_list(int index) const;
   inline void set_cur_user_id_list(int index, ::google::protobuf::uint32 value);
   inline void add_cur_user_id_list(::google::protobuf::uint32 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      cur_user_id_list() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_cur_user_id_list();
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
+  cur_user_id_list() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
+  mutable_cur_user_id_list();
 
   // repeated uint32 chg_user_id_list = 6;
   inline int chg_user_id_list_size() const;
@@ -1071,10 +1086,10 @@ class IMGroupChangeMemberRsp : public ::google::protobuf::MessageLite {
   inline ::google::protobuf::uint32 chg_user_id_list(int index) const;
   inline void set_chg_user_id_list(int index, ::google::protobuf::uint32 value);
   inline void add_chg_user_id_list(::google::protobuf::uint32 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      chg_user_id_list() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_chg_user_id_list();
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
+  chg_user_id_list() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
+  mutable_chg_user_id_list();
 
   // optional bytes attach_data = 20;
   inline bool has_attach_data() const;
@@ -1109,14 +1124,16 @@ class IMGroupChangeMemberRsp : public ::google::protobuf::MessageLite {
   int change_type_;
   ::google::protobuf::uint32 result_code_;
   ::google::protobuf::uint32 group_id_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > cur_user_id_list_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > chg_user_id_list_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32>
+      cur_user_id_list_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32>
+      chg_user_id_list_;
   ::std::string* attach_data_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -1141,13 +1158,11 @@ class IMGroupShieldReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupShieldReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1155,7 +1170,7 @@ class IMGroupShieldReq : public ::google::protobuf::MessageLite {
   static inline const IMGroupShieldReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupShieldReq* other);
 
@@ -1175,11 +1190,13 @@ class IMGroupShieldReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1238,11 +1255,11 @@ class IMGroupShieldReq : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 group_id_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 shield_status_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -1267,13 +1284,11 @@ class IMGroupShieldRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupShieldRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1281,7 +1296,7 @@ class IMGroupShieldRsp : public ::google::protobuf::MessageLite {
   static inline const IMGroupShieldRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupShieldRsp* other);
 
@@ -1301,11 +1316,13 @@ class IMGroupShieldRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1364,11 +1381,11 @@ class IMGroupShieldRsp : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 group_id_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 result_code_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -1384,7 +1401,8 @@ class IMGroupChangeMemberNotify : public ::google::protobuf::MessageLite {
 
   IMGroupChangeMemberNotify(const IMGroupChangeMemberNotify& from);
 
-  inline IMGroupChangeMemberNotify& operator=(const IMGroupChangeMemberNotify& from) {
+  inline IMGroupChangeMemberNotify& operator=(
+      const IMGroupChangeMemberNotify& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1393,13 +1411,11 @@ class IMGroupChangeMemberNotify : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMGroupChangeMemberNotify& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1407,7 +1423,7 @@ class IMGroupChangeMemberNotify : public ::google::protobuf::MessageLite {
   static inline const IMGroupChangeMemberNotify* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMGroupChangeMemberNotify* other);
 
@@ -1427,11 +1443,13 @@ class IMGroupChangeMemberNotify : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1466,10 +1484,10 @@ class IMGroupChangeMemberNotify : public ::google::protobuf::MessageLite {
   inline ::google::protobuf::uint32 cur_user_id_list(int index) const;
   inline void set_cur_user_id_list(int index, ::google::protobuf::uint32 value);
   inline void add_cur_user_id_list(::google::protobuf::uint32 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      cur_user_id_list() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_cur_user_id_list();
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
+  cur_user_id_list() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
+  mutable_cur_user_id_list();
 
   // repeated uint32 chg_user_id_list = 5;
   inline int chg_user_id_list_size() const;
@@ -1478,10 +1496,10 @@ class IMGroupChangeMemberNotify : public ::google::protobuf::MessageLite {
   inline ::google::protobuf::uint32 chg_user_id_list(int index) const;
   inline void set_chg_user_id_list(int index, ::google::protobuf::uint32 value);
   inline void add_chg_user_id_list(::google::protobuf::uint32 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      chg_user_id_list() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_chg_user_id_list();
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
+  chg_user_id_list() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
+  mutable_chg_user_id_list();
 
   // @@protoc_insertion_point(class_scope:IM.Group.IMGroupChangeMemberNotify)
  private:
@@ -1498,14 +1516,16 @@ class IMGroupChangeMemberNotify : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::google::protobuf::uint32 user_id_;
   int change_type_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > cur_user_id_list_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > chg_user_id_list_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32>
+      cur_user_id_list_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32>
+      chg_user_id_list_;
   ::google::protobuf::uint32 group_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eGroup_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eGroup_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eGroup_2eproto();
   friend void protobuf_ShutdownFile_IM_2eGroup_2eproto();
 
@@ -1513,7 +1533,6 @@ class IMGroupChangeMemberNotify : public ::google::protobuf::MessageLite {
   static IMGroupChangeMemberNotify* default_instance_;
 };
 // ===================================================================
-
 
 // ===================================================================
 
@@ -1537,7 +1556,8 @@ inline ::google::protobuf::uint32 IMNormalGroupListReq::user_id() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMNormalGroupListReq.user_id)
   return user_id_;
 }
-inline void IMNormalGroupListReq::set_user_id(::google::protobuf::uint32 value) {
+inline void IMNormalGroupListReq::set_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMNormalGroupListReq.user_id)
@@ -1554,7 +1574,8 @@ inline void IMNormalGroupListReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMNormalGroupListReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -1565,7 +1586,8 @@ inline const ::std::string& IMNormalGroupListReq::attach_data() const {
 }
 inline void IMNormalGroupListReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -1573,15 +1595,18 @@ inline void IMNormalGroupListReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMNormalGroupListReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.Group.IMNormalGroupListReq.attach_data)
 }
-inline void IMNormalGroupListReq::set_attach_data(const void* value, size_t size) {
+inline void IMNormalGroupListReq::set_attach_data(const void* value,
+                                                  size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -1589,7 +1614,8 @@ inline void IMNormalGroupListReq::set_attach_data(const void* value, size_t size
 }
 inline ::std::string* IMNormalGroupListReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMNormalGroupListReq.attach_data)
@@ -1597,16 +1623,20 @@ inline ::std::string* IMNormalGroupListReq::mutable_attach_data() {
 }
 inline ::std::string* IMNormalGroupListReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMNormalGroupListReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMNormalGroupListReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -1614,7 +1644,8 @@ inline void IMNormalGroupListReq::set_allocated_attach_data(::std::string* attac
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMNormalGroupListReq.attach_data)
 }
@@ -1641,7 +1672,8 @@ inline ::google::protobuf::uint32 IMNormalGroupListRsp::user_id() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMNormalGroupListRsp.user_id)
   return user_id_;
 }
-inline void IMNormalGroupListRsp::set_user_id(::google::protobuf::uint32 value) {
+inline void IMNormalGroupListRsp::set_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMNormalGroupListRsp.user_id)
@@ -1654,24 +1686,29 @@ inline int IMNormalGroupListRsp::group_version_list_size() const {
 inline void IMNormalGroupListRsp::clear_group_version_list() {
   group_version_list_.Clear();
 }
-inline const ::IM::BaseDefine::GroupVersionInfo& IMNormalGroupListRsp::group_version_list(int index) const {
+inline const ::IM::BaseDefine::GroupVersionInfo&
+IMNormalGroupListRsp::group_version_list(int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMNormalGroupListRsp.group_version_list)
   return group_version_list_.Get(index);
 }
-inline ::IM::BaseDefine::GroupVersionInfo* IMNormalGroupListRsp::mutable_group_version_list(int index) {
+inline ::IM::BaseDefine::GroupVersionInfo*
+IMNormalGroupListRsp::mutable_group_version_list(int index) {
   // @@protoc_insertion_point(field_mutable:IM.Group.IMNormalGroupListRsp.group_version_list)
   return group_version_list_.Mutable(index);
 }
-inline ::IM::BaseDefine::GroupVersionInfo* IMNormalGroupListRsp::add_group_version_list() {
+inline ::IM::BaseDefine::GroupVersionInfo*
+IMNormalGroupListRsp::add_group_version_list() {
   // @@protoc_insertion_point(field_add:IM.Group.IMNormalGroupListRsp.group_version_list)
   return group_version_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo >&
+inline const ::google::protobuf::RepeatedPtrField<
+    ::IM::BaseDefine::GroupVersionInfo>&
 IMNormalGroupListRsp::group_version_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMNormalGroupListRsp.group_version_list)
   return group_version_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo >*
+inline ::google::protobuf::RepeatedPtrField<
+    ::IM::BaseDefine::GroupVersionInfo>*
 IMNormalGroupListRsp::mutable_group_version_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMNormalGroupListRsp.group_version_list)
   return &group_version_list_;
@@ -1688,7 +1725,8 @@ inline void IMNormalGroupListRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMNormalGroupListRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -1699,7 +1737,8 @@ inline const ::std::string& IMNormalGroupListRsp::attach_data() const {
 }
 inline void IMNormalGroupListRsp::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -1707,15 +1746,18 @@ inline void IMNormalGroupListRsp::set_attach_data(const ::std::string& value) {
 }
 inline void IMNormalGroupListRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.Group.IMNormalGroupListRsp.attach_data)
 }
-inline void IMNormalGroupListRsp::set_attach_data(const void* value, size_t size) {
+inline void IMNormalGroupListRsp::set_attach_data(const void* value,
+                                                  size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -1723,7 +1765,8 @@ inline void IMNormalGroupListRsp::set_attach_data(const void* value, size_t size
 }
 inline ::std::string* IMNormalGroupListRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMNormalGroupListRsp.attach_data)
@@ -1731,16 +1774,20 @@ inline ::std::string* IMNormalGroupListRsp::mutable_attach_data() {
 }
 inline ::std::string* IMNormalGroupListRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMNormalGroupListRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMNormalGroupListRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -1748,7 +1795,8 @@ inline void IMNormalGroupListRsp::set_allocated_attach_data(::std::string* attac
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMNormalGroupListRsp.attach_data)
 }
@@ -1788,24 +1836,29 @@ inline int IMGroupInfoListReq::group_version_list_size() const {
 inline void IMGroupInfoListReq::clear_group_version_list() {
   group_version_list_.Clear();
 }
-inline const ::IM::BaseDefine::GroupVersionInfo& IMGroupInfoListReq::group_version_list(int index) const {
+inline const ::IM::BaseDefine::GroupVersionInfo&
+IMGroupInfoListReq::group_version_list(int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupInfoListReq.group_version_list)
   return group_version_list_.Get(index);
 }
-inline ::IM::BaseDefine::GroupVersionInfo* IMGroupInfoListReq::mutable_group_version_list(int index) {
+inline ::IM::BaseDefine::GroupVersionInfo*
+IMGroupInfoListReq::mutable_group_version_list(int index) {
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupInfoListReq.group_version_list)
   return group_version_list_.Mutable(index);
 }
-inline ::IM::BaseDefine::GroupVersionInfo* IMGroupInfoListReq::add_group_version_list() {
+inline ::IM::BaseDefine::GroupVersionInfo*
+IMGroupInfoListReq::add_group_version_list() {
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupInfoListReq.group_version_list)
   return group_version_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo >&
+inline const ::google::protobuf::RepeatedPtrField<
+    ::IM::BaseDefine::GroupVersionInfo>&
 IMGroupInfoListReq::group_version_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupInfoListReq.group_version_list)
   return group_version_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupVersionInfo >*
+inline ::google::protobuf::RepeatedPtrField<
+    ::IM::BaseDefine::GroupVersionInfo>*
 IMGroupInfoListReq::mutable_group_version_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupInfoListReq.group_version_list)
   return &group_version_list_;
@@ -1822,7 +1875,8 @@ inline void IMGroupInfoListReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMGroupInfoListReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -1833,7 +1887,8 @@ inline const ::std::string& IMGroupInfoListReq::attach_data() const {
 }
 inline void IMGroupInfoListReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -1841,15 +1896,18 @@ inline void IMGroupInfoListReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMGroupInfoListReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.Group.IMGroupInfoListReq.attach_data)
 }
-inline void IMGroupInfoListReq::set_attach_data(const void* value, size_t size) {
+inline void IMGroupInfoListReq::set_attach_data(const void* value,
+                                                size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -1857,7 +1915,8 @@ inline void IMGroupInfoListReq::set_attach_data(const void* value, size_t size) 
 }
 inline ::std::string* IMGroupInfoListReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupInfoListReq.attach_data)
@@ -1865,16 +1924,20 @@ inline ::std::string* IMGroupInfoListReq::mutable_attach_data() {
 }
 inline ::std::string* IMGroupInfoListReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupInfoListReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupInfoListReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -1882,7 +1945,8 @@ inline void IMGroupInfoListReq::set_allocated_attach_data(::std::string* attach_
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupInfoListReq.attach_data)
 }
@@ -1922,11 +1986,13 @@ inline int IMGroupInfoListRsp::group_info_list_size() const {
 inline void IMGroupInfoListRsp::clear_group_info_list() {
   group_info_list_.Clear();
 }
-inline const ::IM::BaseDefine::GroupInfo& IMGroupInfoListRsp::group_info_list(int index) const {
+inline const ::IM::BaseDefine::GroupInfo& IMGroupInfoListRsp::group_info_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupInfoListRsp.group_info_list)
   return group_info_list_.Get(index);
 }
-inline ::IM::BaseDefine::GroupInfo* IMGroupInfoListRsp::mutable_group_info_list(int index) {
+inline ::IM::BaseDefine::GroupInfo* IMGroupInfoListRsp::mutable_group_info_list(
+    int index) {
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupInfoListRsp.group_info_list)
   return group_info_list_.Mutable(index);
 }
@@ -1934,12 +2000,12 @@ inline ::IM::BaseDefine::GroupInfo* IMGroupInfoListRsp::add_group_info_list() {
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupInfoListRsp.group_info_list)
   return group_info_list_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo >&
+inline const ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo>&
 IMGroupInfoListRsp::group_info_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupInfoListRsp.group_info_list)
   return group_info_list_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo >*
+inline ::google::protobuf::RepeatedPtrField< ::IM::BaseDefine::GroupInfo>*
 IMGroupInfoListRsp::mutable_group_info_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupInfoListRsp.group_info_list)
   return &group_info_list_;
@@ -1956,7 +2022,8 @@ inline void IMGroupInfoListRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMGroupInfoListRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -1967,7 +2034,8 @@ inline const ::std::string& IMGroupInfoListRsp::attach_data() const {
 }
 inline void IMGroupInfoListRsp::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -1975,15 +2043,18 @@ inline void IMGroupInfoListRsp::set_attach_data(const ::std::string& value) {
 }
 inline void IMGroupInfoListRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.Group.IMGroupInfoListRsp.attach_data)
 }
-inline void IMGroupInfoListRsp::set_attach_data(const void* value, size_t size) {
+inline void IMGroupInfoListRsp::set_attach_data(const void* value,
+                                                size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -1991,7 +2062,8 @@ inline void IMGroupInfoListRsp::set_attach_data(const void* value, size_t size) 
 }
 inline ::std::string* IMGroupInfoListRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupInfoListRsp.attach_data)
@@ -1999,16 +2071,20 @@ inline ::std::string* IMGroupInfoListRsp::mutable_attach_data() {
 }
 inline ::std::string* IMGroupInfoListRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupInfoListRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupInfoListRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -2016,7 +2092,8 @@ inline void IMGroupInfoListRsp::set_allocated_attach_data(::std::string* attach_
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupInfoListRsp.attach_data)
 }
@@ -2065,9 +2142,10 @@ inline void IMGroupCreateReq::clear_group_type() {
 }
 inline ::IM::BaseDefine::GroupType IMGroupCreateReq::group_type() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupCreateReq.group_type)
-  return static_cast< ::IM::BaseDefine::GroupType >(group_type_);
+  return static_cast< ::IM::BaseDefine::GroupType>(group_type_);
 }
-inline void IMGroupCreateReq::set_group_type(::IM::BaseDefine::GroupType value) {
+inline void IMGroupCreateReq::set_group_type(
+    ::IM::BaseDefine::GroupType value) {
   assert(::IM::BaseDefine::GroupType_IsValid(value));
   set_has_group_type();
   group_type_ = value;
@@ -2085,7 +2163,8 @@ inline void IMGroupCreateReq::clear_has_group_name() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMGroupCreateReq::clear_group_name() {
-  if (group_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_->clear();
   }
   clear_has_group_name();
@@ -2096,7 +2175,8 @@ inline const ::std::string& IMGroupCreateReq::group_name() const {
 }
 inline void IMGroupCreateReq::set_group_name(const ::std::string& value) {
   set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_ = new ::std::string;
   }
   group_name_->assign(value);
@@ -2104,7 +2184,8 @@ inline void IMGroupCreateReq::set_group_name(const ::std::string& value) {
 }
 inline void IMGroupCreateReq::set_group_name(const char* value) {
   set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_ = new ::std::string;
   }
   group_name_->assign(value);
@@ -2112,7 +2193,8 @@ inline void IMGroupCreateReq::set_group_name(const char* value) {
 }
 inline void IMGroupCreateReq::set_group_name(const char* value, size_t size) {
   set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_ = new ::std::string;
   }
   group_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -2120,7 +2202,8 @@ inline void IMGroupCreateReq::set_group_name(const char* value, size_t size) {
 }
 inline ::std::string* IMGroupCreateReq::mutable_group_name() {
   set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupCreateReq.group_name)
@@ -2128,16 +2211,20 @@ inline ::std::string* IMGroupCreateReq::mutable_group_name() {
 }
 inline ::std::string* IMGroupCreateReq::release_group_name() {
   clear_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = group_name_;
-    group_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    group_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupCreateReq::set_allocated_group_name(::std::string* group_name) {
-  if (group_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupCreateReq::set_allocated_group_name(
+    ::std::string* group_name) {
+  if (group_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete group_name_;
   }
   if (group_name) {
@@ -2145,7 +2232,8 @@ inline void IMGroupCreateReq::set_allocated_group_name(::std::string* group_name
     group_name_ = group_name;
   } else {
     clear_has_group_name();
-    group_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    group_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupCreateReq.group_name)
 }
@@ -2161,7 +2249,8 @@ inline void IMGroupCreateReq::clear_has_group_avatar() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMGroupCreateReq::clear_group_avatar() {
-  if (group_avatar_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_avatar_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_avatar_->clear();
   }
   clear_has_group_avatar();
@@ -2172,7 +2261,8 @@ inline const ::std::string& IMGroupCreateReq::group_avatar() const {
 }
 inline void IMGroupCreateReq::set_group_avatar(const ::std::string& value) {
   set_has_group_avatar();
-  if (group_avatar_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_avatar_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_avatar_ = new ::std::string;
   }
   group_avatar_->assign(value);
@@ -2180,7 +2270,8 @@ inline void IMGroupCreateReq::set_group_avatar(const ::std::string& value) {
 }
 inline void IMGroupCreateReq::set_group_avatar(const char* value) {
   set_has_group_avatar();
-  if (group_avatar_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_avatar_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_avatar_ = new ::std::string;
   }
   group_avatar_->assign(value);
@@ -2188,7 +2279,8 @@ inline void IMGroupCreateReq::set_group_avatar(const char* value) {
 }
 inline void IMGroupCreateReq::set_group_avatar(const char* value, size_t size) {
   set_has_group_avatar();
-  if (group_avatar_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_avatar_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_avatar_ = new ::std::string;
   }
   group_avatar_->assign(reinterpret_cast<const char*>(value), size);
@@ -2196,7 +2288,8 @@ inline void IMGroupCreateReq::set_group_avatar(const char* value, size_t size) {
 }
 inline ::std::string* IMGroupCreateReq::mutable_group_avatar() {
   set_has_group_avatar();
-  if (group_avatar_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_avatar_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_avatar_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupCreateReq.group_avatar)
@@ -2204,16 +2297,20 @@ inline ::std::string* IMGroupCreateReq::mutable_group_avatar() {
 }
 inline ::std::string* IMGroupCreateReq::release_group_avatar() {
   clear_has_group_avatar();
-  if (group_avatar_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_avatar_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = group_avatar_;
-    group_avatar_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    group_avatar_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupCreateReq::set_allocated_group_avatar(::std::string* group_avatar) {
-  if (group_avatar_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupCreateReq::set_allocated_group_avatar(
+    ::std::string* group_avatar) {
+  if (group_avatar_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete group_avatar_;
   }
   if (group_avatar) {
@@ -2221,7 +2318,8 @@ inline void IMGroupCreateReq::set_allocated_group_avatar(::std::string* group_av
     group_avatar_ = group_avatar;
   } else {
     clear_has_group_avatar();
-    group_avatar_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    group_avatar_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupCreateReq.group_avatar)
 }
@@ -2233,24 +2331,27 @@ inline int IMGroupCreateReq::member_id_list_size() const {
 inline void IMGroupCreateReq::clear_member_id_list() {
   member_id_list_.Clear();
 }
-inline ::google::protobuf::uint32 IMGroupCreateReq::member_id_list(int index) const {
+inline ::google::protobuf::uint32 IMGroupCreateReq::member_id_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupCreateReq.member_id_list)
   return member_id_list_.Get(index);
 }
-inline void IMGroupCreateReq::set_member_id_list(int index, ::google::protobuf::uint32 value) {
+inline void IMGroupCreateReq::set_member_id_list(
+    int index, ::google::protobuf::uint32 value) {
   member_id_list_.Set(index, value);
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupCreateReq.member_id_list)
 }
-inline void IMGroupCreateReq::add_member_id_list(::google::protobuf::uint32 value) {
+inline void IMGroupCreateReq::add_member_id_list(
+    ::google::protobuf::uint32 value) {
   member_id_list_.Add(value);
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupCreateReq.member_id_list)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
 IMGroupCreateReq::member_id_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupCreateReq.member_id_list)
   return member_id_list_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
 IMGroupCreateReq::mutable_member_id_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupCreateReq.member_id_list)
   return &member_id_list_;
@@ -2267,7 +2368,8 @@ inline void IMGroupCreateReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000020u;
 }
 inline void IMGroupCreateReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -2278,7 +2380,8 @@ inline const ::std::string& IMGroupCreateReq::attach_data() const {
 }
 inline void IMGroupCreateReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -2286,7 +2389,8 @@ inline void IMGroupCreateReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMGroupCreateReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -2294,7 +2398,8 @@ inline void IMGroupCreateReq::set_attach_data(const char* value) {
 }
 inline void IMGroupCreateReq::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -2302,7 +2407,8 @@ inline void IMGroupCreateReq::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMGroupCreateReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupCreateReq.attach_data)
@@ -2310,16 +2416,20 @@ inline ::std::string* IMGroupCreateReq::mutable_attach_data() {
 }
 inline ::std::string* IMGroupCreateReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupCreateReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupCreateReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -2327,7 +2437,8 @@ inline void IMGroupCreateReq::set_allocated_attach_data(::std::string* attach_da
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupCreateReq.attach_data)
 }
@@ -2378,7 +2489,8 @@ inline ::google::protobuf::uint32 IMGroupCreateRsp::result_code() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupCreateRsp.result_code)
   return result_code_;
 }
-inline void IMGroupCreateRsp::set_result_code(::google::protobuf::uint32 value) {
+inline void IMGroupCreateRsp::set_result_code(
+    ::google::protobuf::uint32 value) {
   set_has_result_code();
   result_code_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupCreateRsp.result_code)
@@ -2419,7 +2531,8 @@ inline void IMGroupCreateRsp::clear_has_group_name() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMGroupCreateRsp::clear_group_name() {
-  if (group_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_->clear();
   }
   clear_has_group_name();
@@ -2430,7 +2543,8 @@ inline const ::std::string& IMGroupCreateRsp::group_name() const {
 }
 inline void IMGroupCreateRsp::set_group_name(const ::std::string& value) {
   set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_ = new ::std::string;
   }
   group_name_->assign(value);
@@ -2438,7 +2552,8 @@ inline void IMGroupCreateRsp::set_group_name(const ::std::string& value) {
 }
 inline void IMGroupCreateRsp::set_group_name(const char* value) {
   set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_ = new ::std::string;
   }
   group_name_->assign(value);
@@ -2446,7 +2561,8 @@ inline void IMGroupCreateRsp::set_group_name(const char* value) {
 }
 inline void IMGroupCreateRsp::set_group_name(const char* value, size_t size) {
   set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_ = new ::std::string;
   }
   group_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -2454,7 +2570,8 @@ inline void IMGroupCreateRsp::set_group_name(const char* value, size_t size) {
 }
 inline ::std::string* IMGroupCreateRsp::mutable_group_name() {
   set_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     group_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupCreateRsp.group_name)
@@ -2462,16 +2579,20 @@ inline ::std::string* IMGroupCreateRsp::mutable_group_name() {
 }
 inline ::std::string* IMGroupCreateRsp::release_group_name() {
   clear_has_group_name();
-  if (group_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (group_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = group_name_;
-    group_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    group_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupCreateRsp::set_allocated_group_name(::std::string* group_name) {
-  if (group_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupCreateRsp::set_allocated_group_name(
+    ::std::string* group_name) {
+  if (group_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete group_name_;
   }
   if (group_name) {
@@ -2479,7 +2600,8 @@ inline void IMGroupCreateRsp::set_allocated_group_name(::std::string* group_name
     group_name_ = group_name;
   } else {
     clear_has_group_name();
-    group_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    group_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupCreateRsp.group_name)
 }
@@ -2488,27 +2610,28 @@ inline void IMGroupCreateRsp::set_allocated_group_name(::std::string* group_name
 inline int IMGroupCreateRsp::user_id_list_size() const {
   return user_id_list_.size();
 }
-inline void IMGroupCreateRsp::clear_user_id_list() {
-  user_id_list_.Clear();
-}
-inline ::google::protobuf::uint32 IMGroupCreateRsp::user_id_list(int index) const {
+inline void IMGroupCreateRsp::clear_user_id_list() { user_id_list_.Clear(); }
+inline ::google::protobuf::uint32 IMGroupCreateRsp::user_id_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupCreateRsp.user_id_list)
   return user_id_list_.Get(index);
 }
-inline void IMGroupCreateRsp::set_user_id_list(int index, ::google::protobuf::uint32 value) {
+inline void IMGroupCreateRsp::set_user_id_list(
+    int index, ::google::protobuf::uint32 value) {
   user_id_list_.Set(index, value);
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupCreateRsp.user_id_list)
 }
-inline void IMGroupCreateRsp::add_user_id_list(::google::protobuf::uint32 value) {
+inline void IMGroupCreateRsp::add_user_id_list(
+    ::google::protobuf::uint32 value) {
   user_id_list_.Add(value);
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupCreateRsp.user_id_list)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
 IMGroupCreateRsp::user_id_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupCreateRsp.user_id_list)
   return user_id_list_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
 IMGroupCreateRsp::mutable_user_id_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupCreateRsp.user_id_list)
   return &user_id_list_;
@@ -2525,7 +2648,8 @@ inline void IMGroupCreateRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000020u;
 }
 inline void IMGroupCreateRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -2536,7 +2660,8 @@ inline const ::std::string& IMGroupCreateRsp::attach_data() const {
 }
 inline void IMGroupCreateRsp::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -2544,7 +2669,8 @@ inline void IMGroupCreateRsp::set_attach_data(const ::std::string& value) {
 }
 inline void IMGroupCreateRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -2552,7 +2678,8 @@ inline void IMGroupCreateRsp::set_attach_data(const char* value) {
 }
 inline void IMGroupCreateRsp::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -2560,7 +2687,8 @@ inline void IMGroupCreateRsp::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMGroupCreateRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupCreateRsp.attach_data)
@@ -2568,16 +2696,20 @@ inline ::std::string* IMGroupCreateRsp::mutable_attach_data() {
 }
 inline ::std::string* IMGroupCreateRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupCreateRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupCreateRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -2585,7 +2717,8 @@ inline void IMGroupCreateRsp::set_allocated_attach_data(::std::string* attach_da
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupCreateRsp.attach_data)
 }
@@ -2612,7 +2745,8 @@ inline ::google::protobuf::uint32 IMGroupChangeMemberReq::user_id() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberReq.user_id)
   return user_id_;
 }
-inline void IMGroupChangeMemberReq::set_user_id(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberReq::set_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberReq.user_id)
@@ -2632,11 +2766,13 @@ inline void IMGroupChangeMemberReq::clear_change_type() {
   change_type_ = 1;
   clear_has_change_type();
 }
-inline ::IM::BaseDefine::GroupModifyType IMGroupChangeMemberReq::change_type() const {
+inline ::IM::BaseDefine::GroupModifyType IMGroupChangeMemberReq::change_type()
+    const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberReq.change_type)
-  return static_cast< ::IM::BaseDefine::GroupModifyType >(change_type_);
+  return static_cast< ::IM::BaseDefine::GroupModifyType>(change_type_);
 }
-inline void IMGroupChangeMemberReq::set_change_type(::IM::BaseDefine::GroupModifyType value) {
+inline void IMGroupChangeMemberReq::set_change_type(
+    ::IM::BaseDefine::GroupModifyType value) {
   assert(::IM::BaseDefine::GroupModifyType_IsValid(value));
   set_has_change_type();
   change_type_ = value;
@@ -2661,7 +2797,8 @@ inline ::google::protobuf::uint32 IMGroupChangeMemberReq::group_id() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberReq.group_id)
   return group_id_;
 }
-inline void IMGroupChangeMemberReq::set_group_id(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberReq::set_group_id(
+    ::google::protobuf::uint32 value) {
   set_has_group_id();
   group_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberReq.group_id)
@@ -2674,24 +2811,27 @@ inline int IMGroupChangeMemberReq::member_id_list_size() const {
 inline void IMGroupChangeMemberReq::clear_member_id_list() {
   member_id_list_.Clear();
 }
-inline ::google::protobuf::uint32 IMGroupChangeMemberReq::member_id_list(int index) const {
+inline ::google::protobuf::uint32 IMGroupChangeMemberReq::member_id_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberReq.member_id_list)
   return member_id_list_.Get(index);
 }
-inline void IMGroupChangeMemberReq::set_member_id_list(int index, ::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberReq::set_member_id_list(
+    int index, ::google::protobuf::uint32 value) {
   member_id_list_.Set(index, value);
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberReq.member_id_list)
 }
-inline void IMGroupChangeMemberReq::add_member_id_list(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberReq::add_member_id_list(
+    ::google::protobuf::uint32 value) {
   member_id_list_.Add(value);
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupChangeMemberReq.member_id_list)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
 IMGroupChangeMemberReq::member_id_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupChangeMemberReq.member_id_list)
   return member_id_list_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
 IMGroupChangeMemberReq::mutable_member_id_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupChangeMemberReq.member_id_list)
   return &member_id_list_;
@@ -2708,7 +2848,8 @@ inline void IMGroupChangeMemberReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000010u;
 }
 inline void IMGroupChangeMemberReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -2717,9 +2858,11 @@ inline const ::std::string& IMGroupChangeMemberReq::attach_data() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberReq.attach_data)
   return *attach_data_;
 }
-inline void IMGroupChangeMemberReq::set_attach_data(const ::std::string& value) {
+inline void IMGroupChangeMemberReq::set_attach_data(
+    const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -2727,15 +2870,18 @@ inline void IMGroupChangeMemberReq::set_attach_data(const ::std::string& value) 
 }
 inline void IMGroupChangeMemberReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.Group.IMGroupChangeMemberReq.attach_data)
 }
-inline void IMGroupChangeMemberReq::set_attach_data(const void* value, size_t size) {
+inline void IMGroupChangeMemberReq::set_attach_data(const void* value,
+                                                    size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -2743,7 +2889,8 @@ inline void IMGroupChangeMemberReq::set_attach_data(const void* value, size_t si
 }
 inline ::std::string* IMGroupChangeMemberReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupChangeMemberReq.attach_data)
@@ -2751,16 +2898,20 @@ inline ::std::string* IMGroupChangeMemberReq::mutable_attach_data() {
 }
 inline ::std::string* IMGroupChangeMemberReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupChangeMemberReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupChangeMemberReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -2768,7 +2919,8 @@ inline void IMGroupChangeMemberReq::set_allocated_attach_data(::std::string* att
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupChangeMemberReq.attach_data)
 }
@@ -2795,7 +2947,8 @@ inline ::google::protobuf::uint32 IMGroupChangeMemberRsp::user_id() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberRsp.user_id)
   return user_id_;
 }
-inline void IMGroupChangeMemberRsp::set_user_id(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberRsp::set_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberRsp.user_id)
@@ -2815,11 +2968,13 @@ inline void IMGroupChangeMemberRsp::clear_change_type() {
   change_type_ = 1;
   clear_has_change_type();
 }
-inline ::IM::BaseDefine::GroupModifyType IMGroupChangeMemberRsp::change_type() const {
+inline ::IM::BaseDefine::GroupModifyType IMGroupChangeMemberRsp::change_type()
+    const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberRsp.change_type)
-  return static_cast< ::IM::BaseDefine::GroupModifyType >(change_type_);
+  return static_cast< ::IM::BaseDefine::GroupModifyType>(change_type_);
 }
-inline void IMGroupChangeMemberRsp::set_change_type(::IM::BaseDefine::GroupModifyType value) {
+inline void IMGroupChangeMemberRsp::set_change_type(
+    ::IM::BaseDefine::GroupModifyType value) {
   assert(::IM::BaseDefine::GroupModifyType_IsValid(value));
   set_has_change_type();
   change_type_ = value;
@@ -2844,7 +2999,8 @@ inline ::google::protobuf::uint32 IMGroupChangeMemberRsp::result_code() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberRsp.result_code)
   return result_code_;
 }
-inline void IMGroupChangeMemberRsp::set_result_code(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberRsp::set_result_code(
+    ::google::protobuf::uint32 value) {
   set_has_result_code();
   result_code_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberRsp.result_code)
@@ -2868,7 +3024,8 @@ inline ::google::protobuf::uint32 IMGroupChangeMemberRsp::group_id() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberRsp.group_id)
   return group_id_;
 }
-inline void IMGroupChangeMemberRsp::set_group_id(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberRsp::set_group_id(
+    ::google::protobuf::uint32 value) {
   set_has_group_id();
   group_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberRsp.group_id)
@@ -2881,24 +3038,27 @@ inline int IMGroupChangeMemberRsp::cur_user_id_list_size() const {
 inline void IMGroupChangeMemberRsp::clear_cur_user_id_list() {
   cur_user_id_list_.Clear();
 }
-inline ::google::protobuf::uint32 IMGroupChangeMemberRsp::cur_user_id_list(int index) const {
+inline ::google::protobuf::uint32 IMGroupChangeMemberRsp::cur_user_id_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberRsp.cur_user_id_list)
   return cur_user_id_list_.Get(index);
 }
-inline void IMGroupChangeMemberRsp::set_cur_user_id_list(int index, ::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberRsp::set_cur_user_id_list(
+    int index, ::google::protobuf::uint32 value) {
   cur_user_id_list_.Set(index, value);
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberRsp.cur_user_id_list)
 }
-inline void IMGroupChangeMemberRsp::add_cur_user_id_list(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberRsp::add_cur_user_id_list(
+    ::google::protobuf::uint32 value) {
   cur_user_id_list_.Add(value);
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupChangeMemberRsp.cur_user_id_list)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
 IMGroupChangeMemberRsp::cur_user_id_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupChangeMemberRsp.cur_user_id_list)
   return cur_user_id_list_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
 IMGroupChangeMemberRsp::mutable_cur_user_id_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupChangeMemberRsp.cur_user_id_list)
   return &cur_user_id_list_;
@@ -2911,24 +3071,27 @@ inline int IMGroupChangeMemberRsp::chg_user_id_list_size() const {
 inline void IMGroupChangeMemberRsp::clear_chg_user_id_list() {
   chg_user_id_list_.Clear();
 }
-inline ::google::protobuf::uint32 IMGroupChangeMemberRsp::chg_user_id_list(int index) const {
+inline ::google::protobuf::uint32 IMGroupChangeMemberRsp::chg_user_id_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberRsp.chg_user_id_list)
   return chg_user_id_list_.Get(index);
 }
-inline void IMGroupChangeMemberRsp::set_chg_user_id_list(int index, ::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberRsp::set_chg_user_id_list(
+    int index, ::google::protobuf::uint32 value) {
   chg_user_id_list_.Set(index, value);
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberRsp.chg_user_id_list)
 }
-inline void IMGroupChangeMemberRsp::add_chg_user_id_list(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberRsp::add_chg_user_id_list(
+    ::google::protobuf::uint32 value) {
   chg_user_id_list_.Add(value);
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupChangeMemberRsp.chg_user_id_list)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
 IMGroupChangeMemberRsp::chg_user_id_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupChangeMemberRsp.chg_user_id_list)
   return chg_user_id_list_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
 IMGroupChangeMemberRsp::mutable_chg_user_id_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupChangeMemberRsp.chg_user_id_list)
   return &chg_user_id_list_;
@@ -2945,7 +3108,8 @@ inline void IMGroupChangeMemberRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000040u;
 }
 inline void IMGroupChangeMemberRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -2954,9 +3118,11 @@ inline const ::std::string& IMGroupChangeMemberRsp::attach_data() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberRsp.attach_data)
   return *attach_data_;
 }
-inline void IMGroupChangeMemberRsp::set_attach_data(const ::std::string& value) {
+inline void IMGroupChangeMemberRsp::set_attach_data(
+    const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -2964,15 +3130,18 @@ inline void IMGroupChangeMemberRsp::set_attach_data(const ::std::string& value) 
 }
 inline void IMGroupChangeMemberRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.Group.IMGroupChangeMemberRsp.attach_data)
 }
-inline void IMGroupChangeMemberRsp::set_attach_data(const void* value, size_t size) {
+inline void IMGroupChangeMemberRsp::set_attach_data(const void* value,
+                                                    size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -2980,7 +3149,8 @@ inline void IMGroupChangeMemberRsp::set_attach_data(const void* value, size_t si
 }
 inline ::std::string* IMGroupChangeMemberRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupChangeMemberRsp.attach_data)
@@ -2988,16 +3158,20 @@ inline ::std::string* IMGroupChangeMemberRsp::mutable_attach_data() {
 }
 inline ::std::string* IMGroupChangeMemberRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupChangeMemberRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupChangeMemberRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3005,7 +3179,8 @@ inline void IMGroupChangeMemberRsp::set_allocated_attach_data(::std::string* att
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupChangeMemberRsp.attach_data)
 }
@@ -3080,7 +3255,8 @@ inline ::google::protobuf::uint32 IMGroupShieldReq::shield_status() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupShieldReq.shield_status)
   return shield_status_;
 }
-inline void IMGroupShieldReq::set_shield_status(::google::protobuf::uint32 value) {
+inline void IMGroupShieldReq::set_shield_status(
+    ::google::protobuf::uint32 value) {
   set_has_shield_status();
   shield_status_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupShieldReq.shield_status)
@@ -3097,7 +3273,8 @@ inline void IMGroupShieldReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMGroupShieldReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3108,7 +3285,8 @@ inline const ::std::string& IMGroupShieldReq::attach_data() const {
 }
 inline void IMGroupShieldReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3116,7 +3294,8 @@ inline void IMGroupShieldReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMGroupShieldReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3124,7 +3303,8 @@ inline void IMGroupShieldReq::set_attach_data(const char* value) {
 }
 inline void IMGroupShieldReq::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3132,7 +3312,8 @@ inline void IMGroupShieldReq::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMGroupShieldReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupShieldReq.attach_data)
@@ -3140,16 +3321,20 @@ inline ::std::string* IMGroupShieldReq::mutable_attach_data() {
 }
 inline ::std::string* IMGroupShieldReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupShieldReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupShieldReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3157,7 +3342,8 @@ inline void IMGroupShieldReq::set_allocated_attach_data(::std::string* attach_da
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupShieldReq.attach_data)
 }
@@ -3232,7 +3418,8 @@ inline ::google::protobuf::uint32 IMGroupShieldRsp::result_code() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupShieldRsp.result_code)
   return result_code_;
 }
-inline void IMGroupShieldRsp::set_result_code(::google::protobuf::uint32 value) {
+inline void IMGroupShieldRsp::set_result_code(
+    ::google::protobuf::uint32 value) {
   set_has_result_code();
   result_code_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupShieldRsp.result_code)
@@ -3249,7 +3436,8 @@ inline void IMGroupShieldRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMGroupShieldRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3260,7 +3448,8 @@ inline const ::std::string& IMGroupShieldRsp::attach_data() const {
 }
 inline void IMGroupShieldRsp::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3268,7 +3457,8 @@ inline void IMGroupShieldRsp::set_attach_data(const ::std::string& value) {
 }
 inline void IMGroupShieldRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3276,7 +3466,8 @@ inline void IMGroupShieldRsp::set_attach_data(const char* value) {
 }
 inline void IMGroupShieldRsp::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3284,7 +3475,8 @@ inline void IMGroupShieldRsp::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMGroupShieldRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Group.IMGroupShieldRsp.attach_data)
@@ -3292,16 +3484,20 @@ inline ::std::string* IMGroupShieldRsp::mutable_attach_data() {
 }
 inline ::std::string* IMGroupShieldRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMGroupShieldRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMGroupShieldRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3309,7 +3505,8 @@ inline void IMGroupShieldRsp::set_allocated_attach_data(::std::string* attach_da
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Group.IMGroupShieldRsp.attach_data)
 }
@@ -3336,7 +3533,8 @@ inline ::google::protobuf::uint32 IMGroupChangeMemberNotify::user_id() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberNotify.user_id)
   return user_id_;
 }
-inline void IMGroupChangeMemberNotify::set_user_id(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberNotify::set_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberNotify.user_id)
@@ -3356,11 +3554,13 @@ inline void IMGroupChangeMemberNotify::clear_change_type() {
   change_type_ = 1;
   clear_has_change_type();
 }
-inline ::IM::BaseDefine::GroupModifyType IMGroupChangeMemberNotify::change_type() const {
+inline ::IM::BaseDefine::GroupModifyType
+IMGroupChangeMemberNotify::change_type() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberNotify.change_type)
-  return static_cast< ::IM::BaseDefine::GroupModifyType >(change_type_);
+  return static_cast< ::IM::BaseDefine::GroupModifyType>(change_type_);
 }
-inline void IMGroupChangeMemberNotify::set_change_type(::IM::BaseDefine::GroupModifyType value) {
+inline void IMGroupChangeMemberNotify::set_change_type(
+    ::IM::BaseDefine::GroupModifyType value) {
   assert(::IM::BaseDefine::GroupModifyType_IsValid(value));
   set_has_change_type();
   change_type_ = value;
@@ -3385,7 +3585,8 @@ inline ::google::protobuf::uint32 IMGroupChangeMemberNotify::group_id() const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberNotify.group_id)
   return group_id_;
 }
-inline void IMGroupChangeMemberNotify::set_group_id(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberNotify::set_group_id(
+    ::google::protobuf::uint32 value) {
   set_has_group_id();
   group_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberNotify.group_id)
@@ -3398,24 +3599,27 @@ inline int IMGroupChangeMemberNotify::cur_user_id_list_size() const {
 inline void IMGroupChangeMemberNotify::clear_cur_user_id_list() {
   cur_user_id_list_.Clear();
 }
-inline ::google::protobuf::uint32 IMGroupChangeMemberNotify::cur_user_id_list(int index) const {
+inline ::google::protobuf::uint32 IMGroupChangeMemberNotify::cur_user_id_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberNotify.cur_user_id_list)
   return cur_user_id_list_.Get(index);
 }
-inline void IMGroupChangeMemberNotify::set_cur_user_id_list(int index, ::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberNotify::set_cur_user_id_list(
+    int index, ::google::protobuf::uint32 value) {
   cur_user_id_list_.Set(index, value);
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberNotify.cur_user_id_list)
 }
-inline void IMGroupChangeMemberNotify::add_cur_user_id_list(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberNotify::add_cur_user_id_list(
+    ::google::protobuf::uint32 value) {
   cur_user_id_list_.Add(value);
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupChangeMemberNotify.cur_user_id_list)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
 IMGroupChangeMemberNotify::cur_user_id_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupChangeMemberNotify.cur_user_id_list)
   return cur_user_id_list_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
 IMGroupChangeMemberNotify::mutable_cur_user_id_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupChangeMemberNotify.cur_user_id_list)
   return &cur_user_id_list_;
@@ -3428,29 +3632,31 @@ inline int IMGroupChangeMemberNotify::chg_user_id_list_size() const {
 inline void IMGroupChangeMemberNotify::clear_chg_user_id_list() {
   chg_user_id_list_.Clear();
 }
-inline ::google::protobuf::uint32 IMGroupChangeMemberNotify::chg_user_id_list(int index) const {
+inline ::google::protobuf::uint32 IMGroupChangeMemberNotify::chg_user_id_list(
+    int index) const {
   // @@protoc_insertion_point(field_get:IM.Group.IMGroupChangeMemberNotify.chg_user_id_list)
   return chg_user_id_list_.Get(index);
 }
-inline void IMGroupChangeMemberNotify::set_chg_user_id_list(int index, ::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberNotify::set_chg_user_id_list(
+    int index, ::google::protobuf::uint32 value) {
   chg_user_id_list_.Set(index, value);
   // @@protoc_insertion_point(field_set:IM.Group.IMGroupChangeMemberNotify.chg_user_id_list)
 }
-inline void IMGroupChangeMemberNotify::add_chg_user_id_list(::google::protobuf::uint32 value) {
+inline void IMGroupChangeMemberNotify::add_chg_user_id_list(
+    ::google::protobuf::uint32 value) {
   chg_user_id_list_.Add(value);
   // @@protoc_insertion_point(field_add:IM.Group.IMGroupChangeMemberNotify.chg_user_id_list)
 }
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32>&
 IMGroupChangeMemberNotify::chg_user_id_list() const {
   // @@protoc_insertion_point(field_list:IM.Group.IMGroupChangeMemberNotify.chg_user_id_list)
   return chg_user_id_list_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32>*
 IMGroupChangeMemberNotify::mutable_chg_user_id_list() {
   // @@protoc_insertion_point(field_mutable_list:IM.Group.IMGroupChangeMemberNotify.chg_user_id_list)
   return &chg_user_id_list_;
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

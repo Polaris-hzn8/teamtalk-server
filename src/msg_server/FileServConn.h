@@ -10,43 +10,44 @@
 #define _FILE_SERVCONN_
 
 #include <iostream>
-#include "im_conn.h"
-#include "ServInfo.h"
 #include "BaseSocket.h"
 #include "IM.BaseDefine.pb.h"
+#include "ServInfo.h"
+#include "im_conn.h"
 
-class CFileServConn : public CImConn
-{
-public:
-    CFileServConn();
-    virtual ~CFileServConn();
+class CFileServConn : public CImConn {
+ public:
+  CFileServConn();
+  virtual ~CFileServConn();
 
-    bool IsOpen() { return m_bOpen; }
+  bool IsOpen() { return m_bOpen; }
 
-    void Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx);
-    virtual void Close();
+  void Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx);
+  virtual void Close();
 
-    virtual void OnConfirm();
-    virtual void OnClose();
-    virtual void OnTimer(uint64_t curr_tick);
+  virtual void OnConfirm();
+  virtual void OnClose();
+  virtual void OnTimer(uint64_t curr_tick);
 
-    virtual void HandlePdu(CImPdu* pPdu);
+  virtual void HandlePdu(CImPdu* pPdu);
 
-    const std::list<IM::BaseDefine::IpAddr>* GetFileServerIPList() { return &m_ip_list; }
+  const std::list<IM::BaseDefine::IpAddr>* GetFileServerIPList() {
+    return &m_ip_list;
+  }
 
-private:
-    void _HandleFileMsgTransRsp(CImPdu* pPdu);
-    void _HandleFileServerIPRsp(CImPdu* pPdu);
+ private:
+  void _HandleFileMsgTransRsp(CImPdu* pPdu);
+  void _HandleFileServerIPRsp(CImPdu* pPdu);
 
-private:
-    bool        m_bOpen;
-    uint32_t    m_serv_idx;
-    uint64_t    m_connect_time;
-    std::list<IM::BaseDefine::IpAddr> m_ip_list;
+ private:
+  bool m_bOpen;
+  uint32_t m_serv_idx;
+  uint64_t m_connect_time;
+  std::list<IM::BaseDefine::IpAddr> m_ip_list;
 };
 
 CFileServConn* get_random_file_serv_conn();
 void init_file_serv_conn(serv_info_t* server_list, uint32_t server_count);
 bool is_file_server_available();
 
-#endif // _FILE_SERVCONN_
+#endif  // _FILE_SERVCONN_

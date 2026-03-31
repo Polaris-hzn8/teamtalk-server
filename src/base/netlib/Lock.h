@@ -11,63 +11,62 @@
 
 #include "ostype.h"
 
-class CLock
-{
-public:
-    CLock();
-    virtual ~CLock();
+class CLock {
+ public:
+  CLock();
+  virtual ~CLock();
 
-    void lock();
-    void unlock();
-    bool try_lock();
+  void lock();
+  void unlock();
+  bool try_lock();
 
 #ifdef _WIN32
-    CRITICAL_SECTION& getMutex() { return m_critical_section; }
+  CRITICAL_SECTION& getMutex() { return m_critical_section; }
 #else
-    pthread_mutex_t& getMutex() { return m_lock; }
+  pthread_mutex_t& getMutex() { return m_lock; }
 #endif
 
-private:
+ private:
 #ifdef _WIN32
-	CRITICAL_SECTION    m_critical_section;
+  CRITICAL_SECTION m_critical_section;
 #else
-    pthread_mutex_t     m_lock;
+  pthread_mutex_t m_lock;
 #endif
 };
 
-class CAutoLock
-{
-public:
-    CAutoLock(CLock* pLock);
-    virtual ~CAutoLock();
-private:
-    CLock* m_pLock;
+class CAutoLock {
+ public:
+  CAutoLock(CLock* pLock);
+  virtual ~CAutoLock();
+
+ private:
+  CLock* m_pLock;
 };
 
 ////////////////////////////////////////////////////////// 读写锁
 #ifndef _WIN32
-class CRWLock
-{
-public:
-    CRWLock();
-    virtual ~CRWLock();
+class CRWLock {
+ public:
+  CRWLock();
+  virtual ~CRWLock();
 
-    void rlock();
-    void wlock();
-    void unlock();
-    bool try_rlock();
-    bool try_wlock();
-private:
-    pthread_rwlock_t m_lock;
+  void rlock();
+  void wlock();
+  void unlock();
+  bool try_rlock();
+  bool try_wlock();
+
+ private:
+  pthread_rwlock_t m_lock;
 };
 
-class CAutoRWLock
-{
-public:
-    CAutoRWLock(CRWLock* pLock, bool bRLock = true);
-    virtual ~CAutoRWLock();
-private:
-    CRWLock* m_pLock;
+class CAutoRWLock {
+ public:
+  CAutoRWLock(CRWLock* pLock, bool bRLock = true);
+  virtual ~CAutoRWLock();
+
+ private:
+  CRWLock* m_pLock;
 };
 #endif
 

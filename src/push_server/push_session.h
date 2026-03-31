@@ -3,39 +3,39 @@
  Email: lch2022fox@163.com
  filename: push_session.h
  Update Time: Sun 10 Aug 2025 12:14:20 CST
- brief: 
+ brief:
 */
 
 #ifndef __my_push_server__push_session__
 #define __my_push_server__push_session__
 
-#include <memory>
 #include <stdio.h>
-#include "socket/epoll_io_loop.h"
+#include <memory>
 #include "push_session_handler.h"
+#include "socket/epoll_io_loop.h"
 #include "socket/tcp_session_async.h"
 
-class CPushSession : public std::enable_shared_from_this<CPushSession>
-{
-public:
-    CPushSession(CEpollIOLoop& io, S_SOCKET sock);
-    virtual ~CPushSession();
-    
-    uint32_t GetSocketID() { return m_pSession->GetSocketID(); }
-    const char* GetRemoteIP() { return m_pSession->GetRemoteIP(); }
-    int32_t GetRemotePort() { return m_pSession->GetRemotePort(); }
-    
-    BOOL Start();
-    BOOL Stop();
-    BOOL SendMsg(const char* szMsg, uint32_t nMsgSize);
-    
-    void SetHeartBeat(uint64_t nHeartBeat) { m_nLastHeartBeat = nHeartBeat; }
-    uint64_t GetLastHeartBeat() { return m_nLastHeartBeat; }
-private:
-    uint64_t m_nLastHeartBeat;
-    CTCPSessionAsync* m_pSession;
-    CEpollIOLoop& m_io;
-    CPushSessionHandler m_handler;
+class CPushSession : public std::enable_shared_from_this<CPushSession> {
+ public:
+  CPushSession(CEpollIOLoop& io, S_SOCKET sock);
+  virtual ~CPushSession();
+
+  uint32_t GetSocketID() { return m_pSession->GetSocketID(); }
+  const char* GetRemoteIP() { return m_pSession->GetRemoteIP(); }
+  int32_t GetRemotePort() { return m_pSession->GetRemotePort(); }
+
+  BOOL Start();
+  BOOL Stop();
+  BOOL SendMsg(const char* szMsg, uint32_t nMsgSize);
+
+  void SetHeartBeat(uint64_t nHeartBeat) { m_nLastHeartBeat = nHeartBeat; }
+  uint64_t GetLastHeartBeat() { return m_nLastHeartBeat; }
+
+ private:
+  uint64_t m_nLastHeartBeat;
+  CTCPSessionAsync* m_pSession;
+  CEpollIOLoop& m_io;
+  CPushSessionHandler m_handler;
 };
 
 typedef std::shared_ptr<CPushSession> push_session_ptr;

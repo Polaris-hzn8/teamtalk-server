@@ -25,6 +25,6 @@ void setGroupPush(CImPdu* pPdu, uint32_t conn_uuid);
 
 void getGroupPush(CImPdu* pPdu, uint32_t conn_uuid);
 
-};
+};  // namespace DB_PROXY
 
 #endif /* GROUPACTION_H_ */

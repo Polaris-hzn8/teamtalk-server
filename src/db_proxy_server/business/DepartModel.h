@@ -10,22 +10,23 @@
 #define __DEPARTMODEL_H__
 
 #include <list>
-#include "ImPduBase.h"
 #include "IM.BaseDefine.pb.h"
+#include "ImPduBase.h"
 
-class CDepartModel
-{
-public:
-    ~CDepartModel() {}
-    static CDepartModel* getInstance();
-    void getChgedDeptId(uint32_t& nLastTime, std::list<uint32_t>& lsChangedIds);
-    void getDepts(std::list<uint32_t>& lsDeptIds, std::list<IM::BaseDefine::DepartInfo>& lsDepts);
-    void getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept);
+class CDepartModel {
+ public:
+  ~CDepartModel() {}
+  static CDepartModel* getInstance();
+  void getChgedDeptId(uint32_t& nLastTime, std::list<uint32_t>& lsChangedIds);
+  void getDepts(std::list<uint32_t>& lsDeptIds,
+                std::list<IM::BaseDefine::DepartInfo>& lsDepts);
+  void getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept);
 
-private:
-    CDepartModel() {};
-private:
-    static CDepartModel* m_pInstance;
+ private:
+  CDepartModel(){};
+
+ private:
+  static CDepartModel* m_pInstance;
 };
 
 #endif /*defined(__DEPARTMODEL_H__) */

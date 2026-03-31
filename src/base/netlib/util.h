@@ -9,59 +9,60 @@
 #ifndef __UTIL_H__
 #define __UTIL_H__
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 #include <sys/stat.h>
 
-#include "Lock.h"
-#include "ostype.h"
-#include "crosslog.h"
 #include "ImPduUtil.h"
+#include "Lock.h"
+#include "crosslog.h"
+#include "ostype.h"
 
 #ifdef _WIN32
 #define snprintf sprintf_s
 #else
-#include <time.h>
+#include <pthread.h>
 #include <stdarg.h>
 #include <strings.h>
-#include <pthread.h>
 #include <sys/time.h>
+#include <time.h>
 #endif
 
-#define _CRT_SECURE_NO_DEPRECATE // remove warning C4996,
-#define NOTUSED_ARG(v) ((void)v) // remove warning C4100, unreferenced parameter
+#define _CRT_SECURE_NO_DEPRECATE  // remove warning C4996,
+#define NOTUSED_ARG(v) \
+  ((void)v)  // remove warning C4100, unreferenced parameter
 
 ////////////////////////////////////////////////////////////////////
-class CRefObject
-{
-public:
-    CRefObject();
-    virtual ~CRefObject();
+class CRefObject {
+ public:
+  CRefObject();
+  virtual ~CRefObject();
 
-    void SetLock(CLock* lock) { m_lock = lock; }
+  void SetLock(CLock* lock) { m_lock = lock; }
 
-    void AddRef();
-    void ReleaseRef();
-private:
-    int     m_refCount;
-    CLock*  m_lock;
+  void AddRef();
+  void ReleaseRef();
+
+ private:
+  int m_refCount;
+  CLock* m_lock;
 };
 
 ////////////////////////////////////////////////////////////////////
 // 字符串分割类
-class CStrExplode
-{
-public:
-    CStrExplode(char* str, char seperator);
-    virtual ~CStrExplode();
-    
-    uint32_t GetItemCnt() { return m_item_cnt; }
-    char* GetItem(uint32_t idx) { return m_item_list[idx]; }
-private:
-    uint32_t    m_item_cnt;     //子字符串数量
-    char**      m_item_list;    //子字符串
+class CStrExplode {
+ public:
+  CStrExplode(char* str, char seperator);
+  virtual ~CStrExplode();
+
+  uint32_t GetItemCnt() { return m_item_cnt; }
+  char* GetItem(uint32_t idx) { return m_item_list[idx]; }
+
+ private:
+  uint32_t m_item_cnt;  //子字符串数量
+  char** m_item_list;   //子字符串
 };
 
 ////////////////////////////////////////////////////////////////////
@@ -74,7 +75,8 @@ void util_sleep(uint32_t millisecond);
 
 //字符串操作
 char* replaceStr(char* pSrc, char oldChar, char newChar);
-void replace_mark(std::string& str, std::string& new_value, uint32_t& begin_pos);
+void replace_mark(std::string& str, std::string& new_value,
+                  uint32_t& begin_pos);
 void replace_mark(std::string& str, uint32_t new_value, uint32_t& begin_pos);
 
 // server.pid
@@ -92,6 +94,7 @@ std::string URLDecode(const std::string& sIn);
 //获取文件的大小
 int64_t get_file_size(const char* path);
 //在内存中查找子字符串
-const char* memfind(const char* src_str, size_t src_len, const char* sub_str, size_t sub_len, bool flag = true);
+const char* memfind(const char* src_str, size_t src_len, const char* sub_str,
+                    size_t sub_len, bool flag = true);
 
 #endif

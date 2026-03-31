@@ -14,29 +14,28 @@
 #include "public_define.h"
 
 typedef enum {
-    HTTP_ERROR_SUCCESS = 0,
-    HTTP_ERROR_PARMENT,
-    HTTP_ERROR_APPKEY,
-    HTTP_ERROR_MATCH,
-    HTTP_ERROR_PERMISSION,
-    HTTP_ERROR_INTERFACE,
-    HTTP_ERROR_IP,
-    HTTP_ERROR_SEND_TYPE,
-    HTTP_ERROR_UNKNOWN,
-    HTTP_ERROR_MAX,
-    HTTP_ERROR_SERVER_EXCEPTION,
-    HTTP_ERROR_CREATE_GROUP,
-    HTTP_ERROR_CHANGE_MEMBER,
-    HTTP_ERROR_ENCRYPT,
+  HTTP_ERROR_SUCCESS = 0,
+  HTTP_ERROR_PARMENT,
+  HTTP_ERROR_APPKEY,
+  HTTP_ERROR_MATCH,
+  HTTP_ERROR_PERMISSION,
+  HTTP_ERROR_INTERFACE,
+  HTTP_ERROR_IP,
+  HTTP_ERROR_SEND_TYPE,
+  HTTP_ERROR_UNKNOWN,
+  HTTP_ERROR_MAX,
+  HTTP_ERROR_SERVER_EXCEPTION,
+  HTTP_ERROR_CREATE_GROUP,
+  HTTP_ERROR_CHANGE_MEMBER,
+  HTTP_ERROR_ENCRYPT,
 } HTTP_ERROR_CODE;
 
 typedef enum {
-    HTTP_SEND_MSG_TYPE_SIGNEL = 1,
-    HTTP_SEND_MSG_TYPE_GROUP = 2,
+  HTTP_SEND_MSG_TYPE_SIGNEL = 1,
+  HTTP_SEND_MSG_TYPE_GROUP = 2,
 } HTTP_SEND_MSG_TYPE;
 
-static std::string HTTP_ERROR_MSG[] =
-{
+static std::string HTTP_ERROR_MSG[] = {
     "成功",
     "参数错误",
     "appKey不存在",
@@ -52,24 +51,34 @@ static std::string HTTP_ERROR_MSG[] =
     "消息加密失败",
 };
 
-class CHttpQuery
-{
-public:
-    virtual ~CHttpQuery() { }
+class CHttpQuery {
+ public:
+  virtual ~CHttpQuery() {}
 
-    static CHttpQuery* GetInstance();
+  static CHttpQuery* GetInstance();
 
-    static void DispatchQuery(std::string& url, std::string& post_data, CHttpConn* pHttpConn);
+  static void DispatchQuery(std::string& url, std::string& post_data,
+                            CHttpConn* pHttpConn);
 
-private:
-    CHttpQuery() { }
-    static void _QueryCreateGroup(const std::string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
-    static void _QueryChangeMember(const std::string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
-    static HTTP_ERROR_CODE _CheckAuth(const std::string& strAppKey, const uint32_t userId, const std::string& strInterface, const std::string& strIp);
-    static HTTP_ERROR_CODE _CheckPermission(const std::string& strAppKey, uint8_t nType, const std::list<uint32_t>& lsToId, std::string strMsg);
+ private:
+  CHttpQuery() {}
+  static void _QueryCreateGroup(const std::string& strAppKey,
+                                Json::Value& post_json_obj,
+                                CHttpConn* pHttpConn);
+  static void _QueryChangeMember(const std::string& strAppKey,
+                                 Json::Value& post_json_obj,
+                                 CHttpConn* pHttpConn);
+  static HTTP_ERROR_CODE _CheckAuth(const std::string& strAppKey,
+                                    const uint32_t userId,
+                                    const std::string& strInterface,
+                                    const std::string& strIp);
+  static HTTP_ERROR_CODE _CheckPermission(const std::string& strAppKey,
+                                          uint8_t nType,
+                                          const std::list<uint32_t>& lsToId,
+                                          std::string strMsg);
 
-private:
-    static CHttpQuery* m_query_instance;
+ private:
+  static CHttpQuery* m_query_instance;
 };
 
 #endif /* HTTPQUERY_H_ */

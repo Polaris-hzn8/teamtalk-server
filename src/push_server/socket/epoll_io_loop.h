@@ -1,5 +1,5 @@
 /**	@file epoll_io_loop.h
- *	@note 
+ *	@note
  *	@brief CEPOLLIOLoop类的头文件。
  *
  *	@author		shiwei
@@ -12,48 +12,46 @@
 #ifndef _EPOLL_IO_LOOP_H
 #define _EPOLL_IO_LOOP_H
 
+#include "base_io_stream.h"
+#include "base_socket.hpp"
 #include "io_loop.h"
 #include "socket_io.h"
-#include "base_socket.hpp"
-#include "type/base_type.h"
-#include "base_io_stream.h"
 #include "thread/base_thread.hpp"
+#include "type/base_type.h"
 
 #include <map>
 #include <vector>
 
 #if defined(__linux__)
-#include <sys/epoll.h>  
+#include <sys/epoll.h>
 #endif
 
 using namespace std;
 
-#define EPOLL_SIZE  256
+#define EPOLL_SIZE 256
 
-
-class SOCKET_IO_DECLARE_CLASS CEpollIOLoop : public CIOLoop
-{
-public:
-	CEpollIOLoop(void);
-	virtual ~CEpollIOLoop(void);
+class SOCKET_IO_DECLARE_CLASS CEpollIOLoop : public CIOLoop {
+ public:
+  CEpollIOLoop(void);
+  virtual ~CEpollIOLoop(void);
 
 #if defined(__linux__)
-	virtual void Start(int32_t nEpollSize = EPOLL_SIZE);
-	virtual void Stop();
-	virtual void Run();
+  virtual void Start(int32_t nEpollSize = EPOLL_SIZE);
+  virtual void Stop();
+  virtual void Run();
 
-	virtual void Add_Handler( CBaseIOStream* piostream );
-	virtual void Remove_Handler(CBaseIOStream* piostream);
-	virtual void Add_WriteEvent(CBaseIOStream* piostream);
-	virtual void Remove_WriteEvent(CBaseIOStream* piostream);
-private:
-	void _SetEpollSize(int32_t nSize) { m_epollszie = nSize; }
-	int _GetEpollSize() { return m_epollszie; }
+  virtual void Add_Handler(CBaseIOStream* piostream);
+  virtual void Remove_Handler(CBaseIOStream* piostream);
+  virtual void Add_WriteEvent(CBaseIOStream* piostream);
+  virtual void Remove_WriteEvent(CBaseIOStream* piostream);
+
+ private:
+  void _SetEpollSize(int32_t nSize) { m_epollszie = nSize; }
+  int _GetEpollSize() { return m_epollszie; }
 #endif
 
-private:
-	int32_t m_eid;
-	int32_t m_epollszie;
-
+ private:
+  int32_t m_eid;
+  int32_t m_epollszie;
 };
 #endif

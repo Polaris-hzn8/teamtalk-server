@@ -19,17 +19,17 @@
 #error regenerate this file with a newer version of protoc.
 #endif
 
+#include <google/protobuf/extension_set.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>
-#include <google/protobuf/extension_set.h>
 // @@protoc_insertion_point(includes)
 
 namespace IM {
 namespace Other {
 
 // Internal implementation detail -- do not call these.
-void  protobuf_AddDesc_IM_2eOther_2eproto();
+void protobuf_AddDesc_IM_2eOther_2eproto();
 void protobuf_AssignDesc_IM_2eOther_2eproto();
 void protobuf_ShutdownFile_IM_2eOther_2eproto();
 
@@ -53,13 +53,11 @@ class IMHeartBeat : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMHeartBeat& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -67,7 +65,7 @@ class IMHeartBeat : public ::google::protobuf::MessageLite {
   static inline const IMHeartBeat* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMHeartBeat* other);
 
@@ -87,11 +85,13 @@ class IMHeartBeat : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -100,16 +100,15 @@ class IMHeartBeat : public ::google::protobuf::MessageLite {
 
   // @@protoc_insertion_point(class_scope:IM.Other.IMHeartBeat)
  private:
-
   ::std::string _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eOther_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eOther_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eOther_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eOther_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eOther_2eproto();
   friend void protobuf_ShutdownFile_IM_2eOther_2eproto();
 
@@ -118,11 +117,9 @@ class IMHeartBeat : public ::google::protobuf::MessageLite {
 };
 // ===================================================================
 
-
 // ===================================================================
 
 // IMHeartBeat
-
 
 // @@protoc_insertion_point(namespace_scope)
 

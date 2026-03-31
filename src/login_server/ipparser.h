@@ -11,12 +11,11 @@
 
 #include "util.h"
 
-class IpParser
-{
-public:
-    IpParser();
-    virtual ~IpParser();
-    bool isTelcome(const char* ip);
+class IpParser {
+ public:
+  IpParser();
+  virtual ~IpParser();
+  bool isTelcome(const char* ip);
 };
 
 #endif

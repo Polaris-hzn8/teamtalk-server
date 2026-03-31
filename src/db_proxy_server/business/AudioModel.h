@@ -9,32 +9,34 @@
 #ifndef AUDIO_MODEL_H_
 #define AUDIO_MODEL_H_
 
-#include <map>
 #include <list>
-#include "util.h"
-#include "public_define.h"
+#include <map>
 #include "IM.BaseDefine.pb.h"
+#include "public_define.h"
+#include "util.h"
 
-class CAudioModel
-{
-public:
-    virtual ~CAudioModel();
+class CAudioModel {
+ public:
+  virtual ~CAudioModel();
 
-    static CAudioModel* getInstance();
-    void setUrl(std::string& strFileUrl);
+  static CAudioModel* getInstance();
+  void setUrl(std::string& strFileUrl);
 
-    bool readAudios(std::list<IM::BaseDefine::MsgInfo>& lsMsg);
+  bool readAudios(std::list<IM::BaseDefine::MsgInfo>& lsMsg);
 
-    int saveAudioInfo(uint32_t nFromId, uint32_t nToId, uint32_t nCreateTime, const char* pAudioData, uint32_t nAudioLen);
+  int saveAudioInfo(uint32_t nFromId, uint32_t nToId, uint32_t nCreateTime,
+                    const char* pAudioData, uint32_t nAudioLen);
 
-private:
-    CAudioModel();
-    //    void GetAudiosInfo(uint32_t nAudioId, IM::BaseDefine::MsgInfo& msg);
-    bool readAudioContent(uint32_t nCostTime, uint32_t nSize, const std::string& strPath, IM::BaseDefine::MsgInfo& msg);
+ private:
+  CAudioModel();
+  //    void GetAudiosInfo(uint32_t nAudioId, IM::BaseDefine::MsgInfo& msg);
+  bool readAudioContent(uint32_t nCostTime, uint32_t nSize,
+                        const std::string& strPath,
+                        IM::BaseDefine::MsgInfo& msg);
 
-private:
-    static CAudioModel* m_pInstance;
-    std::string         m_strFileSite;
+ private:
+  static CAudioModel* m_pInstance;
+  std::string m_strFileSite;
 };
 
 #endif

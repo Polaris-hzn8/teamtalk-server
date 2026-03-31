@@ -12,35 +12,38 @@
 #include "singleton.h"
 #include "transfer_task.h"
 
-class TransferTaskManager : public Singleton<TransferTaskManager>
-{
-public:
-    ~TransferTaskManager();
+class TransferTaskManager : public Singleton<TransferTaskManager> {
+ public:
+  ~TransferTaskManager();
 
-    void OnTimer(uint64_t tick);
+  void OnTimer(uint64_t tick);
 
-    BaseTransferTask* NewTransferTask(uint32_t trans_mode, const std::string& task_id, uint32_t from_user_id, uint32_t to_user_id, const std::string& file_name, uint32_t file_size);
+  BaseTransferTask* NewTransferTask(uint32_t trans_mode,
+                                    const std::string& task_id,
+                                    uint32_t from_user_id, uint32_t to_user_id,
+                                    const std::string& file_name,
+                                    uint32_t file_size);
 
-    OfflineTransferTask* NewTransferTask(const std::string& task_id, uint32_t to_user_id);
+  OfflineTransferTask* NewTransferTask(const std::string& task_id,
+                                       uint32_t to_user_id);
 
-    bool DeleteTransferTask(const std::string& task_id);
-    bool DeleteTransferTaskByConnClose(const std::string& task_id);
+  bool DeleteTransferTask(const std::string& task_id);
+  bool DeleteTransferTaskByConnClose(const std::string& task_id);
 
-    BaseTransferTask* FindByTaskID(const std::string& task_id) {
-        BaseTransferTask* transfer_task = NULL;
-        TransferTaskMap::iterator it = transfer_tasks_.find(task_id);
-        if (it != transfer_tasks_.end())
-            transfer_task = it->second;
-        return transfer_task;
-    }
+  BaseTransferTask* FindByTaskID(const std::string& task_id) {
+    BaseTransferTask* transfer_task = NULL;
+    TransferTaskMap::iterator it = transfer_tasks_.find(task_id);
+    if (it != transfer_tasks_.end()) transfer_task = it->second;
+    return transfer_task;
+  }
 
-private:
-    friend class Singleton<TransferTaskManager>;
+ private:
+  friend class Singleton<TransferTaskManager>;
 
-    TransferTaskManager();
+  TransferTaskManager();
 
-    TransferTaskMap transfer_tasks_;
-    // TransferTaskConnkMap conn_tasks_;
+  TransferTaskMap transfer_tasks_;
+  // TransferTaskConnkMap conn_tasks_;
 };
 
-#endif // _FILE_SERVER_TRANSFER_TASK_MANAGER_H_
+#endif  // _FILE_SERVER_TRANSFER_TASK_MANAGER_H_

@@ -39,21 +39,19 @@
 typedef char* sds;
 
 struct sdshdr {
-    int len;
-    int free;
-    char buf[];
+  int len;
+  int free;
+  char buf[];
 };
 
-static inline size_t sdslen(const sds s)
-{
-    struct sdshdr* sh = (struct sdshdr*)(s - sizeof *sh);
-    return sh->len;
+static inline size_t sdslen(const sds s) {
+  struct sdshdr* sh = (struct sdshdr*)(s - sizeof *sh);
+  return sh->len;
 }
 
-static inline size_t sdsavail(const sds s)
-{
-    struct sdshdr* sh = (struct sdshdr*)(s - sizeof *sh);
-    return sh->free;
+static inline size_t sdsavail(const sds s) {
+  struct sdshdr* sh = (struct sdshdr*)(s - sizeof *sh);
+  return sh->free;
 }
 
 sds sdsnewlen(const void* init, size_t initlen);
@@ -84,7 +82,8 @@ void sdsrange(sds s, int start, int end);
 void sdsupdatelen(sds s);
 void sdsclear(sds s);
 int sdscmp(const sds s1, const sds s2);
-sds* sdssplitlen(const char* s, int len, const char* sep, int seplen, int* count);
+sds* sdssplitlen(const char* s, int len, const char* sep, int seplen,
+                 int* count);
 void sdsfreesplitres(sds* tokens, int count);
 void sdstolower(sds s);
 void sdstoupper(sds s);

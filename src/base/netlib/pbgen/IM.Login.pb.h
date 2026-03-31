@@ -19,10 +19,10 @@
 #error regenerate this file with a newer version of protoc.
 #endif
 
+#include <google/protobuf/extension_set.h>
 #include <google/protobuf/generated_message_util.h>
 #include <google/protobuf/message_lite.h>
 #include <google/protobuf/repeated_field.h>
-#include <google/protobuf/extension_set.h>
 #include "IM.BaseDefine.pb.h"
 // @@protoc_insertion_point(includes)
 
@@ -30,7 +30,7 @@ namespace IM {
 namespace Login {
 
 // Internal implementation detail -- do not call these.
-void  protobuf_AddDesc_IM_2eLogin_2eproto();
+void protobuf_AddDesc_IM_2eLogin_2eproto();
 void protobuf_AssignDesc_IM_2eLogin_2eproto();
 void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -70,13 +70,11 @@ class IMMsgServReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMMsgServReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -84,7 +82,7 @@ class IMMsgServReq : public ::google::protobuf::MessageLite {
   static inline const IMMsgServReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMMsgServReq* other);
 
@@ -104,11 +102,13 @@ class IMMsgServReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -117,16 +117,15 @@ class IMMsgServReq : public ::google::protobuf::MessageLite {
 
   // @@protoc_insertion_point(class_scope:IM.Login.IMMsgServReq)
  private:
-
   ::std::string _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -151,13 +150,11 @@ class IMMsgServRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMMsgServRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -165,7 +162,7 @@ class IMMsgServRsp : public ::google::protobuf::MessageLite {
   static inline const IMMsgServRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMMsgServRsp* other);
 
@@ -185,11 +182,13 @@ class IMMsgServRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -253,11 +252,11 @@ class IMMsgServRsp : public ::google::protobuf::MessageLite {
   int result_code_;
   ::google::protobuf::uint32 port_;
   ::std::string* backip_ip_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -282,13 +281,11 @@ class IMLoginReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMLoginReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -296,7 +293,7 @@ class IMLoginReq : public ::google::protobuf::MessageLite {
   static inline const IMLoginReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMLoginReq* other);
 
@@ -316,11 +313,13 @@ class IMLoginReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -399,11 +398,11 @@ class IMLoginReq : public ::google::protobuf::MessageLite {
   int online_status_;
   int client_type_;
   ::std::string* client_version_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -428,13 +427,11 @@ class IMLoginRes : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMLoginRes& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -442,7 +439,7 @@ class IMLoginRes : public ::google::protobuf::MessageLite {
   static inline const IMLoginRes* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMLoginRes* other);
 
@@ -462,11 +459,13 @@ class IMLoginRes : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -537,11 +536,11 @@ class IMLoginRes : public ::google::protobuf::MessageLite {
   ::std::string* result_string_;
   ::IM::BaseDefine::UserInfo* user_info_;
   int online_status_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -566,13 +565,11 @@ class IMLogoutReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMLogoutReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -580,7 +577,7 @@ class IMLogoutReq : public ::google::protobuf::MessageLite {
   static inline const IMLogoutReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMLogoutReq* other);
 
@@ -600,11 +597,13 @@ class IMLogoutReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -613,16 +612,15 @@ class IMLogoutReq : public ::google::protobuf::MessageLite {
 
   // @@protoc_insertion_point(class_scope:IM.Login.IMLogoutReq)
  private:
-
   ::std::string _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -647,13 +645,11 @@ class IMLogoutRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMLogoutRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -661,7 +657,7 @@ class IMLogoutRsp : public ::google::protobuf::MessageLite {
   static inline const IMLogoutRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMLogoutRsp* other);
 
@@ -681,11 +677,13 @@ class IMLogoutRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -709,11 +707,11 @@ class IMLogoutRsp : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google::protobuf::uint32 result_code_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -738,13 +736,11 @@ class IMKickUser : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMKickUser& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -752,7 +748,7 @@ class IMKickUser : public ::google::protobuf::MessageLite {
   static inline const IMKickUser* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMKickUser* other);
 
@@ -772,11 +768,13 @@ class IMKickUser : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -810,11 +808,11 @@ class IMKickUser : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::google::protobuf::uint32 user_id_;
   int kick_reason_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -839,13 +837,11 @@ class IMDeviceTokenReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMDeviceTokenReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -853,7 +849,7 @@ class IMDeviceTokenReq : public ::google::protobuf::MessageLite {
   static inline const IMDeviceTokenReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMDeviceTokenReq* other);
 
@@ -873,11 +869,13 @@ class IMDeviceTokenReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -941,11 +939,11 @@ class IMDeviceTokenReq : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 user_id_;
   int client_type_;
   ::std::string* attach_data_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -970,13 +968,11 @@ class IMDeviceTokenRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMDeviceTokenRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -984,7 +980,7 @@ class IMDeviceTokenRsp : public ::google::protobuf::MessageLite {
   static inline const IMDeviceTokenRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMDeviceTokenRsp* other);
 
@@ -1004,11 +1000,13 @@ class IMDeviceTokenRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1047,11 +1045,11 @@ class IMDeviceTokenRsp : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -1076,13 +1074,11 @@ class IMKickPCClientReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMKickPCClientReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1090,7 +1086,7 @@ class IMKickPCClientReq : public ::google::protobuf::MessageLite {
   static inline const IMKickPCClientReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMKickPCClientReq* other);
 
@@ -1110,11 +1106,13 @@ class IMKickPCClientReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1138,11 +1136,11 @@ class IMKickPCClientReq : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -1167,13 +1165,11 @@ class IMKickPCClientRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMKickPCClientRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1181,7 +1177,7 @@ class IMKickPCClientRsp : public ::google::protobuf::MessageLite {
   static inline const IMKickPCClientRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMKickPCClientRsp* other);
 
@@ -1201,11 +1197,13 @@ class IMKickPCClientRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1239,11 +1237,11 @@ class IMKickPCClientRsp : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::google::protobuf::uint32 user_id_;
   ::google::protobuf::uint32 result_code_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -1268,13 +1266,11 @@ class IMPushShieldReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMPushShieldReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1282,7 +1278,7 @@ class IMPushShieldReq : public ::google::protobuf::MessageLite {
   static inline const IMPushShieldReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMPushShieldReq* other);
 
@@ -1302,11 +1298,13 @@ class IMPushShieldReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1355,11 +1353,11 @@ class IMPushShieldReq : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 user_id_;
   ::google::protobuf::uint32 shield_status_;
   ::std::string* attach_data_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -1384,13 +1382,11 @@ class IMPushShieldRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMPushShieldRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1398,7 +1394,7 @@ class IMPushShieldRsp : public ::google::protobuf::MessageLite {
   static inline const IMPushShieldRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMPushShieldRsp* other);
 
@@ -1418,11 +1414,13 @@ class IMPushShieldRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1481,11 +1479,11 @@ class IMPushShieldRsp : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 result_code_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 shield_status_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -1510,13 +1508,11 @@ class IMQueryPushShieldReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMQueryPushShieldReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1524,7 +1520,7 @@ class IMQueryPushShieldReq : public ::google::protobuf::MessageLite {
   static inline const IMQueryPushShieldReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMQueryPushShieldReq* other);
 
@@ -1544,11 +1540,13 @@ class IMQueryPushShieldReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1587,11 +1585,11 @@ class IMQueryPushShieldReq : public ::google::protobuf::MessageLite {
   mutable int _cached_size_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 user_id_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -1616,13 +1614,11 @@ class IMQueryPushShieldRsp : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMQueryPushShieldRsp& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1630,7 +1626,7 @@ class IMQueryPushShieldRsp : public ::google::protobuf::MessageLite {
   static inline const IMQueryPushShieldRsp* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMQueryPushShieldRsp* other);
 
@@ -1650,11 +1646,13 @@ class IMQueryPushShieldRsp : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1713,11 +1711,11 @@ class IMQueryPushShieldRsp : public ::google::protobuf::MessageLite {
   ::google::protobuf::uint32 result_code_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 shield_status_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -1742,13 +1740,11 @@ class IMRegistReq : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMRegistReq& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1756,7 +1752,7 @@ class IMRegistReq : public ::google::protobuf::MessageLite {
   static inline const IMRegistReq* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMRegistReq* other);
 
@@ -1776,11 +1772,13 @@ class IMRegistReq : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -1909,11 +1907,11 @@ class IMRegistReq : public ::google::protobuf::MessageLite {
   ::std::string* email_;
   ::std::string* attach_data_;
   ::google::protobuf::uint32 sex_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -1938,13 +1936,11 @@ class IMRegistRes : public ::google::protobuf::MessageLite {
     return _unknown_fields_;
   }
 
-  inline ::std::string* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
+  inline ::std::string* mutable_unknown_fields() { return &_unknown_fields_; }
 
   static const IMRegistRes& default_instance();
 
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   // Returns the internal default instance pointer. This function can
   // return NULL thus should not be used by the user. This is intended
   // for Protobuf internal code. Please use default_instance() declared
@@ -1952,7 +1948,7 @@ class IMRegistRes : public ::google::protobuf::MessageLite {
   static inline const IMRegistRes* internal_default_instance() {
     return default_instance_;
   }
-  #endif
+#endif
 
   void Swap(IMRegistRes* other);
 
@@ -1972,11 +1968,13 @@ class IMRegistRes : public ::google::protobuf::MessageLite {
       ::google::protobuf::io::CodedOutputStream* output) const;
   void DiscardUnknownFields();
   int GetCachedSize() const { return _cached_size_; }
-  private:
+
+ private:
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  public:
+
+ public:
   ::std::string GetTypeName() const;
 
   // nested types ----------------------------------------------------
@@ -2055,11 +2053,11 @@ class IMRegistRes : public ::google::protobuf::MessageLite {
   int result_code_;
   ::google::protobuf::uint32 user_id_;
   ::std::string* attach_data_;
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto_impl();
-  #else
-  friend void  protobuf_AddDesc_IM_2eLogin_2eproto();
-  #endif
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto_impl();
+#else
+  friend void protobuf_AddDesc_IM_2eLogin_2eproto();
+#endif
   friend void protobuf_AssignDesc_IM_2eLogin_2eproto();
   friend void protobuf_ShutdownFile_IM_2eLogin_2eproto();
 
@@ -2067,7 +2065,6 @@ class IMRegistRes : public ::google::protobuf::MessageLite {
   static IMRegistRes* default_instance_;
 };
 // ===================================================================
-
 
 // ===================================================================
 
@@ -2093,7 +2090,7 @@ inline void IMMsgServRsp::clear_result_code() {
 }
 inline ::IM::BaseDefine::ResultType IMMsgServRsp::result_code() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMMsgServRsp.result_code)
-  return static_cast< ::IM::BaseDefine::ResultType >(result_code_);
+  return static_cast< ::IM::BaseDefine::ResultType>(result_code_);
 }
 inline void IMMsgServRsp::set_result_code(::IM::BaseDefine::ResultType value) {
   assert(::IM::BaseDefine::ResultType_IsValid(value));
@@ -2106,14 +2103,13 @@ inline void IMMsgServRsp::set_result_code(::IM::BaseDefine::ResultType value) {
 inline bool IMMsgServRsp::has_prior_ip() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMMsgServRsp::set_has_prior_ip() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMMsgServRsp::set_has_prior_ip() { _has_bits_[0] |= 0x00000002u; }
 inline void IMMsgServRsp::clear_has_prior_ip() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMMsgServRsp::clear_prior_ip() {
-  if (prior_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (prior_ip_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     prior_ip_->clear();
   }
   clear_has_prior_ip();
@@ -2124,7 +2120,8 @@ inline const ::std::string& IMMsgServRsp::prior_ip() const {
 }
 inline void IMMsgServRsp::set_prior_ip(const ::std::string& value) {
   set_has_prior_ip();
-  if (prior_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (prior_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     prior_ip_ = new ::std::string;
   }
   prior_ip_->assign(value);
@@ -2132,7 +2129,8 @@ inline void IMMsgServRsp::set_prior_ip(const ::std::string& value) {
 }
 inline void IMMsgServRsp::set_prior_ip(const char* value) {
   set_has_prior_ip();
-  if (prior_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (prior_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     prior_ip_ = new ::std::string;
   }
   prior_ip_->assign(value);
@@ -2140,7 +2138,8 @@ inline void IMMsgServRsp::set_prior_ip(const char* value) {
 }
 inline void IMMsgServRsp::set_prior_ip(const char* value, size_t size) {
   set_has_prior_ip();
-  if (prior_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (prior_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     prior_ip_ = new ::std::string;
   }
   prior_ip_->assign(reinterpret_cast<const char*>(value), size);
@@ -2148,7 +2147,8 @@ inline void IMMsgServRsp::set_prior_ip(const char* value, size_t size) {
 }
 inline ::std::string* IMMsgServRsp::mutable_prior_ip() {
   set_has_prior_ip();
-  if (prior_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (prior_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     prior_ip_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMMsgServRsp.prior_ip)
@@ -2156,16 +2156,19 @@ inline ::std::string* IMMsgServRsp::mutable_prior_ip() {
 }
 inline ::std::string* IMMsgServRsp::release_prior_ip() {
   clear_has_prior_ip();
-  if (prior_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (prior_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = prior_ip_;
-    prior_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    prior_ip_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMMsgServRsp::set_allocated_prior_ip(::std::string* prior_ip) {
-  if (prior_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (prior_ip_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete prior_ip_;
   }
   if (prior_ip) {
@@ -2173,7 +2176,8 @@ inline void IMMsgServRsp::set_allocated_prior_ip(::std::string* prior_ip) {
     prior_ip_ = prior_ip;
   } else {
     clear_has_prior_ip();
-    prior_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    prior_ip_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMMsgServRsp.prior_ip)
 }
@@ -2182,14 +2186,13 @@ inline void IMMsgServRsp::set_allocated_prior_ip(::std::string* prior_ip) {
 inline bool IMMsgServRsp::has_backip_ip() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void IMMsgServRsp::set_has_backip_ip() {
-  _has_bits_[0] |= 0x00000004u;
-}
+inline void IMMsgServRsp::set_has_backip_ip() { _has_bits_[0] |= 0x00000004u; }
 inline void IMMsgServRsp::clear_has_backip_ip() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMMsgServRsp::clear_backip_ip() {
-  if (backip_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (backip_ip_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     backip_ip_->clear();
   }
   clear_has_backip_ip();
@@ -2200,7 +2203,8 @@ inline const ::std::string& IMMsgServRsp::backip_ip() const {
 }
 inline void IMMsgServRsp::set_backip_ip(const ::std::string& value) {
   set_has_backip_ip();
-  if (backip_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (backip_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     backip_ip_ = new ::std::string;
   }
   backip_ip_->assign(value);
@@ -2208,7 +2212,8 @@ inline void IMMsgServRsp::set_backip_ip(const ::std::string& value) {
 }
 inline void IMMsgServRsp::set_backip_ip(const char* value) {
   set_has_backip_ip();
-  if (backip_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (backip_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     backip_ip_ = new ::std::string;
   }
   backip_ip_->assign(value);
@@ -2216,7 +2221,8 @@ inline void IMMsgServRsp::set_backip_ip(const char* value) {
 }
 inline void IMMsgServRsp::set_backip_ip(const char* value, size_t size) {
   set_has_backip_ip();
-  if (backip_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (backip_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     backip_ip_ = new ::std::string;
   }
   backip_ip_->assign(reinterpret_cast<const char*>(value), size);
@@ -2224,7 +2230,8 @@ inline void IMMsgServRsp::set_backip_ip(const char* value, size_t size) {
 }
 inline ::std::string* IMMsgServRsp::mutable_backip_ip() {
   set_has_backip_ip();
-  if (backip_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (backip_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     backip_ip_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMMsgServRsp.backip_ip)
@@ -2232,16 +2239,19 @@ inline ::std::string* IMMsgServRsp::mutable_backip_ip() {
 }
 inline ::std::string* IMMsgServRsp::release_backip_ip() {
   clear_has_backip_ip();
-  if (backip_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (backip_ip_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = backip_ip_;
-    backip_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    backip_ip_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMMsgServRsp::set_allocated_backip_ip(::std::string* backip_ip) {
-  if (backip_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (backip_ip_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete backip_ip_;
   }
   if (backip_ip) {
@@ -2249,7 +2259,8 @@ inline void IMMsgServRsp::set_allocated_backip_ip(::std::string* backip_ip) {
     backip_ip_ = backip_ip;
   } else {
     clear_has_backip_ip();
-    backip_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    backip_ip_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMMsgServRsp.backip_ip)
 }
@@ -2258,12 +2269,8 @@ inline void IMMsgServRsp::set_allocated_backip_ip(::std::string* backip_ip) {
 inline bool IMMsgServRsp::has_port() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void IMMsgServRsp::set_has_port() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void IMMsgServRsp::clear_has_port() {
-  _has_bits_[0] &= ~0x00000008u;
-}
+inline void IMMsgServRsp::set_has_port() { _has_bits_[0] |= 0x00000008u; }
+inline void IMMsgServRsp::clear_has_port() { _has_bits_[0] &= ~0x00000008u; }
 inline void IMMsgServRsp::clear_port() {
   port_ = 0u;
   clear_has_port();
@@ -2286,14 +2293,11 @@ inline void IMMsgServRsp::set_port(::google::protobuf::uint32 value) {
 inline bool IMLoginReq::has_user_name() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMLoginReq::set_has_user_name() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void IMLoginReq::clear_has_user_name() {
-  _has_bits_[0] &= ~0x00000001u;
-}
+inline void IMLoginReq::set_has_user_name() { _has_bits_[0] |= 0x00000001u; }
+inline void IMLoginReq::clear_has_user_name() { _has_bits_[0] &= ~0x00000001u; }
 inline void IMLoginReq::clear_user_name() {
-  if (user_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_->clear();
   }
   clear_has_user_name();
@@ -2304,7 +2308,8 @@ inline const ::std::string& IMLoginReq::user_name() const {
 }
 inline void IMLoginReq::set_user_name(const ::std::string& value) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(value);
@@ -2312,7 +2317,8 @@ inline void IMLoginReq::set_user_name(const ::std::string& value) {
 }
 inline void IMLoginReq::set_user_name(const char* value) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(value);
@@ -2320,7 +2326,8 @@ inline void IMLoginReq::set_user_name(const char* value) {
 }
 inline void IMLoginReq::set_user_name(const char* value, size_t size) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -2328,7 +2335,8 @@ inline void IMLoginReq::set_user_name(const char* value, size_t size) {
 }
 inline ::std::string* IMLoginReq::mutable_user_name() {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMLoginReq.user_name)
@@ -2336,16 +2344,19 @@ inline ::std::string* IMLoginReq::mutable_user_name() {
 }
 inline ::std::string* IMLoginReq::release_user_name() {
   clear_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = user_name_;
-    user_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    user_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMLoginReq::set_allocated_user_name(::std::string* user_name) {
-  if (user_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete user_name_;
   }
   if (user_name) {
@@ -2353,7 +2364,8 @@ inline void IMLoginReq::set_allocated_user_name(::std::string* user_name) {
     user_name_ = user_name;
   } else {
     clear_has_user_name();
-    user_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    user_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMLoginReq.user_name)
 }
@@ -2362,14 +2374,11 @@ inline void IMLoginReq::set_allocated_user_name(::std::string* user_name) {
 inline bool IMLoginReq::has_password() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMLoginReq::set_has_password() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void IMLoginReq::clear_has_password() {
-  _has_bits_[0] &= ~0x00000002u;
-}
+inline void IMLoginReq::set_has_password() { _has_bits_[0] |= 0x00000002u; }
+inline void IMLoginReq::clear_has_password() { _has_bits_[0] &= ~0x00000002u; }
 inline void IMLoginReq::clear_password() {
-  if (password_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_->clear();
   }
   clear_has_password();
@@ -2380,7 +2389,8 @@ inline const ::std::string& IMLoginReq::password() const {
 }
 inline void IMLoginReq::set_password(const ::std::string& value) {
   set_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_ = new ::std::string;
   }
   password_->assign(value);
@@ -2388,7 +2398,8 @@ inline void IMLoginReq::set_password(const ::std::string& value) {
 }
 inline void IMLoginReq::set_password(const char* value) {
   set_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_ = new ::std::string;
   }
   password_->assign(value);
@@ -2396,7 +2407,8 @@ inline void IMLoginReq::set_password(const char* value) {
 }
 inline void IMLoginReq::set_password(const char* value, size_t size) {
   set_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_ = new ::std::string;
   }
   password_->assign(reinterpret_cast<const char*>(value), size);
@@ -2404,7 +2416,8 @@ inline void IMLoginReq::set_password(const char* value, size_t size) {
 }
 inline ::std::string* IMLoginReq::mutable_password() {
   set_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMLoginReq.password)
@@ -2412,16 +2425,19 @@ inline ::std::string* IMLoginReq::mutable_password() {
 }
 inline ::std::string* IMLoginReq::release_password() {
   clear_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = password_;
-    password_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    password_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMLoginReq::set_allocated_password(::std::string* password) {
-  if (password_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete password_;
   }
   if (password) {
@@ -2429,7 +2445,8 @@ inline void IMLoginReq::set_allocated_password(::std::string* password) {
     password_ = password;
   } else {
     clear_has_password();
-    password_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    password_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMLoginReq.password)
 }
@@ -2450,9 +2467,10 @@ inline void IMLoginReq::clear_online_status() {
 }
 inline ::IM::BaseDefine::UserStatType IMLoginReq::online_status() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMLoginReq.online_status)
-  return static_cast< ::IM::BaseDefine::UserStatType >(online_status_);
+  return static_cast< ::IM::BaseDefine::UserStatType>(online_status_);
 }
-inline void IMLoginReq::set_online_status(::IM::BaseDefine::UserStatType value) {
+inline void IMLoginReq::set_online_status(
+    ::IM::BaseDefine::UserStatType value) {
   assert(::IM::BaseDefine::UserStatType_IsValid(value));
   set_has_online_status();
   online_status_ = value;
@@ -2463,9 +2481,7 @@ inline void IMLoginReq::set_online_status(::IM::BaseDefine::UserStatType value) 
 inline bool IMLoginReq::has_client_type() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void IMLoginReq::set_has_client_type() {
-  _has_bits_[0] |= 0x00000008u;
-}
+inline void IMLoginReq::set_has_client_type() { _has_bits_[0] |= 0x00000008u; }
 inline void IMLoginReq::clear_has_client_type() {
   _has_bits_[0] &= ~0x00000008u;
 }
@@ -2475,7 +2491,7 @@ inline void IMLoginReq::clear_client_type() {
 }
 inline ::IM::BaseDefine::ClientType IMLoginReq::client_type() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMLoginReq.client_type)
-  return static_cast< ::IM::BaseDefine::ClientType >(client_type_);
+  return static_cast< ::IM::BaseDefine::ClientType>(client_type_);
 }
 inline void IMLoginReq::set_client_type(::IM::BaseDefine::ClientType value) {
   assert(::IM::BaseDefine::ClientType_IsValid(value));
@@ -2495,7 +2511,8 @@ inline void IMLoginReq::clear_has_client_version() {
   _has_bits_[0] &= ~0x00000010u;
 }
 inline void IMLoginReq::clear_client_version() {
-  if (client_version_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (client_version_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     client_version_->clear();
   }
   clear_has_client_version();
@@ -2506,7 +2523,8 @@ inline const ::std::string& IMLoginReq::client_version() const {
 }
 inline void IMLoginReq::set_client_version(const ::std::string& value) {
   set_has_client_version();
-  if (client_version_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (client_version_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     client_version_ = new ::std::string;
   }
   client_version_->assign(value);
@@ -2514,7 +2532,8 @@ inline void IMLoginReq::set_client_version(const ::std::string& value) {
 }
 inline void IMLoginReq::set_client_version(const char* value) {
   set_has_client_version();
-  if (client_version_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (client_version_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     client_version_ = new ::std::string;
   }
   client_version_->assign(value);
@@ -2522,7 +2541,8 @@ inline void IMLoginReq::set_client_version(const char* value) {
 }
 inline void IMLoginReq::set_client_version(const char* value, size_t size) {
   set_has_client_version();
-  if (client_version_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (client_version_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     client_version_ = new ::std::string;
   }
   client_version_->assign(reinterpret_cast<const char*>(value), size);
@@ -2530,7 +2550,8 @@ inline void IMLoginReq::set_client_version(const char* value, size_t size) {
 }
 inline ::std::string* IMLoginReq::mutable_client_version() {
   set_has_client_version();
-  if (client_version_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (client_version_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     client_version_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMLoginReq.client_version)
@@ -2538,16 +2559,20 @@ inline ::std::string* IMLoginReq::mutable_client_version() {
 }
 inline ::std::string* IMLoginReq::release_client_version() {
   clear_has_client_version();
-  if (client_version_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (client_version_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = client_version_;
-    client_version_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    client_version_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMLoginReq::set_allocated_client_version(::std::string* client_version) {
-  if (client_version_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMLoginReq::set_allocated_client_version(
+    ::std::string* client_version) {
+  if (client_version_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete client_version_;
   }
   if (client_version) {
@@ -2555,7 +2580,8 @@ inline void IMLoginReq::set_allocated_client_version(::std::string* client_versi
     client_version_ = client_version;
   } else {
     clear_has_client_version();
-    client_version_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    client_version_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMLoginReq.client_version)
 }
@@ -2568,9 +2594,7 @@ inline void IMLoginReq::set_allocated_client_version(::std::string* client_versi
 inline bool IMLoginRes::has_server_time() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMLoginRes::set_has_server_time() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMLoginRes::set_has_server_time() { _has_bits_[0] |= 0x00000001u; }
 inline void IMLoginRes::clear_has_server_time() {
   _has_bits_[0] &= ~0x00000001u;
 }
@@ -2592,9 +2616,7 @@ inline void IMLoginRes::set_server_time(::google::protobuf::uint32 value) {
 inline bool IMLoginRes::has_result_code() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMLoginRes::set_has_result_code() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMLoginRes::set_has_result_code() { _has_bits_[0] |= 0x00000002u; }
 inline void IMLoginRes::clear_has_result_code() {
   _has_bits_[0] &= ~0x00000002u;
 }
@@ -2604,7 +2626,7 @@ inline void IMLoginRes::clear_result_code() {
 }
 inline ::IM::BaseDefine::ResultType IMLoginRes::result_code() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMLoginRes.result_code)
-  return static_cast< ::IM::BaseDefine::ResultType >(result_code_);
+  return static_cast< ::IM::BaseDefine::ResultType>(result_code_);
 }
 inline void IMLoginRes::set_result_code(::IM::BaseDefine::ResultType value) {
   assert(::IM::BaseDefine::ResultType_IsValid(value));
@@ -2624,7 +2646,8 @@ inline void IMLoginRes::clear_has_result_string() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMLoginRes::clear_result_string() {
-  if (result_string_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_->clear();
   }
   clear_has_result_string();
@@ -2635,7 +2658,8 @@ inline const ::std::string& IMLoginRes::result_string() const {
 }
 inline void IMLoginRes::set_result_string(const ::std::string& value) {
   set_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_ = new ::std::string;
   }
   result_string_->assign(value);
@@ -2643,7 +2667,8 @@ inline void IMLoginRes::set_result_string(const ::std::string& value) {
 }
 inline void IMLoginRes::set_result_string(const char* value) {
   set_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_ = new ::std::string;
   }
   result_string_->assign(value);
@@ -2651,7 +2676,8 @@ inline void IMLoginRes::set_result_string(const char* value) {
 }
 inline void IMLoginRes::set_result_string(const char* value, size_t size) {
   set_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_ = new ::std::string;
   }
   result_string_->assign(reinterpret_cast<const char*>(value), size);
@@ -2659,7 +2685,8 @@ inline void IMLoginRes::set_result_string(const char* value, size_t size) {
 }
 inline ::std::string* IMLoginRes::mutable_result_string() {
   set_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMLoginRes.result_string)
@@ -2667,16 +2694,20 @@ inline ::std::string* IMLoginRes::mutable_result_string() {
 }
 inline ::std::string* IMLoginRes::release_result_string() {
   clear_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = result_string_;
-    result_string_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    result_string_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMLoginRes::set_allocated_result_string(::std::string* result_string) {
-  if (result_string_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMLoginRes::set_allocated_result_string(
+    ::std::string* result_string) {
+  if (result_string_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete result_string_;
   }
   if (result_string) {
@@ -2684,7 +2715,8 @@ inline void IMLoginRes::set_allocated_result_string(::std::string* result_string
     result_string_ = result_string;
   } else {
     clear_has_result_string();
-    result_string_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    result_string_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMLoginRes.result_string)
 }
@@ -2705,9 +2737,10 @@ inline void IMLoginRes::clear_online_status() {
 }
 inline ::IM::BaseDefine::UserStatType IMLoginRes::online_status() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMLoginRes.online_status)
-  return static_cast< ::IM::BaseDefine::UserStatType >(online_status_);
+  return static_cast< ::IM::BaseDefine::UserStatType>(online_status_);
 }
-inline void IMLoginRes::set_online_status(::IM::BaseDefine::UserStatType value) {
+inline void IMLoginRes::set_online_status(
+    ::IM::BaseDefine::UserStatType value) {
   assert(::IM::BaseDefine::UserStatType_IsValid(value));
   set_has_online_status();
   online_status_ = value;
@@ -2718,12 +2751,8 @@ inline void IMLoginRes::set_online_status(::IM::BaseDefine::UserStatType value) 
 inline bool IMLoginRes::has_user_info() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void IMLoginRes::set_has_user_info() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void IMLoginRes::clear_has_user_info() {
-  _has_bits_[0] &= ~0x00000010u;
-}
+inline void IMLoginRes::set_has_user_info() { _has_bits_[0] |= 0x00000010u; }
+inline void IMLoginRes::clear_has_user_info() { _has_bits_[0] &= ~0x00000010u; }
 inline void IMLoginRes::clear_user_info() {
   if (user_info_ != NULL) user_info_->::IM::BaseDefine::UserInfo::Clear();
   clear_has_user_info();
@@ -2748,7 +2777,8 @@ inline ::IM::BaseDefine::UserInfo* IMLoginRes::release_user_info() {
   user_info_ = NULL;
   return temp;
 }
-inline void IMLoginRes::set_allocated_user_info(::IM::BaseDefine::UserInfo* user_info) {
+inline void IMLoginRes::set_allocated_user_info(
+    ::IM::BaseDefine::UserInfo* user_info) {
   delete user_info_;
   user_info_ = user_info;
   if (user_info) {
@@ -2771,9 +2801,7 @@ inline void IMLoginRes::set_allocated_user_info(::IM::BaseDefine::UserInfo* user
 inline bool IMLogoutRsp::has_result_code() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMLogoutRsp::set_has_result_code() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMLogoutRsp::set_has_result_code() { _has_bits_[0] |= 0x00000001u; }
 inline void IMLogoutRsp::clear_has_result_code() {
   _has_bits_[0] &= ~0x00000001u;
 }
@@ -2799,12 +2827,8 @@ inline void IMLogoutRsp::set_result_code(::google::protobuf::uint32 value) {
 inline bool IMKickUser::has_user_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMKickUser::set_has_user_id() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void IMKickUser::clear_has_user_id() {
-  _has_bits_[0] &= ~0x00000001u;
-}
+inline void IMKickUser::set_has_user_id() { _has_bits_[0] |= 0x00000001u; }
+inline void IMKickUser::clear_has_user_id() { _has_bits_[0] &= ~0x00000001u; }
 inline void IMKickUser::clear_user_id() {
   user_id_ = 0u;
   clear_has_user_id();
@@ -2823,9 +2847,7 @@ inline void IMKickUser::set_user_id(::google::protobuf::uint32 value) {
 inline bool IMKickUser::has_kick_reason() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMKickUser::set_has_kick_reason() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMKickUser::set_has_kick_reason() { _has_bits_[0] |= 0x00000002u; }
 inline void IMKickUser::clear_has_kick_reason() {
   _has_bits_[0] &= ~0x00000002u;
 }
@@ -2835,9 +2857,10 @@ inline void IMKickUser::clear_kick_reason() {
 }
 inline ::IM::BaseDefine::KickReasonType IMKickUser::kick_reason() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMKickUser.kick_reason)
-  return static_cast< ::IM::BaseDefine::KickReasonType >(kick_reason_);
+  return static_cast< ::IM::BaseDefine::KickReasonType>(kick_reason_);
 }
-inline void IMKickUser::set_kick_reason(::IM::BaseDefine::KickReasonType value) {
+inline void IMKickUser::set_kick_reason(
+    ::IM::BaseDefine::KickReasonType value) {
   assert(::IM::BaseDefine::KickReasonType_IsValid(value));
   set_has_kick_reason();
   kick_reason_ = value;
@@ -2883,7 +2906,8 @@ inline void IMDeviceTokenReq::clear_has_device_token() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMDeviceTokenReq::clear_device_token() {
-  if (device_token_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (device_token_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     device_token_->clear();
   }
   clear_has_device_token();
@@ -2894,7 +2918,8 @@ inline const ::std::string& IMDeviceTokenReq::device_token() const {
 }
 inline void IMDeviceTokenReq::set_device_token(const ::std::string& value) {
   set_has_device_token();
-  if (device_token_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (device_token_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     device_token_ = new ::std::string;
   }
   device_token_->assign(value);
@@ -2902,7 +2927,8 @@ inline void IMDeviceTokenReq::set_device_token(const ::std::string& value) {
 }
 inline void IMDeviceTokenReq::set_device_token(const char* value) {
   set_has_device_token();
-  if (device_token_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (device_token_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     device_token_ = new ::std::string;
   }
   device_token_->assign(value);
@@ -2910,7 +2936,8 @@ inline void IMDeviceTokenReq::set_device_token(const char* value) {
 }
 inline void IMDeviceTokenReq::set_device_token(const char* value, size_t size) {
   set_has_device_token();
-  if (device_token_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (device_token_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     device_token_ = new ::std::string;
   }
   device_token_->assign(reinterpret_cast<const char*>(value), size);
@@ -2918,7 +2945,8 @@ inline void IMDeviceTokenReq::set_device_token(const char* value, size_t size) {
 }
 inline ::std::string* IMDeviceTokenReq::mutable_device_token() {
   set_has_device_token();
-  if (device_token_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (device_token_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     device_token_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMDeviceTokenReq.device_token)
@@ -2926,16 +2954,20 @@ inline ::std::string* IMDeviceTokenReq::mutable_device_token() {
 }
 inline ::std::string* IMDeviceTokenReq::release_device_token() {
   clear_has_device_token();
-  if (device_token_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (device_token_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = device_token_;
-    device_token_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    device_token_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMDeviceTokenReq::set_allocated_device_token(::std::string* device_token) {
-  if (device_token_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMDeviceTokenReq::set_allocated_device_token(
+    ::std::string* device_token) {
+  if (device_token_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete device_token_;
   }
   if (device_token) {
@@ -2943,7 +2975,8 @@ inline void IMDeviceTokenReq::set_allocated_device_token(::std::string* device_t
     device_token_ = device_token;
   } else {
     clear_has_device_token();
-    device_token_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    device_token_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMDeviceTokenReq.device_token)
 }
@@ -2964,9 +2997,10 @@ inline void IMDeviceTokenReq::clear_client_type() {
 }
 inline ::IM::BaseDefine::ClientType IMDeviceTokenReq::client_type() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMDeviceTokenReq.client_type)
-  return static_cast< ::IM::BaseDefine::ClientType >(client_type_);
+  return static_cast< ::IM::BaseDefine::ClientType>(client_type_);
 }
-inline void IMDeviceTokenReq::set_client_type(::IM::BaseDefine::ClientType value) {
+inline void IMDeviceTokenReq::set_client_type(
+    ::IM::BaseDefine::ClientType value) {
   assert(::IM::BaseDefine::ClientType_IsValid(value));
   set_has_client_type();
   client_type_ = value;
@@ -2984,7 +3018,8 @@ inline void IMDeviceTokenReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMDeviceTokenReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -2995,7 +3030,8 @@ inline const ::std::string& IMDeviceTokenReq::attach_data() const {
 }
 inline void IMDeviceTokenReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3003,7 +3039,8 @@ inline void IMDeviceTokenReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMDeviceTokenReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3011,7 +3048,8 @@ inline void IMDeviceTokenReq::set_attach_data(const char* value) {
 }
 inline void IMDeviceTokenReq::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3019,7 +3057,8 @@ inline void IMDeviceTokenReq::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMDeviceTokenReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMDeviceTokenReq.attach_data)
@@ -3027,16 +3066,20 @@ inline ::std::string* IMDeviceTokenReq::mutable_attach_data() {
 }
 inline ::std::string* IMDeviceTokenReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMDeviceTokenReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMDeviceTokenReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3044,7 +3087,8 @@ inline void IMDeviceTokenReq::set_allocated_attach_data(::std::string* attach_da
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMDeviceTokenReq.attach_data)
 }
@@ -3088,7 +3132,8 @@ inline void IMDeviceTokenRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMDeviceTokenRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3099,7 +3144,8 @@ inline const ::std::string& IMDeviceTokenRsp::attach_data() const {
 }
 inline void IMDeviceTokenRsp::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3107,7 +3153,8 @@ inline void IMDeviceTokenRsp::set_attach_data(const ::std::string& value) {
 }
 inline void IMDeviceTokenRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3115,7 +3162,8 @@ inline void IMDeviceTokenRsp::set_attach_data(const char* value) {
 }
 inline void IMDeviceTokenRsp::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3123,7 +3171,8 @@ inline void IMDeviceTokenRsp::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMDeviceTokenRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMDeviceTokenRsp.attach_data)
@@ -3131,16 +3180,20 @@ inline ::std::string* IMDeviceTokenRsp::mutable_attach_data() {
 }
 inline ::std::string* IMDeviceTokenRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMDeviceTokenRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMDeviceTokenRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3148,7 +3201,8 @@ inline void IMDeviceTokenRsp::set_allocated_attach_data(::std::string* attach_da
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMDeviceTokenRsp.attach_data)
 }
@@ -3227,7 +3281,8 @@ inline ::google::protobuf::uint32 IMKickPCClientRsp::result_code() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMKickPCClientRsp.result_code)
   return result_code_;
 }
-inline void IMKickPCClientRsp::set_result_code(::google::protobuf::uint32 value) {
+inline void IMKickPCClientRsp::set_result_code(
+    ::google::protobuf::uint32 value) {
   set_has_result_code();
   result_code_ = value;
   // @@protoc_insertion_point(field_set:IM.Login.IMKickPCClientRsp.result_code)
@@ -3241,9 +3296,7 @@ inline void IMKickPCClientRsp::set_result_code(::google::protobuf::uint32 value)
 inline bool IMPushShieldReq::has_user_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMPushShieldReq::set_has_user_id() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMPushShieldReq::set_has_user_id() { _has_bits_[0] |= 0x00000001u; }
 inline void IMPushShieldReq::clear_has_user_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
@@ -3279,7 +3332,8 @@ inline ::google::protobuf::uint32 IMPushShieldReq::shield_status() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMPushShieldReq.shield_status)
   return shield_status_;
 }
-inline void IMPushShieldReq::set_shield_status(::google::protobuf::uint32 value) {
+inline void IMPushShieldReq::set_shield_status(
+    ::google::protobuf::uint32 value) {
   set_has_shield_status();
   shield_status_ = value;
   // @@protoc_insertion_point(field_set:IM.Login.IMPushShieldReq.shield_status)
@@ -3296,7 +3350,8 @@ inline void IMPushShieldReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMPushShieldReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3307,7 +3362,8 @@ inline const ::std::string& IMPushShieldReq::attach_data() const {
 }
 inline void IMPushShieldReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3315,7 +3371,8 @@ inline void IMPushShieldReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMPushShieldReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3323,7 +3380,8 @@ inline void IMPushShieldReq::set_attach_data(const char* value) {
 }
 inline void IMPushShieldReq::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3331,7 +3389,8 @@ inline void IMPushShieldReq::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMPushShieldReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMPushShieldReq.attach_data)
@@ -3339,16 +3398,20 @@ inline ::std::string* IMPushShieldReq::mutable_attach_data() {
 }
 inline ::std::string* IMPushShieldReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMPushShieldReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMPushShieldReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3356,7 +3419,8 @@ inline void IMPushShieldReq::set_allocated_attach_data(::std::string* attach_dat
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMPushShieldReq.attach_data)
 }
@@ -3369,9 +3433,7 @@ inline void IMPushShieldReq::set_allocated_attach_data(::std::string* attach_dat
 inline bool IMPushShieldRsp::has_user_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMPushShieldRsp::set_has_user_id() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMPushShieldRsp::set_has_user_id() { _has_bits_[0] |= 0x00000001u; }
 inline void IMPushShieldRsp::clear_has_user_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
@@ -3431,7 +3493,8 @@ inline ::google::protobuf::uint32 IMPushShieldRsp::shield_status() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMPushShieldRsp.shield_status)
   return shield_status_;
 }
-inline void IMPushShieldRsp::set_shield_status(::google::protobuf::uint32 value) {
+inline void IMPushShieldRsp::set_shield_status(
+    ::google::protobuf::uint32 value) {
   set_has_shield_status();
   shield_status_ = value;
   // @@protoc_insertion_point(field_set:IM.Login.IMPushShieldRsp.shield_status)
@@ -3448,7 +3511,8 @@ inline void IMPushShieldRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMPushShieldRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3459,7 +3523,8 @@ inline const ::std::string& IMPushShieldRsp::attach_data() const {
 }
 inline void IMPushShieldRsp::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3467,7 +3532,8 @@ inline void IMPushShieldRsp::set_attach_data(const ::std::string& value) {
 }
 inline void IMPushShieldRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3475,7 +3541,8 @@ inline void IMPushShieldRsp::set_attach_data(const char* value) {
 }
 inline void IMPushShieldRsp::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3483,7 +3550,8 @@ inline void IMPushShieldRsp::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMPushShieldRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMPushShieldRsp.attach_data)
@@ -3491,16 +3559,20 @@ inline ::std::string* IMPushShieldRsp::mutable_attach_data() {
 }
 inline ::std::string* IMPushShieldRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMPushShieldRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMPushShieldRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3508,7 +3580,8 @@ inline void IMPushShieldRsp::set_allocated_attach_data(::std::string* attach_dat
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMPushShieldRsp.attach_data)
 }
@@ -3535,7 +3608,8 @@ inline ::google::protobuf::uint32 IMQueryPushShieldReq::user_id() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMQueryPushShieldReq.user_id)
   return user_id_;
 }
-inline void IMQueryPushShieldReq::set_user_id(::google::protobuf::uint32 value) {
+inline void IMQueryPushShieldReq::set_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Login.IMQueryPushShieldReq.user_id)
@@ -3552,7 +3626,8 @@ inline void IMQueryPushShieldReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000002u;
 }
 inline void IMQueryPushShieldReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3563,7 +3638,8 @@ inline const ::std::string& IMQueryPushShieldReq::attach_data() const {
 }
 inline void IMQueryPushShieldReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3571,15 +3647,18 @@ inline void IMQueryPushShieldReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMQueryPushShieldReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.Login.IMQueryPushShieldReq.attach_data)
 }
-inline void IMQueryPushShieldReq::set_attach_data(const void* value, size_t size) {
+inline void IMQueryPushShieldReq::set_attach_data(const void* value,
+                                                  size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3587,7 +3666,8 @@ inline void IMQueryPushShieldReq::set_attach_data(const void* value, size_t size
 }
 inline ::std::string* IMQueryPushShieldReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMQueryPushShieldReq.attach_data)
@@ -3595,16 +3675,20 @@ inline ::std::string* IMQueryPushShieldReq::mutable_attach_data() {
 }
 inline ::std::string* IMQueryPushShieldReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMQueryPushShieldReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMQueryPushShieldReq::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3612,7 +3696,8 @@ inline void IMQueryPushShieldReq::set_allocated_attach_data(::std::string* attac
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMQueryPushShieldReq.attach_data)
 }
@@ -3639,7 +3724,8 @@ inline ::google::protobuf::uint32 IMQueryPushShieldRsp::user_id() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMQueryPushShieldRsp.user_id)
   return user_id_;
 }
-inline void IMQueryPushShieldRsp::set_user_id(::google::protobuf::uint32 value) {
+inline void IMQueryPushShieldRsp::set_user_id(
+    ::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
   // @@protoc_insertion_point(field_set:IM.Login.IMQueryPushShieldRsp.user_id)
@@ -3663,7 +3749,8 @@ inline ::google::protobuf::uint32 IMQueryPushShieldRsp::result_code() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMQueryPushShieldRsp.result_code)
   return result_code_;
 }
-inline void IMQueryPushShieldRsp::set_result_code(::google::protobuf::uint32 value) {
+inline void IMQueryPushShieldRsp::set_result_code(
+    ::google::protobuf::uint32 value) {
   set_has_result_code();
   result_code_ = value;
   // @@protoc_insertion_point(field_set:IM.Login.IMQueryPushShieldRsp.result_code)
@@ -3687,7 +3774,8 @@ inline ::google::protobuf::uint32 IMQueryPushShieldRsp::shield_status() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMQueryPushShieldRsp.shield_status)
   return shield_status_;
 }
-inline void IMQueryPushShieldRsp::set_shield_status(::google::protobuf::uint32 value) {
+inline void IMQueryPushShieldRsp::set_shield_status(
+    ::google::protobuf::uint32 value) {
   set_has_shield_status();
   shield_status_ = value;
   // @@protoc_insertion_point(field_set:IM.Login.IMQueryPushShieldRsp.shield_status)
@@ -3704,7 +3792,8 @@ inline void IMQueryPushShieldRsp::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void IMQueryPushShieldRsp::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -3715,7 +3804,8 @@ inline const ::std::string& IMQueryPushShieldRsp::attach_data() const {
 }
 inline void IMQueryPushShieldRsp::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -3723,15 +3813,18 @@ inline void IMQueryPushShieldRsp::set_attach_data(const ::std::string& value) {
 }
 inline void IMQueryPushShieldRsp::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
   // @@protoc_insertion_point(field_set_char:IM.Login.IMQueryPushShieldRsp.attach_data)
 }
-inline void IMQueryPushShieldRsp::set_attach_data(const void* value, size_t size) {
+inline void IMQueryPushShieldRsp::set_attach_data(const void* value,
+                                                  size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -3739,7 +3832,8 @@ inline void IMQueryPushShieldRsp::set_attach_data(const void* value, size_t size
 }
 inline ::std::string* IMQueryPushShieldRsp::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMQueryPushShieldRsp.attach_data)
@@ -3747,16 +3841,20 @@ inline ::std::string* IMQueryPushShieldRsp::mutable_attach_data() {
 }
 inline ::std::string* IMQueryPushShieldRsp::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMQueryPushShieldRsp::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMQueryPushShieldRsp::set_allocated_attach_data(
+    ::std::string* attach_data) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -3764,7 +3862,8 @@ inline void IMQueryPushShieldRsp::set_allocated_attach_data(::std::string* attac
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMQueryPushShieldRsp.attach_data)
 }
@@ -3777,14 +3876,13 @@ inline void IMQueryPushShieldRsp::set_allocated_attach_data(::std::string* attac
 inline bool IMRegistReq::has_user_name() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMRegistReq::set_has_user_name() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMRegistReq::set_has_user_name() { _has_bits_[0] |= 0x00000001u; }
 inline void IMRegistReq::clear_has_user_name() {
   _has_bits_[0] &= ~0x00000001u;
 }
 inline void IMRegistReq::clear_user_name() {
-  if (user_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_->clear();
   }
   clear_has_user_name();
@@ -3795,7 +3893,8 @@ inline const ::std::string& IMRegistReq::user_name() const {
 }
 inline void IMRegistReq::set_user_name(const ::std::string& value) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(value);
@@ -3803,7 +3902,8 @@ inline void IMRegistReq::set_user_name(const ::std::string& value) {
 }
 inline void IMRegistReq::set_user_name(const char* value) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(value);
@@ -3811,7 +3911,8 @@ inline void IMRegistReq::set_user_name(const char* value) {
 }
 inline void IMRegistReq::set_user_name(const char* value, size_t size) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -3819,7 +3920,8 @@ inline void IMRegistReq::set_user_name(const char* value, size_t size) {
 }
 inline ::std::string* IMRegistReq::mutable_user_name() {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMRegistReq.user_name)
@@ -3827,16 +3929,19 @@ inline ::std::string* IMRegistReq::mutable_user_name() {
 }
 inline ::std::string* IMRegistReq::release_user_name() {
   clear_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = user_name_;
-    user_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    user_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMRegistReq::set_allocated_user_name(::std::string* user_name) {
-  if (user_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete user_name_;
   }
   if (user_name) {
@@ -3844,7 +3949,8 @@ inline void IMRegistReq::set_allocated_user_name(::std::string* user_name) {
     user_name_ = user_name;
   } else {
     clear_has_user_name();
-    user_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    user_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistReq.user_name)
 }
@@ -3853,14 +3959,11 @@ inline void IMRegistReq::set_allocated_user_name(::std::string* user_name) {
 inline bool IMRegistReq::has_password() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMRegistReq::set_has_password() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void IMRegistReq::clear_has_password() {
-  _has_bits_[0] &= ~0x00000002u;
-}
+inline void IMRegistReq::set_has_password() { _has_bits_[0] |= 0x00000002u; }
+inline void IMRegistReq::clear_has_password() { _has_bits_[0] &= ~0x00000002u; }
 inline void IMRegistReq::clear_password() {
-  if (password_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_->clear();
   }
   clear_has_password();
@@ -3871,7 +3974,8 @@ inline const ::std::string& IMRegistReq::password() const {
 }
 inline void IMRegistReq::set_password(const ::std::string& value) {
   set_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_ = new ::std::string;
   }
   password_->assign(value);
@@ -3879,7 +3983,8 @@ inline void IMRegistReq::set_password(const ::std::string& value) {
 }
 inline void IMRegistReq::set_password(const char* value) {
   set_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_ = new ::std::string;
   }
   password_->assign(value);
@@ -3887,7 +3992,8 @@ inline void IMRegistReq::set_password(const char* value) {
 }
 inline void IMRegistReq::set_password(const char* value, size_t size) {
   set_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_ = new ::std::string;
   }
   password_->assign(reinterpret_cast<const char*>(value), size);
@@ -3895,7 +4001,8 @@ inline void IMRegistReq::set_password(const char* value, size_t size) {
 }
 inline ::std::string* IMRegistReq::mutable_password() {
   set_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     password_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMRegistReq.password)
@@ -3903,16 +4010,19 @@ inline ::std::string* IMRegistReq::mutable_password() {
 }
 inline ::std::string* IMRegistReq::release_password() {
   clear_has_password();
-  if (password_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = password_;
-    password_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    password_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMRegistReq::set_allocated_password(::std::string* password) {
-  if (password_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (password_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete password_;
   }
   if (password) {
@@ -3920,7 +4030,8 @@ inline void IMRegistReq::set_allocated_password(::std::string* password) {
     password_ = password;
   } else {
     clear_has_password();
-    password_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    password_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistReq.password)
 }
@@ -3929,12 +4040,8 @@ inline void IMRegistReq::set_allocated_password(::std::string* password) {
 inline bool IMRegistReq::has_sex() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void IMRegistReq::set_has_sex() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void IMRegistReq::clear_has_sex() {
-  _has_bits_[0] &= ~0x00000004u;
-}
+inline void IMRegistReq::set_has_sex() { _has_bits_[0] |= 0x00000004u; }
+inline void IMRegistReq::clear_has_sex() { _has_bits_[0] &= ~0x00000004u; }
 inline void IMRegistReq::clear_sex() {
   sex_ = 0u;
   clear_has_sex();
@@ -3953,12 +4060,8 @@ inline void IMRegistReq::set_sex(::google::protobuf::uint32 value) {
 inline bool IMRegistReq::has_nick() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void IMRegistReq::set_has_nick() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void IMRegistReq::clear_has_nick() {
-  _has_bits_[0] &= ~0x00000008u;
-}
+inline void IMRegistReq::set_has_nick() { _has_bits_[0] |= 0x00000008u; }
+inline void IMRegistReq::clear_has_nick() { _has_bits_[0] &= ~0x00000008u; }
 inline void IMRegistReq::clear_nick() {
   if (nick_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     nick_->clear();
@@ -4007,7 +4110,8 @@ inline ::std::string* IMRegistReq::release_nick() {
     return NULL;
   } else {
     ::std::string* temp = nick_;
-    nick_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    nick_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
@@ -4020,7 +4124,8 @@ inline void IMRegistReq::set_allocated_nick(::std::string* nick) {
     nick_ = nick;
   } else {
     clear_has_nick();
-    nick_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    nick_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistReq.nick)
 }
@@ -4029,12 +4134,8 @@ inline void IMRegistReq::set_allocated_nick(::std::string* nick) {
 inline bool IMRegistReq::has_avatar() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void IMRegistReq::set_has_avatar() {
-  _has_bits_[0] |= 0x00000010u;
-}
-inline void IMRegistReq::clear_has_avatar() {
-  _has_bits_[0] &= ~0x00000010u;
-}
+inline void IMRegistReq::set_has_avatar() { _has_bits_[0] |= 0x00000010u; }
+inline void IMRegistReq::clear_has_avatar() { _has_bits_[0] &= ~0x00000010u; }
 inline void IMRegistReq::clear_avatar() {
   if (avatar_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     avatar_->clear();
@@ -4083,7 +4184,8 @@ inline ::std::string* IMRegistReq::release_avatar() {
     return NULL;
   } else {
     ::std::string* temp = avatar_;
-    avatar_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    avatar_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
@@ -4096,7 +4198,8 @@ inline void IMRegistReq::set_allocated_avatar(::std::string* avatar) {
     avatar_ = avatar;
   } else {
     clear_has_avatar();
-    avatar_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    avatar_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistReq.avatar)
 }
@@ -4105,12 +4208,8 @@ inline void IMRegistReq::set_allocated_avatar(::std::string* avatar) {
 inline bool IMRegistReq::has_phone() const {
   return (_has_bits_[0] & 0x00000020u) != 0;
 }
-inline void IMRegistReq::set_has_phone() {
-  _has_bits_[0] |= 0x00000020u;
-}
-inline void IMRegistReq::clear_has_phone() {
-  _has_bits_[0] &= ~0x00000020u;
-}
+inline void IMRegistReq::set_has_phone() { _has_bits_[0] |= 0x00000020u; }
+inline void IMRegistReq::clear_has_phone() { _has_bits_[0] &= ~0x00000020u; }
 inline void IMRegistReq::clear_phone() {
   if (phone_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     phone_->clear();
@@ -4159,7 +4258,8 @@ inline ::std::string* IMRegistReq::release_phone() {
     return NULL;
   } else {
     ::std::string* temp = phone_;
-    phone_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    phone_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
@@ -4172,7 +4272,8 @@ inline void IMRegistReq::set_allocated_phone(::std::string* phone) {
     phone_ = phone;
   } else {
     clear_has_phone();
-    phone_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    phone_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistReq.phone)
 }
@@ -4181,12 +4282,8 @@ inline void IMRegistReq::set_allocated_phone(::std::string* phone) {
 inline bool IMRegistReq::has_email() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
-inline void IMRegistReq::set_has_email() {
-  _has_bits_[0] |= 0x00000040u;
-}
-inline void IMRegistReq::clear_has_email() {
-  _has_bits_[0] &= ~0x00000040u;
-}
+inline void IMRegistReq::set_has_email() { _has_bits_[0] |= 0x00000040u; }
+inline void IMRegistReq::clear_has_email() { _has_bits_[0] &= ~0x00000040u; }
 inline void IMRegistReq::clear_email() {
   if (email_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     email_->clear();
@@ -4235,7 +4332,8 @@ inline ::std::string* IMRegistReq::release_email() {
     return NULL;
   } else {
     ::std::string* temp = email_;
-    email_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    email_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
@@ -4248,7 +4346,8 @@ inline void IMRegistReq::set_allocated_email(::std::string* email) {
     email_ = email;
   } else {
     clear_has_email();
-    email_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    email_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistReq.email)
 }
@@ -4257,14 +4356,13 @@ inline void IMRegistReq::set_allocated_email(::std::string* email) {
 inline bool IMRegistReq::has_attach_data() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
-inline void IMRegistReq::set_has_attach_data() {
-  _has_bits_[0] |= 0x00000080u;
-}
+inline void IMRegistReq::set_has_attach_data() { _has_bits_[0] |= 0x00000080u; }
 inline void IMRegistReq::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000080u;
 }
 inline void IMRegistReq::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -4275,7 +4373,8 @@ inline const ::std::string& IMRegistReq::attach_data() const {
 }
 inline void IMRegistReq::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -4283,7 +4382,8 @@ inline void IMRegistReq::set_attach_data(const ::std::string& value) {
 }
 inline void IMRegistReq::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -4291,7 +4391,8 @@ inline void IMRegistReq::set_attach_data(const char* value) {
 }
 inline void IMRegistReq::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -4299,7 +4400,8 @@ inline void IMRegistReq::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMRegistReq::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMRegistReq.attach_data)
@@ -4307,16 +4409,19 @@ inline ::std::string* IMRegistReq::mutable_attach_data() {
 }
 inline ::std::string* IMRegistReq::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMRegistReq::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -4324,7 +4429,8 @@ inline void IMRegistReq::set_allocated_attach_data(::std::string* attach_data) {
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistReq.attach_data)
 }
@@ -4337,14 +4443,13 @@ inline void IMRegistReq::set_allocated_attach_data(::std::string* attach_data) {
 inline bool IMRegistRes::has_user_name() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void IMRegistRes::set_has_user_name() {
-  _has_bits_[0] |= 0x00000001u;
-}
+inline void IMRegistRes::set_has_user_name() { _has_bits_[0] |= 0x00000001u; }
 inline void IMRegistRes::clear_has_user_name() {
   _has_bits_[0] &= ~0x00000001u;
 }
 inline void IMRegistRes::clear_user_name() {
-  if (user_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_->clear();
   }
   clear_has_user_name();
@@ -4355,7 +4460,8 @@ inline const ::std::string& IMRegistRes::user_name() const {
 }
 inline void IMRegistRes::set_user_name(const ::std::string& value) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(value);
@@ -4363,7 +4469,8 @@ inline void IMRegistRes::set_user_name(const ::std::string& value) {
 }
 inline void IMRegistRes::set_user_name(const char* value) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(value);
@@ -4371,7 +4478,8 @@ inline void IMRegistRes::set_user_name(const char* value) {
 }
 inline void IMRegistRes::set_user_name(const char* value, size_t size) {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   user_name_->assign(reinterpret_cast<const char*>(value), size);
@@ -4379,7 +4487,8 @@ inline void IMRegistRes::set_user_name(const char* value, size_t size) {
 }
 inline ::std::string* IMRegistRes::mutable_user_name() {
   set_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_name_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMRegistRes.user_name)
@@ -4387,16 +4496,19 @@ inline ::std::string* IMRegistRes::mutable_user_name() {
 }
 inline ::std::string* IMRegistRes::release_user_name() {
   clear_has_user_name();
-  if (user_name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = user_name_;
-    user_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    user_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMRegistRes::set_allocated_user_name(::std::string* user_name) {
-  if (user_name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (user_name_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete user_name_;
   }
   if (user_name) {
@@ -4404,7 +4516,8 @@ inline void IMRegistRes::set_allocated_user_name(::std::string* user_name) {
     user_name_ = user_name;
   } else {
     clear_has_user_name();
-    user_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    user_name_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistRes.user_name)
 }
@@ -4413,9 +4526,7 @@ inline void IMRegistRes::set_allocated_user_name(::std::string* user_name) {
 inline bool IMRegistRes::has_result_code() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void IMRegistRes::set_has_result_code() {
-  _has_bits_[0] |= 0x00000002u;
-}
+inline void IMRegistRes::set_has_result_code() { _has_bits_[0] |= 0x00000002u; }
 inline void IMRegistRes::clear_has_result_code() {
   _has_bits_[0] &= ~0x00000002u;
 }
@@ -4425,7 +4536,7 @@ inline void IMRegistRes::clear_result_code() {
 }
 inline ::IM::BaseDefine::ResultType IMRegistRes::result_code() const {
   // @@protoc_insertion_point(field_get:IM.Login.IMRegistRes.result_code)
-  return static_cast< ::IM::BaseDefine::ResultType >(result_code_);
+  return static_cast< ::IM::BaseDefine::ResultType>(result_code_);
 }
 inline void IMRegistRes::set_result_code(::IM::BaseDefine::ResultType value) {
   assert(::IM::BaseDefine::ResultType_IsValid(value));
@@ -4445,7 +4556,8 @@ inline void IMRegistRes::clear_has_result_string() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void IMRegistRes::clear_result_string() {
-  if (result_string_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_->clear();
   }
   clear_has_result_string();
@@ -4456,7 +4568,8 @@ inline const ::std::string& IMRegistRes::result_string() const {
 }
 inline void IMRegistRes::set_result_string(const ::std::string& value) {
   set_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_ = new ::std::string;
   }
   result_string_->assign(value);
@@ -4464,7 +4577,8 @@ inline void IMRegistRes::set_result_string(const ::std::string& value) {
 }
 inline void IMRegistRes::set_result_string(const char* value) {
   set_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_ = new ::std::string;
   }
   result_string_->assign(value);
@@ -4472,7 +4586,8 @@ inline void IMRegistRes::set_result_string(const char* value) {
 }
 inline void IMRegistRes::set_result_string(const char* value, size_t size) {
   set_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_ = new ::std::string;
   }
   result_string_->assign(reinterpret_cast<const char*>(value), size);
@@ -4480,7 +4595,8 @@ inline void IMRegistRes::set_result_string(const char* value, size_t size) {
 }
 inline ::std::string* IMRegistRes::mutable_result_string() {
   set_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_string_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMRegistRes.result_string)
@@ -4488,16 +4604,20 @@ inline ::std::string* IMRegistRes::mutable_result_string() {
 }
 inline ::std::string* IMRegistRes::release_result_string() {
   clear_has_result_string();
-  if (result_string_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (result_string_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = result_string_;
-    result_string_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    result_string_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
-inline void IMRegistRes::set_allocated_result_string(::std::string* result_string) {
-  if (result_string_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+inline void IMRegistRes::set_allocated_result_string(
+    ::std::string* result_string) {
+  if (result_string_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete result_string_;
   }
   if (result_string) {
@@ -4505,7 +4625,8 @@ inline void IMRegistRes::set_allocated_result_string(::std::string* result_strin
     result_string_ = result_string;
   } else {
     clear_has_result_string();
-    result_string_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    result_string_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistRes.result_string)
 }
@@ -4514,12 +4635,8 @@ inline void IMRegistRes::set_allocated_result_string(::std::string* result_strin
 inline bool IMRegistRes::has_user_id() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void IMRegistRes::set_has_user_id() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void IMRegistRes::clear_has_user_id() {
-  _has_bits_[0] &= ~0x00000008u;
-}
+inline void IMRegistRes::set_has_user_id() { _has_bits_[0] |= 0x00000008u; }
+inline void IMRegistRes::clear_has_user_id() { _has_bits_[0] &= ~0x00000008u; }
 inline void IMRegistRes::clear_user_id() {
   user_id_ = 0u;
   clear_has_user_id();
@@ -4538,14 +4655,13 @@ inline void IMRegistRes::set_user_id(::google::protobuf::uint32 value) {
 inline bool IMRegistRes::has_attach_data() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void IMRegistRes::set_has_attach_data() {
-  _has_bits_[0] |= 0x00000010u;
-}
+inline void IMRegistRes::set_has_attach_data() { _has_bits_[0] |= 0x00000010u; }
 inline void IMRegistRes::clear_has_attach_data() {
   _has_bits_[0] &= ~0x00000010u;
 }
 inline void IMRegistRes::clear_attach_data() {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_->clear();
   }
   clear_has_attach_data();
@@ -4556,7 +4672,8 @@ inline const ::std::string& IMRegistRes::attach_data() const {
 }
 inline void IMRegistRes::set_attach_data(const ::std::string& value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -4564,7 +4681,8 @@ inline void IMRegistRes::set_attach_data(const ::std::string& value) {
 }
 inline void IMRegistRes::set_attach_data(const char* value) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(value);
@@ -4572,7 +4690,8 @@ inline void IMRegistRes::set_attach_data(const char* value) {
 }
 inline void IMRegistRes::set_attach_data(const void* value, size_t size) {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   attach_data_->assign(reinterpret_cast<const char*>(value), size);
@@ -4580,7 +4699,8 @@ inline void IMRegistRes::set_attach_data(const void* value, size_t size) {
 }
 inline ::std::string* IMRegistRes::mutable_attach_data() {
   set_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     attach_data_ = new ::std::string;
   }
   // @@protoc_insertion_point(field_mutable:IM.Login.IMRegistRes.attach_data)
@@ -4588,16 +4708,19 @@ inline ::std::string* IMRegistRes::mutable_attach_data() {
 }
 inline ::std::string* IMRegistRes::release_attach_data() {
   clear_has_attach_data();
-  if (attach_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ ==
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
   } else {
     ::std::string* temp = attach_data_;
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
     return temp;
   }
 }
 inline void IMRegistRes::set_allocated_attach_data(::std::string* attach_data) {
-  if (attach_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+  if (attach_data_ !=
+      &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete attach_data_;
   }
   if (attach_data) {
@@ -4605,11 +4728,11 @@ inline void IMRegistRes::set_allocated_attach_data(::std::string* attach_data) {
     attach_data_ = attach_data;
   } else {
     clear_has_attach_data();
-    attach_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    attach_data_ = const_cast< ::std::string*>(
+        &::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:IM.Login.IMRegistRes.attach_data)
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

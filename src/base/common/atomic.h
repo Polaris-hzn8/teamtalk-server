@@ -24,8 +24,9 @@
 #define ATOMIC_FETCH(src_ptr) __sync_add_and_fetch(src_ptr, 0)
 
 // src_ptr set
-#define ATOMIC_SET(src_ptr, v) (void)__sync_bool_compare_and_swap(src_ptr, *(src_ptr), v)
+#define ATOMIC_SET(src_ptr, v) \
+  (void)__sync_bool_compare_and_swap(src_ptr, *(src_ptr), v)
 
-typedef volatile long atomic_t;// 原子访问
+typedef volatile long atomic_t;  // 原子访问
 
 #endif

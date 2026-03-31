@@ -6,11 +6,11 @@
 
 #include <algorithm>
 
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 #include <google/protobuf/stubs/common.h>
 #include <google/protobuf/stubs/once.h>
-#include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/wire_format_lite_inl.h>
-#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 // @@protoc_insertion_point(includes)
 
 namespace IM {
@@ -34,14 +34,15 @@ void protobuf_AddDesc_IM_2eOther_2eproto() {
 #endif
   IMHeartBeat::default_instance_ = new IMHeartBeat();
   IMHeartBeat::default_instance_->InitAsDefaultInstance();
-  ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_IM_2eOther_2eproto);
+  ::google::protobuf::internal::OnShutdown(
+      &protobuf_ShutdownFile_IM_2eOther_2eproto);
 }
 
 #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
 GOOGLE_PROTOBUF_DECLARE_ONCE(protobuf_AddDesc_IM_2eOther_2eproto_once_);
 void protobuf_AddDesc_IM_2eOther_2eproto() {
   ::google::protobuf::GoogleOnceInit(&protobuf_AddDesc_IM_2eOther_2eproto_once_,
-                 &protobuf_AddDesc_IM_2eOther_2eproto_impl);
+                                     &protobuf_AddDesc_IM_2eOther_2eproto_impl);
 }
 #else
 // Force AddDescriptors() to be called at static initialization time.
@@ -57,17 +58,15 @@ struct StaticDescriptorInitializer_IM_2eOther_2eproto {
 #ifndef _MSC_VER
 #endif  // !_MSC_VER
 
-IMHeartBeat::IMHeartBeat()
-  : ::google::protobuf::MessageLite() {
+IMHeartBeat::IMHeartBeat() : ::google::protobuf::MessageLite() {
   SharedCtor();
   // @@protoc_insertion_point(constructor:IM.Other.IMHeartBeat)
 }
 
-void IMHeartBeat::InitAsDefaultInstance() {
-}
+void IMHeartBeat::InitAsDefaultInstance() {}
 
 IMHeartBeat::IMHeartBeat(const IMHeartBeat& from)
-  : ::google::protobuf::MessageLite() {
+    : ::google::protobuf::MessageLite() {
   SharedCtor();
   MergeFrom(from);
   // @@protoc_insertion_point(copy_constructor:IM.Other.IMHeartBeat)
@@ -84,11 +83,11 @@ IMHeartBeat::~IMHeartBeat() {
 }
 
 void IMHeartBeat::SharedDtor() {
-  #ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
+#ifdef GOOGLE_PROTOBUF_NO_STATIC_INITIALIZER
   if (this != &default_instance()) {
-  #else
+#else
   if (this != default_instance_) {
-  #endif
+#endif
   }
 }
 
@@ -108,9 +107,7 @@ const IMHeartBeat& IMHeartBeat::default_instance() {
 
 IMHeartBeat* IMHeartBeat::default_instance_ = NULL;
 
-IMHeartBeat* IMHeartBeat::New() const {
-  return new IMHeartBeat;
-}
+IMHeartBeat* IMHeartBeat::New() const { return new IMHeartBeat; }
 
 void IMHeartBeat::Clear() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
@@ -119,7 +116,8 @@ void IMHeartBeat::Clear() {
 
 bool IMHeartBeat::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+#define DO_(EXPRESSION) \
+  if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
   ::google::protobuf::io::StringOutputStream unknown_fields_string(
       mutable_unknown_fields());
@@ -127,13 +125,14 @@ bool IMHeartBeat::MergePartialFromCodedStream(
       &unknown_fields_string);
   // @@protoc_insertion_point(parse_start:IM.Other.IMHeartBeat)
   for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    ::std::pair< ::google::protobuf::uint32, bool> p =
+        input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
   handle_unusual:
     if (tag == 0 ||
         ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
       goto success;
     }
     DO_(::google::protobuf::internal::WireFormatLite::SkipField(
@@ -151,8 +150,7 @@ failure:
 void IMHeartBeat::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:IM.Other.IMHeartBeat)
-  output->WriteRaw(unknown_fields().data(),
-                   unknown_fields().size());
+  output->WriteRaw(unknown_fields().data(), unknown_fields().size());
   // @@protoc_insertion_point(serialize_end:IM.Other.IMHeartBeat)
 }
 
@@ -183,10 +181,7 @@ void IMHeartBeat::CopyFrom(const IMHeartBeat& from) {
   MergeFrom(from);
 }
 
-bool IMHeartBeat::IsInitialized() const {
-
-  return true;
-}
+bool IMHeartBeat::IsInitialized() const { return true; }
 
 void IMHeartBeat::Swap(IMHeartBeat* other) {
   if (other != this) {
@@ -198,7 +193,6 @@ void IMHeartBeat::Swap(IMHeartBeat* other) {
 ::std::string IMHeartBeat::GetTypeName() const {
   return "IM.Other.IMHeartBeat";
 }
-
 
 // @@protoc_insertion_point(namespace_scope)
 

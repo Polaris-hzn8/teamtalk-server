@@ -9,119 +9,86 @@
 #include "Lock.h"
 
 ////////////////////////////CLock/////////////////////////////////////
-CLock::CLock()
-{
+CLock::CLock() {
 #ifdef _WIN32
-    InitializeCriticalSection(&m_critical_section);
+  InitializeCriticalSection(&m_critical_section);
 #else
-    pthread_mutex_init(&m_lock, NULL);
+  pthread_mutex_init(&m_lock, NULL);
 #endif
 }
 
-CLock::~CLock()
-{
+CLock::~CLock() {
 #ifdef _WIN32
-    DeleteCriticalSection(&m_critical_section);
+  DeleteCriticalSection(&m_critical_section);
 #else
-    pthread_mutex_destroy(&m_lock);
+  pthread_mutex_destroy(&m_lock);
 #endif
 }
 
-void CLock::lock()
-{
+void CLock::lock() {
 #ifdef _WIN32
-    EnterCriticalSection(&m_critical_section);
+  EnterCriticalSection(&m_critical_section);
 #else
-    pthread_mutex_lock(&m_lock);
+  pthread_mutex_lock(&m_lock);
 #endif
 }
 
-void CLock::unlock()
-{
+void CLock::unlock() {
 #ifdef _WIN32
-    LeaveCriticalSection(&m_critical_section);
+  LeaveCriticalSection(&m_critical_section);
 #else
-    pthread_mutex_unlock(&m_lock);
+  pthread_mutex_unlock(&m_lock);
 #endif
 }
 
-bool CLock::try_lock()
-{
+bool CLock::try_lock() {
 #ifdef _WIN32
-    return TryEnterCriticalSection(&m_critical_section);
+  return TryEnterCriticalSection(&m_critical_section);
 #else
-    return pthread_mutex_trylock(&m_lock) == 0;
+  return pthread_mutex_trylock(&m_lock) == 0;
 #endif
 }
 
 ////////////////////////////CAutoLock/////////////////////////////////////
-CAutoLock::CAutoLock(CLock* pLock)
-{
-    m_pLock = pLock;
-    if (m_pLock != NULL)
-        m_pLock->lock();
+CAutoLock::CAutoLock(CLock* pLock) {
+  m_pLock = pLock;
+  if (m_pLock != NULL) m_pLock->lock();
 }
 
-CAutoLock::~CAutoLock()
-{
-    if (NULL != m_pLock)
-        m_pLock->unlock();
+CAutoLock::~CAutoLock() {
+  if (NULL != m_pLock) m_pLock->unlock();
 }
 
 ////////////////////////////CRWLock/////////////////////////////////////
 #ifndef _WIN32
-CRWLock::CRWLock()
-{
-    pthread_rwlock_init(&m_lock, NULL);
-}
+CRWLock::CRWLock() { pthread_rwlock_init(&m_lock, NULL); }
 
-CRWLock::~CRWLock()
-{
-    pthread_rwlock_destroy(&m_lock);
-}
+CRWLock::~CRWLock() { pthread_rwlock_destroy(&m_lock); }
 
-void CRWLock::rlock()
-{
-    pthread_rwlock_rdlock(&m_lock);
-}
+void CRWLock::rlock() { pthread_rwlock_rdlock(&m_lock); }
 
-void CRWLock::wlock()
-{
-    pthread_rwlock_wrlock(&m_lock);
-}
+void CRWLock::wlock() { pthread_rwlock_wrlock(&m_lock); }
 
-void CRWLock::unlock()
-{
-    pthread_rwlock_unlock(&m_lock);
-}
+void CRWLock::unlock() { pthread_rwlock_unlock(&m_lock); }
 
-bool CRWLock::try_rlock()
-{
-    return pthread_rwlock_tryrdlock(&m_lock) == 0;
-}
+bool CRWLock::try_rlock() { return pthread_rwlock_tryrdlock(&m_lock) == 0; }
 
-bool CRWLock::try_wlock()
-{
-    return pthread_rwlock_trywrlock(&m_lock) == 0;
-}
+bool CRWLock::try_wlock() { return pthread_rwlock_trywrlock(&m_lock) == 0; }
 
 ////////////////////////////CAutoRWLock/////////////////////////////////////
-CAutoRWLock::CAutoRWLock(CRWLock* pLock, bool bRLock)
-{
-    m_pLock = pLock;
-    if (NULL != m_pLock) {
-        if (bRLock) {
-            m_pLock->rlock();//获取读锁
-        } else {
-            m_pLock->wlock();//获取写锁
-        }
+CAutoRWLock::CAutoRWLock(CRWLock* pLock, bool bRLock) {
+  m_pLock = pLock;
+  if (NULL != m_pLock) {
+    if (bRLock) {
+      m_pLock->rlock();  //获取读锁
+    } else {
+      m_pLock->wlock();  //获取写锁
     }
+  }
 }
 
-CAutoRWLock::~CAutoRWLock()
-{
-    if (NULL != m_pLock)
-        m_pLock->unlock();
+CAutoRWLock::~CAutoRWLock() {
+  if (NULL != m_pLock) m_pLock->unlock();
 }
 
 #endif

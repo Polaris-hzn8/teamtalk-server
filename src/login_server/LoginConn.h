@@ -11,43 +11,38 @@
 
 #include "im_conn.h"
 
-enum
-{
-    LOGIN_CONN_TYPE_CLIENT = 1,
-    LOGIN_CONN_TYPE_MSG_SERV
-};
+enum { LOGIN_CONN_TYPE_CLIENT = 1, LOGIN_CONN_TYPE_MSG_SERV };
 
 typedef struct {
-    std::string ip_addr1;       // 电信IP
-    std::string ip_addr2;       // 网通IP
-    uint16_t port;              // 端口
-    uint32_t max_conn_cnt;      // 最大连接数
-    uint32_t cur_conn_cnt;      // 当前连接数
-    std::string hostname;       // 消息服务器的主机名
+  std::string ip_addr1;   // 电信IP
+  std::string ip_addr2;   // 网通IP
+  uint16_t port;          // 端口
+  uint32_t max_conn_cnt;  // 最大连接数
+  uint32_t cur_conn_cnt;  // 当前连接数
+  std::string hostname;   // 消息服务器的主机名
 } msg_serv_info_t;
 
-class CLoginConn : public CImConn
-{
-public:
-    CLoginConn();
-    virtual ~CLoginConn();
+class CLoginConn : public CImConn {
+ public:
+  CLoginConn();
+  virtual ~CLoginConn();
 
-    virtual void Close();
+  virtual void Close();
 
-    void OnConnect2(net_handle_t handle, int conn_type);
+  void OnConnect2(net_handle_t handle, int conn_type);
 
-    virtual void OnClose();
-    virtual void OnTimer(uint64_t curr_tick);
+  virtual void OnClose();
+  virtual void OnTimer(uint64_t curr_tick);
 
-    virtual void HandlePdu(CImPdu* pPdu);
+  virtual void HandlePdu(CImPdu* pPdu);
 
-private:
-    void _HandleMsgServInfo(CImPdu* pPdu);      //处理消息服务信息
-    void _HandleMsgServRequest(CImPdu* pPdu);   //处理消息服务请求
-    void _HandleUserCntUpdate(CImPdu* pPdu);    //处理用户数量更新
+ private:
+  void _HandleMsgServInfo(CImPdu* pPdu);     //处理消息服务信息
+  void _HandleMsgServRequest(CImPdu* pPdu);  //处理消息服务请求
+  void _HandleUserCntUpdate(CImPdu* pPdu);   //处理用户数量更新
 
-private:
-    int m_conn_type;
+ private:
+  int m_conn_type;
 };
 
 void init_login_conn();

@@ -13,19 +13,19 @@ class CDBConn;
 class CacheConn;
 
 class CAutoDB {
-public:
-    CAutoDB(const char* pDBName, CDBConn** pDBConn);
-    ~CAutoDB();
+ public:
+  CAutoDB(const char* pDBName, CDBConn** pDBConn);
+  ~CAutoDB();
 
-private:
-    CDBConn* m_pDBConn;
+ private:
+  CDBConn* m_pDBConn;
 };
 
 class CAutoCache {
-    CAutoCache(const char* pCacheName, CacheConn** pCacheConn);
-    ~CAutoCache();
+  CAutoCache(const char* pCacheName, CacheConn** pCacheConn);
+  ~CAutoCache();
 
-private:
-    CacheConn* m_pCacheConn;
+ private:
+  CacheConn* m_pCacheConn;
 };
 #endif /*defined(__AUTOPOOl_H__) */
