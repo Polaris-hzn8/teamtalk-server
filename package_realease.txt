@@ -1,0 +1,56 @@
+package_components:
+├── share_lib
+│   ├── liblog4cxx.so.10
+│   ├── liblog4cxx.so.10.0.0
+│   ├── libprotobuf-lite.so.9
+│   ├── libprotobuf-lite.so.9.0.1
+│   ├── libprotobuf.so.9
+│   ├── libprotobuf.so.9.0.1
+│   └── libslog.so
+├── db_proxy_server
+│   ├── db_proxy_server
+│   ├── db_proxy_server.conf
+│   └── log4cxx.properties
+├── file_server
+│   ├── file_server
+│   ├── file_server.conf
+│   └── log4cxx.properties
+├── http_msg_server
+│   ├── http_msg_server
+│   ├── http_msg_server.conf
+│   └── log4cxx.properties
+├── login_server
+│   ├── login_server
+│   ├── login_server.conf
+│   └── log4cxx.properties
+├── msg_server
+│   ├── msg_server
+│   ├── msg_server.conf
+│   └── log4cxx.properties
+├── push_server
+│   ├── push_server
+│   ├── push_server.conf
+│   └── log4cxx.properties
+├── route_server
+│   ├── route_server
+│   ├── route_server.conf
+│   └── log4cxx.properties
+├── msfs
+│   ├── msfs
+│   ├── msfs.conf
+│   ├── log4cxx.properties
+│   └── tmp
+├── log
+│   ├── login_server
+│   ├── file_server
+│   ├── http_msg_server
+│   ├── db_proxy_server
+│   ├── msg_server
+│   ├── push_server
+│   ├── route_server
+│   └── msfs
+├── daeml
+├── init.sh
+├── init.sql
+├── server_manager.sh
+└── server_monitor.sh
