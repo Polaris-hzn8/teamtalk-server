@@ -3,7 +3,7 @@
  Email: lch2022fox@163.com
  filename: base_socket.hpp
  Update Time: Sun 10 Aug 2025 12:28:09 CST
- brief: 
+ brief:
 */
 
 #ifndef _BASE_SOCKET_HPP
@@ -12,32 +12,29 @@
 #if (defined(_WIN32) || defined(_WIN64))
 
 #else
-#include <sys/socket.h>
-#include <sys/fcntl.h>
 #include <arpa/inet.h>
-#include <netinet/tcp.h>
 #include <netdb.h>
+#include <netinet/tcp.h>
+#include <sys/fcntl.h>
+#include <sys/socket.h>
 #include <unistd.h>
 #endif
 
 #include "type/base_type.h"
 
-
 #include <string.h>
 
-typedef int32_t	S_SOCKET;
-const int32_t S_SOCKET_ERROR	= -1;
-const int32_t S_INVALID_SOCKET  = -1;
-#define S_SHUT_RD		SHUT_RD
-#define S_SHUT_WR		SHUT_WR
-#define S_SHUT_RDWR	    SHUT_RDWR
-
-
+typedef int32_t S_SOCKET;
+const int32_t S_SOCKET_ERROR = -1;
+const int32_t S_INVALID_SOCKET = -1;
+#define S_SHUT_RD SHUT_RD
+#define S_SHUT_WR SHUT_WR
+#define S_SHUT_RDWR SHUT_RDWR
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
-    
+
 /**
  *  S_CreateSocket
  *
@@ -47,9 +44,8 @@ extern "C"{
  *
  *  @return S_INVALID_SOCKET fail, else success.
  */
-static S_SOCKET S_CreateSocket(int32_t nAf, int32_t nType, int32_t nProto)
-{
-    return socket(nAf, nType, nProto);
+static S_SOCKET S_CreateSocket(int32_t nAf, int32_t nType, int32_t nProto) {
+  return socket(nAf, nType, nProto);
 }
 
 /**
@@ -59,14 +55,12 @@ static S_SOCKET S_CreateSocket(int32_t nAf, int32_t nType, int32_t nProto)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_CloseSocket(S_SOCKET nSockFd)
-{
+static int32_t S_CloseSocket(S_SOCKET nSockFd) {
 #ifdef _WIN32
-	return closesocket(nSockFd);
+  return closesocket(nSockFd);
 #else
-    return close(nSockFd);
+  return close(nSockFd);
 #endif
-    
 }
 
 /**
@@ -77,9 +71,8 @@ static int32_t S_CloseSocket(S_SOCKET nSockFd)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_ShutDown(S_SOCKET nSockFd, int32_t nHow)
-{
-    return shutdown(nSockFd, nHow);
+static int32_t S_ShutDown(S_SOCKET nSockFd, int32_t nHow) {
+  return shutdown(nSockFd, nHow);
 }
 
 /**
@@ -91,18 +84,17 @@ static int32_t S_ShutDown(S_SOCKET nSockFd, int32_t nHow)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_Bind(S_SOCKET nSockFd, const char* szIP, int32_t nPort)
-{
-    sockaddr_in addr;
-    memset(&addr, 0, sizeof(sockaddr_in));
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(nPort);
-    inet_pton(addr.sin_family, szIP, (void *)&(addr.sin_addr));
-	//addr.sin_addr.s_addr = inet_addr(szIP);
-    //此处最好使用::,否则头文件引用得时候引入了std，会定位成std::bind得函数
-    return ::bind(nSockFd, (sockaddr*)&addr, (int)sizeof(addr));
+static int32_t S_Bind(S_SOCKET nSockFd, const char* szIP, int32_t nPort) {
+  sockaddr_in addr;
+  memset(&addr, 0, sizeof(sockaddr_in));
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(nPort);
+  inet_pton(addr.sin_family, szIP, (void*)&(addr.sin_addr));
+  // addr.sin_addr.s_addr = inet_addr(szIP);
+  //此处最好使用::,否则头文件引用得时候引入了std，会定位成std::bind得函数
+  return ::bind(nSockFd, (sockaddr*)&addr, (int)sizeof(addr));
 }
-    
+
 /**
  *  S_Connect connect remote ip port
  *
@@ -112,14 +104,13 @@ static int32_t S_Bind(S_SOCKET nSockFd, const char* szIP, int32_t nPort)
  *
  *  @return 0 success, -1 fail
  */
-static int32_t S_Connect(S_SOCKET nSockFd, const char* szIP, int32_t nPort)
-{
-    sockaddr_in addr;
-    memset(&addr, 0, sizeof(sockaddr_in));
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(nPort);
-    inet_pton(addr.sin_family, szIP, (void *)&(addr.sin_addr));
-    return connect(nSockFd, (sockaddr*)&addr, sizeof(addr));
+static int32_t S_Connect(S_SOCKET nSockFd, const char* szIP, int32_t nPort) {
+  sockaddr_in addr;
+  memset(&addr, 0, sizeof(sockaddr_in));
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(nPort);
+  inet_pton(addr.sin_family, szIP, (void*)&(addr.sin_addr));
+  return connect(nSockFd, (sockaddr*)&addr, sizeof(addr));
 }
 
 /**
@@ -130,9 +121,8 @@ static int32_t S_Connect(S_SOCKET nSockFd, const char* szIP, int32_t nPort)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_Listen(S_SOCKET nSockFd, int32_t nNum)
-{
-    return listen(nSockFd, nNum);
+static int32_t S_Listen(S_SOCKET nSockFd, int32_t nNum) {
+  return listen(nSockFd, nNum);
 }
 
 /**
@@ -144,28 +134,24 @@ static int32_t S_Listen(S_SOCKET nSockFd, int32_t nNum)
  *
  *  @return S_INVALID_SOCKET fail, else success.
  */
-static S_SOCKET S_Accept(S_SOCKET nSockFd, char* szIP, int32_t* nPort)
-{
-    if (szIP == NULL || nPort == NULL) {
-        return S_SOCKET_ERROR;
-    }
-    S_SOCKET fd = 0;
-    char peer_ip[32] = {0};
-    sockaddr_in peer_addr;
-	socklen_t addr_len = sizeof(sockaddr_in);
-    fd = accept(nSockFd, (sockaddr*)&peer_addr, &addr_len);
-    if (fd != S_INVALID_SOCKET)
-    {
-        inet_ntop(AF_INET, (void *)&(peer_addr.sin_addr), peer_ip, sizeof(peer_ip));
-        strcpy(szIP, peer_ip);
-        *nPort = ntohs(peer_addr.sin_port);
-    }
-    else
-    {
-        strcpy(szIP, "");
-        *nPort = 0;
-    }
-    return fd;
+static S_SOCKET S_Accept(S_SOCKET nSockFd, char* szIP, int32_t* nPort) {
+  if (szIP == NULL || nPort == NULL) {
+    return S_SOCKET_ERROR;
+  }
+  S_SOCKET fd = 0;
+  char peer_ip[32] = {0};
+  sockaddr_in peer_addr;
+  socklen_t addr_len = sizeof(sockaddr_in);
+  fd = accept(nSockFd, (sockaddr*)&peer_addr, &addr_len);
+  if (fd != S_INVALID_SOCKET) {
+    inet_ntop(AF_INET, (void*)&(peer_addr.sin_addr), peer_ip, sizeof(peer_ip));
+    strcpy(szIP, peer_ip);
+    *nPort = ntohs(peer_addr.sin_port);
+  } else {
+    strcpy(szIP, "");
+    *nPort = 0;
+  }
+  return fd;
 }
 
 /**
@@ -176,22 +162,18 @@ static S_SOCKET S_Accept(S_SOCKET nSockFd, char* szIP, int32_t* nPort)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_SetNoBlock(S_SOCKET nSockFd, BOOL bNoBlock)
-{
+static int32_t S_SetNoBlock(S_SOCKET nSockFd, BOOL bNoBlock) {
 #ifdef _WIN32
-	int32_t ret = ioctlsocket(nSockFd, FIONBIO, &bNoBlock);
+  int32_t ret = ioctlsocket(nSockFd, FIONBIO, &bNoBlock);
 #else
-    int32_t ret = 0;
-    if (bNoBlock)
-    {
-        ret = fcntl(nSockFd, F_SETFL, O_NONBLOCK | fcntl(nSockFd, F_GETFL));
-    }
-    else
-    {
-        ret = fcntl(nSockFd, F_SETFL, ~O_NONBLOCK & fcntl(nSockFd, F_GETFL));
-    }
+  int32_t ret = 0;
+  if (bNoBlock) {
+    ret = fcntl(nSockFd, F_SETFL, O_NONBLOCK | fcntl(nSockFd, F_GETFL));
+  } else {
+    ret = fcntl(nSockFd, F_SETFL, ~O_NONBLOCK & fcntl(nSockFd, F_GETFL));
+  }
 #endif
-    return ret;
+  return ret;
 }
 
 /**
@@ -202,9 +184,8 @@ static int32_t S_SetNoBlock(S_SOCKET nSockFd, BOOL bNoBlock)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_SetTTL(S_SOCKET nSockFd, int32_t nTTL)
-{
-    return setsockopt(nSockFd, IPPROTO_IP, IP_TTL, (char *)&nTTL, sizeof(nTTL));
+static int32_t S_SetTTL(S_SOCKET nSockFd, int32_t nTTL) {
+  return setsockopt(nSockFd, IPPROTO_IP, IP_TTL, (char*)&nTTL, sizeof(nTTL));
 }
 
 /**
@@ -215,10 +196,9 @@ static int32_t S_SetTTL(S_SOCKET nSockFd, int32_t nTTL)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_GetTTL(S_SOCKET nSockFd, int32_t* nTTL)
-{
-    socklen_t len = sizeof(int32_t);
-    return getsockopt(nSockFd, IPPROTO_IP, IP_TTL, nTTL, &len);
+static int32_t S_GetTTL(S_SOCKET nSockFd, int32_t* nTTL) {
+  socklen_t len = sizeof(int32_t);
+  return getsockopt(nSockFd, IPPROTO_IP, IP_TTL, nTTL, &len);
 }
 
 /**
@@ -229,9 +209,8 @@ static int32_t S_GetTTL(S_SOCKET nSockFd, int32_t* nTTL)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_SetTOS(S_SOCKET nSockFd, int32_t nTOS)
-{
-    return setsockopt(nSockFd, IPPROTO_IP, IP_TOS, (char *)&nTOS, sizeof(nTOS));
+static int32_t S_SetTOS(S_SOCKET nSockFd, int32_t nTOS) {
+  return setsockopt(nSockFd, IPPROTO_IP, IP_TOS, (char*)&nTOS, sizeof(nTOS));
 }
 
 /**
@@ -242,10 +221,9 @@ static int32_t S_SetTOS(S_SOCKET nSockFd, int32_t nTOS)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_GetTOS(S_SOCKET nSockFd, int32_t* nTOS)
-{
-    socklen_t len = sizeof(int32_t);
-    return getsockopt(nSockFd, IPPROTO_IP, IP_TOS, nTOS, &len);
+static int32_t S_GetTOS(S_SOCKET nSockFd, int32_t* nTOS) {
+  socklen_t len = sizeof(int32_t);
+  return getsockopt(nSockFd, IPPROTO_IP, IP_TOS, nTOS, &len);
 }
 
 /**
@@ -256,9 +234,9 @@ static int32_t S_GetTOS(S_SOCKET nSockFd, int32_t* nTOS)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_SetReuseAddr(S_SOCKET nSockFd, BOOL bReuse)
-{
-    return setsockopt(nSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&bReuse, sizeof(bReuse));
+static int32_t S_SetReuseAddr(S_SOCKET nSockFd, BOOL bReuse) {
+  return setsockopt(nSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&bReuse,
+                    sizeof(bReuse));
 }
 
 /**
@@ -269,14 +247,13 @@ static int32_t S_SetReuseAddr(S_SOCKET nSockFd, BOOL bReuse)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_SetSendTimeOut(S_SOCKET nSockFd, int32_t nSendTimeOut)
-{
+static int32_t S_SetSendTimeOut(S_SOCKET nSockFd, int32_t nSendTimeOut) {
 #if (defined(_WIN32) || defined(_WIN64))
-	nSendTimeOut *= 1000;
+  nSendTimeOut *= 1000;
 #endif
-    struct timeval timeout = {nSendTimeOut, 0};
-	socklen_t len = sizeof(timeout);
-	return setsockopt(nSockFd, SOL_SOCKET, SO_SNDTIMEO, &timeout, len);
+  struct timeval timeout = {nSendTimeOut, 0};
+  socklen_t len = sizeof(timeout);
+  return setsockopt(nSockFd, SOL_SOCKET, SO_SNDTIMEO, &timeout, len);
 }
 
 /**
@@ -287,14 +264,13 @@ static int32_t S_SetSendTimeOut(S_SOCKET nSockFd, int32_t nSendTimeOut)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_SetRecvTimeOut(S_SOCKET nSockFd, int32_t nRecvTimeOut)
-{
+static int32_t S_SetRecvTimeOut(S_SOCKET nSockFd, int32_t nRecvTimeOut) {
 #if (defined(_WIN32) || defined(_WIN64))
-	nRecvTimeOut *= 1000;
+  nRecvTimeOut *= 1000;
 #endif
-    struct timeval timeout = {nRecvTimeOut, 0};
-	socklen_t len = sizeof(timeout);
-	return setsockopt(nSockFd, SOL_SOCKET, SO_RCVTIMEO, &timeout, len);
+  struct timeval timeout = {nRecvTimeOut, 0};
+  socklen_t len = sizeof(timeout);
+  return setsockopt(nSockFd, SOL_SOCKET, SO_RCVTIMEO, &timeout, len);
 }
 
 /**
@@ -305,9 +281,9 @@ static int32_t S_SetRecvTimeOut(S_SOCKET nSockFd, int32_t nRecvTimeOut)
  *
  *  @return 0 succes, -1 fail.
  */
-static int32_t S_SetSendBuffSize(S_SOCKET nSockFd, int32_t nSendBuffSize)
-{
-    return setsockopt(nSockFd, SOL_SOCKET, SO_SNDBUF, &nSendBuffSize, sizeof(nSendBuffSize));
+static int32_t S_SetSendBuffSize(S_SOCKET nSockFd, int32_t nSendBuffSize) {
+  return setsockopt(nSockFd, SOL_SOCKET, SO_SNDBUF, &nSendBuffSize,
+                    sizeof(nSendBuffSize));
 }
 
 /**
@@ -318,9 +294,9 @@ static int32_t S_SetSendBuffSize(S_SOCKET nSockFd, int32_t nSendBuffSize)
  *
  *  @return 0 succes, -1 fail.
  */
-static int32_t S_SetRecvBuffSize(S_SOCKET nSockFd, int32_t nRecvBuffSize)
-{
-    return setsockopt(nSockFd, SOL_SOCKET, SO_RCVBUF, &nRecvBuffSize, sizeof(nRecvBuffSize));
+static int32_t S_SetRecvBuffSize(S_SOCKET nSockFd, int32_t nRecvBuffSize) {
+  return setsockopt(nSockFd, SOL_SOCKET, SO_RCVBUF, &nRecvBuffSize,
+                    sizeof(nRecvBuffSize));
 }
 
 /**
@@ -331,10 +307,9 @@ static int32_t S_SetRecvBuffSize(S_SOCKET nSockFd, int32_t nRecvBuffSize)
  *
  *  @return 0 succes, -1 fail.
  */
-static int32_t S_GetSendBuffSize(S_SOCKET nSockFd, int32_t* nSendBuffSize)
-{
-    socklen_t len = sizeof(int32_t);
-    return getsockopt(nSockFd, SOL_SOCKET, SO_SNDBUF, nSendBuffSize, &len);
+static int32_t S_GetSendBuffSize(S_SOCKET nSockFd, int32_t* nSendBuffSize) {
+  socklen_t len = sizeof(int32_t);
+  return getsockopt(nSockFd, SOL_SOCKET, SO_SNDBUF, nSendBuffSize, &len);
 }
 
 /**
@@ -345,11 +320,9 @@ static int32_t S_GetSendBuffSize(S_SOCKET nSockFd, int32_t* nSendBuffSize)
  *
  *  @return 0 succes, -1 fail.
  */
-static int32_t S_GetRecvBuffSize(S_SOCKET nSockFd, int32_t* nRecvBuffSize)
-{
-    socklen_t len = sizeof(int32_t);
-    return getsockopt(nSockFd, SOL_SOCKET, SO_RCVBUF, nRecvBuffSize, &len);
-
+static int32_t S_GetRecvBuffSize(S_SOCKET nSockFd, int32_t* nRecvBuffSize) {
+  socklen_t len = sizeof(int32_t);
+  return getsockopt(nSockFd, SOL_SOCKET, SO_RCVBUF, nRecvBuffSize, &len);
 }
 
 /**
@@ -359,12 +332,12 @@ static int32_t S_GetRecvBuffSize(S_SOCKET nSockFd, int32_t* nRecvBuffSize)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_LingerOff(S_SOCKET nSockFd)
-{
-    struct linger so_linger;
-    so_linger.l_onoff = FALSE;    //system default setting
-    so_linger.l_linger = 0;
-    return setsockopt(nSockFd, SOL_SOCKET, SO_LINGER, &so_linger, sizeof(so_linger));
+static int32_t S_LingerOff(S_SOCKET nSockFd) {
+  struct linger so_linger;
+  so_linger.l_onoff = FALSE;  // system default setting
+  so_linger.l_linger = 0;
+  return setsockopt(nSockFd, SOL_SOCKET, SO_LINGER, &so_linger,
+                    sizeof(so_linger));
 }
 
 //?
@@ -376,15 +349,15 @@ static int32_t S_LingerOff(S_SOCKET nSockFd)
  *
  *  @return 0 success, -1 fail.
  */
-static int32_t S_LingerOn(S_SOCKET nSockFd, uint16_t nTimeOutSec)
-{
-    struct linger so_linger;
+static int32_t S_LingerOn(S_SOCKET nSockFd, uint16_t nTimeOutSec) {
+  struct linger so_linger;
 #if (defined(_WIN32) || defined(_WIN64))
-	nTimeOutSec *= 1000;
+  nTimeOutSec *= 1000;
 #endif
-    so_linger.l_onoff = TRUE;
-    so_linger.l_linger = nTimeOutSec;
-    return setsockopt(nSockFd, SOL_SOCKET, SO_LINGER, &so_linger, sizeof(so_linger));
+  so_linger.l_onoff = TRUE;
+  so_linger.l_linger = nTimeOutSec;
+  return setsockopt(nSockFd, SOL_SOCKET, SO_LINGER, &so_linger,
+                    sizeof(so_linger));
 }
 
 //?
@@ -396,10 +369,9 @@ static int32_t S_LingerOn(S_SOCKET nSockFd, uint16_t nTimeOutSec)
  *
  *  @return 0 success, -1 fail
  */
-static int32_t S_SetNoDelay(S_SOCKET nSockFd, BOOL bNoDelay)
-{
-    return setsockopt(nSockFd, IPPROTO_TCP, TCP_NODELAY, (char*)&bNoDelay, sizeof(bNoDelay));
-
+static int32_t S_SetNoDelay(S_SOCKET nSockFd, BOOL bNoDelay) {
+  return setsockopt(nSockFd, IPPROTO_TCP, TCP_NODELAY, (char*)&bNoDelay,
+                    sizeof(bNoDelay));
 }
 
 /**
@@ -411,9 +383,8 @@ static int32_t S_SetNoDelay(S_SOCKET nSockFd, BOOL bNoDelay)
  *
  *  @return count of data sent, -1 for error.
  */
-static int32_t S_Send(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen)
-{
-    return send(nSockFd, pBuf, nBufLen, 0);
+static int32_t S_Send(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen) {
+  return send(nSockFd, pBuf, nBufLen, 0);
 }
 
 /**
@@ -425,9 +396,8 @@ static int32_t S_Send(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen)
  *
  *  @return count of data received, -1 for error.
  */
-static int32_t S_Recv(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize)
-{
-    return recv(nSockFd, pBuf, nBufSize, 0);
+static int32_t S_Recv(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize) {
+  return recv(nSockFd, pBuf, nBufSize, 0);
 }
 
 /**
@@ -441,15 +411,15 @@ static int32_t S_Recv(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize)
  *
  *  @return count of data sent, -1 for errror.
  */
-static int32_t S_SendTo(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen, const char* szIP, int32_t nPort)
-{
-    sockaddr_in addr;
-    memset(&addr, 0, sizeof(sockaddr_in));
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(nPort);
-    inet_pton(addr.sin_family, szIP, (void *)&(addr.sin_addr));
-	//addr.sin_addr.s_addr = inet_addr(szIP);
-    return sendto(nSockFd, pBuf, nBufLen, 0, (sockaddr*)&addr, sizeof(addr));
+static int32_t S_SendTo(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen,
+                        const char* szIP, int32_t nPort) {
+  sockaddr_in addr;
+  memset(&addr, 0, sizeof(sockaddr_in));
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(nPort);
+  inet_pton(addr.sin_family, szIP, (void*)&(addr.sin_addr));
+  // addr.sin_addr.s_addr = inet_addr(szIP);
+  return sendto(nSockFd, pBuf, nBufLen, 0, (sockaddr*)&addr, sizeof(addr));
 }
 
 /**
@@ -463,31 +433,29 @@ static int32_t S_SendTo(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen, const cha
  *
  *  @return count of data received, -1 for error.
  */
-static int32_t S_RecvFrom(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize, char* szIP, int32_t* nPort)
-{
-    if (szIP == NULL || nPort == NULL) {
-        return S_SOCKET_ERROR;
-    }
-    S_SOCKET fd = 0;
-    char peer_ip[32] = {0};
-    sockaddr_in peer_addr;
-	socklen_t addr_len = sizeof(sockaddr_in);
-    int32_t ret = recvfrom(nSockFd, pBuf, nBufSize, 0, (sockaddr*)&peer_addr, &addr_len);
-    if (ret >= 0)
-    {
-        inet_ntop(AF_INET, (void *)&(peer_addr.sin_addr), peer_ip, sizeof(peer_ip));
-        strcpy(szIP, peer_ip);
-        *nPort = ntohs(peer_addr.sin_port);
-    }
-    else
-    {
-        strcpy(szIP, "");
-        *nPort = 0;
-    }
-    return ret;
+static int32_t S_RecvFrom(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize,
+                          char* szIP, int32_t* nPort) {
+  if (szIP == NULL || nPort == NULL) {
+    return S_SOCKET_ERROR;
+  }
+  S_SOCKET fd = 0;
+  char peer_ip[32] = {0};
+  sockaddr_in peer_addr;
+  socklen_t addr_len = sizeof(sockaddr_in);
+  int32_t ret =
+      recvfrom(nSockFd, pBuf, nBufSize, 0, (sockaddr*)&peer_addr, &addr_len);
+  if (ret >= 0) {
+    inet_ntop(AF_INET, (void*)&(peer_addr.sin_addr), peer_ip, sizeof(peer_ip));
+    strcpy(szIP, peer_ip);
+    *nPort = ntohs(peer_addr.sin_port);
+  } else {
+    strcpy(szIP, "");
+    *nPort = 0;
+  }
+  return ret;
 }
 
-//int32_t S_Ioctl(S_SOCKET nSockFd, int32_t nCmd, int32_t* nData);
+// int32_t S_Ioctl(S_SOCKET nSockFd, int32_t nCmd, int32_t* nData);
 
 /**
  *  S_GetSockName get host ip and port.
@@ -498,26 +466,24 @@ static int32_t S_RecvFrom(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize, char* 
  *
  *  @return 0 success, -1 fail
  */
-static int32_t S_GetSockName(S_SOCKET nSockFd, char* szIP, int32_t* nPort)
-{
-    if (szIP == NULL || nPort == NULL) {
-        return S_SOCKET_ERROR;
-    }
-    char host_ip[32] = {0};
-    struct sockaddr_in host_addr;
-    int32_t addr_len = sizeof(host_addr);
-    int32_t ret = getsockname(nSockFd, (struct sockaddr *)&host_addr, (socklen_t*)&addr_len);
-    if (ret == 0) {
-        inet_ntop(AF_INET, &host_addr.sin_addr, host_ip, sizeof(host_ip));
-        strcpy(szIP, host_ip);
-        *nPort = ntohs(host_addr.sin_port);
-    }
-    else
-    {
-        strcpy(szIP, "");
-        *nPort = 0;
-    }
-    return ret;
+static int32_t S_GetSockName(S_SOCKET nSockFd, char* szIP, int32_t* nPort) {
+  if (szIP == NULL || nPort == NULL) {
+    return S_SOCKET_ERROR;
+  }
+  char host_ip[32] = {0};
+  struct sockaddr_in host_addr;
+  int32_t addr_len = sizeof(host_addr);
+  int32_t ret =
+      getsockname(nSockFd, (struct sockaddr*)&host_addr, (socklen_t*)&addr_len);
+  if (ret == 0) {
+    inet_ntop(AF_INET, &host_addr.sin_addr, host_ip, sizeof(host_ip));
+    strcpy(szIP, host_ip);
+    *nPort = ntohs(host_addr.sin_port);
+  } else {
+    strcpy(szIP, "");
+    *nPort = 0;
+  }
+  return ret;
 }
 
 /**
@@ -529,26 +495,24 @@ static int32_t S_GetSockName(S_SOCKET nSockFd, char* szIP, int32_t* nPort)
  *
  *  @return 0 success, -1 fail
  */
-static int32_t S_GetPeerName(S_SOCKET nSockFd, char* szIP, int32_t* nPort)
-{
-    if (szIP == NULL || nPort == NULL) {
-        return S_SOCKET_ERROR;
-    }
-    char peer_ip[32] = {0};
-    struct sockaddr_in peer_addr;
-    int32_t addr_len = sizeof(peer_addr);
-    int32_t ret = getpeername(nSockFd, (struct sockaddr *)&peer_addr, (socklen_t*)&addr_len);
-    if (ret == 0) {
-        inet_ntop(AF_INET, &peer_addr.sin_addr, peer_ip, sizeof(peer_ip));
-        strcpy(szIP, peer_ip);
-        *nPort = ntohs(peer_addr.sin_port);
-    }
-    else
-    {
-        strcpy(szIP, "");
-        *nPort = 0;
-    }
-    return ret;
+static int32_t S_GetPeerName(S_SOCKET nSockFd, char* szIP, int32_t* nPort) {
+  if (szIP == NULL || nPort == NULL) {
+    return S_SOCKET_ERROR;
+  }
+  char peer_ip[32] = {0};
+  struct sockaddr_in peer_addr;
+  int32_t addr_len = sizeof(peer_addr);
+  int32_t ret =
+      getpeername(nSockFd, (struct sockaddr*)&peer_addr, (socklen_t*)&addr_len);
+  if (ret == 0) {
+    inet_ntop(AF_INET, &peer_addr.sin_addr, peer_ip, sizeof(peer_ip));
+    strcpy(szIP, peer_ip);
+    *nPort = ntohs(peer_addr.sin_port);
+  } else {
+    strcpy(szIP, "");
+    *nPort = 0;
+  }
+  return ret;
 }
 
 /**
@@ -559,29 +523,27 @@ static int32_t S_GetPeerName(S_SOCKET nSockFd, char* szIP, int32_t* nPort)
  *
  *  @return 0 success, -1 error
  */
-static int32_t S_GetHostByName(const char* szName, char* szIP)
-{
-    if (szName == NULL || szIP == NULL) {
-        return S_SOCKET_ERROR;
-    }
-    struct hostent * hostent = NULL;
-    struct in_addr sin_addr;
-    memset(&sin_addr, 0, sizeof(in_addr));
+static int32_t S_GetHostByName(const char* szName, char* szIP) {
+  if (szName == NULL || szIP == NULL) {
+    return S_SOCKET_ERROR;
+  }
+  struct hostent* hostent = NULL;
+  struct in_addr sin_addr;
+  memset(&sin_addr, 0, sizeof(in_addr));
 
-    hostent = gethostbyname(szName);
-    
-    if (!hostent) {
-        return S_SOCKET_ERROR;
-    }
-    
-    char host_ip[32] = {0};
-    sin_addr = *(struct in_addr*) hostent->h_addr_list[0];
-    inet_ntop(AF_INET, &sin_addr, host_ip, sizeof(host_ip));
-    strcpy(szIP, host_ip);
-    return 0;
+  hostent = gethostbyname(szName);
+
+  if (!hostent) {
+    return S_SOCKET_ERROR;
+  }
+
+  char host_ip[32] = {0};
+  sin_addr = *(struct in_addr*)hostent->h_addr_list[0];
+  inet_ntop(AF_INET, &sin_addr, host_ip, sizeof(host_ip));
+  strcpy(szIP, host_ip);
+  return 0;
 }
-    
-    
+
 /**
  *  S_ntohl
  *
@@ -589,10 +551,7 @@ static int32_t S_GetHostByName(const char* szName, char* szIP)
  *
  *  @return
  */
-static uint32_t S_ntohl(uint32_t netlong)
-{
-    return ntohl(netlong);
-}
+static uint32_t S_ntohl(uint32_t netlong) { return ntohl(netlong); }
 
 /**
  *  S_htonl
@@ -601,10 +560,7 @@ static uint32_t S_ntohl(uint32_t netlong)
  *
  *  @return
  */
-static uint32_t S_htonl(uint32_t hostlong)
-{
-    return htonl(hostlong);
-}
+static uint32_t S_htonl(uint32_t hostlong) { return htonl(hostlong); }
 
 /**
  *  S_ntohs
@@ -613,10 +569,7 @@ static uint32_t S_htonl(uint32_t hostlong)
  *
  *  @return
  */
-static uint16_t S_ntohs(uint16_t netshort)
-{
-    return ntohs(netshort);
-}
+static uint16_t S_ntohs(uint16_t netshort) { return ntohs(netshort); }
 
 /**
  *  S_htons
@@ -625,11 +578,8 @@ static uint16_t S_ntohs(uint16_t netshort)
  *
  *  @return
  */
-static uint16_t S_htons(uint16_t hostshort)
-{
-    return htons(hostshort);
-}
-    
+static uint16_t S_htons(uint16_t hostshort) { return htons(hostshort); }
+
 /**
  *  S_ntohll
  *
@@ -637,9 +587,9 @@ static uint16_t S_htons(uint16_t hostshort)
  *
  *  @return
  */
-static uint64_t S_ntohll(uint64_t val)
-{
-    return (((uint64_t )htonl((int32_t)((val << 32) >> 32))) << 32) | (uint32_t)htonl((int32_t)(val >> 32));
+static uint64_t S_ntohll(uint64_t val) {
+  return (((uint64_t)htonl((int32_t)((val << 32) >> 32))) << 32) |
+         (uint32_t)htonl((int32_t)(val >> 32));
 }
 
 /**
@@ -649,11 +599,11 @@ static uint64_t S_ntohll(uint64_t val)
  *
  *  @return
  */
-static uint64_t S_htonll(uint64_t val)
-{
-    return (((uint64_t )htonl((int32_t)((val << 32) >> 32))) << 32) | (uint32_t)htonl((int32_t)(val >> 32));
+static uint64_t S_htonll(uint64_t val) {
+  return (((uint64_t)htonl((int32_t)((val << 32) >> 32))) << 32) |
+         (uint32_t)htonl((int32_t)(val >> 32));
 }
-    
+
 #ifdef __cplusplus
 }
 #endif

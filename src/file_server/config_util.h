@@ -10,28 +10,28 @@
 #define FILE_SERVER_CONFIG_UTIL_H_
 
 #include <list>
+#include "im._base_define.pb.h"
 #include "singleton.h"
-#include "IM.BaseDefine.pb.h"
 
-class ConfigUtil : public Singleton<ConfigUtil>
-{
-public:
-    ~ConfigUtil() { }
+class ConfigUtil : public Singleton<ConfigUtil> {
+ public:
+  ~ConfigUtil() {}
 
-    void AddAddress(const char* ip, uint16_t port);
-    const std::list<IM::BaseDefine::IpAddr>& GetAddressList() const {
-        return addrs_;
-    }
-    
-    void SetTaskTimeout(uint32_t timeout) { task_timeout_ = timeout; }
-    uint32_t GetTaskTimeout() const { return task_timeout_; }
-private:
-    friend class Singleton<ConfigUtil>;
+  void AddAddress(const char* ip, uint16_t port);
+  const std::list<IM::BaseDefine::IpAddr>& GetAddressList() const {
+    return addrs_;
+  }
 
-    ConfigUtil() : task_timeout_(3600) { }
+  void SetTaskTimeout(uint32_t timeout) { task_timeout_ = timeout; }
+  uint32_t GetTaskTimeout() const { return task_timeout_; }
 
-    uint32_t task_timeout_;
-    std::list<IM::BaseDefine::IpAddr> addrs_;
+ private:
+  friend class Singleton<ConfigUtil>;
+
+  ConfigUtil() : task_timeout_(3600) {}
+
+  uint32_t task_timeout_;
+  std::list<IM::BaseDefine::IpAddr> addrs_;
 };
 
 #endif /* defined(FILE_SERVER_CONFIG_UTIL_H_) */

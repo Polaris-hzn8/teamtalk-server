@@ -6,8 +6,8 @@
 #ifndef JSONCPP_BATCHALLOCATOR_H_INCLUDED
 #define JSONCPP_BATCHALLOCATOR_H_INCLUDED
 
-#include <stdlib.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
 
@@ -27,16 +27,16 @@ namespace Json {
  */
 template <typename AllocatedType, const unsigned int objectPerAllocation>
 class BatchAllocator {
-public:
+ public:
   BatchAllocator(unsigned int objectsPerPage = 255)
       : freeHead_(0), objectsPerPage_(objectsPerPage) {
     //      printf( "Size: %d => %s\n", sizeof(AllocatedType),
     // typeid(AllocatedType).name() );
     assert(sizeof(AllocatedType) * objectPerAllocation >=
-           sizeof(AllocatedType *)); // We must be able to store a slist in the
-                                     // object free space.
+           sizeof(AllocatedType *));  // We must be able to store a slist in the
+                                      // object free space.
     assert(objectsPerPage >= 16);
-    batches_ = allocateBatch(0); // allocated a dummy page
+    batches_ = allocateBatch(0);  // allocated a dummy page
     currentBatch_ = batches_;
   }
 
@@ -52,7 +52,7 @@ public:
   /// @warning it is the responsability of the caller to call objects
   /// constructors.
   AllocatedType *allocate() {
-    if (freeHead_) // returns node from free list.
+    if (freeHead_)  // returns node from free list.
     {
       AllocatedType *object = freeHead_;
       freeHead_ = *(AllocatedType **)object;
@@ -63,10 +63,10 @@ public:
       while (currentBatch_ && currentBatch_->used_ == currentBatch_->end_)
         currentBatch_ = currentBatch_->next_;
 
-      if (!currentBatch_) // no free batch found, allocate a new one
+      if (!currentBatch_)  // no free batch found, allocate a new one
       {
         currentBatch_ = allocateBatch(objectsPerPage_);
-        currentBatch_->next_ = batches_; // insert at the head of the list
+        currentBatch_->next_ = batches_;  // insert at the head of the list
         batches_ = currentBatch_;
       }
     }
@@ -84,7 +84,7 @@ public:
     freeHead_ = object;
   }
 
-private:
+ private:
   struct BatchInfo {
     BatchInfo *next_;
     AllocatedType *used_;
@@ -114,9 +114,9 @@ private:
   unsigned int objectsPerPage_;
 };
 
-} // namespace Json
+}  // namespace Json
 
-#endif // ifndef JSONCPP_DOC_INCLUDE_IMPLEMENTATION
+#endif  // ifndef JSONCPP_DOC_INCLUDE_IMPLEMENTATION
 
-#endif // JSONCPP_BATCHALLOCATOR_H_INCLUDED
+#endif  // JSONCPP_BATCHALLOCATOR_H_INCLUDED
 // vim: et ts=2 sts=2 sw=2 tw=0

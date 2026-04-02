@@ -8,16 +8,16 @@
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "value.h"
-#endif // if !defined(JSON_IS_AMALGAMATION)
-#include <vector>
+#endif  // if !defined(JSON_IS_AMALGAMATION)
 #include <string>
+#include <vector>
 
 // Disable warning C4251: <data member>: <type> needs to have dll-interface to
 // be used by...
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(push)
 #pragma warning(disable : 4251)
-#endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+#endif  // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
 namespace Json {
 
@@ -26,7 +26,7 @@ class Value;
 /** \brief Abstract class for writers.
  */
 class JSON_API Writer {
-public:
+ public:
   virtual ~Writer();
 
   virtual std::string write(const Value &root) = 0;
@@ -41,7 +41,7 @@ public:
  * \sa Reader, Value
  */
 class JSON_API FastWriter : public Writer {
-public:
+ public:
   FastWriter();
   virtual ~FastWriter() {}
 
@@ -54,10 +54,10 @@ public:
    */
   void dropNullPlaceholders();
 
-public: // overridden from Writer
+ public:  // overridden from Writer
   virtual std::string write(const Value &root);
 
-private:
+ private:
   void writeValue(const Value &value);
 
   std::string document_;
@@ -89,18 +89,18 @@ private:
  * \sa Reader, Value, Value::setComment()
  */
 class JSON_API StyledWriter : public Writer {
-public:
+ public:
   StyledWriter();
   virtual ~StyledWriter() {}
 
-public: // overridden from Writer
+ public:  // overridden from Writer
   /** \brief Serialize a Value in <a HREF="http://www.json.org">JSON</a> format.
    * \param root Value to serialize.
    * \return String containing the JSON document that represents the root value.
    */
   virtual std::string write(const Value &root);
 
-private:
+ private:
   void writeValue(const Value &value);
   void writeArrayValue(const Value &value);
   bool isMultineArray(const Value &value);
@@ -150,11 +150,11 @@ private:
  * \sa Reader, Value, Value::setComment()
  */
 class JSON_API StyledStreamWriter {
-public:
+ public:
   StyledStreamWriter(std::string indentation = "\t");
   ~StyledStreamWriter() {}
 
-public:
+ public:
   /** \brief Serialize a Value in <a HREF="http://www.json.org">JSON</a> format.
    * \param out Stream to write to. (Can be ostringstream, e.g.)
    * \param root Value to serialize.
@@ -163,7 +163,7 @@ public:
    */
   void write(std::ostream &out, const Value &root);
 
-private:
+ private:
   void writeValue(const Value &value);
   void writeArrayValue(const Value &value);
   bool isMultineArray(const Value &value);
@@ -190,7 +190,7 @@ private:
 #if defined(JSON_HAS_INT64)
 std::string JSON_API valueToString(Int value);
 std::string JSON_API valueToString(UInt value);
-#endif // if defined(JSON_HAS_INT64)
+#endif  // if defined(JSON_HAS_INT64)
 std::string JSON_API valueToString(LargestInt value);
 std::string JSON_API valueToString(LargestUInt value);
 std::string JSON_API valueToString(double value);
@@ -201,10 +201,10 @@ std::string JSON_API valueToQuotedString(const char *value);
 /// \see Json::operator>>()
 JSON_API std::ostream &operator<<(std::ostream &, const Value &root);
 
-} // namespace Json
+}  // namespace Json
 
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(pop)
-#endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+#endif  // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
-#endif // JSON_WRITER_H_INCLUDED
+#endif  // JSON_WRITER_H_INCLUDED

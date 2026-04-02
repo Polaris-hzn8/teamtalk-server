@@ -9,7 +9,7 @@
 #if !defined(JSON_IS_AMALGAMATION)
 #include "features.h"
 #include "value.h"
-#endif // if !defined(JSON_IS_AMALGAMATION)
+#endif  // if !defined(JSON_IS_AMALGAMATION)
 #include <deque>
 #include <iosfwd>
 #include <stack>
@@ -20,7 +20,7 @@
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(push)
 #pragma warning(disable : 4251)
-#endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+#endif  // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
 namespace Json {
 
@@ -29,7 +29,7 @@ namespace Json {
  *
  */
 class JSON_API Reader {
-public:
+ public:
   typedef char Char;
   typedef const Char *Location;
 
@@ -69,8 +69,8 @@ public:
    * \return \c true if the document was successfully parsed, \c false if an
    * error occurred.
    */
-  bool
-  parse(const std::string &document, Value &root, bool collectComments = true);
+  bool parse(const std::string &document, Value &root,
+             bool collectComments = true);
 
   /** \brief Read a Value from a <a HREF="http://www.json.org">JSON</a>
    document.
@@ -90,9 +90,7 @@ public:
    * \return \c true if the document was successfully parsed, \c false if an
    error occurred.
    */
-  bool parse(const char *beginDoc,
-             const char *endDoc,
-             Value &root,
+  bool parse(const char *beginDoc, const char *endDoc, Value &root,
              bool collectComments = true);
 
   /// \brief Parse from input stream.
@@ -130,7 +128,7 @@ public:
    */
   std::vector<StructuredError> getStructuredErrors() const;
 
-private:
+ private:
   enum TokenType {
     tokenEndOfStream = 0,
     tokenObjectBegin,
@@ -149,14 +147,14 @@ private:
   };
 
   class Token {
-  public:
+   public:
     TokenType type_;
     Location start_;
     Location end_;
   };
 
   class ErrorInfo {
-  public:
+   public:
     Token token_;
     std::string message_;
     Location extra_;
@@ -182,24 +180,19 @@ private:
   bool decodeString(Token &token, std::string &decoded);
   bool decodeDouble(Token &token);
   bool decodeDouble(Token &token, Value &decoded);
-  bool decodeUnicodeCodePoint(Token &token,
-                              Location &current,
-                              Location end,
+  bool decodeUnicodeCodePoint(Token &token, Location &current, Location end,
                               unsigned int &unicode);
-  bool decodeUnicodeEscapeSequence(Token &token,
-                                   Location &current,
-                                   Location end,
-                                   unsigned int &unicode);
+  bool decodeUnicodeEscapeSequence(Token &token, Location &current,
+                                   Location end, unsigned int &unicode);
   bool addError(const std::string &message, Token &token, Location extra = 0);
   bool recoverFromError(TokenType skipUntilToken);
-  bool addErrorAndRecover(const std::string &message,
-                          Token &token,
+  bool addErrorAndRecover(const std::string &message, Token &token,
                           TokenType skipUntilToken);
   void skipUntilSpace();
   Value &currentValue();
   Char getNextChar();
-  void
-  getLocationLineAndColumn(Location location, int &line, int &column) const;
+  void getLocationLineAndColumn(Location location, int &line,
+                                int &column) const;
   std::string getLocationLineAndColumn(Location location) const;
   void addComment(Location begin, Location end, CommentPlacement placement);
   void skipCommentTokens(Token &token);
@@ -244,10 +237,10 @@ private:
 */
 JSON_API std::istream &operator>>(std::istream &, Value &);
 
-} // namespace Json
+}  // namespace Json
 
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(pop)
-#endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+#endif  // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
-#endif // CPPTL_JSON_READER_H_INCLUDED
+#endif  // CPPTL_JSON_READER_H_INCLUDED

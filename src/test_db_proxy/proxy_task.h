@@ -1,0 +1,29 @@
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: ProxyTask.h
+ Update Time: Thu 15 Jun 2023 01:04:06 CST
+ brief:
+*/
+
+#ifndef __PROXY_TASK_H__
+#define __PROXY_TASK_H__
+#include "im_pdu_base.h"
+#include "task.h"
+#include "util.h"
+
+typedef void (*pdu_handler_t)(CImPdu* pPdu, uint32_t conn_uuid);
+
+class CProxyTask : public CTask {
+ public:
+  CProxyTask(uint32_t conn_uuid, pdu_handler_t pdu_handler, CImPdu* pPdu);
+  virtual ~CProxyTask();
+
+  virtual void run();
+
+ private:
+  uint32_t m_conn_uuid;
+  pdu_handler_t m_pdu_handler;
+  CImPdu* m_pPdu;
+};
+#endif

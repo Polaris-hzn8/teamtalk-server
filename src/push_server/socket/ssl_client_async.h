@@ -3,61 +3,61 @@
  Email: lch2022fox@163.com
  filename: ssl_client_async.h
  Update Time: Sun 10 Aug 2025 12:24:44 CST
- brief: 
+ brief:
 */
 
 #ifndef __my_push_server__ssl_client_async__
 #define __my_push_server__ssl_client_async__
 
-#include <string>
-#include <stdio.h>
-#include <openssl/ssl.h>
 #include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <stdio.h>
+#include <string>
 #include "tcp_client_async.h"
 
-class CSSLClientAsync : public CTCPClientAsync
-{
-public:
-    CSSLClientAsync(CIOLoop* pIO);
-    virtual ~CSSLClientAsync();
-    
-    SSL_CTX* GetSSLCTX() const { return m_ctx; }
-    SSL* GetSSL() const { return m_ssl; }
-    
-    void SetSSLConnectStatus(BOOL bStatus) { m_bSSLConnectStatus = bStatus; }
-    BOOL GetSSLConnectStatus() { return m_bSSLConnectStatus; }
-    string GetCertFile() { return m_strCertFile; }
-    string GetKeyFile() { return m_strKeyFile; }
-    string GetKeyPassword() { return m_strKeyPassword; }
-    
-    BOOL InitSSL(const char* cert_file = NULL, const char* key_file = NULL, const char* key_password = NULL);
-    void UnInitSSL();
-    virtual void OnConnect(BOOL bConnected);
-    virtual void OnRecv();
-    int32_t SSLConnect();
-    virtual int32_t ReConnectAsync();
+class CSSLClientAsync : public CTCPClientAsync {
+ public:
+  CSSLClientAsync(CIOLoop* pIO);
+  virtual ~CSSLClientAsync();
 
-    virtual int32_t SendMsgAsync(const char* szBuf, int32_t nBufSize);
-    virtual int32_t SendBufferAsync();
+  SSL_CTX* GetSSLCTX() const { return m_ctx; }
+  SSL* GetSSL() const { return m_ssl; }
 
-    virtual void Close();
-    virtual void ShutDown();
+  void SetSSLConnectStatus(BOOL bStatus) { m_bSSLConnectStatus = bStatus; }
+  BOOL GetSSLConnectStatus() { return m_bSSLConnectStatus; }
+  string GetCertFile() { return m_strCertFile; }
+  string GetKeyFile() { return m_strKeyFile; }
+  string GetKeyPassword() { return m_strKeyPassword; }
 
-    /*uint32_t nsockid*/
-    sigslot::signal1<uint32_t> DoSSLConnect;
-    
-protected:
-    virtual void _Close();
-    
-protected:
-    BOOL m_bSSLConnectStatus;
-    
-    string m_strCertFile;
-    string m_strKeyFile;
-    string m_strKeyPassword;
-    
-    SSL_CTX* m_ctx;
-    SSL* m_ssl;
+  BOOL InitSSL(const char* cert_file = NULL, const char* key_file = NULL,
+               const char* key_password = NULL);
+  void UnInitSSL();
+  virtual void OnConnect(BOOL bConnected);
+  virtual void OnRecv();
+  int32_t SSLConnect();
+  virtual int32_t ReConnectAsync();
+
+  virtual int32_t SendMsgAsync(const char* szBuf, int32_t nBufSize);
+  virtual int32_t SendBufferAsync();
+
+  virtual void Close();
+  virtual void ShutDown();
+
+  /*uint32_t nsockid*/
+  sigslot::signal1<uint32_t> DoSSLConnect;
+
+ protected:
+  virtual void _Close();
+
+ protected:
+  BOOL m_bSSLConnectStatus;
+
+  string m_strCertFile;
+  string m_strKeyFile;
+  string m_strKeyPassword;
+
+  SSL_CTX* m_ctx;
+  SSL* m_ssl;
 };
 
 #endif /* defined(__my_push_server__ssl_client_async__) */

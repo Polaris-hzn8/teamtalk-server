@@ -60,5 +60,5 @@ bin/
 build/
 
 # output_pack
-src/im-server-*.tar.gz
+im-server-*.tar.gz
 im_server_pack/

@@ -8,7 +8,7 @@
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "forwards.h"
-#endif // if !defined(JSON_IS_AMALGAMATION)
+#endif  // if !defined(JSON_IS_AMALGAMATION)
 #include <string>
 #include <vector>
 
@@ -26,7 +26,7 @@
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(push)
 #pragma warning(disable : 4251)
-#endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+#endif  // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
 /** \brief JSON (JavaScript Object Notation).
  */
@@ -35,20 +35,20 @@ namespace Json {
 /** \brief Type of the value held by a Value object.
  */
 enum ValueType {
-  nullValue = 0, ///< 'null' value
-  intValue,      ///< signed integer value
-  uintValue,     ///< unsigned integer value
-  realValue,     ///< double value
-  stringValue,   ///< UTF-8 string value
-  booleanValue,  ///< bool value
-  arrayValue,    ///< array value (ordered list)
-  objectValue    ///< object value (collection of name/value pairs).
+  nullValue = 0,  ///< 'null' value
+  intValue,       ///< signed integer value
+  uintValue,      ///< unsigned integer value
+  realValue,      ///< double value
+  stringValue,    ///< UTF-8 string value
+  booleanValue,   ///< bool value
+  arrayValue,     ///< array value (ordered list)
+  objectValue     ///< object value (collection of name/value pairs).
 };
 
 enum CommentPlacement {
-  commentBefore = 0,      ///< a comment placed on the line before a value
-  commentAfterOnSameLine, ///< a comment just after a value on the same line
-  commentAfter, ///< a comment on the line after a value (only make sense for
+  commentBefore = 0,       ///< a comment placed on the line before a value
+  commentAfterOnSameLine,  ///< a comment just after a value on the same line
+  commentAfter,  ///< a comment on the line after a value (only make sense for
   /// root value)
   numberOfCommentPlacement
 };
@@ -73,14 +73,14 @@ enum CommentPlacement {
  * \endcode
  */
 class JSON_API StaticString {
-public:
+ public:
   explicit StaticString(const char *czstring) : str_(czstring) {}
 
   operator const char *() const { return str_; }
 
   const char *c_str() const { return str_; }
 
-private:
+ private:
   const char *str_;
 };
 
@@ -119,7 +119,7 @@ class JSON_API Value {
   friend class ValueInternalLink;
   friend class ValueInternalMap;
 #endif
-public:
+ public:
   typedef std::vector<std::string> Members;
   typedef ValueIterator iterator;
   typedef ValueConstIterator const_iterator;
@@ -128,12 +128,12 @@ public:
 #if defined(JSON_HAS_INT64)
   typedef Json::UInt64 UInt64;
   typedef Json::Int64 Int64;
-#endif // defined(JSON_HAS_INT64)
+#endif  // defined(JSON_HAS_INT64)
   typedef Json::LargestInt LargestInt;
   typedef Json::LargestUInt LargestUInt;
   typedef Json::ArrayIndex ArrayIndex;
 
-  static const Value& null;
+  static const Value &null;
   /// Minimum signed integer value that can be stored in a Json::Value.
   static const LargestInt minLargestInt;
   /// Maximum signed integer value that can be stored in a Json::Value.
@@ -155,18 +155,14 @@ public:
   static const Int64 maxInt64;
   /// Maximum unsigned 64 bits int value that can be stored in a Json::Value.
   static const UInt64 maxUInt64;
-#endif // defined(JSON_HAS_INT64)
+#endif  // defined(JSON_HAS_INT64)
 
-private:
+ private:
 #ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
   class CZString {
-  public:
-    enum DuplicationPolicy {
-      noDuplication = 0,
-      duplicate,
-      duplicateOnCopy
-    };
+   public:
+    enum DuplicationPolicy { noDuplication = 0, duplicate, duplicateOnCopy };
     CZString(ArrayIndex index);
     CZString(const char *cstr, DuplicationPolicy allocate);
     CZString(const CZString &other);
@@ -178,22 +174,22 @@ private:
     const char *c_str() const;
     bool isStaticString() const;
 
-  private:
+   private:
     void swap(CZString &other);
     const char *cstr_;
     ArrayIndex index_;
   };
 
-public:
+ public:
 #ifndef JSON_USE_CPPTL_SMALLMAP
   typedef std::map<CZString, Value> ObjectValues;
 #else
   typedef CppTL::SmallMap<CZString, Value> ObjectValues;
-#endif // ifndef JSON_USE_CPPTL_SMALLMAP
-#endif // ifndef JSON_VALUE_USE_INTERNAL_MAP
-#endif // ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
+#endif  // ifndef JSON_USE_CPPTL_SMALLMAP
+#endif  // ifndef JSON_VALUE_USE_INTERNAL_MAP
+#endif  // ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
 
-public:
+ public:
   /** \brief Create a default Value of the given type.
 
     This is a very useful constructor.
@@ -215,7 +211,7 @@ Json::Value obj_value(Json::objectValue); // {}
 #if defined(JSON_HAS_INT64)
   Value(Int64 value);
   Value(UInt64 value);
-#endif // if defined(JSON_HAS_INT64)
+#endif  // if defined(JSON_HAS_INT64)
   Value(double value);
   Value(const char *value);
   Value(const char *beginValue, const char *endValue);
@@ -266,7 +262,7 @@ Json::Value obj_value(Json::objectValue); // {}
 #if defined(JSON_HAS_INT64)
   Int64 asInt64() const;
   UInt64 asUInt64() const;
-#endif // if defined(JSON_HAS_INT64)
+#endif  // if defined(JSON_HAS_INT64)
   LargestInt asLargestInt() const;
   LargestUInt asLargestUInt() const;
   float asFloat() const;
@@ -439,7 +435,7 @@ Json::Value obj_value(Json::objectValue); // {}
   size_t getOffsetStart() const;
   size_t getOffsetLimit() const;
 
-private:
+ private:
   Value &resolveReference(const char *key, bool isStatic);
 
 #ifdef JSON_VALUE_USE_INTERNAL_MAP
@@ -452,9 +448,9 @@ private:
   inline void setMemberNameIsStatic(bool isStatic) {
     memberNameIsStatic_ = isStatic ? 1 : 0;
   }
-#endif // # ifdef JSON_VALUE_USE_INTERNAL_MAP
+#endif  // # ifdef JSON_VALUE_USE_INTERNAL_MAP
 
-private:
+ private:
   struct CommentInfo {
     CommentInfo();
     ~CommentInfo();
@@ -487,10 +483,10 @@ private:
 #endif
   } value_;
   ValueType type_ : 8;
-  int allocated_ : 1; // Notes: if declared as bool, bitfield is useless.
+  int allocated_ : 1;  // Notes: if declared as bool, bitfield is useless.
 #ifdef JSON_VALUE_USE_INTERNAL_MAP
-  unsigned int itemIsUsed_ : 1; // used by the ValueInternalMap container.
-  int memberNameIsStatic_ : 1;  // used by the ValueInternalMap container.
+  unsigned int itemIsUsed_ : 1;  // used by the ValueInternalMap container.
+  int memberNameIsStatic_ : 1;   // used by the ValueInternalMap container.
 #endif
   CommentInfo *comments_;
 
@@ -504,7 +500,7 @@ private:
  * access a node.
  */
 class JSON_API PathArgument {
-public:
+ public:
   friend class Path;
 
   PathArgument();
@@ -512,12 +508,8 @@ public:
   PathArgument(const char *key);
   PathArgument(const std::string &key);
 
-private:
-  enum Kind {
-    kindNone = 0,
-    kindIndex,
-    kindKey
-  };
+ private:
+  enum Kind { kindNone = 0, kindIndex, kindKey };
   std::string key_;
   ArrayIndex index_;
   Kind kind_;
@@ -535,9 +527,8 @@ private:
  * - ".[%]" => index is provied as parameter
  */
 class JSON_API Path {
-public:
-  Path(const std::string &path,
-       const PathArgument &a1 = PathArgument(),
+ public:
+  Path(const std::string &path, const PathArgument &a1 = PathArgument(),
        const PathArgument &a2 = PathArgument(),
        const PathArgument &a3 = PathArgument(),
        const PathArgument &a4 = PathArgument(),
@@ -549,15 +540,13 @@ public:
   /// the node.
   Value &make(Value &root) const;
 
-private:
+ private:
   typedef std::vector<const PathArgument *> InArgs;
   typedef std::vector<PathArgument> Args;
 
   void makePath(const std::string &path, const InArgs &in);
-  void addPathInArg(const std::string &path,
-                    const InArgs &in,
-                    InArgs::const_iterator &itInArg,
-                    PathArgument::Kind kind);
+  void addPathInArg(const std::string &path, const InArgs &in,
+                    InArgs::const_iterator &itInArg, PathArgument::Kind kind);
   void invalidPath(const std::string &path, int location);
 
   Args args_;
@@ -610,7 +599,7 @@ private:
  * \endcode
  */
 class JSON_API ValueMapAllocator {
-public:
+ public:
   virtual ~ValueMapAllocator();
   virtual ValueInternalMap *newMap() = 0;
   virtual ValueInternalMap *newMapCopy(const ValueInternalMap &other) = 0;
@@ -625,14 +614,11 @@ public:
  * \internal previous_ & next_ allows for bidirectional traversal.
  */
 class JSON_API ValueInternalLink {
-public:
+ public:
   enum {
     itemPerLink = 6
-  }; // sizeof(ValueInternalLink) = 128 on 32 bits architecture.
-  enum InternalFlags {
-    flagAvailable = 0,
-    flagUsed = 1
-  };
+  };  // sizeof(ValueInternalLink) = 128 on 32 bits architecture.
+  enum InternalFlags { flagAvailable = 0, flagUsed = 1 };
 
   ValueInternalLink();
 
@@ -665,7 +651,7 @@ class JSON_API ValueInternalMap {
   friend class ValueIteratorBase;
   friend class Value;
 
-public:
+ public:
   typedef unsigned int HashKey;
   typedef unsigned int BucketIndex;
 
@@ -677,7 +663,7 @@ public:
     BucketIndex itemIndex_;
     BucketIndex bucketIndex_;
   };
-#endif // ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
+#endif  // ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
 
   ValueInternalMap();
   ValueInternalMap(const ValueInternalMap &other);
@@ -702,15 +688,12 @@ public:
 
   void remove(const char *key);
 
-  void doActualRemove(ValueInternalLink *link,
-                      BucketIndex index,
+  void doActualRemove(ValueInternalLink *link, BucketIndex index,
                       BucketIndex bucketIndex);
 
   ValueInternalLink *&getLastLinkInBucket(BucketIndex bucketIndex);
 
-  Value &setNewItem(const char *key,
-                    bool isStatic,
-                    ValueInternalLink *link,
+  Value &setNewItem(const char *key, bool isStatic, ValueInternalLink *link,
                     BucketIndex index);
 
   Value &unsafeAdd(const char *key, bool isStatic, HashKey hashedKey);
@@ -719,7 +702,7 @@ public:
 
   int compare(const ValueInternalMap &other) const;
 
-private:
+ private:
   void makeBeginIterator(IteratorState &it) const;
   void makeEndIterator(IteratorState &it) const;
   static bool equals(const IteratorState &x, const IteratorState &other);
@@ -731,7 +714,7 @@ private:
   static Value &value(const IteratorState &iterator);
   static int distance(const IteratorState &x, const IteratorState &y);
 
-private:
+ private:
   ValueInternalLink *buckets_;
   ValueInternalLink *tailLink_;
   BucketIndex bucketsSize_;
@@ -739,39 +722,39 @@ private:
 };
 
 /** \brief A simplified deque implementation used internally by Value.
-* \internal
-* It is based on a list of fixed "page", each page contains a fixed number of
-*items.
-* Instead of using a linked-list, a array of pointer is used for fast item
-*look-up.
-* Look-up for an element is as follow:
-* - compute page index: pageIndex = itemIndex / itemsPerPage
-* - look-up item in page: pages_[pageIndex][itemIndex % itemsPerPage]
-*
-* Insertion is amortized constant time (only the array containing the index of
-*pointers
-* need to be reallocated when items are appended).
-*/
+ * \internal
+ * It is based on a list of fixed "page", each page contains a fixed number of
+ *items.
+ * Instead of using a linked-list, a array of pointer is used for fast item
+ *look-up.
+ * Look-up for an element is as follow:
+ * - compute page index: pageIndex = itemIndex / itemsPerPage
+ * - look-up item in page: pages_[pageIndex][itemIndex % itemsPerPage]
+ *
+ * Insertion is amortized constant time (only the array containing the index of
+ *pointers
+ * need to be reallocated when items are appended).
+ */
 class JSON_API ValueInternalArray {
   friend class Value;
   friend class ValueIteratorBase;
 
-public:
+ public:
   enum {
     itemsPerPage = 8
-  }; // should be a power of 2 for fast divide and modulo.
+  };  // should be a power of 2 for fast divide and modulo.
   typedef Value::ArrayIndex ArrayIndex;
   typedef unsigned int PageIndex;
 
 #ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
-  struct IteratorState // Must be a POD
-      {
+  struct IteratorState  // Must be a POD
+  {
     IteratorState() : array_(0), currentPageIndex_(0), currentItemIndex_(0) {}
     ValueInternalArray *array_;
     Value **currentPageIndex_;
     unsigned int currentItemIndex_;
   };
-#endif // ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
+#endif  // ifndef JSONCPP_DOC_EXCLUDE_IMPLEMENTATION
 
   ValueInternalArray();
   ValueInternalArray(const ValueInternalArray &other);
@@ -790,7 +773,7 @@ public:
 
   int compare(const ValueInternalArray &other) const;
 
-private:
+ private:
   static bool equals(const IteratorState &x, const IteratorState &other);
   static void increment(IteratorState &iterator);
   static void decrement(IteratorState &iterator);
@@ -873,7 +856,7 @@ virtual void releaseArrayPage( Value *value )
    \endcode
  */
 class JSON_API ValueArrayAllocator {
-public:
+ public:
   virtual ~ValueArrayAllocator();
   virtual ValueInternalArray *newArray() = 0;
   virtual ValueInternalArray *newArrayCopy(const ValueInternalArray &other) = 0;
@@ -890,23 +873,21 @@ public:
    * to
    *                         handle.
    */
-  virtual void
-  reallocateArrayPageIndex(Value **&indexes,
-                           ValueInternalArray::PageIndex &indexCount,
-                           ValueInternalArray::PageIndex minNewIndexCount) = 0;
-  virtual void
-  releaseArrayPageIndex(Value **indexes,
-                        ValueInternalArray::PageIndex indexCount) = 0;
+  virtual void reallocateArrayPageIndex(
+      Value **&indexes, ValueInternalArray::PageIndex &indexCount,
+      ValueInternalArray::PageIndex minNewIndexCount) = 0;
+  virtual void releaseArrayPageIndex(
+      Value **indexes, ValueInternalArray::PageIndex indexCount) = 0;
   virtual Value *allocateArrayPage() = 0;
   virtual void releaseArrayPage(Value *value) = 0;
 };
-#endif // #ifdef JSON_VALUE_USE_INTERNAL_MAP
+#endif  // #ifdef JSON_VALUE_USE_INTERNAL_MAP
 
 /** \brief base class for Value iterators.
  *
  */
 class JSON_API ValueIteratorBase {
-public:
+ public:
   typedef std::bidirectional_iterator_tag iterator_category;
   typedef unsigned int size_t;
   typedef int difference_type;
@@ -939,7 +920,7 @@ public:
   /// objectValue.
   const char *memberName() const;
 
-protected:
+ protected:
   Value &deref() const;
 
   void increment();
@@ -952,7 +933,7 @@ protected:
 
   void copy(const SelfType &other);
 
-private:
+ private:
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
   Value::ObjectValues::iterator current_;
   // Indicates that iterator is for a null value.
@@ -972,7 +953,7 @@ private:
 class JSON_API ValueConstIterator : public ValueIteratorBase {
   friend class Value;
 
-public:
+ public:
   typedef const Value value_type;
   typedef unsigned int size_t;
   typedef int difference_type;
@@ -982,7 +963,7 @@ public:
 
   ValueConstIterator();
 
-private:
+ private:
 /*! \internal Use by Value to create an iterator.
  */
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
@@ -991,7 +972,7 @@ private:
   ValueConstIterator(const ValueInternalArray::IteratorState &state);
   ValueConstIterator(const ValueInternalMap::IteratorState &state);
 #endif
-public:
+ public:
   SelfType &operator=(const ValueIteratorBase &other);
 
   SelfType operator++(int) {
@@ -1024,7 +1005,7 @@ public:
 class JSON_API ValueIterator : public ValueIteratorBase {
   friend class Value;
 
-public:
+ public:
   typedef Value value_type;
   typedef unsigned int size_t;
   typedef int difference_type;
@@ -1036,7 +1017,7 @@ public:
   ValueIterator(const ValueConstIterator &other);
   ValueIterator(const ValueIterator &other);
 
-private:
+ private:
 /*! \internal Use by Value to create an iterator.
  */
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
@@ -1045,7 +1026,7 @@ private:
   ValueIterator(const ValueInternalArray::IteratorState &state);
   ValueIterator(const ValueInternalMap::IteratorState &state);
 #endif
-public:
+ public:
   SelfType &operator=(const SelfType &other);
 
   SelfType operator++(int) {
@@ -1073,10 +1054,10 @@ public:
   reference operator*() const { return deref(); }
 };
 
-} // namespace Json
+}  // namespace Json
 
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(pop)
-#endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
+#endif  // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 
-#endif // CPPTL_JSON_H_INCLUDED
+#endif  // CPPTL_JSON_H_INCLUDED
