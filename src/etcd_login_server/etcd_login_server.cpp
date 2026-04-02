@@ -7,10 +7,10 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "HttpConn.h"
-#include "LoginConn.h"
-#include "ServerRegister.h"
+#include "config_file_reader.h"
+#include "http_conn.h"
+#include "login_conn.h"
+#include "server_register.h"
 #include "ipparser.h"
 #include "netlib.h"
 #include "version.h"

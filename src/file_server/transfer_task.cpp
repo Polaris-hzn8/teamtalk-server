@@ -8,7 +8,7 @@
 
 #include "transfer_task.h"
 #include <uuid/uuid.h>
-#include "IM.BaseDefine.pb.h"
+#include "im._base_define.pb.h"
 #include "util.h"
 
 // static char g_current_save_path[BUFSIZ];

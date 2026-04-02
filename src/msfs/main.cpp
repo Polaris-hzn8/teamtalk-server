@@ -8,10 +8,10 @@
 
 #include <signal.h>
 #include <iostream>
-#include "ConfigFileReader.h"
-#include "FileManager.h"
-#include "HttpConn.h"
-#include "ThreadPool.h"
+#include "config_file_reader.h"
+#include "file_manager.h"
+#include "http_conn.h"
+#include "thread_pool.h"
 #include "netlib.h"
 
 using namespace std;

@@ -7,8 +7,8 @@
 */
 
 #include "file_client_conn.h"
-#include "IM.File.pb.h"
-#include "IM.Other.pb.h"
+#include "im._file.pb.h"
+#include "im._other.pb.h"
 #include "config_util.h"
 #include "im_conn_util.h"
 #include "transfer_task_manager.h"

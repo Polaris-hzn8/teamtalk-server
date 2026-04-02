@@ -10,7 +10,7 @@
 #define _IMCONN_H_
 
 #include <unordered_map>
-#include "ImPduBase.h"
+#include "im_pdu_base.h"
 #include "netlib.h"
 #include "util.h"
 

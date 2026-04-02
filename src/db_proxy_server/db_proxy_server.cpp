@@ -6,17 +6,17 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "EncDec.h"
-#include "HttpClient.h"
-#include "ProxyConn.h"
+#include "config_file_reader.h"
+#include "enc_dec.h"
+#include "http_client.h"
+#include "proxy_conn.h"
 #include "netlib.h"
 #include "version.h"
 
-#include "CachePool.h"
-#include "DBPool.h"
-#include "SyncCenter.h"
-#include "ThreadPool.h"
+#include "cache_pool.h"
+#include "db_pool.h"
+#include "sync_center.h"
+#include "thread_pool.h"
 
 #include "business/AudioModel.h"
 #include "business/FileModel.h"

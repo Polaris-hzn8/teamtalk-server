@@ -8,7 +8,7 @@
 */
 
 #include "push_session_handler.h"
-#include "IM.Server.pb.h"
+#include "im._server.pb.h"
 #include "apns_msg.h"
 #include "push_define.h"
 #include "session_manager.h"

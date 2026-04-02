@@ -15,8 +15,8 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#include "ImPduUtil.h"
-#include "Lock.h"
+#include "im_pdu_util.h"
+#include "lock.h"
 #include "crosslog.h"
 #include "ostype.h"
 

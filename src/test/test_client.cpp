@@ -12,13 +12,13 @@
 
 #include <iostream>
 #include <vector>
-#include "Client.h"
-#include "ClientConn.h"
-#include "Common.h"
-#include "IM.BaseDefine.pb.h"
-#include "IM.Buddy.pb.h"
-#include "Thread.h"
-#include "TokenValidator.h"
+#include "client.h"
+#include "client_conn.h"
+#include "common.h"
+#include "im._base_define.pb.h"
+#include "im._buddy.pb.h"
+#include "thread.h"
+#include "token_validator.h"
 #include "netlib.h"
 using namespace std;
 

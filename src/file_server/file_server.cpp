@@ -6,8 +6,8 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "IM.BaseDefine.pb.h"
+#include "config_file_reader.h"
+#include "im._base_define.pb.h"
 #include "netlib.h"
 #include "version.h"
 

@@ -6,8 +6,8 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "RouteConn.h"
+#include "config_file_reader.h"
+#include "route_conn.h"
 #include "netlib.h"
 #include "version.h"
 

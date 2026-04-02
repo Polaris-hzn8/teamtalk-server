@@ -323,20 +323,16 @@ TeamTalk Server Build Script
 
 Usage:
   $0 build <server>       --- build single server
-  $0 build_all <version>  --- build all servers and create package
-  $0 pack <version>       --- package existing binaries
+  $0 build_version <version>  --- build all servers and create package
   $0 clean                --- clean all build files
-  $0 sync <server>        --- sync and restart single server
 
 Available servers:
   ${SERVERS[*]}
 
 Examples:
   $0 build login_server   # Build only login_server
-  $0 build_all 1.0.0      # Build all servers and package
-  $0 pack 1.0.0           # Package existing binaries only
+  $0 build_version 1.0.0  # Build all servers and package
   $0 clean                # Clean all build files
-  $0 sync login_server    # Sync and restart login_server
 
 Configuration:
   Pack folder: $PACK_FOLDER_NAME

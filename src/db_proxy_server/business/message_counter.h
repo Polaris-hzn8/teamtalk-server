@@ -1,0 +1,24 @@
+/*
+ Reviser: Polaris_hzn8
+ Email: 3453851623@qq.com
+ filename: MessageCounter.h
+ Update Time: Thu 15 Jun 2023 00:31:55 CST
+ brief:
+*/
+
+#ifndef MESSAGECOUNTER_H_
+#define MESSAGECOUNTER_H_
+
+#include "im_pdu_base.h"
+
+namespace DB_PROXY {
+
+void getUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid);
+void clearUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid);
+
+void setDevicesToken(CImPdu* pPdu, uint32_t conn_uuid);
+void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid);
+
+}  // namespace DB_PROXY
+
+#endif /* MESSAGECOUNTER_H_ */

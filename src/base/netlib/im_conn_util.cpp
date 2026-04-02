@@ -7,7 +7,7 @@
 */
 
 #include "im_conn_util.h"
-#include "ImPduBase.h"
+#include "im_pdu_base.h"
 #include "im_conn.h"
 
 int SendMessageLite(CImConn* conn, uint16_t sid, uint16_t cid,

@@ -9,8 +9,8 @@
 */
 
 #include "netlib.h"
-#include "BaseSocket.h"
-#include "EventDispatch.h"
+#include "base_socket.h"
+#include "event_dispatch.h"
 
 int netlib_init() {
   int ret = NETLIB_OK;

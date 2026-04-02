@@ -6,14 +6,14 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "DBServConn.h"
-#include "EncDec.h"
-#include "FileServConn.h"
-#include "LoginServConn.h"
-#include "MsgConn.h"
-#include "PushServConn.h"
-#include "RouteServConn.h"
+#include "config_file_reader.h"
+#include "db_serv_conn.h"
+#include "enc_dec.h"
+#include "file_serv_conn.h"
+#include "login_serv_conn.h"
+#include "msg_conn.h"
+#include "push_serv_conn.h"
+#include "route_serv_conn.h"
 #include "netlib.h"
 #include "version.h"
 

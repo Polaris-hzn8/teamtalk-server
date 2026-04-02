@@ -10,7 +10,7 @@
 #define FILE_SERVER_CONFIG_UTIL_H_
 
 #include <list>
-#include "IM.BaseDefine.pb.h"
+#include "im._base_define.pb.h"
 #include "singleton.h"
 
 class ConfigUtil : public Singleton<ConfigUtil> {

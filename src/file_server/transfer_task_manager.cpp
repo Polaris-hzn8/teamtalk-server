@@ -7,7 +7,7 @@
 */
 
 #include "transfer_task_manager.h"
-#include "IM.BaseDefine.pb.h"
+#include "im._base_define.pb.h"
 #include "config_util.h"
 #include "file_client_conn.h"
 #include "util.h"

@@ -7,8 +7,8 @@
 */
 
 #include "file_msg_server_conn.h"
-#include "IM.Other.pb.h"
-#include "IM.Server.pb.h"
+#include "im._other.pb.h"
+#include "im._server.pb.h"
 #include "config_util.h"
 #include "im_conn_util.h"
 #include "transfer_task.h"

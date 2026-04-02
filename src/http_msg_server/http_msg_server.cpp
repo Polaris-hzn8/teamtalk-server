@@ -6,16 +6,16 @@
  brief:
 */
 
-#include "ConfigFileReader.h"
-#include "ServInfo.h"
+#include "config_file_reader.h"
+#include "serv_info.h"
 #include "netlib.h"
 #include "util.h"
 #include "version.h"
 
-#include "DBServConn.h"
-#include "HttpConn.h"
-#include "HttpQuery.h"
-#include "RouteServConn.h"
+#include "db_serv_conn.h"
+#include "http_conn.h"
+#include "http_query.h"
+#include "route_serv_conn.h"
 
 #define DEFAULT_CONCURRENT_DB_CONN_CNT 2
 
