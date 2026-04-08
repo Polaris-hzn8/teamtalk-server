@@ -34,7 +34,8 @@ File::File(const char* path) {
 }
 
 File::~File() {
-  if (m_opened) close();
+  if (m_opened)
+    close();
   delete[] m_path;
   m_path = NULL;
 }
@@ -45,7 +46,8 @@ u64 File::isExist(bool* exist) {
 }
 
 u64 File::remove() {
-  if (-1 == unlink(m_path)) return errno;
+  if (-1 == unlink(m_path))
+    return errno;
   return 0;
 }
 
@@ -57,10 +59,12 @@ u64 File::create(bool directIo) {
 #elif defined(__LINUX__) || defined(__linux__)
   m_file = open64(m_path, flags, 00640);
 #endif
-  if (-1 == m_file) return errno;
+  if (-1 == m_file)
+    return errno;
 #ifdef __LINUX__
   if (directIo)
-    if (-1 == fcntl(m_file, F_SETFL, O_DIRECT)) return errno;
+    if (-1 == fcntl(m_file, F_SETFL, O_DIRECT))
+      return errno;
 #endif
   m_opened = true;
   m_size = 0;
@@ -81,7 +85,8 @@ u64 File::open(bool directIo) {
   }
 #ifdef __LINUX__
   if (directIo)
-    if (-1 == fcntl(m_file, F_SETFL, O_DIRECT)) return errno;
+    if (-1 == fcntl(m_file, F_SETFL, O_DIRECT))
+      return errno;
 #endif
   struct flock lock;
   lock.l_type = F_WRLCK;
@@ -106,11 +111,14 @@ u64 File::open(bool directIo) {
 }
 
 u64 File::close() {
-  if (!m_opened) return 0;
+  if (!m_opened)
+    return 0;
   u64 err = sync();
-  if (err) return err;
+  if (err)
+    return err;
   m_opened = false;
-  if (0 != ::close(m_file)) return errno;
+  if (0 != ::close(m_file))
+    return errno;
   return 0;
 }
 
@@ -154,7 +162,8 @@ u64 File::setSize(u64 size) {
 
 u64 File::read(u64 offset, u32 size, void* buffer) {
   assert(m_opened);
-  if (offset + size > (u64)m_size) return E_EOF;
+  if (offset + size > (u64)m_size)
+    return E_EOF;
 #ifdef __linux__
   if (size != pread64(m_file, buffer, size, offset))
 #elif defined(__FREEBSD__) || defined(__APPLE__)
@@ -167,7 +176,8 @@ u64 File::read(u64 offset, u32 size, void* buffer) {
 u64 File::write(u64 offset, u32 size, const void* buffer) {
   assert(m_opened);
   setSize((u64)size);
-  if (offset + size > (u64)m_size) return E_EOF;
+  if (offset + size > (u64)m_size)
+    return E_EOF;
 #ifdef __linux__
   if (size != pwrite64(m_file, buffer, size, offset))
 #elif defined(__FREEBSD__) || defined(__APPLE__)
@@ -186,13 +196,15 @@ u64 File::sync() {
 }
 
 u64 File::mkdirNoRecursion(const char* path) {
-  if (::mkdir(path, 0777) != 0) return errno;
+  if (::mkdir(path, 0777) != 0)
+    return errno;
   return 0;
 }
 
 u64 File::isDirectory(bool* isDir) {
   struct stat fileStat;
-  if (stat(m_path, &fileStat) != 0) return errno;
+  if (stat(m_path, &fileStat) != 0)
+    return errno;
   *isDir = S_ISDIR(fileStat.st_mode) != 0;
   return 0;
 }
@@ -201,9 +213,11 @@ u64 File::getFileNum(int* fileNum) {
   DIR* dp;
   struct dirent* ep = NULL;
   string dir(m_path);
-  if (dir[dir.length() - 1] != '/' && dir[dir.length() - 1] != '\\') dir += "/";
+  if (dir[dir.length() - 1] != '/' && dir[dir.length() - 1] != '\\')
+    dir += "/";
   dp = opendir(m_path);
-  if (!dp) return errno;
+  if (!dp)
+    return errno;
   int files = 0;
   ep = readdir(dp);
   while (ep) {
@@ -214,7 +228,8 @@ u64 File::getFileNum(int* fileNum) {
       closedir(dp);
       return errno;
     } else {
-      if (strncmp(ep->d_name, ".", 1) != 0) files++;
+      if (strncmp(ep->d_name, ".", 1) != 0)
+        files++;
     }
     ep = readdir(dp);
   }

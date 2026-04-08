@@ -22,8 +22,7 @@ class CBaseHandler : public has_slots<> {
   CBaseHandler(void) {}
   ~CBaseHandler(void) {}
 
-  virtual void OnAccept(uint32_t nsockid, S_SOCKET sock, const char* szIP,
-                        int32_t nPort) {}
+  virtual void OnAccept(uint32_t nsockid, S_SOCKET sock, const char* szIP, int32_t nPort) {}
 
   virtual void OnException(uint32_t nsockid, int32_t nErrorCode) {}
 
@@ -33,8 +32,7 @@ class CBaseHandler : public has_slots<> {
 
   virtual void OnRecvData(const char* szBuf, int32_t nBufSize) {}
 
-  void OnRecv(uint32_t nsockid, const char* szBuf, int32_t nBufSize,
-              const char* szIP, int32_t nPort) {
+  void OnRecv(uint32_t nsockid, const char* szBuf, int32_t nBufSize, const char* szIP, int32_t nPort) {
     m_nSockID = nsockid;
     m_strRemoteIP = szIP;
     m_nRemotePort = nPort;

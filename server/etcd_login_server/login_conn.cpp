@@ -20,11 +20,9 @@ static ConnMap_t g_msg_serv_conn_map;
 static uint32_t g_total_online_user_cnt = 0;  // 并发在线总人数
 map<uint32_t, msg_serv_info_t*> g_msg_serv_info;
 
-void login_conn_timer_callback(void* callback_data, uint8_t msg,
-                               uint32_t handle, void* pParam) {
+void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   uint64_t cur_time = get_tick_count();
-  for (ConnMap_t::iterator it = g_client_conn_map.begin();
-       it != g_client_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_client_conn_map.begin(); it != g_client_conn_map.end();) {
     ConnMap_t::iterator it_old = it;
     it++;
 
@@ -32,8 +30,7 @@ void login_conn_timer_callback(void* callback_data, uint8_t msg,
     pConn->OnTimer(cur_time);
   }
 
-  for (ConnMap_t::iterator it = g_msg_serv_conn_map.begin();
-       it != g_msg_serv_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_msg_serv_conn_map.begin(); it != g_msg_serv_conn_map.end();) {
     ConnMap_t::iterator it_old = it;
     it++;
 
@@ -59,14 +56,12 @@ void CLoginConn::Close() {
       g_msg_serv_conn_map.erase(m_handle);
 
       // remove all user count from this message server
-      map<uint32_t, msg_serv_info_t*>::iterator it =
-          g_msg_serv_info.find(m_handle);
+      map<uint32_t, msg_serv_info_t*>::iterator it = g_msg_serv_info.find(m_handle);
       if (it != g_msg_serv_info.end()) {
         msg_serv_info_t* pMsgServInfo = it->second;
 
         g_total_online_user_cnt -= pMsgServInfo->cur_conn_cnt;
-        log("onclose from MsgServer: %s:%u ", pMsgServInfo->hostname.c_str(),
-            pMsgServInfo->port);
+        log("onclose from MsgServer: %s:%u ", pMsgServInfo->hostname.c_str(), pMsgServInfo->port);
         delete pMsgServInfo;
         g_msg_serv_info.erase(it);
       }
@@ -89,7 +84,9 @@ void CLoginConn::OnConnect2(net_handle_t handle, int conn_type) {
   netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)conn_map);
 }
 
-void CLoginConn::OnClose() { Close(); }
+void CLoginConn::OnClose() {
+  Close();
+}
 
 void CLoginConn::OnTimer(uint64_t curr_tick) {
   if (m_conn_type == LOGIN_CONN_TYPE_CLIENT) {
@@ -150,12 +147,16 @@ void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu) {
 
   g_total_online_user_cnt += pMsgServInfo->cur_conn_cnt;
 
-  log("MsgServInfo, ip_addr1=%s, ip_addr2=%s, port=%d, max_conn_cnt=%d, "
-      "cur_conn_cnt=%d, "
-      "hostname: %s. ",
-      pMsgServInfo->ip_addr1.c_str(), pMsgServInfo->ip_addr2.c_str(),
-      pMsgServInfo->port, pMsgServInfo->max_conn_cnt,
-      pMsgServInfo->cur_conn_cnt, pMsgServInfo->hostname.c_str());
+  log(
+    "MsgServInfo, ip_addr1=%s, ip_addr2=%s, port=%d, max_conn_cnt=%d, "
+    "cur_conn_cnt=%d, "
+    "hostname: %s. ",
+    pMsgServInfo->ip_addr1.c_str(),
+    pMsgServInfo->ip_addr2.c_str(),
+    pMsgServInfo->port,
+    pMsgServInfo->max_conn_cnt,
+    pMsgServInfo->cur_conn_cnt,
+    pMsgServInfo->hostname.c_str());
 }
 
 void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu) {
@@ -166,8 +167,7 @@ void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu) {
     msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
 
     uint32_t action = msg.user_action();
-    if (action ==
-        USER_CNT_INC) {  // msg_server收到client登录后通知login_server上线加一
+    if (action == USER_CNT_INC) {  // msg_server收到client登录后通知login_server上线加一
       pMsgServInfo->cur_conn_cnt++;
       g_total_online_user_cnt++;
     } else {  // 下线减一
@@ -175,8 +175,10 @@ void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu) {
       g_total_online_user_cnt--;
     }
 
-    log("%s:%d, cur_cnt=%u, total_cnt=%u ", pMsgServInfo->hostname.c_str(),
-        pMsgServInfo->port, pMsgServInfo->cur_conn_cnt,
+    log("%s:%d, cur_cnt=%u, total_cnt=%u ",
+        pMsgServInfo->hostname.c_str(),
+        pMsgServInfo->port,
+        pMsgServInfo->cur_conn_cnt,
         g_total_online_user_cnt);
   }
 }
@@ -204,13 +206,11 @@ void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu) {
   // return a message server with minimum concurrent connection count
   msg_serv_info_t* pMsgServInfo;
   uint32_t min_user_cnt = (uint32_t)-1;
-  map<uint32_t, msg_serv_info_t*>::iterator it_min_conn = g_msg_serv_info.end(),
-                                            it;
+  map<uint32_t, msg_serv_info_t*>::iterator it_min_conn = g_msg_serv_info.end(), it;
 
   for (it = g_msg_serv_info.begin(); it != g_msg_serv_info.end(); it++) {
     pMsgServInfo = it->second;
-    if ((pMsgServInfo->cur_conn_cnt < pMsgServInfo->max_conn_cnt) &&
-        (pMsgServInfo->cur_conn_cnt < min_user_cnt)) {
+    if ((pMsgServInfo->cur_conn_cnt < pMsgServInfo->max_conn_cnt) && (pMsgServInfo->cur_conn_cnt < min_user_cnt)) {
       it_min_conn = it;
       min_user_cnt = pMsgServInfo->cur_conn_cnt;
     }

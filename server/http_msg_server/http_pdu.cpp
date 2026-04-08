@@ -30,15 +30,15 @@
 #define OK_MSG "OK"
 #define ERROR_CODE_OFFSET 4000
 const char* g_error_msg[] = {
-    "general error",           // 4000
-    "parse parameter failed",  // 4001
-    "parameter miss",          // 4002
-    "uuid not match",          // 4003
-    "token not valid",         // 4004
-    "no business server",      // 4005
-    "parse json failed",       // 4006
-    "no http user",            // 4007
-    "no such method",          // 4008
+  "general error",           // 4000
+  "parse parameter failed",  // 4001
+  "parameter miss",          // 4002
+  "uuid not match",          // 4003
+  "token not valid",         // 4004
+  "no business server",      // 4005
+  "parse json failed",       // 4006
+  "no http user",            // 4007
+  "no such method",          // 4008
 };
 
 // for single thread
@@ -104,13 +104,11 @@ char* PackSendResult(uint32_t error_code, const char* error_msg) {
   std::string json_str = json_obj.toStyledString();
   uint32_t content_len = json_str.size();
 
-  snprintf(g_response_buf, MAX_BUF_SIZE, HTTP_QUEYR_HEADER, content_len,
-           json_str.c_str());
+  snprintf(g_response_buf, MAX_BUF_SIZE, HTTP_QUEYR_HEADER, content_len, json_str.c_str());
   return g_response_buf;
 }
 
-char* PackSendCreateGroupResult(uint32_t error_code, const char* error_msg,
-                                uint32_t group_id) {
+char* PackSendCreateGroupResult(uint32_t error_code, const char* error_msg, uint32_t group_id) {
   Json::Value json_obj;
 
   json_obj["error_code"] = error_code;
@@ -119,13 +117,11 @@ char* PackSendCreateGroupResult(uint32_t error_code, const char* error_msg,
   std::string json_str = json_obj.toStyledString();
   uint32_t content_len = json_str.size();
 
-  snprintf(g_response_buf, MAX_BUF_SIZE, HTTP_QUEYR_HEADER, content_len,
-           json_str.c_str());
+  snprintf(g_response_buf, MAX_BUF_SIZE, HTTP_QUEYR_HEADER, content_len, json_str.c_str());
   return g_response_buf;
 }
 
-char* PackGetUserIdByNickNameResult(
-    uint32_t result, std::list<IM::BaseDefine::UserInfo> user_list) {
+char* PackGetUserIdByNickNameResult(uint32_t result, std::list<IM::BaseDefine::UserInfo> user_list) {
   Json::Value json_obj;
   Json::Value user_info_array;
   json_obj["error_code"] = result;
@@ -142,7 +138,6 @@ char* PackGetUserIdByNickNameResult(
   std::string json_str = json_obj.toStyledString();
   uint32_t content_len = json_str.size();
 
-  snprintf(g_response_buf, MAX_BUF_SIZE, HTTP_QUEYR_HEADER, content_len,
-           json_str.c_str());
+  snprintf(g_response_buf, MAX_BUF_SIZE, HTTP_QUEYR_HEADER, content_len, json_str.c_str());
   return g_response_buf;
 }

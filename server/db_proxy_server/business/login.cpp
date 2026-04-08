@@ -9,17 +9,17 @@
 #include "login.h"
 #include <list>
 #include <unordered_map>
+#include "IM.Server.pb.h"
 #include "base64.h"
 #include "common.h"
 #include "exter_login.h"
 #include "http_client.h"
-#include "IM.Server.pb.h"
 #include "inter_login.h"
+#include "json/json.h"
 #include "proxy_conn.h"
 #include "sync_center.h"
 #include "token_validator.h"
 #include "user_model.h"
-#include "json/json.h"
 
 namespace DB_PROXY {
 
@@ -51,7 +51,8 @@ void doLogin(CImPdu* pPdu, uint32_t conn_uuid) {
       uint32_t tmNow = time(NULL);
       auto itTime = lsErrorTime.begin();
       for (; itTime != lsErrorTime.end(); ++itTime)
-        if (tmNow - *itTime > 30 * 60) break;
+        if (tmNow - *itTime > 30 * 60)
+          break;
 
       //清理放在这里还是放在密码错误后添加的时候呢？
       //放在这里，每次都要遍历，会有一点点性能的损失。
@@ -121,11 +122,11 @@ void doLogin(CImPdu* pPdu, uint32_t conn_uuid) {
     msgResp.set_result_string("服务端内部错误");
   }
   // 登录响应消息回发
-  pPduResp->SetPBMsg(&msgResp);                       //设置消息体
-  pPduResp->SetSeqNum(pPdu->GetSeqNum());             //设置消息序号
-  pPduResp->SetServiceId(IM::BaseDefine::SID_OTHER);  // SetServiceId
+  pPduResp->SetPBMsg(&msgResp);                                    //设置消息体
+  pPduResp->SetSeqNum(pPdu->GetSeqNum());                          //设置消息序号
+  pPduResp->SetServiceId(IM::BaseDefine::SID_OTHER);               // SetServiceId
   pPduResp->SetCommandId(IM::BaseDefine::CID_OTHER_VALIDATE_RSP);  // command_id
-  CProxyConn::AddResponsePdu(conn_uuid, pPduResp);  // AddResponsePdu
+  CProxyConn::AddResponsePdu(conn_uuid, pPduResp);                 // AddResponsePdu
 }
 
 }  // namespace DB_PROXY

@@ -17,8 +17,8 @@
 #include "IM.Other.pb.h"
 #include "IM.Server.pb.h"
 #include "i_packet_callback.h"
-#include "seq_alloctor.h"
 #include "im_conn.h"
+#include "seq_alloctor.h"
 
 class ClientConn : public CImConn {
  public:
@@ -27,8 +27,7 @@ class ClientConn : public CImConn {
 
   bool IsOpen() { return m_bOpen; }
 
-  net_handle_t connect(const string& strIp, uint16_t nPort,
-                       const string& strName, const string& strPass);
+  net_handle_t connect(const string& strIp, uint16_t nPort, const string& strName, const string& strPass);
 
   virtual void Close();
 
@@ -36,14 +35,12 @@ class ClientConn : public CImConn {
   uint32_t login(const string& strName, const string& strPass);
   uint32_t getUser(uint32_t nUserId, uint32_t nTime = 0);
   uint32_t getUserInfo(uint32_t nUserId, list<uint32_t>& lsUserId);
-  uint32_t sendMessage(uint32_t nFromId, uint32_t nToId,
-                       IM::BaseDefine::MsgType nType, const string& strMsgData);
+  uint32_t sendMessage(uint32_t nFromId, uint32_t nToId, IM::BaseDefine::MsgType nType, const string& strMsgData);
   uint32_t getUnreadMsgCnt(uint32_t nUserId);
   uint32_t getRecentSession(uint32_t nUserId, uint32_t nLastTime);
-  uint32_t getMsgList(uint32_t nUserId, IM::BaseDefine::SessionType nType,
-                      uint32_t nPeerId, uint32_t nMsgId, uint32_t nMsgCnt);
-  uint32_t sendMsgAck(uint32_t nUserId, uint32_t nPeerId,
-                      IM::BaseDefine::SessionType nType, uint32_t nMsgId);
+  uint32_t getMsgList(
+    uint32_t nUserId, IM::BaseDefine::SessionType nType, uint32_t nPeerId, uint32_t nMsgId, uint32_t nMsgCnt);
+  uint32_t sendMsgAck(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefine::SessionType nType, uint32_t nMsgId);
   uint32_t registerUser(const string& strName, const string& strNick);
 
  public:

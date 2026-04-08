@@ -29,7 +29,8 @@ static uint64_t S_GetTickCount() {
   LARGE_INTEGER liCounter;
   LARGE_INTEGER liCurrent;
 
-  if (!QueryPerformanceFrequency(&liCounter)) return GetTickCount();
+  if (!QueryPerformanceFrequency(&liCounter))
+    return GetTickCount();
 
   QueryPerformanceCounter(&liCurrent);
   return (uint64_t)(liCurrent.QuadPart * 1000 / liCounter.QuadPart);
@@ -58,8 +59,7 @@ class CTimer {
 
  public:
   //启动定时器
-  BOOL StartTimer(int nIndex, pTimerProc pfnTimerProc,
-                  unsigned int nMilliSeconds, void* param) {
+  BOOL StartTimer(int nIndex, pTimerProc pfnTimerProc, unsigned int nMilliSeconds, void* param) {
     BOOL bRet = FALSE;
     if (NULL == pfnTimerProc) {
       return bRet;
@@ -112,8 +112,7 @@ class CTimer {
 
       //复制一个MAP表进行操作，即使在m_pTimerProc()函数中再次创建一个定时器，也不会出现死锁
       pInstance->m_MapMutex.Lock();
-      map<int, pair<unsigned int, unsigned int> > tmp =
-          pInstance->m_MapInterval;
+      map<int, pair<unsigned int, unsigned int> > tmp = pInstance->m_MapInterval;
       map<int, void*> paramtmp = pInstance->m_MapParam;
       pInstance->m_MapMutex.Unlock();
 
@@ -124,8 +123,7 @@ class CTimer {
           pInstance->m_pTimerProc(iter->first, paramtmp[iter->first]);
           //触发定时器，则在原MAP表中将当前时间重置
           pInstance->m_MapMutex.Lock();
-          map<int, pair<unsigned int, unsigned int> >::iterator it =
-              pInstance->m_MapInterval.find(iter->first);
+          map<int, pair<unsigned int, unsigned int> >::iterator it = pInstance->m_MapInterval.find(iter->first);
           if (it != pInstance->m_MapInterval.end()) {
             //当前时间重置为0
             it->second.second = 0;
@@ -134,8 +132,7 @@ class CTimer {
         } else {
           //没有触发定时器，则在原MAP表中将时间叠加
           pInstance->m_MapMutex.Lock();
-          map<int, pair<unsigned int, unsigned int> >::iterator it =
-              pInstance->m_MapInterval.find(iter->first);
+          map<int, pair<unsigned int, unsigned int> >::iterator it = pInstance->m_MapInterval.find(iter->first);
           if (it != pInstance->m_MapInterval.end()) {
             //当前时间继续增加
             it->second.second += 500;
@@ -153,9 +150,8 @@ class CTimer {
   int m_iQuit;
 
   map<int /* nIndex */,
-      pair<unsigned int /* time of miliseconds 预设定时器的时间 */,
-           unsigned int /* time of miliseconds，当前时间 */> >
-      m_MapInterval;
+      pair<unsigned int /* time of miliseconds 预设定时器的时间 */, unsigned int /* time of miliseconds，当前时间 */> >
+    m_MapInterval;
   map<int /* nIndex */, void*> m_MapParam;
 
   //时间线程

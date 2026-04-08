@@ -11,14 +11,14 @@
 #include "../HttpClient.h"
 #include "../ProxyConn.h"
 #include "../SyncCenter.h"
+#include "IM.Server.pb.h"
 #include "base64.h"
 #include "common.h"
 #include "exter_login.h"
-#include "IM.Server.pb.h"
 #include "inter_login.h"
+#include "json/json.h"
 #include "token_validator.h"
 #include "user_model.h"
-#include "json/json.h"
 
 CInterLoginStrategy g_loginStrategy;
 

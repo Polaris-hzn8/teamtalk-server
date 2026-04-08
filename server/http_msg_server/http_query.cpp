@@ -12,8 +12,8 @@
 #include "db_serv_conn.h"
 #include "http_pdu.h"
 #include "http_query.h"
-#include "route_serv_conn.h"
 #include "public_define.h"
+#include "route_serv_conn.h"
 
 #include "IM.Buddy.pb.h"
 #include "IM.Group.pb.h"
@@ -31,8 +31,7 @@ CHttpQuery* CHttpQuery::m_query_instance = NULL;
 
 std::unordered_map<std::string, auth_struct*> g_hm_http_auth;
 
-void http_query_timer_callback(void* callback_data, uint8_t msg,
-                               uint32_t handle, void* pParam) {
+void http_query_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   struct tm* tm;
   time_t currTime;
 
@@ -61,8 +60,7 @@ CHttpQuery* CHttpQuery::GetInstance() {
   return m_query_instance;
 }
 
-void CHttpQuery::DispatchQuery(std::string& url, std::string& post_data,
-                               CHttpConn* pHttpConn) {
+void CHttpQuery::DispatchQuery(std::string& url, std::string& post_data, CHttpConn* pHttpConn) {
   ++g_total_query;
 
   /* 在用
@@ -70,8 +68,7 @@ void CHttpQuery::DispatchQuery(std::string& url, std::string& post_data,
    /query/GroupP2PMessage
 
    */
-  log_info("DispatchQuery, url=%s, content=%s ", url.c_str(),
-           post_data.c_str());
+  log_info("DispatchQuery, url=%s, content=%s ", url.c_str(), post_data.c_str());
 
   Json::Reader reader;
   Json::Value value;
@@ -121,14 +118,11 @@ void CHttpQuery::DispatchQuery(std::string& url, std::string& post_data,
   }
 }
 
-void CHttpQuery::_QueryCreateGroup(const string& strAppKey,
-                                   Json::Value& post_json_obj,
-                                   CHttpConn* pHttpConn) {
+void CHttpQuery::_QueryCreateGroup(const string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn) {
   HTTP::CDBServConn* pConn = HTTP::get_db_serv_conn();
   if (!pConn) {
     log_info("no connection to DBProxy ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_SERVER_EXCEPTION, HTTP_ERROR_MSG[9].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_SERVER_EXCEPTION, HTTP_ERROR_MSG[9].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -136,8 +130,7 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey,
 
   if (post_json_obj["req_user_id"].isNull()) {
     log_info("no user id ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -145,8 +138,7 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey,
 
   if (post_json_obj["group_name"].isNull()) {
     log_info("no group name ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -154,8 +146,7 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey,
 
   if (post_json_obj["group_type"].isNull()) {
     log_info("no group type ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -163,8 +154,7 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey,
 
   if (post_json_obj["group_avatar"].isNull()) {
     log_info("no group avatar ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -172,8 +162,7 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey,
 
   if (post_json_obj["user_id_list"].isNull()) {
     log_info("no user list ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -186,13 +175,15 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey,
     string group_avatar = post_json_obj["group_avatar"].asString();
     uint32_t user_cnt = post_json_obj["user_id_list"].size();
     log_info(
-        "QueryCreateGroup, user_id: %u, group_name: %s, group_type: %u, "
-        "user_cnt: %u. ",
-        user_id, group_name.c_str(), group_type, user_cnt);
+      "QueryCreateGroup, user_id: %u, group_name: %s, group_type: %u, "
+      "user_cnt: %u. ",
+      user_id,
+      group_name.c_str(),
+      group_type,
+      user_cnt);
     if (!IM::BaseDefine::GroupType_IsValid(group_type)) {
       log_info("QueryCreateGroup, unvalid group_type");
-      char* response_buf =
-          PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+      char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
       pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
       pHttpConn->Close();
       return;
@@ -218,29 +209,24 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey,
 
   } catch (std::runtime_error msg) {
     log_info("parse json data failed.");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
   }
 }
 
-void CHttpQuery::_QueryChangeMember(const string& strAppKey,
-                                    Json::Value& post_json_obj,
-                                    CHttpConn* pHttpConn) {
+void CHttpQuery::_QueryChangeMember(const string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn) {
   HTTP::CDBServConn* pConn = HTTP::get_db_serv_conn();
   if (!pConn) {
     log_info("no connection to RouteServConn ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_SERVER_EXCEPTION, HTTP_ERROR_MSG[9].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_SERVER_EXCEPTION, HTTP_ERROR_MSG[9].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
   }
   if (post_json_obj["req_user_id"].isNull()) {
     log_info("no user id ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -248,8 +234,7 @@ void CHttpQuery::_QueryChangeMember(const string& strAppKey,
 
   if (post_json_obj["group_id"].isNull()) {
     log_info("no group id ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -257,8 +242,7 @@ void CHttpQuery::_QueryChangeMember(const string& strAppKey,
 
   if (post_json_obj["modify_type"].isNull()) {
     log_info("no modify_type ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -266,8 +250,7 @@ void CHttpQuery::_QueryChangeMember(const string& strAppKey,
 
   if (post_json_obj["user_id_list"].isNull()) {
     log_info("no user list ");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
     return;
@@ -279,13 +262,15 @@ void CHttpQuery::_QueryChangeMember(const string& strAppKey,
     uint32_t modify_type = post_json_obj["modify_type"].asUInt();
     uint32_t user_cnt = post_json_obj["user_id_list"].size();
     log_info(
-        "QueryChangeMember, user_id: %u, group_id: %u, modify type: %u, "
-        "user_cnt: %u. ",
-        user_id, group_id, modify_type, user_cnt);
+      "QueryChangeMember, user_id: %u, group_id: %u, modify type: %u, "
+      "user_cnt: %u. ",
+      user_id,
+      group_id,
+      modify_type,
+      user_cnt);
     if (!IM::BaseDefine::GroupModifyType_IsValid(modify_type)) {
       log_info("QueryChangeMember, unvalid modify_type");
-      char* response_buf =
-          PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+      char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
       pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
       pHttpConn->Close();
       return;
@@ -307,8 +292,7 @@ void CHttpQuery::_QueryChangeMember(const string& strAppKey,
     pConn->SendPdu(&pdu);
   } catch (std::runtime_error msg) {
     log_info("parse json data failed.");
-    char* response_buf =
-        PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
+    char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
     pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
     pHttpConn->Close();
   }

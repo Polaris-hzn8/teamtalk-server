@@ -36,19 +36,19 @@ typedef enum {
 } HTTP_SEND_MSG_TYPE;
 
 static std::string HTTP_ERROR_MSG[] = {
-    "成功",
-    "参数错误",
-    "appKey不存在",
-    "appKey与用户不匹配",
-    "含有不允许发送的Id",
-    "未授权的接口",
-    "未授权的IP",
-    "非法的发送类型",
-    "未知错误",
-    "服务器异常",
-    "创建群失败",
-    "更改群成员失败",
-    "消息加密失败",
+  "成功",
+  "参数错误",
+  "appKey不存在",
+  "appKey与用户不匹配",
+  "含有不允许发送的Id",
+  "未授权的接口",
+  "未授权的IP",
+  "非法的发送类型",
+  "未知错误",
+  "服务器异常",
+  "创建群失败",
+  "更改群成员失败",
+  "消息加密失败",
 };
 
 class CHttpQuery {
@@ -57,17 +57,12 @@ class CHttpQuery {
 
   static CHttpQuery* GetInstance();
 
-  static void DispatchQuery(std::string& url, std::string& post_data,
-                            CHttpConn* pHttpConn);
+  static void DispatchQuery(std::string& url, std::string& post_data, CHttpConn* pHttpConn);
 
  private:
   CHttpQuery() {}
-  static void _QueryCreateGroup(const std::string& strAppKey,
-                                Json::Value& post_json_obj,
-                                CHttpConn* pHttpConn);
-  static void _QueryChangeMember(const std::string& strAppKey,
-                                 Json::Value& post_json_obj,
-                                 CHttpConn* pHttpConn);
+  static void _QueryCreateGroup(const std::string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
+  static void _QueryChangeMember(const std::string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn);
   static HTTP_ERROR_CODE _CheckAuth(const std::string& strAppKey,
                                     const uint32_t userId,
                                     const std::string& strInterface,

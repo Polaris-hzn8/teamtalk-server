@@ -11,8 +11,8 @@
 #include "config_file_reader.h"
 #include "file_manager.h"
 #include "http_conn.h"
-#include "thread_pool.h"
 #include "netlib.h"
+#include "thread_pool.h"
 
 using namespace std;
 using namespace msfs;
@@ -25,7 +25,8 @@ CThreadPool g_GetThreadPool;
 
 void closeall(int fd) {
   int fdlimit = sysconf(_SC_OPEN_MAX);
-  while (fd < fdlimit) close(fd++);
+  while (fd < fdlimit)
+    close(fd++);
 }
 
 int daemon(int nochdir, int noclose, int asroot) {
@@ -56,7 +57,8 @@ int daemon(int nochdir, int noclose, int asroot) {
       _exit(0);
   }
 
-  if (!nochdir) chdir("/");
+  if (!nochdir)
+    chdir("/");
 
   if (!noclose) {
     closeall(0);
@@ -68,8 +70,7 @@ int daemon(int nochdir, int noclose, int asroot) {
 }
 
 // for client connect in
-void http_callback(void* callback_data, uint8_t msg, uint32_t handle,
-                   void* pParam) {
+void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   if (msg == NETLIB_MSG_CONNECT) {
     CHttpConn* pConn = new CHttpConn();
     // CHttpTask* pTask = new CHttpTask(handle, pConn);
@@ -116,26 +117,26 @@ int main(int argc, char* argv[]) {
   }
   log_info("MsgServer max files can open: %d", getdtablesize());
 
-  char* listen_ip = config_file.GetConfigName("ListenIP");
-  char* str_listen_port = config_file.GetConfigName("ListenPort");
-  char* base_dir = config_file.GetConfigName("BaseDir");
-  char* str_file_cnt = config_file.GetConfigName("FileCnt");
-  char* str_files_per_dir = config_file.GetConfigName("FilesPerDir");
-  char* str_post_thread_count = config_file.GetConfigName("PostThreadCount");
-  char* str_get_thread_count = config_file.GetConfigName("GetThreadCount");
+  std::string listen_ip = config_file.GetConfigValue("ListenIP");
+  std::string str_listen_port = config_file.GetConfigValue("ListenPort");
+  std::string base_dir = config_file.GetConfigValue("BaseDir");
+  std::string str_file_cnt = config_file.GetConfigValue("FileCnt");
+  std::string str_files_per_dir = config_file.GetConfigValue("FilesPerDir");
+  std::string str_post_thread_count = config_file.GetConfigValue("PostThreadCount");
+  std::string str_get_thread_count = config_file.GetConfigValue("GetThreadCount");
 
-  if (!listen_ip || !str_listen_port || !base_dir || !str_file_cnt ||
-      !str_files_per_dir || !str_post_thread_count || !str_get_thread_count) {
+  if (listen_ip.empty() || str_listen_port.empty() || base_dir.empty() || str_file_cnt.empty() ||
+      str_files_per_dir.empty() || str_post_thread_count.empty() || str_get_thread_count.empty()) {
     log_info("config file miss, exit...");
     return -1;
   }
 
-  log_info("%s,%s", listen_ip, str_listen_port);
-  uint16_t listen_port = atoi(str_listen_port);
-  long long int fileCnt = atoll(str_file_cnt);
-  int filesPerDir = atoi(str_files_per_dir);
-  int nPostThreadCount = atoi(str_post_thread_count);
-  int nGetThreadCount = atoi(str_get_thread_count);
+  log_info("%s,%s", listen_ip.c_str(), str_listen_port.c_str());
+  uint16_t listen_port = config_file.GetUint32Value("ListenPort", 0);
+  long long int fileCnt = config_file.GetIntValue("FileCnt", 0);
+  int filesPerDir = config_file.GetIntValue("FilesPerDir", 0);
+  int nPostThreadCount = config_file.GetIntValue("PostThreadCount", 0);
+  int nGetThreadCount = config_file.GetIntValue("GetThreadCount", 0);
   if (nPostThreadCount <= 0 || nGetThreadCount <= 0) {
     log_info("thread count is invalied");
     return -1;
@@ -143,21 +144,21 @@ int main(int argc, char* argv[]) {
   g_PostThreadPool.Init(nPostThreadCount);
   g_GetThreadPool.Init(nGetThreadCount);
 
-  g_fileManager =
-      FileManager::getInstance(listen_ip, base_dir, fileCnt, filesPerDir);
+  g_fileManager = FileManager::getInstance(listen_ip.c_str(), base_dir.c_str(), fileCnt, filesPerDir);
   int ret = g_fileManager->initDir();
   if (ret) {
-    printf("The BaseDir is set incorrectly :%s\n", base_dir);
+    printf("The BaseDir is set incorrectly :%s\n", base_dir.c_str());
     return ret;
   }
   ret = netlib_init();
-  if (ret == NETLIB_ERROR) return ret;
+  if (ret == NETLIB_ERROR)
+    return ret;
 
-  CStrExplode listen_ip_list(listen_ip, ';');
+  CStrExplode listen_ip_list(listen_ip.c_str(), ';');
   for (uint32_t i = 0; i < listen_ip_list.GetItemCnt(); i++) {
-    ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, http_callback,
-                        NULL);
-    if (ret == NETLIB_ERROR) return ret;
+    ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, http_callback, NULL);
+    if (ret == NETLIB_ERROR)
+      return ret;
   }
 
   signal(SIGINT, Stop);
@@ -166,7 +167,7 @@ int main(int argc, char* argv[]) {
   signal(SIGPIPE, SIG_IGN);
   signal(SIGHUP, SIG_IGN);
 
-  printf("server start listen on: %s:%d\n", listen_ip, listen_port);
+  printf("server start listen on: %s:%d\n", listen_ip.c_str(), listen_port);
   init_http_conn();
   printf("now enter the event loop...\n");
 

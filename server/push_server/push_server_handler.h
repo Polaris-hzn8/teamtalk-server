@@ -18,8 +18,7 @@ class CPushServerHandler : public CBaseHandler {
   CPushServerHandler() {}
   virtual ~CPushServerHandler() {}
 
-  void OnAccept(uint32_t nsockid, S_SOCKET sock, const char* szIP,
-                int32_t nPort);
+  void OnAccept(uint32_t nsockid, S_SOCKET sock, const char* szIP, int32_t nPort);
   void OnClose(uint32_t nsockid);
 
  private:

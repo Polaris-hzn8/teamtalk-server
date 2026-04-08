@@ -13,11 +13,11 @@
 #include "group_chat.h"
 #include "im_pdu_base.h"
 #include "im_user.h"
+#include "jsonxx.h"
 #include "msg_conn.h"
+#include "public_define.h"
 #include "push_serv_conn.h"
 #include "route_serv_conn.h"
-#include "jsonxx.h"
-#include "public_define.h"
 #include "security.h"
 
 #include "IM.Buddy.pb.h"
@@ -33,22 +33,19 @@ using namespace std;
 static ConnMap_t g_db_server_conn_map;
 
 static serv_info_t* g_db_server_list = NULL;
-static uint32_t g_db_server_count = 0;  // 到DBServer的总连接数
-static uint32_t g_db_server_login_count =
-    0;  // 到进行登录处理的DBServer的总连接数
+static uint32_t g_db_server_count = 0;        // 到DBServer的总连接数
+static uint32_t g_db_server_login_count = 0;  // 到进行登录处理的DBServer的总连接数
 static CGroupChat* s_group_chat = NULL;
 static CFileHandler* s_file_handler = NULL;
 
 extern CAes* pAes;
 
-static void db_server_conn_timer_callback(void* callback_data, uint8_t msg,
-                                          uint32_t handle, void* pParam) {
+static void db_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ConnMap_t::iterator it_old;
   CDBServConn* pConn = NULL;
   uint64_t cur_time = get_tick_count();
 
-  for (ConnMap_t::iterator it = g_db_server_conn_map.begin();
-       it != g_db_server_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_db_server_conn_map.begin(); it != g_db_server_conn_map.end();) {
     it_old = it;
     it++;
 
@@ -63,17 +60,18 @@ static void db_server_conn_timer_callback(void* callback_data, uint8_t msg,
   serv_check_reconnect<CDBServConn>(g_db_server_list, g_db_server_count);
 }
 
-void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count,
-                       uint32_t concur_conn_cnt) {
+void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count, uint32_t concur_conn_cnt) {
   g_db_server_list = server_list;
   g_db_server_count = server_count;
 
   uint32_t total_db_instance = server_count / concur_conn_cnt;
   g_db_server_login_count = (total_db_instance / 2) * concur_conn_cnt;
   log_info(
-      "DB server connection index for login business: [0, %u), for other "
-      "business: [%u, %u) ",
-      g_db_server_login_count, g_db_server_login_count, g_db_server_count);
+    "DB server connection index for login business: [0, %u), for other "
+    "business: [%u, %u) ",
+    g_db_server_login_count,
+    g_db_server_login_count,
+    g_db_server_count);
 
   serv_init<CDBServConn>(g_db_server_list, g_db_server_count);
 
@@ -83,8 +81,7 @@ void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count,
 }
 
 // get a random db server connection in the range [start_pos, stop_pos)
-static CDBServConn* get_db_server_conn_in_range(uint32_t start_pos,
-                                                uint32_t stop_pos) {
+static CDBServConn* get_db_server_conn_in_range(uint32_t start_pos, uint32_t stop_pos) {
   uint32_t i = 0;
   CDBServConn* pDbConn = NULL;
 
@@ -115,11 +112,9 @@ static CDBServConn* get_db_server_conn_in_range(uint32_t start_pos,
 
 CDBServConn* get_db_serv_conn_for_login() {
   // 先获取login业务的实例，没有就去获取其他业务流程的实例
-  CDBServConn* pDBConn =
-      get_db_server_conn_in_range(0, g_db_server_login_count);
+  CDBServConn* pDBConn = get_db_server_conn_in_range(0, g_db_server_login_count);
   if (!pDBConn) {
-    pDBConn =
-        get_db_server_conn_in_range(g_db_server_login_count, g_db_server_count);
+    pDBConn = get_db_server_conn_in_range(g_db_server_login_count, g_db_server_count);
   }
 
   return pDBConn;
@@ -127,8 +122,7 @@ CDBServConn* get_db_serv_conn_for_login() {
 
 CDBServConn* get_db_serv_conn() {
   // 先获取其他业务流程的实例，没有就去获取login业务的实例
-  CDBServConn* pDBConn =
-      get_db_server_conn_in_range(g_db_server_login_count, g_db_server_count);
+  CDBServConn* pDBConn = get_db_server_conn_in_range(g_db_server_login_count, g_db_server_count);
   if (!pDBConn) {
     pDBConn = get_db_server_conn_in_range(0, g_db_server_login_count);
   }
@@ -136,17 +130,17 @@ CDBServConn* get_db_serv_conn() {
   return pDBConn;
 }
 
-CDBServConn::CDBServConn() { m_bOpen = false; }
+CDBServConn::CDBServConn() {
+  m_bOpen = false;
+}
 
 CDBServConn::~CDBServConn() {}
 
-void CDBServConn::Connect(const char* server_ip, uint16_t server_port,
-                          uint32_t serv_idx) {
+void CDBServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx) {
   log_info("Connecting to DB Storage Server %s:%d ", server_ip, server_port);
 
   m_serv_idx = serv_idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback,
-                            (void*)&g_db_server_conn_map);
+  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_db_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_db_server_conn_map.insert(make_pair(m_handle, this));
@@ -284,21 +278,17 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
   IM::Server::IMValidateRsp msg;
   // 1.解析验证响应消息 获取登录名 login_name、结果码 result 和 结果字符串
   // result_string
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   string login_name = msg.user_name();
   uint32_t result = msg.result_code();
   string result_string = msg.result_string();
 
   // 2.根据附加数据构造 CDbAttachData 对象
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
-  log_info("HandleValidateResp, user_name=%s, result=%d", login_name.c_str(),
-           result);
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
+  log_info("HandleValidateResp, user_name=%s, result=%d", login_name.c_str(), result);
 
   // 3.根据登录名获取用户对象 pImUser 记录日志
-  CImUser* pImUser =
-      CImUserManager::GetInstance()->GetImUserByLoginName(login_name);
+  CImUser* pImUser = CImUserManager::GetInstance()->GetImUserByLoginName(login_name);
   CMsgConn* pMsgConn = NULL;
   if (!pImUser) {
     // 如果用户对象存在，则根据附加数据的句柄获取未验证的消息连接对象 pMsgConn
@@ -315,7 +305,8 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
 
   // 4.如果结果码 result 不为零，将结果码重置为
   // IM::BaseDefine::REFUSE_REASON_DB_VALIDATE_FAILED
-  if (result != 0) result = IM::BaseDefine::REFUSE_REASON_DB_VALIDATE_FAILED;
+  if (result != 0)
+    result = IM::BaseDefine::REFUSE_REASON_DB_VALIDATE_FAILED;
 
   // 5.如果结果码为零表示验证成功，继续处理验证成功的逻辑
   if (result == 0) {
@@ -346,9 +337,7 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
     CImUserManager::GetInstance()->AddImUserById(user_id, pUser);
 
     // 5-3.根据连接的客户端类型踢出相同类型的重复用户
-    pUser->KickOutSameClientType(pMsgConn->GetClientType(),
-                                 IM::BaseDefine::KICK_REASON_DUPLICATE_USER,
-                                 pMsgConn);
+    pUser->KickOutSameClientType(pMsgConn->GetClientType(), IM::BaseDefine::KICK_REASON_DUPLICATE_USER, pMsgConn);
 
     // 5-4.获取路由服务器连接
     // pRouteConn，如果存在则向路由服务器发送踢出用户的消息
@@ -356,8 +345,7 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
     if (pRouteConn) {
       IM::Server::IMServerKickUser msg2;
       msg2.set_user_id(user_id);
-      msg2.set_client_type(
-          (::IM::BaseDefine::ClientType)pMsgConn->GetClientType());
+      msg2.set_client_type((::IM::BaseDefine::ClientType)pMsgConn->GetClientType());
       msg2.set_reason(1);
       CImPdu pdu;
       pdu.SetPBMsg(&msg2);
@@ -378,8 +366,7 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
     msg3.set_server_time(time(NULL));
     msg3.set_result_code(IM::BaseDefine::REFUSE_REASON_NONE);
     msg3.set_result_string(result_string);
-    msg3.set_online_status(
-        (IM::BaseDefine::UserStatType)pMsgConn->GetOnlineStatus());
+    msg3.set_online_status((IM::BaseDefine::UserStatType)pMsgConn->GetOnlineStatus());
     IM::BaseDefine::UserInfo* user_info_tmp = msg3.mutable_user_info();
     user_info_tmp->set_user_id(user_info.user_id());
     user_info_tmp->set_user_gender(user_info.user_gender());
@@ -395,11 +382,10 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
 
     // 5-6.构造登录响应消息Pdu pdu2，设置相关字段
     CImPdu pdu2;
-    pdu2.SetPBMsg(&msg3);          //消息体
-    pdu2.SetServiceId(SID_LOGIN);  // service_id
-    pdu2.SetCommandId(
-        CID_LOGIN_RES_USERLOGIN);  //新的command_id CID_LOGIN_RES_USERLOGIN
-    pdu2.SetSeqNum(pPdu->GetSeqNum());  //设置消息序号
+    pdu2.SetPBMsg(&msg3);                        //消息体
+    pdu2.SetServiceId(SID_LOGIN);                // service_id
+    pdu2.SetCommandId(CID_LOGIN_RES_USERLOGIN);  //新的command_id CID_LOGIN_RES_USERLOGIN
+    pdu2.SetSeqNum(pPdu->GetSeqNum());           //设置消息序号
 
     // 5-7.发送登录响应消息给客户端
     pMsgConn->SendPdu(&pdu2);
@@ -413,10 +399,9 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
 
     // 6-2.构造登录响应消息Pdu pdu2，设置相关字段
     CImPdu pdu3;
-    pdu3.SetPBMsg(&msg4);          //消息体
-    pdu3.SetServiceId(SID_LOGIN);  // service_id
-    pdu3.SetCommandId(
-        CID_LOGIN_RES_USERLOGIN);  // command_id CID_LOGIN_RES_USERLOGIN
+    pdu3.SetPBMsg(&msg4);                        //消息体
+    pdu3.SetServiceId(SID_LOGIN);                // service_id
+    pdu3.SetCommandId(CID_LOGIN_RES_USERLOGIN);  // command_id CID_LOGIN_RES_USERLOGIN
     pdu3.SetSeqNum(pPdu->GetSeqNum());
     pMsgConn->SendPdu(&pdu3);
 
@@ -427,19 +412,15 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleRecentSessionResponse(CImPdu* pPdu) {
   IM::Buddy::IMRecentContactSessionRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   uint32_t user_id = msg.user_id();
   uint32_t session_cnt = msg.contact_session_list_size();
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
-  log_info("HandleRecentSessionResponse, userId=%u, session_cnt=%u", user_id,
-           session_cnt);
+  log_info("HandleRecentSessionResponse, userId=%u, session_cnt=%u", user_id, session_cnt);
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
 
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
@@ -450,22 +431,18 @@ void CDBServConn::_HandleRecentSessionResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleAllUserResponse(CImPdu* pPdu) {
   IM::Buddy::IMAllUserRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t latest_update_time = msg.latest_update_time();
   uint32_t user_cnt = msg.user_list_size();
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
   log_info(
-      "HandleAllUserResponse, userId=%u, latest_update_time=%u, user_cnt=%u",
-      user_id, latest_update_time, user_cnt);
+    "HandleAllUserResponse, userId=%u, latest_update_time=%u, user_cnt=%u", user_id, latest_update_time, user_cnt);
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
 
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
@@ -476,25 +453,26 @@ void CDBServConn::_HandleAllUserResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleGetMsgListResponse(CImPdu* pPdu) {
   IM::Message::IMGetMsgListRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t session_type = msg.session_type();
   uint32_t session_id = msg.session_id();
   uint32_t msg_cnt = msg.msg_list_size();
   uint32_t msg_id_begin = msg.msg_id_begin();
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
   log_info(
-      "HandleGetMsgListResponse, userId=%u, session_type=%u, "
-      "opposite_user_id=%u, msg_id_begin=%u, cnt=%u.",
-      user_id, session_type, session_id, msg_id_begin, msg_cnt);
+    "HandleGetMsgListResponse, userId=%u, session_type=%u, "
+    "opposite_user_id=%u, msg_id_begin=%u, cnt=%u.",
+    user_id,
+    session_type,
+    session_id,
+    msg_id_begin,
+    msg_cnt);
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);
@@ -504,24 +482,24 @@ void CDBServConn::_HandleGetMsgListResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleGetMsgByIdResponse(CImPdu* pPdu) {
   IM::Message::IMGetMsgByIdRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t session_type = msg.session_type();
   uint32_t session_id = msg.session_id();
   uint32_t msg_cnt = msg.msg_list_size();
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
   log_info(
-      "HandleGetMsgByIdResponse, userId=%u, session_type=%u, "
-      "opposite_user_id=%u, cnt=%u.",
-      user_id, session_type, session_id, msg_cnt);
+    "HandleGetMsgByIdResponse, userId=%u, session_type=%u, "
+    "opposite_user_id=%u, cnt=%u.",
+    user_id,
+    session_type,
+    session_id,
+    msg_cnt);
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);
@@ -531,8 +509,7 @@ void CDBServConn::_HandleGetMsgByIdResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleMsgData(CImPdu* pPdu) {
   IM::Message::IMMsgData msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   if (CHECK_MSG_TYPE_GROUP(msg.msg_type())) {
     s_group_chat->HandleGroupMessage(pPdu);
     return;
@@ -542,21 +519,17 @@ void CDBServConn::_HandleMsgData(CImPdu* pPdu) {
   uint32_t to_user_id = msg.to_session_id();
   uint32_t msg_id = msg.msg_id();
   if (msg_id == 0) {
-    log_info("HandleMsgData, write db failed, %u->%u.", from_user_id,
-             to_user_id);
+    log_info("HandleMsgData, write db failed, %u->%u.", from_user_id, to_user_id);
     return;
   }
 
   uint8_t msg_type = msg.msg_type();
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
-  log_info("HandleMsgData, from_user_id=%u, to_user_id=%u, msg_id=%u.",
-           from_user_id, to_user_id, msg_id);
+  log_info("HandleMsgData, from_user_id=%u, to_user_id=%u, msg_id=%u.", from_user_id, to_user_id, msg_id);
 
-  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(
-      from_user_id, attach_data.GetHandle());
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(from_user_id, attach_data.GetHandle());
   if (pMsgConn) {
     IM::Message::IMMsgDataAck msg2;
     msg2.set_user_id(from_user_id);
@@ -578,8 +551,7 @@ void CDBServConn::_HandleMsgData(CImPdu* pPdu) {
 
   msg.clear_attach_data();
   pPdu->SetPBMsg(&msg);
-  CImUser* pFromImUser =
-      CImUserManager::GetInstance()->GetImUserById(from_user_id);
+  CImUser* pFromImUser = CImUserManager::GetInstance()->GetImUserById(from_user_id);
   CImUser* pToImUser = CImUserManager::GetInstance()->GetImUserById(to_user_id);
   pPdu->SetSeqNum(0);
   if (pFromImUser) {
@@ -602,24 +574,24 @@ void CDBServConn::_HandleMsgData(CImPdu* pPdu) {
 
 void CDBServConn::_HandleGetLatestMsgIDRsp(CImPdu* pPdu) {
   IM::Message::IMGetLatestMsgIdRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t session_id = msg.session_id();
   uint32_t session_type = msg.session_type();
   uint32_t latest_msg_id = msg.latest_msg_id();
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
   log_info(
-      "HandleUnreadMsgCntResp, userId=%u, session_id=%u, session_type=%u, "
-      "latest_msg_id=%u.",
-      user_id, session_id, session_type, latest_msg_id);
+    "HandleUnreadMsgCntResp, userId=%u, session_id=%u, session_type=%u, "
+    "latest_msg_id=%u.",
+    user_id,
+    session_id,
+    session_type,
+    latest_msg_id);
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);
@@ -629,22 +601,17 @@ void CDBServConn::_HandleGetLatestMsgIDRsp(CImPdu* pPdu) {
 
 void CDBServConn::_HandleUnreadMsgCountResponse(CImPdu* pPdu) {
   IM::Message::IMUnreadMsgCntRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t total_cnt = msg.total_cnt();
   uint32_t user_unread_cnt = msg.unreadinfo_list_size();
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
-  log_info(
-      "HandleUnreadMsgCntResp, userId=%u, total_cnt=%u, user_unread_cnt=%u.",
-      user_id, total_cnt, user_unread_cnt);
+  log_info("HandleUnreadMsgCntResp, userId=%u, total_cnt=%u, user_unread_cnt=%u.", user_id, total_cnt, user_unread_cnt);
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
 
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
@@ -655,19 +622,16 @@ void CDBServConn::_HandleUnreadMsgCountResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleUsersInfoResponse(CImPdu* pPdu) {
   IM::Buddy::IMUsersInfoRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t user_cnt = msg.user_info_list_size();
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
   log_info("HandleUsersInfoResp, user_id=%u, user_cnt=%u.", user_id, user_cnt);
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);
@@ -685,22 +649,21 @@ void CDBServConn::_HandleStopReceivePacket(CImPdu* pPdu) {
 
 void CDBServConn::_HandleRemoveSessionResponse(CImPdu* pPdu) {
   IM::Buddy::IMRemoveSessionRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t result = msg.result_code();
   uint32_t session_type = msg.session_type();
   uint32_t session_id = msg.session_id();
-  log_info(
-      "HandleRemoveSessionResp, req_id=%u, result=%u, session_id=%u, type=%u.",
-      user_id, result, session_id, session_type);
+  log_info("HandleRemoveSessionResp, req_id=%u, result=%u, session_id=%u, type=%u.",
+           user_id,
+           result,
+           session_id,
+           session_type);
 
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
-  CMsgConn* pConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
   if (pConn && pConn->IsOpen()) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);
@@ -710,8 +673,7 @@ void CDBServConn::_HandleRemoveSessionResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleChangeAvatarResponse(CImPdu* pPdu) {
   IM::Buddy::IMChangeAvatarRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t result = msg.result_code();
@@ -731,26 +693,25 @@ void CDBServConn::_HandleDepartmentResponse(CImPdu* pPdu) {
   // 1.解析收到的部门信息响应消息，将消息内容存储在 IM::Buddy::IMDepartmentRsp
   // 类型的 msg 对象中
   IM::Buddy::IMDepartmentRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   // 2.获取用户ID、最新更新时间和部门数量等信息
   uint32_t user_id = msg.user_id();
   uint32_t latest_update_time = msg.latest_update_time();
   uint32_t dept_cnt = msg.dept_list_size();
   log_info(
-      "HandleDepartmentResponse, user_id=%u, latest_update_time=%u, "
-      "dept_cnt=%u.",
-      user_id, latest_update_time, dept_cnt);
+    "HandleDepartmentResponse, user_id=%u, latest_update_time=%u, "
+    "dept_cnt=%u.",
+    user_id,
+    latest_update_time,
+    dept_cnt);
 
   // 3.解析附加数据，将其转换为 CDbAttachData 对象，获取句柄（handle）
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
 
   // 4.通过用户ID和句柄获取与之关联的消息连接对象 pConn
   uint32_t handle = attach_data.GetHandle();
-  CMsgConn* pConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
 
   // 5.如果消息连接对象存在且处于打开状态
   if (pConn && pConn->IsOpen()) {
@@ -765,8 +726,7 @@ void CDBServConn::_HandleDepartmentResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleSetDeviceTokenResponse(CImPdu* pPdu) {
   IM::Login::IMDeviceTokenRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   log_info("HandleSetDeviceTokenResponse, user_id = %u.", user_id);
@@ -774,29 +734,27 @@ void CDBServConn::_HandleSetDeviceTokenResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
   IM::Server::IMGetDeviceTokenRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   IM::Message::IMMsgData msg2;
-  CHECK_PB_PARSE_MSG(msg2.ParseFromArray(msg.attach_data().c_str(),
-                                         msg.attach_data().length()));
+  CHECK_PB_PARSE_MSG(msg2.ParseFromArray(msg.attach_data().c_str(), msg.attach_data().length()));
   std::string msg_data = msg2.msg_data();
   uint32_t msg_type = msg2.msg_type();
   uint32_t from_id = msg2.from_user_id();
   uint32_t to_id = msg2.to_session_id();
-  if (msg_type == IM::BaseDefine::MSG_TYPE_SINGLE_TEXT ||
-      msg_type == IM::BaseDefine::MSG_TYPE_GROUP_TEXT) {
+  if (msg_type == IM::BaseDefine::MSG_TYPE_SINGLE_TEXT || msg_type == IM::BaseDefine::MSG_TYPE_GROUP_TEXT) {
     // msg_data =
     char* msg_out = NULL;
     uint32_t msg_out_len = 0;
-    if (pAes->Decrypt(msg_data.c_str(), msg_data.length(), &msg_out,
-                      msg_out_len) == 0) {
+    if (pAes->Decrypt(msg_data.c_str(), msg_data.length(), &msg_out, msg_out_len) == 0) {
       msg_data = string(msg_out, msg_out_len);
     } else {
       log_info(
-          "HandleGetDeviceTokenResponse, decrypt msg failed, from_id: %u, "
-          "to_id: %u, msg_type: %u.",
-          from_id, to_id, msg_type);
+        "HandleGetDeviceTokenResponse, decrypt msg failed, from_id: %u, "
+        "to_id: %u, msg_type: %u.",
+        from_id,
+        to_id,
+        msg_type);
       return;
     }
     pAes->Free(msg_out);
@@ -816,8 +774,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
   }
 
   uint32_t user_token_cnt = msg.user_token_info_size();
-  log_info("HandleGetDeviceTokenResponse, user_token_cnt = %u.",
-           user_token_cnt);
+  log_info("HandleGetDeviceTokenResponse, user_token_cnt = %u.", user_token_cnt);
 
   IM::Server::IMPushToUserReq msg3;
   for (uint32_t i = 0; i < user_token_cnt; i++) {
@@ -832,16 +789,18 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
     }
 
     log_info(
-        "HandleGetDeviceTokenResponse, user_id = %u, device_token = %s, "
-        "push_cnt = %u, client_type = %u.",
-        user_id, device_token.c_str(), push_cnt, client_type);
+      "HandleGetDeviceTokenResponse, user_id = %u, device_token = %s, "
+      "push_cnt = %u, client_type = %u.",
+      user_id,
+      device_token.c_str(),
+      push_cnt,
+      client_type);
 
     CImUser* pUser = CImUserManager::GetInstance()->GetImUserById(user_id);
     if (pUser) {
       msg3.set_flash(msg_data);
       msg3.set_data(json_obj.json());
-      IM::BaseDefine::UserTokenInfo* user_token_tmp =
-          msg3.add_user_token_list();
+      IM::BaseDefine::UserTokenInfo* user_token_tmp = msg3.add_user_token_list();
       user_token_tmp->set_user_id(user_id);
       user_token_tmp->set_user_type((IM::BaseDefine::ClientType)client_type);
       user_token_tmp->set_token(device_token);
@@ -849,21 +808,16 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
       // pc client登录，则为勿打扰式推送
       if (pUser->GetPCLoginStatus() == IM_PC_LOGIN_STATUS_ON) {
         user_token_tmp->set_push_type(IM_PUSH_TYPE_SILENT);
-        log_info(
-            "HandleGetDeviceTokenResponse, user id: %d, push type: silent.",
-            user_id);
+        log_info("HandleGetDeviceTokenResponse, user id: %d, push type: silent.", user_id);
       } else {
         user_token_tmp->set_push_type(IM_PUSH_TYPE_NORMAL);
-        log_info(
-            "HandleGetDeviceTokenResponse, user id: %d, push type: normal.",
-            user_id);
+        log_info("HandleGetDeviceTokenResponse, user id: %d, push type: normal.", user_id);
       }
     } else {
       IM::Server::IMPushToUserReq msg4;
       msg4.set_flash(msg_data);
       msg4.set_data(json_obj.json());
-      IM::BaseDefine::UserTokenInfo* user_token_tmp =
-          msg4.add_user_token_list();
+      IM::BaseDefine::UserTokenInfo* user_token_tmp = msg4.add_user_token_list();
       user_token_tmp->set_user_id(user_id);
       user_token_tmp->set_user_type((IM::BaseDefine::ClientType)client_type);
       user_token_tmp->set_token(device_token);
@@ -874,8 +828,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
       pdu.SetServiceId(SID_OTHER);
       pdu.SetCommandId(CID_OTHER_PUSH_TO_USER_REQ);
 
-      CPduAttachData attach_data(ATTACH_TYPE_PDU_FOR_PUSH, 0,
-                                 pdu.GetBodyLength(), pdu.GetBodyData());
+      CPduAttachData attach_data(ATTACH_TYPE_PDU_FOR_PUSH, 0, pdu.GetBodyLength(), pdu.GetBodyData());
       IM::Buddy::IMUsersStatReq msg5;
       msg5.set_user_id(0);
       msg5.add_user_id_list(user_id);
@@ -906,20 +859,17 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandleChangeSignInfoResponse(CImPdu* pPdu) {
   IM::Buddy::IMChangeSignInfoRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t result = msg.result_code();
 
   log_info("HandleChangeSignInfoResp: user_id=%u, result=%u.", user_id, result);
 
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
 
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
@@ -927,9 +877,10 @@ void CDBServConn::_HandleChangeSignInfoResponse(CImPdu* pPdu) {
     pMsgConn->SendPdu(pPdu);
   } else {
     log_info(
-        "HandleChangeSignInfoResp: can't found msg_conn by user_id = %u, "
-        "handle = %u",
-        user_id, handle);
+      "HandleChangeSignInfoResp: can't found msg_conn by user_id = %u, "
+      "handle = %u",
+      user_id,
+      handle);
   }
 
   if (!result) {
@@ -953,21 +904,17 @@ void CDBServConn::_HandleChangeSignInfoResponse(CImPdu* pPdu) {
 
 void CDBServConn::_HandlePushShieldResponse(CImPdu* pPdu) {
   IM::Login::IMPushShieldRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t result = msg.result_code();
 
-  log_info("_HandlePushShieldResponse: user_id=%u, result=%u.", user_id,
-           result);
+  log_info("_HandlePushShieldResponse: user_id=%u, result=%u.", user_id, result);
 
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
 
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
@@ -975,30 +922,27 @@ void CDBServConn::_HandlePushShieldResponse(CImPdu* pPdu) {
     pMsgConn->SendPdu(pPdu);
   } else {
     log_info(
-        "_HandlePushShieldResponse: can't found msg_conn by user_id = %u, "
-        "handle = %u",
-        user_id, handle);
+      "_HandlePushShieldResponse: can't found msg_conn by user_id = %u, "
+      "handle = %u",
+      user_id,
+      handle);
   }
 }
 
 void CDBServConn::_HandleQueryPushShieldResponse(CImPdu* pPdu) {
   IM::Login::IMQueryPushShieldRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
   uint32_t result = msg.result_code();
   // uint32_t shield_status = msg.shield_status();
 
-  log_info("_HandleQueryPushShieldResponse: user_id=%u, result=%u.", user_id,
-           result);
+  log_info("_HandleQueryPushShieldResponse: user_id=%u, result=%u.", user_id, result);
 
-  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(),
-                            msg.attach_data().length());
+  CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t handle = attach_data.GetHandle();
 
-  CMsgConn* pMsgConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
+  CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, handle);
 
   if (pMsgConn && pMsgConn->IsOpen()) {
     msg.clear_attach_data();
@@ -1006,8 +950,9 @@ void CDBServConn::_HandleQueryPushShieldResponse(CImPdu* pPdu) {
     pMsgConn->SendPdu(pPdu);
   } else {
     log_info(
-        "_HandleQueryPushShieldResponse: can't found msg_conn by user_id = %u, "
-        "handle = %u",
-        user_id, handle);
+      "_HandleQueryPushShieldResponse: can't found msg_conn by user_id = %u, "
+      "handle = %u",
+      user_id,
+      handle);
   }
 }

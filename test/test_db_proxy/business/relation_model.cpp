@@ -37,8 +37,7 @@ CRelationModel* CRelationModel::getInstance() {
  *  @param bAdd      <#bAdd description#>
  *  @param nStatus 0 获取未被删除会话，1获取所有。
  */
-uint32_t CRelationModel::getRelationId(uint32_t nUserAId, uint32_t nUserBId,
-                                       bool bAdd) {
+uint32_t CRelationModel::getRelationId(uint32_t nUserAId, uint32_t nUserBId, bool bAdd) {
   uint32_t nRelationId = INVALID_VALUE;
   if (nUserAId == 0 || nUserBId == 0) {
     log("invalied user id:%u->%u", nUserAId, nUserBId);
@@ -49,9 +48,8 @@ uint32_t CRelationModel::getRelationId(uint32_t nUserAId, uint32_t nUserBId,
   if (pDBConn) {
     uint32_t nBigId = nUserAId > nUserBId ? nUserAId : nUserBId;
     uint32_t nSmallId = nUserAId > nUserBId ? nUserBId : nUserAId;
-    string strSql =
-        "select id from IMRelationShip where smallId=" + int2string(nSmallId) +
-        " and bigId=" + int2string(nBigId) + " and status = 0";
+    string strSql = "select id from IMRelationShip where smallId=" + int2string(nSmallId) +
+                    " and bigId=" + int2string(nBigId) + " and status = 0";
 
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet) {
@@ -79,13 +77,12 @@ uint32_t CRelationModel::addRelation(uint32_t nSmallId, uint32_t nBigId) {
   if (pDBConn) {
     uint32_t nTimeNow = (uint32_t)time(NULL);
     string strSql =
-        "select id from IMRelationShip where smallId=" + int2string(nSmallId) +
-        " and bigId=" + int2string(nBigId);
+      "select id from IMRelationShip where smallId=" + int2string(nSmallId) + " and bigId=" + int2string(nBigId);
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet && pResultSet->Next()) {
       nRelationId = pResultSet->GetInt("id");
-      strSql = "update IMRelationShip set status=0, updated=" +
-               int2string(nTimeNow) + " where id=" + int2string(nRelationId);
+      strSql =
+        "update IMRelationShip set status=0, updated=" + int2string(nTimeNow) + " where id=" + int2string(nRelationId);
       bool bRet = pDBConn->ExecuteUpdate(strSql.c_str());
       if (!bRet) {
         nRelationId = INVALID_VALUE;
@@ -94,8 +91,8 @@ uint32_t CRelationModel::addRelation(uint32_t nSmallId, uint32_t nBigId) {
       delete pResultSet;
     } else {
       strSql =
-          "insert into IMRelationShip "
-          "(`smallId`,`bigId`,`status`,`created`,`updated`) values(?,?,?,?,?)";
+        "insert into IMRelationShip "
+        "(`smallId`,`bigId`,`status`,`created`,`updated`) values(?,?,?,?,?)";
       // 必须在释放连接前delete
       // CPrepareStatement对象，否则有可能多个线程操作mysql对象，会crash
       CPrepareStatement* stmt = new CPrepareStatement();
@@ -129,15 +126,13 @@ uint32_t CRelationModel::addRelation(uint32_t nSmallId, uint32_t nBigId) {
   return nRelationId;
 }
 
-bool CRelationModel::updateRelation(uint32_t nRelationId,
-                                    uint32_t nUpdateTime) {
+bool CRelationModel::updateRelation(uint32_t nRelationId, uint32_t nUpdateTime) {
   bool bRet = false;
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
     string strSql =
-        "update IMRelationShip set `updated`=" + int2string(nUpdateTime) +
-        " where id=" + int2string(nRelationId);
+      "update IMRelationShip set `updated`=" + int2string(nUpdateTime) + " where id=" + int2string(nRelationId);
     bRet = pDBConn->ExecuteUpdate(strSql.c_str());
     pDBManager->RelDBConn(pDBConn);
   } else {
@@ -153,8 +148,7 @@ bool CRelationModel::removeRelation(uint32_t nRelationId) {
   if (pDBConn) {
     uint32_t nNow = (uint32_t)time(NULL);
     string strSql =
-        "update IMRelationShip set status = 1, updated=" + int2string(nNow) +
-        " where id=" + int2string(nRelationId);
+      "update IMRelationShip set status = 1, updated=" + int2string(nNow) + " where id=" + int2string(nRelationId);
     bRet = pDBConn->ExecuteUpdate(strSql.c_str());
     pDBManager->RelDBConn(pDBConn);
   } else {

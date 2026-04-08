@@ -31,8 +31,7 @@ class CriticalSection;
 class FileManager {
  private:
   FileManager() {}
-  FileManager(const char* host, const char* disk, int totFiles,
-              int filesPerDir) {
+  FileManager(const char* host, const char* disk, int totFiles, int filesPerDir) {
     m_host = new char[strlen(host) + 1];
     m_disk = new char[strlen(disk) + 1];
     m_host[strlen(host)] = '\0';
@@ -44,9 +43,11 @@ class FileManager {
     m_map.clear();
   }
   ~FileManager() {
-    if (m_host) delete[] m_host;
+    if (m_host)
+      delete[] m_host;
     m_host = NULL;
-    if (m_disk) delete[] m_disk;
+    if (m_disk)
+      delete[] m_disk;
     m_disk = NULL;
     EntryMap::iterator it = m_map.begin();
     while (it != m_map.end()) {
@@ -59,27 +60,23 @@ class FileManager {
   FileManager operator=(const FileManager&);
 
  public:
-  static FileManager* getInstance(const char* host, const char* disk,
-                                  int totFiles, int filesPerDir) {
-    return (m_instance) ? m_instance
-                        : (new FileManager(host, disk, totFiles, filesPerDir));
+  static FileManager* getInstance(const char* host, const char* disk, int totFiles, int filesPerDir) {
+    return (m_instance) ? m_instance : (new FileManager(host, disk, totFiles, filesPerDir));
   }
 
   static void destroyInstance() {
-    if (m_instance) delete m_instance;
+    if (m_instance)
+      delete m_instance;
     m_instance = NULL;
   }
 
   int initDir();
   u64 getFileCntCurr() { return m_totFiles; }
   int getFirstDir() { return (m_totFiles / (m_filesPerDir)) / (FIRST_DIR_MAX); }
-  int getSecondDir() {
-    return (m_totFiles % (m_filesPerDir * FIRST_DIR_MAX)) / m_filesPerDir;
-  }
+  int getSecondDir() { return (m_totFiles % (m_filesPerDir * FIRST_DIR_MAX)) / m_filesPerDir; }
 
   string createFileRelatePath();
-  int uploadFile(const char* type, const void* content, u32 size, char* url,
-                 char* ext = NULL);
+  int uploadFile(const char* type, const void* content, u32 size, char* url, char* ext = NULL);
   int downloadFileByUrl(char* urlEn, void* buf, u32* size);
   int getRelatePathByUrl(const string& url, string& path);
   int getAbsPathByUrl(const string& url, string& path);
@@ -95,15 +92,14 @@ class FileManager {
       m_fileContent = NULL;
     }
     ~Entry() {
-      if (m_fileContent) delete[] m_fileContent;
+      if (m_fileContent)
+        delete[] m_fileContent;
       m_fileContent = NULL;
     }
   };
   typedef std::map<std::string, Entry*> EntryMap;
   int insertEntry(const std::string& url, size_t filesize, const void* content);
-  Entry* getEntry(const std::string& url) const {
-    return const_cast<FileManager*>(this)->getOrCreateEntry(url, false);
-  }
+  Entry* getEntry(const std::string& url) const { return const_cast<FileManager*>(this)->getOrCreateEntry(url, false); }
   Entry* getOrCreateEntry(const std::string& url, bool create);
   void releaseFileCache(const std::string& url);
   void updateMapCache();

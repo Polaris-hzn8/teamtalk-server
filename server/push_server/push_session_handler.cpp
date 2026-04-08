@@ -21,10 +21,8 @@ void CPushSessionHandler::OnClose(uint32_t nsockid) {
 }
 
 void CPushSessionHandler::OnException(uint32_t nsockid, int32_t nErrorCode) {
-  PUSH_SERVER_WARN("push session has exception, sockid: %u, error code: %u.",
-                   nsockid, nErrorCode);
-  push_session_ptr pSession =
-      CSessionManager::GetInstance()->GetPushSessionBySockID(nsockid);
+  PUSH_SERVER_WARN("push session has exception, sockid: %u, error code: %u.", nsockid, nErrorCode);
+  push_session_ptr pSession = CSessionManager::GetInstance()->GetPushSessionBySockID(nsockid);
   if (pSession) {
     pSession->Stop();
   }
@@ -43,9 +41,7 @@ void CPushSessionHandler::OnRecvData(const char* szBuf, int32_t nBufSize) {
         break;
       default:
         PUSH_SERVER_WARN("push session recv undefind msg, cmd id: %u.", cmd_id);
-        push_session_ptr pSession =
-            CSessionManager::GetInstance()->GetPushSessionBySockID(
-                _GetSockID());
+        push_session_ptr pSession = CSessionManager::GetInstance()->GetPushSessionBySockID(_GetSockID());
         if (pSession) {
           pSession->Stop();
         }
@@ -55,11 +51,9 @@ void CPushSessionHandler::OnRecvData(const char* szBuf, int32_t nBufSize) {
   }
 }
 
-void CPushSessionHandler::_HandleHeartBeat(const char* szBuf,
-                                           int32_t nBufSize) {
+void CPushSessionHandler::_HandleHeartBeat(const char* szBuf, int32_t nBufSize) {
   PUSH_SERVER_TRACE("HeartBeat");
-  push_session_ptr pSession =
-      CSessionManager::GetInstance()->GetPushSessionBySockID(_GetSockID());
+  push_session_ptr pSession = CSessionManager::GetInstance()->GetPushSessionBySockID(_GetSockID());
   if (pSession == nullptr) {
     return;
   }
@@ -74,8 +68,7 @@ void CPushSessionHandler::_HandlePushMsg(const char* szBuf, int32_t nBufSize) {
     return;
   }
 
-  push_session_ptr pSession =
-      CSessionManager::GetInstance()->GetPushSessionBySockID(_GetSockID());
+  push_session_ptr pSession = CSessionManager::GetInstance()->GetPushSessionBySockID(_GetSockID());
   if (pSession == nullptr) {
     return;
   }
@@ -102,10 +95,12 @@ void CPushSessionHandler::_HandlePushMsg(const char* szBuf, int32_t nBufSize) {
       m_NotificationID++;
 
       PUSH_SERVER_INFO(
-          "HandlePushMsg, token: %s, push count: %d, push_type:%d, "
-          "notification id: %u.",
-          user_token.token().c_str(), user_token.push_count(),
-          user_token.push_type(), m_NotificationID);
+        "HandlePushMsg, token: %s, push count: %d, push_type:%d, "
+        "notification id: %u.",
+        user_token.token().c_str(),
+        user_token.push_count(),
+        user_token.push_type(),
+        m_NotificationID);
       CAPNSGateWayMsg msg;
       msg.SetAlterBody(strFlash);
       msg.SetCustomData(strUserData);

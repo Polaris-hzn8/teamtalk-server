@@ -15,8 +15,8 @@
 #include "IM.BaseDefine.pb.h"
 #include "IM.Buddy.pb.h"
 #include "IM.Login.pb.h"
-#include "user_model.h"
 #include "public_define.h"
+#include "user_model.h"
 
 namespace DB_PROXY {
 
@@ -35,8 +35,7 @@ void getUserInfo(CImPdu* pPdu, uint32_t conn_uuid) {
     std::list<IM::BaseDefine::UserInfo> lsUser;
     CUserModel::getInstance()->getUsers(idList, lsUser);
     msgResp.set_user_id(from_user_id);
-    for (list<IM::BaseDefine::UserInfo>::iterator it = lsUser.begin();
-         it != lsUser.end(); ++it) {
+    for (list<IM::BaseDefine::UserInfo>::iterator it = lsUser.begin(); it != lsUser.end(); ++it) {
       IM::BaseDefine::UserInfo* pUser = msgResp.add_user_info_list();
       //            *pUser = *it;
 
@@ -83,8 +82,7 @@ void getChangedUser(CImPdu* pPdu, uint32_t conn_uuid) {
     }
     msgResp.set_user_id(nReqId);
     msgResp.set_latest_update_time(nLastTime);
-    for (list<IM::BaseDefine::UserInfo>::iterator it = lsUsers.begin();
-         it != lsUsers.end(); ++it) {
+    for (list<IM::BaseDefine::UserInfo>::iterator it = lsUsers.begin(); it != lsUsers.end(); ++it) {
       IM::BaseDefine::UserInfo* pUser = msgResp.add_user_list();
       //            *pUser = *it;
       pUser->set_user_id(it->user_id());
@@ -99,8 +97,7 @@ void getChangedUser(CImPdu* pPdu, uint32_t conn_uuid) {
       pUser->set_user_domain(it->user_domain());
       pUser->set_status(it->status());
     }
-    log("userId=%u,nLastUpdate=%u, last_time=%u, userCnt=%u", nReqId,
-        nLastUpdate, nLastTime, msgResp.user_list_size());
+    log("userId=%u,nLastUpdate=%u, last_time=%u, userCnt=%u", nReqId, nLastUpdate, nLastTime, msgResp.user_list_size());
     msgResp.set_attach_data(msg.attach_data());
     pPduRes->SetPBMsg(&msgResp);
     pPduRes->SetSeqNum(pPdu->GetSeqNum());
@@ -119,18 +116,15 @@ void changeUserSignInfo(CImPdu* pPdu, uint32_t conn_uuid) {
     uint32_t user_id = req.user_id();
     const string& sign_info = req.sign_info();
 
-    bool result =
-        CUserModel::getInstance()->updateUserSignInfo(user_id, sign_info);
+    bool result = CUserModel::getInstance()->updateUserSignInfo(user_id, sign_info);
 
     resp.set_user_id(user_id);
     resp.set_result_code(result ? 0 : 1);
     if (result) {
       resp.set_sign_info(sign_info);
-      log("changeUserSignInfo sucess, user_id=%u, sign_info=%s", user_id,
-          sign_info.c_str());
+      log("changeUserSignInfo sucess, user_id=%u, sign_info=%s", user_id, sign_info.c_str());
     } else {
-      log("changeUserSignInfo false, user_id=%u, sign_info=%s", user_id,
-          sign_info.c_str());
+      log("changeUserSignInfo false, user_id=%u, sign_info=%s", user_id, sign_info.c_str());
     }
 
     CImPdu* pdu_resp = new CImPdu();
@@ -138,8 +132,7 @@ void changeUserSignInfo(CImPdu* pPdu, uint32_t conn_uuid) {
     pdu_resp->SetPBMsg(&resp);
     pdu_resp->SetSeqNum(pPdu->GetSeqNum());
     pdu_resp->SetServiceId(IM::BaseDefine::SID_BUDDY_LIST);
-    pdu_resp->SetCommandId(
-        IM::BaseDefine::CID_BUDDY_LIST_CHANGE_SIGN_INFO_RESPONSE);
+    pdu_resp->SetCommandId(IM::BaseDefine::CID_BUDDY_LIST_CHANGE_SIGN_INFO_RESPONSE);
     CProxyConn::AddResponsePdu(conn_uuid, pdu_resp);
 
   } else {
@@ -154,18 +147,15 @@ void doPushShield(CImPdu* pPdu, uint32_t conn_uuid) {
     uint32_t shield_status = req.shield_status();
     // const string& sign_info = req.sign_info();
 
-    bool result =
-        CUserModel::getInstance()->updatePushShield(user_id, shield_status);
+    bool result = CUserModel::getInstance()->updatePushShield(user_id, shield_status);
 
     resp.set_user_id(user_id);
     resp.set_result_code(result ? 0 : 1);
     if (result) {
       resp.set_shield_status(shield_status);
-      log("doPushShield sucess, user_id=%u, shield_status=%u", user_id,
-          shield_status);
+      log("doPushShield sucess, user_id=%u, shield_status=%u", user_id, shield_status);
     } else {
-      log("doPushShield false, user_id=%u, shield_status=%u", user_id,
-          shield_status);
+      log("doPushShield false, user_id=%u, shield_status=%u", user_id, shield_status);
     }
 
     CImPdu* pdu_resp = new CImPdu();
@@ -188,15 +178,13 @@ void doQueryPushShield(CImPdu* pPdu, uint32_t conn_uuid) {
     uint32_t user_id = req.user_id();
     uint32_t shield_status = 0;
 
-    bool result =
-        CUserModel::getInstance()->getPushShield(user_id, &shield_status);
+    bool result = CUserModel::getInstance()->getPushShield(user_id, &shield_status);
 
     resp.set_user_id(user_id);
     resp.set_result_code(result ? 0 : 1);
     if (result) {
       resp.set_shield_status(shield_status);
-      log("doQueryPushShield sucess, user_id=%u, shield_status=%u", user_id,
-          shield_status);
+      log("doQueryPushShield sucess, user_id=%u, shield_status=%u", user_id, shield_status);
     } else {
       log("doQueryPushShield false, user_id=%u", user_id);
     }

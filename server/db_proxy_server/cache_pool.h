@@ -31,8 +31,7 @@ class CacheConn {
   std::string set(std::string key, std::string& value);
 
   // 批量获取
-  bool mget(const std::vector<std::string>& keys,
-            std::map<std::string, std::string>& ret_value);
+  bool mget(const std::vector<std::string>& keys, std::map<std::string, std::string>& ret_value);
 
   bool isExists(std::string& key);
 
@@ -45,8 +44,7 @@ class CacheConn {
   long hincrBy(std::string key, std::string field, long value);
   long incrBy(std::string key, long value);
   std::string hmset(std::string key, std::map<std::string, std::string>& hash);
-  bool hmget(std::string key, std::list<std::string>& fields,
-             std::list<std::string>& ret_value);
+  bool hmget(std::string key, std::list<std::string>& fields, std::list<std::string>& ret_value);
 
   // 原子加减1
   long incr(std::string key);
@@ -56,8 +54,7 @@ class CacheConn {
   long lpush(std::string key, std::string value);
   long rpush(std::string key, std::string value);
   long llen(std::string key);
-  bool lrange(std::string key, long start, long end,
-              std::list<std::string>& ret_value);
+  bool lrange(std::string key, long start, long end, std::list<std::string>& ret_value);
 
  private:
   CachePool* m_pCachePool;
@@ -67,8 +64,7 @@ class CacheConn {
 
 class CachePool {
  public:
-  CachePool(const char* pool_name, const char* server_ip, int server_port,
-            int db_num, int max_conn_cnt);
+  CachePool(const char* pool_name, const char* server_ip, int server_port, int db_num, int max_conn_cnt);
   virtual ~CachePool();
 
   int Init();

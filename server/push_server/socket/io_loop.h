@@ -40,8 +40,7 @@ class CWakerPipe {
 
   void Wake() {
     const char* szMsg = "lljzj";
-    S_SendTo(m_wake_sock_send, (void*)szMsg, (int32_t)strlen(szMsg), m_szRecvIP,
-             m_nRecvPort);
+    S_SendTo(m_wake_sock_send, (void*)szMsg, (int32_t)strlen(szMsg), m_szRecvIP, m_nRecvPort);
   }
 
   void Recv() {

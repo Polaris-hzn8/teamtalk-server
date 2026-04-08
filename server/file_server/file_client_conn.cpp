@@ -14,11 +14,9 @@
 #include "transfer_task_manager.h"
 using namespace IM::BaseDefine;
 
-static ConnMap_t
-    g_file_client_conn_map;  // connection with others, on connect insert...
+static ConnMap_t g_file_client_conn_map;  // connection with others, on connect insert...
 
-void FileClientConnCallback(void* callback_data, uint8_t msg, uint32_t handle,
-                            void* param) {
+void FileClientConnCallback(void* callback_data, uint8_t msg, uint32_t handle, void* param) {
   if (msg == NETLIB_MSG_CONNECT) {
     FileClientConn* conn = new FileClientConn();
     conn->OnConnect(handle);
@@ -27,11 +25,9 @@ void FileClientConnCallback(void* callback_data, uint8_t msg, uint32_t handle,
   }
 }
 
-void FileClientConnTimerCallback(void* callback_data, uint8_t msg,
-                                 uint32_t handle, void* pParam) {
+void FileClientConnTimerCallback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   uint64_t cur_time = get_tick_count();
-  for (ConnMap_t::iterator it = g_file_client_conn_map.begin();
-       it != g_file_client_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_file_client_conn_map.begin(); it != g_file_client_conn_map.end();) {
     ConnMap_t::iterator it_old = it;
     it++;
 
@@ -40,8 +36,7 @@ void FileClientConnTimerCallback(void* callback_data, uint8_t msg,
   }
 }
 
-void FileTaskTimerCallback(void* callback_data, uint8_t msg, uint32_t handle,
-                           void* pParam) {
+void FileTaskTimerCallback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   uint64_t tick = get_tick_count();
   TransferTaskManager::GetInstance()->OnTimer(tick);
 }
@@ -88,8 +83,7 @@ void FileClientConn::Close() {
     }
     transfer_task_->SetConnByUserID(user_id_, NULL);
 
-    TransferTaskManager::GetInstance()->DeleteTransferTaskByConnClose(
-        transfer_task_->task_id());
+    TransferTaskManager::GetInstance()->DeleteTransferTaskByConnClose(transfer_task_->task_id());
 
     // 关闭另一个连接
     //        if (transfer_task_->GetTransMode() == FILE_TYPE_ONLINE) {
@@ -158,8 +152,7 @@ void FileClientConn::OnConnect(net_handle_t handle) {
 
   g_file_client_conn_map.insert(std::make_pair(handle, this));
   netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)imconn_callback);
-  netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA,
-                (void*)&g_file_client_conn_map);
+  netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)&g_file_client_conn_map);
 
   uint32_t socket_buf_size = NETLIB_MAX_SOCKET_BUF_SIZE;
   netlib_option(handle, NETLIB_OPT_SET_SEND_BUF_SIZE, &socket_buf_size);
@@ -187,7 +180,9 @@ void FileClientConn::OnTimer(uint64_t curr_tick) {
   }
 }
 
-void FileClientConn::OnWrite() { CImConn::OnWrite(); }
+void FileClientConn::OnWrite() {
+  CImConn::OnWrite();
+}
 
 void FileClientConn::HandlePdu(CImPdu* pdu) {
   switch (pdu->GetCommandId()) {
@@ -214,20 +209,20 @@ void FileClientConn::HandlePdu(CImPdu* pdu) {
   }
 }
 
-void FileClientConn::_HandleHeartBeat(CImPdu* pdu) { SendPdu(pdu); }
+void FileClientConn::_HandleHeartBeat(CImPdu* pdu) {
+  SendPdu(pdu);
+}
 
 // Client客户端（包括接受方与发送方）发起向file_server登录请求
 void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu) {
   IM::File::IMFileLoginReq login_req;
-  CHECK_PB_PARSE_MSG(
-      login_req.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(login_req.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
 
   uint32_t user_id = login_req.user_id();
   std::string task_id = login_req.task_id();
   IM::BaseDefine::ClientFileRole mode = login_req.file_role();
 
-  log_info("Client login, user_id=%d, task_id=%s, file_role=%d", user_id,
-           task_id.c_str(), mode);
+  log_info("Client login, user_id=%d, task_id=%s, file_role=%d", user_id, task_id.c_str(), mode);
 
   BaseTransferTask* transfer_task = NULL;
 
@@ -240,24 +235,22 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu) {
       if (mode == CLIENT_OFFLINE_DOWNLOAD) {
         // 如果文件不存在，但是传输模式为离线文件传输
         // 尝试从磁盘加载离线文件 有可能是文件服务器重启
-        transfer_task = TransferTaskManager::GetInstance()->NewTransferTask(
-            task_id, user_id);
+        transfer_task = TransferTaskManager::GetInstance()->NewTransferTask(task_id, user_id);
         if (transfer_task == NULL) {
           // 需要再次判断是否加载成功
-          log_info("Find task id failed, user_id=%u, taks_id=%s, mode=%d",
-                   user_id, task_id.c_str(), mode);
+          log_info("Find task id failed, user_id=%u, taks_id=%s, mode=%d", user_id, task_id.c_str(), mode);
           break;
         }
       } else {
         // 异常文件任务id
-        log_info("Can't find task_id, user_id=%u, taks_id=%s, mode=%d", user_id,
-                 task_id.c_str(), mode);
+        log_info("Can't find task_id, user_id=%u, taks_id=%s, mode=%d", user_id, task_id.c_str(), mode);
         break;
       }
     }
     // 1-2 状态转换
     rv = transfer_task->ChangePullState(user_id, mode);  // 状态转换
-    if (!rv) break;
+    if (!rv)
+      break;
 
     // 1-3 Ok
     auth_ = true;
@@ -273,8 +266,7 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu) {
   IM::File::IMFileLoginRsp login_rsp;
   login_rsp.set_result_code(rv ? 0 : 1);
   login_rsp.set_task_id(task_id);
-  ::SendMessageLite(this, SID_FILE, CID_FILE_LOGIN_RES, pdu->GetSeqNum(),
-                    &login_rsp);
+  ::SendMessageLite(this, SID_FILE, CID_FILE_LOGIN_RES, pdu->GetSeqNum(), &login_rsp);
   if (rv) {
     if (transfer_task->GetTransMode() == FILE_TYPE_ONLINE) {
       // 2-1 进行文件的在线传输
@@ -282,8 +274,7 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu) {
         // 通知接收端已经准备好了接受文件
         CImConn* conn = transfer_task_->GetToConn();  // 获取接收端conn
         if (conn)
-          _StatesNotify(CLIENT_FILE_PEER_READY, task_id,
-                        transfer_task_->from_user_id(), conn);
+          _StatesNotify(CLIENT_FILE_PEER_READY, task_id, transfer_task_->from_user_id(), conn);
         else {
           log_info("to_conn is close, close me!!!");
           Close();
@@ -295,16 +286,14 @@ void FileClientConn::_HandleClientFileLoginReq(CImPdu* pdu) {
     } else {
       // 2-2 进行文件的离线传输
       if (transfer_task->state() == kTransferTaskStateWaitingUpload) {
-        OfflineTransferTask* offline =
-            reinterpret_cast<OfflineTransferTask*>(transfer_task);
+        OfflineTransferTask* offline = reinterpret_cast<OfflineTransferTask*>(transfer_task);
         IM::File::IMFilePullDataReq pull_data_req;
         pull_data_req.set_task_id(task_id);
         pull_data_req.set_user_id(user_id);
         pull_data_req.set_trans_mode(FILE_TYPE_OFFLINE);
         pull_data_req.set_offset(0);
         pull_data_req.set_data_size(offline->GetNextSegmentBlockSize());
-        ::SendMessageLite(this, SID_FILE, CID_FILE_PULL_DATA_REQ,
-                          &pull_data_req);
+        ::SendMessageLite(this, SID_FILE, CID_FILE_PULL_DATA_REQ, &pull_data_req);
         log_info("Pull Data Req");
       }
     }
@@ -320,15 +309,13 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu) {
   }
 
   IM::File::IMFileState file_state;
-  CHECK_PB_PARSE_MSG(
-      file_state.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(file_state.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
 
   std::string task_id = file_state.task_id();
   uint32_t user_id = file_state.user_id();
   uint32_t file_stat = file_state.state();
 
-  log_info("Recv FileState, user_id=%d, task_id=%s, file_stat=%d", user_id,
-           task_id.c_str(), file_stat);
+  log_info("Recv FileState, user_id=%d, task_id=%s, file_stat=%d", user_id, task_id.c_str(), file_stat);
 
   // FilePullFileRsp
   bool rv = false;
@@ -336,16 +323,19 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu) {
     // 检查user_id
     if (user_id != user_id_) {
       log_info(
-          "Received user_id valid, recv_user_id = %d, transfer_task.user_id = "
-          "%d, user_id_ = %d",
-          user_id, transfer_task_->from_user_id(), user_id_);
+        "Received user_id valid, recv_user_id = %d, transfer_task.user_id = "
+        "%d, user_id_ = %d",
+        user_id,
+        transfer_task_->from_user_id(),
+        user_id_);
       break;
     }
 
     // 检查task_id
     if (transfer_task_->task_id() != task_id) {
       log_info("Received task_id valid, recv_task_id = %s, this_task_id = %s",
-               task_id.c_str(), transfer_task_->task_id().c_str());
+               task_id.c_str(),
+               transfer_task_->task_id().c_str());
       break;
     }
 
@@ -357,7 +347,9 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu) {
         if (im_conn) {
           im_conn->SendPdu(pdu);
           log_info("Task %s %d by user_id %d notify %d, erased",
-                   task_id.c_str(), file_stat, user_id,
+                   task_id.c_str(),
+                   file_stat,
+                   user_id,
                    transfer_task_->GetOpponent(user_id));
         }
         // notify other client
@@ -371,9 +363,7 @@ void FileClientConn::_HandleClientFileStates(CImPdu* pdu) {
       }
 
       default:
-        log_info(
-            "Recv valid file_stat: file_state = %d, user_id=%d, task_id=%s",
-            file_stat, user_id_, task_id.c_str());
+        log_info("Recv valid file_stat: file_state = %d, user_id=%d, task_id=%s", file_stat, user_id_, task_id.c_str());
         break;
     }
 
@@ -427,8 +417,7 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu) {
 
   // 2.解析收到的request请求数据
   IM::File::IMFilePullDataReq pull_data_req;
-  CHECK_PB_PARSE_MSG(
-      pull_data_req.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(pull_data_req.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
   uint32_t user_id = pull_data_req.user_id();     // 用户id
   std::string task_id = pull_data_req.task_id();  // 任务id
   uint32_t mode = pull_data_req.trans_mode();     // 传输模式
@@ -436,9 +425,13 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu) {
   uint32_t datasize = pull_data_req.data_size();  // 文件数据
 
   log_info(
-      "Recv FilePullFileReq, user_id=%d, task_id=%s, file_role=%d, offset=%d, "
-      "datasize=%d",
-      user_id, task_id.c_str(), mode, offset, datasize);
+    "Recv FilePullFileReq, user_id=%d, task_id=%s, file_role=%d, offset=%d, "
+    "datasize=%d",
+    user_id,
+    task_id.c_str(),
+    mode,
+    offset,
+    datasize);
 
   // 3.组装response响应消息 接收端 -> file_server -> 发送端
   IM::File::IMFilePullDataRsp pull_data_rsp;
@@ -469,9 +462,11 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu) {
     // user_id_ 是 FileClientConn 类的成员变量，表示当前连接的用户ID
     if (user_id != user_id_) {
       log_info(
-          "Received user_id valid, recv_user_id = %d, transfer_task.user_id = "
-          "%d, user_id_ = %d",
-          user_id, transfer_task_->from_user_id(), user_id_);
+        "Received user_id valid, recv_user_id = %d, transfer_task.user_id = "
+        "%d, user_id_ = %d",
+        user_id,
+        transfer_task_->from_user_id(),
+        user_id_);
       break;
     }
 
@@ -481,7 +476,8 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu) {
     // 用于获取当前连接的传输任务的任务标识符 调用了当前连接所关联的传输任务对象
     if (transfer_task_->task_id() != task_id) {
       log_info("Received task_id valid, recv_task_id = %s, this_task_id = %s",
-               task_id.c_str(), transfer_task_->task_id().c_str());
+               task_id.c_str(),
+               transfer_task_->task_id().c_str());
       break;
     }
 
@@ -490,9 +486,10 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu) {
     // 表示文件传输请求的user_id user_id 是否为 transfer_task.to_user_id
     if (!transfer_task_->CheckToUserID(user_id)) {
       log_info(
-          "user_id equal transfer_task.to_user_id, but user_id=%d, "
-          "transfer_task.to_user_id=%d",
-          user_id, transfer_task_->to_user_id());
+        "user_id equal transfer_task.to_user_id, but user_id=%d, "
+        "transfer_task.to_user_id=%d",
+        user_id,
+        transfer_task_->to_user_id());
       break;
     }
 
@@ -500,9 +497,9 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu) {
     // 根据传输模式的不同进行不同的逻辑处理 DoPullFileRequest函数
     // 如果是在线模式则只是检测状态 如果是离线状态则该函数会将文件数据
     // 存入pull_data_rsp中 离线传输需要下载文件 在线传输从发送者拉数据
-    rv = transfer_task_->DoPullFileRequest(user_id, offset, datasize,
-                                           pull_data_rsp.mutable_file_data());
-    if (rv == -1) break;
+    rv = transfer_task_->DoPullFileRequest(user_id, offset, datasize, pull_data_rsp.mutable_file_data());
+    if (rv == -1)
+      break;
 
     pull_data_rsp.set_result_code(0);
 
@@ -516,8 +513,7 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu) {
       // 但是需要注意潜在的类型不匹配和未定义行为 这里 transfer_task_ 是一个基类
       // BaseTransferTask 类型的指针, 而 OnlineTransferTask 是继承自
       // BaseTransferTask 的派生类。可以进行类型转换
-      OnlineTransferTask* online =
-          reinterpret_cast<OnlineTransferTask*>(transfer_task_);
+      OnlineTransferTask* online = reinterpret_cast<OnlineTransferTask*>(transfer_task_);
 
       // 调用OnlineTransferTask类中的 SetSeqNum 成员函数
       // 将消息的序列号（SeqNum）设置给 OnlineTransferTask
@@ -535,18 +531,17 @@ void FileClientConn::_HandleClientFilePullFileReq(CImPdu* pdu) {
     } else {
       // 5-2 离线传输模式
       // （1）离线传输 直接通过当前连接this 发送响应消息
-      SendMessageLite(this, SID_FILE, CID_FILE_PULL_DATA_RSP, pdu->GetSeqNum(),
-                      &pull_data_rsp);
+      SendMessageLite(this, SID_FILE, CID_FILE_PULL_DATA_RSP, pdu->GetSeqNum(), &pull_data_rsp);
 
       // （2）如果传输任务完成 rv == 1 则调用_StatesNotify函数通知状态变化
       if (rv == 1)
-        _StatesNotify(CLIENT_FILE_DONE, task_id, transfer_task_->from_user_id(),
-                      this);
+        _StatesNotify(CLIENT_FILE_DONE, task_id, transfer_task_->from_user_id(), this);
     }
   } while (0);
 
   // 5.如果传输过程中发生任何错误 则会关闭当前连接conn
-  if (rv != 0) Close();
+  if (rv != 0)
+    Close();
 }
 
 /**
@@ -565,8 +560,7 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu) {
   // 2.解析响应数据 通过解析pdu对象的消息体，将数据解析为
   // IM::File::IMFilePullDataRsp 类型的 pull_data_rsp
   IM::File::IMFilePullDataRsp pull_data_rsp;
-  CHECK_PB_PARSE_MSG(
-      pull_data_rsp.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(pull_data_rsp.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
   uint32_t user_id = pull_data_rsp.user_id();     // 用户id
   std::string task_id = pull_data_rsp.task_id();  // 任务id
   uint32_t offset = pull_data_rsp.offset();       // 偏移量offset
@@ -574,15 +568,16 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu) {
   // 由于 data_size 的类型是uint32_t 需要使用static_cast 进行类型转换
   // 确保将字符串长度转换为正确的类型并存储在 data_size 变量中 data_size
   // 会用于处理文件数据的大小，判断是否接收完整数据、计算数据偏移量等
-  uint32_t data_size =
-      static_cast<uint32_t>(pull_data_rsp.file_data().length());  // 数据大小
-  const char* data = pull_data_rsp.file_data().data();  // 数据内容
+  uint32_t data_size = static_cast<uint32_t>(pull_data_rsp.file_data().length());  // 数据大小
+  const char* data = pull_data_rsp.file_data().data();                             // 数据内容
 
   // log_info("Recv FilePullFileRsp, user_id=%d, task_id=%s, file_role=%d,
   // offset=%d, datasize=%d", user_id, task_id.c_str(), mode, offset, datasize);
-  log_info(
-      "Recv FilePullFileRsp, task_id=%s, user_id=%u, offset=%u, data_size=%d",
-      task_id.c_str(), user_id, offset, data_size);
+  log_info("Recv FilePullFileRsp, task_id=%s, user_id=%u, offset=%u, data_size=%d",
+           task_id.c_str(),
+           user_id,
+           offset,
+           data_size);
 
   int rv = -1;
   do {
@@ -593,9 +588,11 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu) {
     //  user_id_ 是 FileClientConn 类的成员变量，表示当前连接的用户ID
     if (user_id != user_id_) {
       log_info(
-          "Received user_id valid, recv_user_id = %d, transfer_task.user_id = "
-          "%d, user_id_ = %d",
-          user_id, transfer_task_->from_user_id(), user_id_);
+        "Received user_id valid, recv_user_id = %d, transfer_task.user_id = "
+        "%d, user_id_ = %d",
+        user_id,
+        transfer_task_->from_user_id(),
+        user_id_);
       break;
     }
 
@@ -605,7 +602,8 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu) {
     // 用于获取当前连接的传输任务的任务标识符 调用了当前连接所关联的传输任务对象
     if (transfer_task_->task_id() != task_id) {
       log_info("Received task_id valid, recv_task_id = %s, this_task_id = %s",
-               task_id.c_str(), transfer_task_->task_id().c_str());
+               task_id.c_str(),
+               transfer_task_->task_id().c_str());
       break;
     }
 
@@ -613,19 +611,20 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu) {
     // DoPullFileRequest函数 如果是在线模式则只是检测状态
     // 如果是离线状态则该函数会将文件数据 存入pull_data_rsp中
     rv = transfer_task_->DoRecvData(user_id, offset, data, data_size);
-    if (rv == -1) break;
+    if (rv == -1)
+      break;
 
     if (transfer_task_->GetTransMode() == FILE_TYPE_ONLINE) {
       // 4-1 对于在线，直接转发
       // （1）设置消息序列号
-      OnlineTransferTask* online =
-          reinterpret_cast<OnlineTransferTask*>(transfer_task_);
+      OnlineTransferTask* online = reinterpret_cast<OnlineTransferTask*>(transfer_task_);
       pdu->SetSeqNum(online->GetSeqNum());
       // online->SetSeqNum(pdu->GetSeqNum());
 
       // （2）直接转发消息给接收方
       CImConn* conn = transfer_task_->GetToConn();
-      if (conn) conn->SendPdu(pdu);
+      if (conn)
+        conn->SendPdu(pdu);
     } else {
       // 4-2 对于离线文件 存入file_server
       if (rv == 1) {
@@ -636,20 +635,16 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu) {
       } else {
         // （2）为传输完成则向 file_server文件服务器 再次发送请求继续拉取数据
         //  类型转换 transfer_task_ -> OfflineTransferTask*
-        OfflineTransferTask* offline =
-            reinterpret_cast<OfflineTransferTask*>(transfer_task_);
+        OfflineTransferTask* offline = reinterpret_cast<OfflineTransferTask*>(transfer_task_);
 
         IM::File::IMFilePullDataReq pull_data_req;
         pull_data_req.set_task_id(task_id);
         pull_data_req.set_user_id(user_id);
-        pull_data_req.set_trans_mode(
-            static_cast<IM::BaseDefine::TransferFileType>(
-                offline->GetTransMode()));
+        pull_data_req.set_trans_mode(static_cast<IM::BaseDefine::TransferFileType>(offline->GetTransMode()));
         pull_data_req.set_offset(offline->GetNextOffset());
         pull_data_req.set_data_size(offline->GetNextSegmentBlockSize());
 
-        ::SendMessageLite(this, SID_FILE, CID_FILE_PULL_DATA_REQ,
-                          &pull_data_req);
+        ::SendMessageLite(this, SID_FILE, CID_FILE_PULL_DATA_REQ, &pull_data_req);
         // log_info("size not match");
       }
     }
@@ -663,8 +658,7 @@ void FileClientConn::_HandleClientFilePullFileRsp(CImPdu* pdu) {
   }
 }
 
-int FileClientConn::_StatesNotify(int state, const std::string& task_id,
-                                  uint32_t user_id, CImConn* conn) {
+int FileClientConn::_StatesNotify(int state, const std::string& task_id, uint32_t user_id, CImConn* conn) {
   FileClientConn* file_client_conn = reinterpret_cast<FileClientConn*>(conn);
 
   IM::File::IMFileState file_msg;
@@ -674,7 +668,6 @@ int FileClientConn::_StatesNotify(int state, const std::string& task_id,
 
   ::SendMessageLite(conn, SID_FILE, CID_FILE_STATE, &file_msg);
 
-  log_info("notify to user %d state %d task %s", user_id, state,
-           task_id.c_str());
+  log_info("notify to user %d state %d task %s", user_id, state, task_id.c_str());
   return 0;
 }

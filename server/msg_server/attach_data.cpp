@@ -8,8 +8,7 @@
 
 #include "attach_data.h"
 
-CDbAttachData::CDbAttachData(uint32_t type, uint32_t handle,
-                             uint32_t service_type /* = 0 */)  // 序列化
+CDbAttachData::CDbAttachData(uint32_t type, uint32_t handle, uint32_t service_type /* = 0 */)  // 序列化
 {
   CByteStream os(&m_buf, 0);
 
@@ -28,8 +27,10 @@ CDbAttachData::CDbAttachData(uchar_t* attach_data,
   is >> m_service_type;
 }
 
-CPduAttachData::CPduAttachData(uint32_t type, uint32_t handle,
-                               uint32_t pduLength, uchar_t* pdu,
+CPduAttachData::CPduAttachData(uint32_t type,
+                               uint32_t handle,
+                               uint32_t pduLength,
+                               uchar_t* pdu,
                                uint32_t service_type)  // 序列化
 {
   CByteStream os(&m_buf, 0);

@@ -94,7 +94,7 @@ build_log4cxx(){
 
     # 源码编译安装
     ./configure --prefix=$CUR_DIR/log4cxx --with-apr=/usr --with-apr-util=/usr
-    make
+    make -j$(nproc)
     make install
 }
 

@@ -19,43 +19,24 @@
 #define LOG_MODULE_SOCKET "SOCKET"
 extern CSLog g_socketlog;
 
-#define __FILENAME__ \
-  (strrchr(__FILE__, '/') ? (strrchr(__FILE__, '/') + 1) : __FILE__)
+#define __FILENAME__ (strrchr(__FILE__, '/') ? (strrchr(__FILE__, '/') + 1) : __FILE__)
 
-#define SOCKET_IO_FATAL(fmt, ...)                                    \
-  {                                                                  \
-    g_socketlog.Fatal("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, \
-                      __FUNCTION__, ##__VA_ARGS__);                  \
-  }
+#define SOCKET_IO_FATAL(fmt, ...) \
+  { g_socketlog.Fatal("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__); }
 
-#define SOCKET_IO_ERROR(fmt, ...)                                    \
-  {                                                                  \
-    g_socketlog.Error("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, \
-                      __FUNCTION__, ##__VA_ARGS__);                  \
-  }
+#define SOCKET_IO_ERROR(fmt, ...) \
+  { g_socketlog.Error("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__); }
 
-#define SOCKET_IO_WARN(fmt, ...)                                    \
-  {                                                                 \
-    g_socketlog.Warn("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, \
-                     __FUNCTION__, ##__VA_ARGS__);                  \
-  }
+#define SOCKET_IO_WARN(fmt, ...) \
+  { g_socketlog.Warn("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__); }
 
-#define SOCKET_IO_INFO(fmt, ...)                                    \
-  {                                                                 \
-    g_socketlog.Info("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, \
-                     __FUNCTION__, ##__VA_ARGS__);                  \
-  }
+#define SOCKET_IO_INFO(fmt, ...) \
+  { g_socketlog.Info("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__); }
 
-#define SOCKET_IO_DEBUG(fmt, ...)                                    \
-  {                                                                  \
-    g_socketlog.Debug("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, \
-                      __FUNCTION__, ##__VA_ARGS__);                  \
-  }
+#define SOCKET_IO_DEBUG(fmt, ...) \
+  { g_socketlog.Debug("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__); }
 
-#define SOCKET_IO_TRACE(fmt, ...)                                    \
-  {                                                                  \
-    g_socketlog.Trace("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, \
-                      __FUNCTION__, ##__VA_ARGS__);                  \
-  }
+#define SOCKET_IO_TRACE(fmt, ...) \
+  { g_socketlog.Trace("<%s>|<%d>|<%s>," fmt, __FILENAME__, __LINE__, __FUNCTION__, ##__VA_ARGS__); }
 
 #endif

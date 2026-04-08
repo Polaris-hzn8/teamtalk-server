@@ -57,8 +57,7 @@ static FILE* OpenByRead(const std::string& task_id, uint32_t user_id) {
   FILE* fp = NULL;
   if (task_id.length() >= 2) {
     char save_path[BUFSIZ];
-    snprintf(save_path, BUFSIZ, "%s/%s/%s", GetCurrentOfflinePath(),
-             task_id.substr(0, 2).c_str(), task_id.c_str());
+    snprintf(save_path, BUFSIZ, "%s/%s/%s", GetCurrentOfflinePath(), task_id.substr(0, 2).c_str(), task_id.c_str());
     fp = fopen(save_path, "rb");  // save fp
     if (!fp) {
       log_info("Open file %s for read failed", save_path);
@@ -72,8 +71,7 @@ static FILE* OpenByWrite(const std::string& task_id, uint32_t user_id) {
   if (task_id.length() >= 2) {
     char save_path[BUFSIZ];
 
-    snprintf(save_path, BUFSIZ, "%s/%s", GetCurrentOfflinePath(),
-             task_id.substr(0, 2).c_str());
+    snprintf(save_path, BUFSIZ, "%s/%s", GetCurrentOfflinePath(), task_id.substr(0, 2).c_str());
     int ret = mkdir(save_path, 0755);
     if ((ret != 0) && (errno != EEXIST)) {
       log_info("Mkdir failed for path: %s", save_path);
@@ -95,15 +93,16 @@ static FILE* OpenByWrite(const std::string& task_id, uint32_t user_id) {
 
 //----------------------------------------------------------------------------
 BaseTransferTask::BaseTransferTask(const std::string& task_id,
-                                   uint32_t from_user_id, uint32_t to_user_id,
+                                   uint32_t from_user_id,
+                                   uint32_t to_user_id,
                                    const std::string& file_name,
                                    uint32_t file_size)
-    : task_id_(task_id),
-      from_user_id_(from_user_id),
-      to_user_id_(to_user_id),
-      file_name_(file_name),
-      file_size_(file_size),
-      state_(kTransferTaskStateReady) {
+  : task_id_(task_id),
+    from_user_id_(from_user_id),
+    to_user_id_(to_user_id),
+    file_name_(file_name),
+    file_size_(file_size),
+    state_(kTransferTaskStateReady) {
   create_time_ = time(NULL);
 
   from_conn_ = NULL;
@@ -141,14 +140,13 @@ bool OnlineTransferTask::ChangePullState(uint32_t user_id, int file_role) {
       break;
     }
 
-    if (state_ != kTransferTaskStateReady &&
-        state_ != kTransferTaskStateWaitingSender &&
+    if (state_ != kTransferTaskStateReady && state_ != kTransferTaskStateWaitingSender &&
         state_ != kTransferTaskStateWaitingReceiver) {
       log_info(
-          "Invalid state, valid state is kTransferTaskStateReady or "
-          "kTransferTaskStateWaitingSender or "
-          "kTransferTaskStateWaitingReceiver, but state is %d",
-          state_);
+        "Invalid state, valid state is kTransferTaskStateReady or "
+        "kTransferTaskStateWaitingSender or "
+        "kTransferTaskStateWaitingReceiver, but state is %d",
+        state_);
       break;
     }
 
@@ -166,16 +164,14 @@ bool OnlineTransferTask::ChangePullState(uint32_t user_id, int file_role) {
         // 此时必须是receiver
         // 需要检查是否是receiver
         if (file_role != CLIENT_REALTIME_RECVER) {
-          log_info("Invalid user, user_id = %d, but to_user_id_ = %d", user_id,
-                   to_user_id_);
+          log_info("Invalid user, user_id = %d, but to_user_id_ = %d", user_id, to_user_id_);
           break;
         }
       } else if (state_ == kTransferTaskStateWaitingSender) {
         // 此时必须是sender
         // 需要检查是否是sender
         if (file_role != CLIENT_REALTIME_SENDER) {
-          log_info("Invalid user, user_id = %d, but to_user_id_ = %d", user_id,
-                   to_user_id_);
+          log_info("Invalid user, user_id = %d, but to_user_id_ = %d", user_id, to_user_id_);
           break;
         }
       }
@@ -190,8 +186,7 @@ bool OnlineTransferTask::ChangePullState(uint32_t user_id, int file_role) {
   return rv;
 }
 
-bool OnlineTransferTask::CheckByUserIDAndFileRole(uint32_t user_id,
-                                                  int file_role) const {
+bool OnlineTransferTask::CheckByUserIDAndFileRole(uint32_t user_id, int file_role) const {
   // 在线文件传输
   // 1. file_role必须是CLIENT_REALTIME_SENDER或CLIENT_REALTIME_RECEIVER
   // 2. CLIENT_REALTIME_SENDER则user_id==from_user_id_
@@ -212,25 +207,23 @@ bool OnlineTransferTask::CheckByUserIDAndFileRole(uint32_t user_id,
   return rv;
 }
 
-int OnlineTransferTask::DoRecvData(uint32_t user_id, uint32_t offset,
-                                   const char* data, uint32_t data_size) {
+int OnlineTransferTask::DoRecvData(uint32_t user_id, uint32_t offset, const char* data, uint32_t data_size) {
   int rv = -1;
 
   do {
     // 检查是否发送者
     if (!CheckFromUserID(user_id)) {
-      log_info("Check error! user_id=%d, from_user_id=%d, to_user_id", user_id,
-               from_user_id_, to_user_id_);
+      log_info("Check error! user_id=%d, from_user_id=%d, to_user_id", user_id, from_user_id_, to_user_id_);
       break;
     }
 
     // 检查状态
-    if (state_ != kTransferTaskStateWaitingTransfer &&
-        state_ != kTransferTaskStateTransfering) {
+    if (state_ != kTransferTaskStateWaitingTransfer && state_ != kTransferTaskStateTransfering) {
       log_info(
-          "Check state_! user_id=%d, state=%d, but state need "
-          "kTransferTaskStateWaitingTransfer or kTransferTaskStateTransfering",
-          user_id, state_);
+        "Check state_! user_id=%d, state=%d, but state need "
+        "kTransferTaskStateWaitingTransfer or kTransferTaskStateTransfering",
+        user_id,
+        state_);
       break;
     }
 
@@ -249,20 +242,18 @@ int OnlineTransferTask::DoRecvData(uint32_t user_id, uint32_t offset,
   return rv;
 }
 
-int OnlineTransferTask::DoPullFileRequest(uint32_t user_id, uint32_t offset,
-                                          uint32_t data_size,
-                                          std::string* data) {
+int OnlineTransferTask::DoPullFileRequest(uint32_t user_id, uint32_t offset, uint32_t data_size, std::string* data) {
   int rv = -1;
 
   // 在线
   do {
     // 1. 检查状态
-    if (state_ != kTransferTaskStateWaitingTransfer &&
-        state_ != kTransferTaskStateTransfering) {
+    if (state_ != kTransferTaskStateWaitingTransfer && state_ != kTransferTaskStateTransfering) {
       log_info(
-          "Check state_! user_id=%d, state=%d, but state need "
-          "kTransferTaskStateWaitingTransfer or kTransferTaskStateTransfering",
-          user_id, state_);
+        "Check state_! user_id=%d, state=%d, but state need "
+        "kTransferTaskStateWaitingTransfer or kTransferTaskStateTransfering",
+        user_id,
+        state_);
       break;
     }
 
@@ -279,8 +270,7 @@ int OnlineTransferTask::DoPullFileRequest(uint32_t user_id, uint32_t offset,
 }
 
 //----------------------------------------------------------------------------
-OfflineTransferTask* OfflineTransferTask::LoadFromDisk(
-    const std::string& task_id, uint32_t user_id) {
+OfflineTransferTask* OfflineTransferTask::LoadFromDisk(const std::string& task_id, uint32_t user_id) {
   OfflineTransferTask* offline = NULL;
 
   FILE* fp = OpenByRead(task_id, user_id);
@@ -291,22 +281,25 @@ OfflineTransferTask* OfflineTransferTask::LoadFromDisk(
       fseek(fp, 0L, SEEK_END);
       size_t file_size = static_cast<size_t>(ftell(fp)) - size;
       if (file_size == file_header.get_file_size()) {
-        offline = new OfflineTransferTask(
-            file_header.get_task_id(), file_header.get_from_user_id(),
-            file_header.get_to_user_id(), file_header.get_file_name(),
-            file_header.get_file_size());
+        offline = new OfflineTransferTask(file_header.get_task_id(),
+                                          file_header.get_from_user_id(),
+                                          file_header.get_to_user_id(),
+                                          file_header.get_file_name(),
+                                          file_header.get_file_size());
         if (offline) {
           offline->set_state(kTransferTaskStateWaitingDownload);
         }
       } else {
         log_info(
-            "Offile file size by task_id=%s, user_id=%u, header_file_size=%u, "
-            "disk_file_size=%u",
-            task_id.c_str(), user_id, file_header.get_file_size(), file_size);
+          "Offile file size by task_id=%s, user_id=%u, header_file_size=%u, "
+          "disk_file_size=%u",
+          task_id.c_str(),
+          user_id,
+          file_header.get_file_size(),
+          file_size);
       }
     } else {
-      log_info("Read file_header error by task_id=%s, user_id=%u",
-               task_id.c_str(), user_id);
+      log_info("Read file_header error by task_id=%s, user_id=%u", task_id.c_str(), user_id);
     }
     fclose(fp);
   }
@@ -345,13 +338,12 @@ bool OfflineTransferTask::ChangePullState(uint32_t user_id, int file_role) {
       break;
     }
 
-    if (state_ != kTransferTaskStateReady &&
-        state_ != kTransferTaskStateUploadEnd &&
+    if (state_ != kTransferTaskStateReady && state_ != kTransferTaskStateUploadEnd &&
         state_ != kTransferTaskStateWaitingDownload) {
       log_info(
-          "Invalid state, valid state is kTransferTaskStateReady or "
-          "kTransferTaskStateUploadEnd, but state is %d",
-          state_);
+        "Invalid state, valid state is kTransferTaskStateReady or "
+        "kTransferTaskStateUploadEnd, but state is %d",
+        state_);
       break;
     }
 
@@ -362,9 +354,9 @@ bool OfflineTransferTask::ChangePullState(uint32_t user_id, int file_role) {
         state_ = kTransferTaskStateWaitingUpload;
       } else {
         log_info(
-            "Offline upload: file_role is CLIENT_OFFLINE_UPLOAD but file_role "
-            "= %d",
-            file_role);
+          "Offline upload: file_role is CLIENT_OFFLINE_UPLOAD but file_role "
+          "= %d",
+          file_role);
         break;
         // state_ = kTransferTaskStateWaitingSender;
       }
@@ -373,9 +365,9 @@ bool OfflineTransferTask::ChangePullState(uint32_t user_id, int file_role) {
         state_ = kTransferTaskStateWaitingDownload;
       } else {
         log_info(
-            "Offline upload: file_role is CLIENT_OFFLINE_DOWNLOAD but "
-            "file_role = %d",
-            file_role);
+          "Offline upload: file_role is CLIENT_OFFLINE_DOWNLOAD but "
+          "file_role = %d",
+          file_role);
         break;
       }
     }
@@ -387,8 +379,7 @@ bool OfflineTransferTask::ChangePullState(uint32_t user_id, int file_role) {
   return rv;
 }
 
-bool OfflineTransferTask::CheckByUserIDAndFileRole(uint32_t user_id,
-                                                   int file_role) const {
+bool OfflineTransferTask::CheckByUserIDAndFileRole(uint32_t user_id, int file_role) const {
   // 离线文件传输
   // 1. file_role必须是CLIENT_OFFLINE_UPLOAD或CLIENT_OFFLINE_DOWNLOAD
   // 2. CLIENT_OFFLINE_UPLOAD则user_id==from_user_id_
@@ -409,8 +400,7 @@ bool OfflineTransferTask::CheckByUserIDAndFileRole(uint32_t user_id,
   return rv;
 }
 
-int OfflineTransferTask::DoRecvData(uint32_t user_id, uint32_t offset,
-                                    const char* data, uint32_t data_size) {
+int OfflineTransferTask::DoRecvData(uint32_t user_id, uint32_t offset, const char* data, uint32_t data_size) {
   // 离线文件上传
 
   int rv = -1;
@@ -423,12 +413,11 @@ int OfflineTransferTask::DoRecvData(uint32_t user_id, uint32_t offset,
     }
 
     // 检查状态
-    if (state_ != kTransferTaskStateWaitingUpload &&
-        state_ != kTransferTaskStateUploading) {
+    if (state_ != kTransferTaskStateWaitingUpload && state_ != kTransferTaskStateUploading) {
       log_info(
-          "state=%d error, need kTransferTaskStateWaitingUpload or "
-          "kTransferTaskStateUploading",
-          state_);
+        "state=%d error, need kTransferTaskStateWaitingUpload or "
+        "kTransferTaskStateUploading",
+        state_);
       break;
     }
 
@@ -444,8 +433,7 @@ int OfflineTransferTask::DoRecvData(uint32_t user_id, uint32_t offset,
     //  检查文件大小
 
     data_size = GetNextSegmentBlockSize();
-    log_info("Ready recv data, offset=%d, data_size=%d, segment_size=%d",
-             offset, data_size, sengment_size_);
+    log_info("Ready recv data, offset=%d, data_size=%d, segment_size=%d", offset, data_size, sengment_size_);
 
     if (state_ == kTransferTaskStateWaitingUpload) {
       if (fp_ == NULL) {
@@ -495,29 +483,26 @@ int OfflineTransferTask::DoRecvData(uint32_t user_id, uint32_t offset,
   return rv;
 }
 
-int OfflineTransferTask::DoPullFileRequest(uint32_t user_id, uint32_t offset,
-                                           uint32_t data_size,
-                                           std::string* data) {
+int OfflineTransferTask::DoPullFileRequest(uint32_t user_id, uint32_t offset, uint32_t data_size, std::string* data) {
   int rv = -1;
 
-  log_info("Recv pull file request: user_id=%d, offset=%d, data_size=%d",
-           user_id, offset, data_size);
+  log_info("Recv pull file request: user_id=%d, offset=%d, data_size=%d", user_id, offset, data_size);
 
   do {
     // 1.
     // 首先检查状态，必须为kTransferTaskStateWaitingDownload或kTransferTaskStateDownloading
-    if (state_ != kTransferTaskStateWaitingDownload &&
-        state_ != kTransferTaskStateDownloading) {
+    if (state_ != kTransferTaskStateWaitingDownload && state_ != kTransferTaskStateDownloading) {
       log_info(
-          "state=%d error, need kTransferTaskStateWaitingDownload or "
-          "kTransferTaskStateDownloading",
-          state_);
+        "state=%d error, need kTransferTaskStateWaitingDownload or "
+        "kTransferTaskStateDownloading",
+        state_);
       break;
     }
 
     // 2. 处理kTransferTaskStateWaitingDownload
     if (state_ == kTransferTaskStateWaitingDownload) {
-      if (transfered_idx_ != 0) transfered_idx_ = 0;
+      if (transfered_idx_ != 0)
+        transfered_idx_ = 0;
 
       if (fp_ != NULL) {
         fclose(fp_);
@@ -534,8 +519,7 @@ int OfflineTransferTask::DoPullFileRequest(uint32_t user_id, uint32_t offset,
       // }
 
       OfflineFileHeader file_header;
-      size_t size =
-          fread(&file_header, 1, sizeof(file_header), fp_);  // read header
+      size_t size = fread(&file_header, 1, sizeof(file_header), fp_);  // read header
       if (sizeof(file_header) != size) {
         // close to ensure next time will read again
         log_info("read file head failed.");
@@ -555,8 +539,7 @@ int OfflineTransferTask::DoPullFileRequest(uint32_t user_id, uint32_t offset,
 
     // 检查offset是否有效
     if (offset != transfered_idx_ * SEGMENT_SIZE) {
-      log_info("Recv offset error, offser=%d, transfered_offset=%d", offset,
-               transfered_idx_ * SEGMENT_SIZE);
+      log_info("Recv offset error, offser=%d, transfered_offset=%d", offset, transfered_idx_ * SEGMENT_SIZE);
       break;
     }
 
@@ -587,8 +570,7 @@ int OfflineTransferTask::DoPullFileRequest(uint32_t user_id, uint32_t offset,
 
     size_t size = fread(tmpbuf, 1, data_size, fp_);
     if (size != data_size) {
-      log_info("Read size error, data_size=%d, but read_size=%d", data_size,
-               size);
+      log_info("Read size error, data_size=%d, but read_size=%d", data_size, size);
       delete[] tmpbuf;
       break;
       //

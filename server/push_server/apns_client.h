@@ -39,9 +39,7 @@ class CAPNSClient : public std::enable_shared_from_this<CAPNSClient> {
   string GetCertPath() { return m_strCertPath; }
   void SetKeyPath(const char* key_path) { m_strKeyPath = key_path; }
   string GetKeyPath() { return m_strKeyPath; }
-  void SetKeyPassword(const char* key_password) {
-    m_strKeyPassword = key_password;
-  }
+  void SetKeyPassword(const char* key_password) { m_strKeyPassword = key_password; }
   string GetKeyPassword() { return m_strKeyPassword; }
   void SetSandBox(BOOL bSandBox) { m_bSandBox = bSandBox; }
   BOOL GetSandBox() { return m_bSandBox; }

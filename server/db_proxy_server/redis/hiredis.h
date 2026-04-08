@@ -107,11 +107,11 @@ extern "C" {
 
 /* This is the reply object returned by redisCommand() */
 typedef struct redisReply {
-  int type;          /* REDIS_REPLY_* */
-  long long integer; /* The integer when type is REDIS_REPLY_INTEGER */
-  int len;           /* Length of string */
-  char* str;       /* Used for both REDIS_REPLY_ERROR and REDIS_REPLY_STRING */
-  size_t elements; /* number of elements, for REDIS_REPLY_ARRAY */
+  int type;                    /* REDIS_REPLY_* */
+  long long integer;           /* The integer when type is REDIS_REPLY_INTEGER */
+  int len;                     /* Length of string */
+  char* str;                   /* Used for both REDIS_REPLY_ERROR and REDIS_REPLY_STRING */
+  size_t elements;             /* number of elements, for REDIS_REPLY_ARRAY */
   struct redisReply** element; /* elements vector for REDIS_REPLY_ARRAY */
 } redisReply;
 
@@ -123,10 +123,8 @@ void freeReplyObject(void* reply);
 /* Functions to format a command according to the protocol. */
 int redisvFormatCommand(char** target, const char* format, va_list ap);
 int redisFormatCommand(char** target, const char* format, ...);
-int redisFormatCommandArgv(char** target, int argc, const char** argv,
-                           const size_t* argvlen);
-int redisFormatSdsCommandArgv(sds* target, int argc, const char** argv,
-                              const size_t* argvlen);
+int redisFormatCommandArgv(char** target, int argc, const char** argv, const size_t* argvlen);
+int redisFormatSdsCommandArgv(sds* target, int argc, const char** argv, const size_t* argvlen);
 void redisFreeCommand(char* cmd);
 void redisFreeSdsCommand(sds cmd);
 
@@ -141,16 +139,12 @@ typedef struct redisContext {
 } redisContext;
 
 redisContext* redisConnect(const char* ip, int port);
-redisContext* redisConnectWithTimeout(const char* ip, int port,
-                                      const struct timeval tv);
+redisContext* redisConnectWithTimeout(const char* ip, int port, const struct timeval tv);
 redisContext* redisConnectNonBlock(const char* ip, int port);
-redisContext* redisConnectBindNonBlock(const char* ip, int port,
-                                       const char* source_addr);
-redisContext* redisConnectBindNonBlockWithReuse(const char* ip, int port,
-                                                const char* source_addr);
+redisContext* redisConnectBindNonBlock(const char* ip, int port, const char* source_addr);
+redisContext* redisConnectBindNonBlockWithReuse(const char* ip, int port, const char* source_addr);
 redisContext* redisConnectUnix(const char* path);
-redisContext* redisConnectUnixWithTimeout(const char* path,
-                                          const struct timeval tv);
+redisContext* redisConnectUnixWithTimeout(const char* path, const struct timeval tv);
 redisContext* redisConnectUnixNonBlock(const char* path);
 redisContext* redisConnectFd(int fd);
 int redisSetTimeout(redisContext* c, const struct timeval tv);
@@ -175,8 +169,7 @@ int redisAppendFormattedCommand(redisContext* c, const char* cmd, size_t len);
  * to get a pipeline of commands. */
 int redisvAppendCommand(redisContext* c, const char* format, va_list ap);
 int redisAppendCommand(redisContext* c, const char* format, ...);
-int redisAppendCommandArgv(redisContext* c, int argc, const char** argv,
-                           const size_t* argvlen);
+int redisAppendCommandArgv(redisContext* c, int argc, const char** argv, const size_t* argvlen);
 
 /* Issue a command to Redis. In a blocking context, it is identical to calling
  * redisAppendCommand, followed by redisGetReply. The function will return
@@ -185,8 +178,7 @@ int redisAppendCommandArgv(redisContext* c, int argc, const char** argv,
  * only redisAppendCommand and will always return NULL. */
 void* redisvCommand(redisContext* c, const char* format, va_list ap);
 void* redisCommand(redisContext* c, const char* format, ...);
-void* redisCommandArgv(redisContext* c, int argc, const char** argv,
-                       const size_t* argvlen);
+void* redisCommandArgv(redisContext* c, int argc, const char** argv, const size_t* argvlen);
 
 #ifdef __cplusplus
 }

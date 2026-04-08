@@ -25,7 +25,8 @@ class CriticalSection {
   ~CriticalSection() { pthread_mutex_destroy(&m_mutex); }
   void Enter() { pthread_mutex_lock(&m_mutex); }
   bool TryEnter() {
-    if (pthread_mutex_trylock(&m_mutex) == 0) return true;
+    if (pthread_mutex_trylock(&m_mutex) == 0)
+      return true;
     return false;
   }
   void Leave() { pthread_mutex_unlock(&m_mutex); }

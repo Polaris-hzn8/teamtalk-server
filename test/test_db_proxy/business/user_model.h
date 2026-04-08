@@ -24,10 +24,8 @@ class CUserModel {
   bool insertUser(DBUserInfo_t& cUser);
   //    void getUserByNick(const list<string>& lsNicks,
   //    list<IM::BaseDefine::UserInfo>& lsUsers);
-  void clearUserCounter(uint32_t nUserId, uint32_t nPeerId,
-                        IM::BaseDefine::SessionType nSessionType);
-  void setCallReport(uint32_t nUserId, uint32_t nPeerId,
-                     IM::BaseDefine::ClientType nClientType);
+  void clearUserCounter(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefine::SessionType nSessionType);
+  void setCallReport(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefine::ClientType nClientType);
 
   bool updateUserSignInfo(uint32_t user_id, const string& sign_info);
   bool getUserSingInfo(uint32_t user_id, string* sign_info);

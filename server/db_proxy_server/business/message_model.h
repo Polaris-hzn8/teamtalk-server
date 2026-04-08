@@ -12,8 +12,8 @@
 #include <list>
 #include <string>
 
-#include "audio_model.h"
 #include "IM.BaseDefine.pb.h"
+#include "audio_model.h"
 #include "im_pdu_base.h"
 #include "util.h"
 using namespace std;
@@ -23,25 +23,36 @@ class CMessageModel {
   virtual ~CMessageModel();
   static CMessageModel* getInstance();
 
-  bool sendMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t nToId,
-                   IM::BaseDefine::MsgType nMsgType, uint32_t nCreateTime,
-                   uint32_t nMsgId, std::string& strMsgContent);
-  bool sendAudioMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t nToId,
-                        IM::BaseDefine::MsgType nMsgType, uint32_t nCreateTime,
-                        uint32_t nMsgId, const char* pMsgContent,
+  bool sendMessage(uint32_t nRelateId,
+                   uint32_t nFromId,
+                   uint32_t nToId,
+                   IM::BaseDefine::MsgType nMsgType,
+                   uint32_t nCreateTime,
+                   uint32_t nMsgId,
+                   std::string& strMsgContent);
+  bool sendAudioMessage(uint32_t nRelateId,
+                        uint32_t nFromId,
+                        uint32_t nToId,
+                        IM::BaseDefine::MsgType nMsgType,
+                        uint32_t nCreateTime,
+                        uint32_t nMsgId,
+                        const char* pMsgContent,
                         uint32_t nMsgLen);
-  void getMessage(uint32_t nUserId, uint32_t nPeerId, uint32_t nMsgId,
-                  uint32_t nMsgCnt, list<IM::BaseDefine::MsgInfo>& lsMsg);
+  void getMessage(
+    uint32_t nUserId, uint32_t nPeerId, uint32_t nMsgId, uint32_t nMsgCnt, list<IM::BaseDefine::MsgInfo>& lsMsg);
   bool clearMessageCount(uint32_t nUserId, uint32_t nPeerId);
 
   uint32_t getMsgId(uint32_t nRelateId);
-  void getUnreadMsgCount(uint32_t nUserId, uint32_t& nTotalCnt,
-                         list<IM::BaseDefine::UnreadInfo>& lsUnreadCount);
-  void getLastMsg(uint32_t nFromId, uint32_t nToId, uint32_t& nMsgId,
-                  string& strMsgData, IM::BaseDefine::MsgType& nMsgType,
+  void getUnreadMsgCount(uint32_t nUserId, uint32_t& nTotalCnt, list<IM::BaseDefine::UnreadInfo>& lsUnreadCount);
+  void getLastMsg(uint32_t nFromId,
+                  uint32_t nToId,
+                  uint32_t& nMsgId,
+                  string& strMsgData,
+                  IM::BaseDefine::MsgType& nMsgType,
                   uint32_t nStatus = 0);
   void getUnReadCntAll(uint32_t nUserId, uint32_t& nTotalCnt);
-  void getMsgByMsgId(uint32_t nUserId, uint32_t nPeerId,
+  void getMsgByMsgId(uint32_t nUserId,
+                     uint32_t nPeerId,
                      const list<uint32_t>& lsMsgId,
                      list<IM::BaseDefine::MsgInfo>& lsMsg);
   bool resetMsgId(uint32_t nRelateId);

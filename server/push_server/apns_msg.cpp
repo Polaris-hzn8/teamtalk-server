@@ -35,22 +35,19 @@ void CAPNSGateWayMsg::WriteHead() {
 BOOL CAPNSGateWayMsg::SerializeToArray() {
   BOOL bRet = FALSE;
   if (m_databuffer.GetWriteOffset() != 0) {
-    PUSH_SERVER_WARN("push msg serialize failed, databuffer offset: %d.",
-                     m_databuffer.GetWriteOffset());
+    PUSH_SERVER_WARN("push msg serialize failed, databuffer offset: %d.", m_databuffer.GetWriteOffset());
     return bRet;
   }
   if (m_strDeviceToken.length() != APNS_DEVICE_TOKEN_HEX_LENGTH) {
-    PUSH_SERVER_WARN(
-        "push msg serialize failed, device token length: %d, token: %s.",
-        m_strDeviceToken.length(), m_strDeviceToken.c_str());
+    PUSH_SERVER_WARN("push msg serialize failed, device token length: %d, token: %s.",
+                     m_strDeviceToken.length(),
+                     m_strDeviceToken.c_str());
     return bRet;
   }
 
   string strPayload = _BuildPayload();
-  if (strPayload.length() > APNS_PAY_LOAD_MAX_LENGTH ||
-      strPayload.length() == 0) {
-    PUSH_SERVER_WARN("push msg serialize failed, payload length: %d.",
-                     strPayload.length());
+  if (strPayload.length() > APNS_PAY_LOAD_MAX_LENGTH || strPayload.length() == 0) {
+    PUSH_SERVER_WARN("push msg serialize failed, payload length: %d.", strPayload.length());
     return bRet;
   }
 
@@ -64,8 +61,7 @@ BOOL CAPNSGateWayMsg::SerializeToArray() {
   char szDeviceToken[APNS_DEVICE_TOKEN_HEX_LENGTH + 1] = {0};
   strcpy(szDeviceToken, m_strDeviceToken.c_str());
   int8_t device_token[APNS_DEVICE_TOKEN_BINARY_LENGTH] = {0};
-  for (uint32_t i = 0, j = 0; i < APNS_DEVICE_TOKEN_BINARY_LENGTH;
-       i++, j += 2) {
+  for (uint32_t i = 0, j = 0; i < APNS_DEVICE_TOKEN_BINARY_LENGTH; i++, j += 2) {
     int8_t binary = 0;
     char tmp[3] = {szDeviceToken[j], szDeviceToken[j + 1], '\0'};
     sscanf(tmp, "%x", &binary);
@@ -104,12 +100,10 @@ BOOL CAPNSGateWayMsg::SerializeToArray() {
   m_databuffer.Write((const char*)&m_cPriority, sizeof(m_cPriority));
 
   __SetTailLength(0);
-  __SetBodyLength(m_databuffer.GetWriteOffset() - GetHeadLength() -
-                  GetTailLength());
+  __SetBodyLength(m_databuffer.GetWriteOffset() - GetHeadLength() - GetTailLength());
   WriteHead();
   bRet = TRUE;
-  PUSH_SERVER_DEBUG("push msg buffer length: %d, payload length: %d.",
-                    GetDataBufferLength(), strPayload.length());
+  PUSH_SERVER_DEBUG("push msg buffer length: %d, payload length: %d.", GetDataBufferLength(), strPayload.length());
   return bRet;
 }
 
@@ -130,8 +124,7 @@ string CAPNSGateWayMsg::_BuildPayload() {
   if (GetLocArgsList().size() != 0) {
     jsonxx::Array loc_args_array;
     const list<string>& loc_args_list = GetLocArgsList();
-    for (list<string>::const_iterator it = loc_args_list.begin();
-         it != loc_args_list.end(); it++) {
+    for (list<string>::const_iterator it = loc_args_list.begin(); it != loc_args_list.end(); it++) {
       loc_args_array << *it;
     }
     alert_obj << "loc-args" << loc_args_list;
@@ -190,9 +183,7 @@ BOOL CAPNSGateWayResMsg::ParseFromArray(const char* buf, uint32_t len) {
   if (CheckMsgAvailable()) {
     memcpy(&m_CommandID, (void*)buf, sizeof(m_CommandID));
     memcpy(&m_Status, (void*)(buf + sizeof(m_CommandID)), sizeof(m_Status));
-    memcpy(&m_NotificationID,
-           (void*)(buf + sizeof(m_CommandID) + sizeof(m_Status)),
-           sizeof(m_NotificationID));
+    memcpy(&m_NotificationID, (void*)(buf + sizeof(m_CommandID) + sizeof(m_Status)), sizeof(m_NotificationID));
     m_NotificationID = ntohl(m_NotificationID);
     bRet = TRUE;
   }
@@ -200,8 +191,7 @@ BOOL CAPNSGateWayResMsg::ParseFromArray(const char* buf, uint32_t len) {
 }
 
 CAPNSFeedBackResMsg::CAPNSFeedBackResMsg() {
-  __SetHeadLength(APNS_FEEDBACK_MSG_TIME_LENGTH +
-                  APNS_FEEDBACK_MSG_TOKEN_LENGTH);
+  __SetHeadLength(APNS_FEEDBACK_MSG_TIME_LENGTH + APNS_FEEDBACK_MSG_TOKEN_LENGTH);
   __SetBodyLength(APNS_FEEDBACK_MSG_TOKEN);
   __SetTailLength(0);
   m_Time = 0;
@@ -230,14 +220,12 @@ BOOL CAPNSFeedBackResMsg::ParseFromArray(const char* buf, uint32_t len) {
   if (CheckMsgAvailable()) {
     memcpy(&m_Time, (void*)buf, sizeof(m_Time));
     m_Time = ntohl(m_Time);
-    memcpy(&m_TokenLength, (void*)(buf + sizeof(m_Time)),
-           sizeof(m_TokenLength));
+    memcpy(&m_TokenLength, (void*)(buf + sizeof(m_Time)), sizeof(m_TokenLength));
     m_TokenLength = ntohs(m_TokenLength);
     uchar_t binary_token[32] = {0};
     char device_token[APNS_DEVICE_TOKEN_HEX_LENGTH + 1] = {0};
     char* p = device_token;
-    memcpy(binary_token, buf + sizeof(m_Time) + sizeof(m_TokenLength),
-           m_TokenLength);
+    memcpy(binary_token, buf + sizeof(m_Time) + sizeof(m_TokenLength), m_TokenLength);
     //需要换算成16进制的字符串表示
     for (uint32_t i = 0; i < APNS_DEVICE_TOKEN_BINARY_LENGTH; i++) {
       snprintf(p, 3, "%2.2hhX", binary_token[i]);

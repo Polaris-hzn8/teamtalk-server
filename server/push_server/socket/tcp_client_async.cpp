@@ -7,7 +7,9 @@ CTCPClientAsync::CTCPClientAsync(CIOLoop* pIO) : CBaseIOStream(pIO) {
   _InitSocket();
 }
 
-CTCPClientAsync::~CTCPClientAsync(void) { ShutDown(); }
+CTCPClientAsync::~CTCPClientAsync(void) {
+  ShutDown();
+}
 
 void CTCPClientAsync::_InitSocket() {
   _SetWaitForClose(FALSE);
@@ -98,8 +100,7 @@ int32_t CTCPClientAsync::SendBufferAsync() {
   }
   CSimpleBuffer* pBufferLoop = m_sendqueue.front();
   m_sendqueuemutex.Unlock();
-  int32_t nRet = S_Send(GetSocket(), (void*)pBufferLoop->GetBuffer(),
-                        pBufferLoop->GetWriteOffset());
+  int32_t nRet = S_Send(GetSocket(), (void*)pBufferLoop->GetBuffer(), pBufferLoop->GetWriteOffset());
   if (nRet < 0) {
 #if (defined(_WIN32) || defined(_WIN64))
     int32_t nError = ::GetLastError();
@@ -123,8 +124,7 @@ int32_t CTCPClientAsync::SendBufferAsync() {
     //将未成功的数据重新放置buffer loop中，待下次发送
     int32_t nSize = 0;
     pBufferLoop->Read(NULL, nRet);
-    SOCKET_IO_DEBUG("send tcp data, send size: %d, less than %d.", nRet,
-                    pBufferLoop->GetWriteOffset());
+    SOCKET_IO_DEBUG("send tcp data, send size: %d, less than %d.", nRet, pBufferLoop->GetWriteOffset());
   } else {
     m_sendqueuemutex.Lock();
     delete pBufferLoop;
@@ -198,8 +198,7 @@ int32_t CTCPClientAsync::SendMsgAsync(const char* szBuf, int32_t nBufSize) {
     m_sendqueuemutex.Unlock();
     //有数据放入待发送队列，则注册为写事件
     m_pio->Add_WriteEvent(this);
-    SOCKET_IO_DEBUG("send tcp data, send size: %d, less than %d.", nRet,
-                    nBufSize);
+    SOCKET_IO_DEBUG("send tcp data, send size: %d, less than %d.", nRet, nBufSize);
   }
   return nErrorCode;
 }
@@ -214,8 +213,7 @@ void CTCPClientAsync::_Close() {
       m_pio->Remove_Handler(this);
     }
     S_CloseSocket(GetSocket());
-    SOCKET_IO_WARN("close socket, sock %d, real sock: %d.", GetSocketID(),
-                   GetSocket());
+    SOCKET_IO_WARN("close socket, sock %d, real sock: %d.", GetSocketID(), GetSocket());
     m_socket = S_INVALID_SOCKET;
     DoClose(GetSocketID());
     _ClearSendBuffer();
@@ -254,12 +252,10 @@ void CTCPClientAsync::OnConnect(BOOL bConnected) {
   //连接完毕，则删除写/错误事件的注册,改成读事件
   m_pio->Remove_WriteEvent(this);
   if (TRUE == bConnected) {
-    SOCKET_IO_INFO("socket connect successed, remote ip: %s, port: %d.",
-                   GetRemoteIP(), GetRemotePort());
+    SOCKET_IO_INFO("socket connect successed, remote ip: %s, port: %d.", GetRemoteIP(), GetRemotePort());
     DoConnect(GetSocketID());
   } else {
-    SOCKET_IO_ERROR("socket connect failed, remote ip: %s, port: %d.",
-                    GetRemoteIP(), GetRemotePort());
+    SOCKET_IO_ERROR("socket connect failed, remote ip: %s, port: %d.", GetRemoteIP(), GetRemotePort());
     DoException(GetSocketID(), SOCKET_IO_TCP_CONNECT_FAILED);
   }
 }

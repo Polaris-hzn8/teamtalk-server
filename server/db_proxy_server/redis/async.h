@@ -54,8 +54,7 @@ typedef struct redisCallbackList {
 } redisCallbackList;
 
 /* Connection callback prototypes */
-typedef void(redisDisconnectCallback)(const struct redisAsyncContext*,
-                                      int status);
+typedef void(redisDisconnectCallback)(const struct redisAsyncContext*, int status);
 typedef void(redisConnectCallback)(const struct redisAsyncContext*, int status);
 
 /* Context for an async connection to Redis */
@@ -103,15 +102,11 @@ typedef struct redisAsyncContext {
 
 /* Functions that proxy to hiredis */
 redisAsyncContext* redisAsyncConnect(const char* ip, int port);
-redisAsyncContext* redisAsyncConnectBind(const char* ip, int port,
-                                         const char* source_addr);
-redisAsyncContext* redisAsyncConnectBindWithReuse(const char* ip, int port,
-                                                  const char* source_addr);
+redisAsyncContext* redisAsyncConnectBind(const char* ip, int port, const char* source_addr);
+redisAsyncContext* redisAsyncConnectBindWithReuse(const char* ip, int port, const char* source_addr);
 redisAsyncContext* redisAsyncConnectUnix(const char* path);
-int redisAsyncSetConnectCallback(redisAsyncContext* ac,
-                                 redisConnectCallback* fn);
-int redisAsyncSetDisconnectCallback(redisAsyncContext* ac,
-                                    redisDisconnectCallback* fn);
+int redisAsyncSetConnectCallback(redisAsyncContext* ac, redisConnectCallback* fn);
+int redisAsyncSetDisconnectCallback(redisAsyncContext* ac, redisDisconnectCallback* fn);
 void redisAsyncDisconnect(redisAsyncContext* ac);
 void redisAsyncFree(redisAsyncContext* ac);
 
@@ -121,15 +116,11 @@ void redisAsyncHandleWrite(redisAsyncContext* ac);
 
 /* Command functions for an async context. Write the command to the
  * output buffer and register the provided callback. */
-int redisvAsyncCommand(redisAsyncContext* ac, redisCallbackFn* fn,
-                       void* privdata, const char* format, va_list ap);
-int redisAsyncCommand(redisAsyncContext* ac, redisCallbackFn* fn,
-                      void* privdata, const char* format, ...);
-int redisAsyncCommandArgv(redisAsyncContext* ac, redisCallbackFn* fn,
-                          void* privdata, int argc, const char** argv,
-                          const size_t* argvlen);
-int redisAsyncFormattedCommand(redisAsyncContext* ac, redisCallbackFn* fn,
-                               void* privdata, const char* cmd, size_t len);
+int redisvAsyncCommand(redisAsyncContext* ac, redisCallbackFn* fn, void* privdata, const char* format, va_list ap);
+int redisAsyncCommand(redisAsyncContext* ac, redisCallbackFn* fn, void* privdata, const char* format, ...);
+int redisAsyncCommandArgv(
+  redisAsyncContext* ac, redisCallbackFn* fn, void* privdata, int argc, const char** argv, const size_t* argvlen);
+int redisAsyncFormattedCommand(redisAsyncContext* ac, redisCallbackFn* fn, void* privdata, const char* cmd, size_t len);
 
 #ifdef __cplusplus
 }

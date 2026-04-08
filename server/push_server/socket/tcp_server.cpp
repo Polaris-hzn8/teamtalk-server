@@ -10,7 +10,9 @@ CTCPServer::CTCPServer(CIOLoop* pIO) : CBaseIOStream(pIO) {
   S_SetReuseAddr(m_socket, TRUE);
 }
 
-CTCPServer::~CTCPServer(void) { Close(); }
+CTCPServer::~CTCPServer(void) {
+  Close();
+}
 
 void CTCPServer::OnAccept() {
   char szIP[32] = {0};
@@ -32,8 +34,7 @@ void CTCPServer::Close() {
       m_pio->Remove_Handler(this);
     }
     S_CloseSocket(GetSocket());
-    SOCKET_IO_WARN("close socket, sock id %d, real sock: %d.", m_sock_id,
-                   m_socket);
+    SOCKET_IO_WARN("close socket, sock id %d, real sock: %d.", m_sock_id, m_socket);
     m_socket = S_INVALID_SOCKET;
     DoClose(GetSocketID());
   }

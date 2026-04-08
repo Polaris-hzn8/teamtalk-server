@@ -18,19 +18,22 @@ CAudioModel::CAudioModel() {}
 CAudioModel::~CAudioModel() {}
 
 CAudioModel* CAudioModel::getInstance() {
-  if (!m_pInstance) m_pInstance = new CAudioModel();
+  if (!m_pInstance)
+    m_pInstance = new CAudioModel();
   return m_pInstance;
 }
 
 // 语音存储地址URL
 void CAudioModel::setUrl(std::string& strFileSite) {
   m_strFileSite = strFileSite;
-  if (m_strFileSite[m_strFileSite.length()] != '/') m_strFileSite += "/";
+  if (m_strFileSite[m_strFileSite.length()] != '/')
+    m_strFileSite += "/";
 }
 
 // 读取语音消息
 bool CAudioModel::readAudios(std::list<IM::BaseDefine::MsgInfo>& lsMsg) {
-  if (lsMsg.empty()) return true;
+  if (lsMsg.empty())
+    return true;
 
   bool bRet = false;
   CDBManager* pDBManger = CDBManager::getInstance();
@@ -38,8 +41,7 @@ bool CAudioModel::readAudios(std::list<IM::BaseDefine::MsgInfo>& lsMsg) {
   if (pDBConn) {
     for (auto it = lsMsg.begin(); it != lsMsg.end();) {
       IM::BaseDefine::MsgType nType = it->msg_type();
-      if ((IM::BaseDefine::MSG_TYPE_GROUP_AUDIO == nType) ||
-          (IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO == nType)) {
+      if ((IM::BaseDefine::MSG_TYPE_GROUP_AUDIO == nType) || (IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO == nType)) {
         std::string strSql = "select * from IMAudio where id=" + it->msg_data();
         CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
         if (pResultSet) {
@@ -77,9 +79,8 @@ bool CAudioModel::readAudios(std::list<IM::BaseDefine::MsgInfo>& lsMsg) {
  * @param nAudioLen     语音消息长度
  * @return int
  */
-int CAudioModel::saveAudioInfo(uint32_t nFromId, uint32_t nToId,
-                               uint32_t nCreateTime, const char* pAudioData,
-                               uint32_t nAudioLen) {
+int CAudioModel::saveAudioInfo(
+  uint32_t nFromId, uint32_t nToId, uint32_t nCreateTime, const char* pAudioData, uint32_t nAudioLen) {
   // parse audio data
   uint32_t nCostTime = CByteStream::ReadUint32((uchar_t*)pAudioData);
   uchar_t* pRealData = (uchar_t*)pAudioData + 4;
@@ -87,17 +88,16 @@ int CAudioModel::saveAudioInfo(uint32_t nFromId, uint32_t nToId,
   int nAudioId = -1;
 
   CHttpClient httpClient;
-  string strPath =
-      httpClient.UploadByteFile(m_strFileSite, pRealData, nRealLen);
+  string strPath = httpClient.UploadByteFile(m_strFileSite, pRealData, nRealLen);
   if (!strPath.empty()) {
     CDBManager* pDBManager = CDBManager::getInstance();
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
     if (pDBConn) {
       uint32_t nStartPos = 0;
       std::string strSql =
-          "insert into IMAudio(`fromId`, `toId`, `path`, `size`, `duration`, "
-          "`created`) "
-          "values(?, ?, ?, ?, ?, ?)";
+        "insert into IMAudio(`fromId`, `toId`, `path`, `size`, `duration`, "
+        "`created`) "
+        "values(?, ?, ?, ?, ?, ?)";
       replace_mark(strSql, nFromId, nStartPos);
       replace_mark(strSql, nToId, nStartPos);
       replace_mark(strSql, strPath, nStartPos);
@@ -130,10 +130,12 @@ int CAudioModel::saveAudioInfo(uint32_t nFromId, uint32_t nToId,
  * @return true
  * @return false
  */
-bool CAudioModel::readAudioContent(uint32_t nCostTime, uint32_t nSize,
+bool CAudioModel::readAudioContent(uint32_t nCostTime,
+                                   uint32_t nSize,
                                    const string& strPath,
                                    IM::BaseDefine::MsgInfo& cMsg) {
-  if (strPath.empty() || nCostTime == 0 || nSize == 0) return false;
+  if (strPath.empty() || nCostTime == 0 || nSize == 0)
+    return false;
 
   uchar_t* pData = new uchar_t[4 + nSize];
 
@@ -151,8 +153,7 @@ bool CAudioModel::readAudioContent(uint32_t nCostTime, uint32_t nSize,
     return false;
   }
 
-  log_info("download_path=%s, data_len=%d", strPath.c_str(),
-           cAudioMsg.data_len);
+  log_info("download_path=%s, data_len=%d", strPath.c_str(), cAudioMsg.data_len);
 
   cMsg.set_msg_data((const char*)cAudioMsg.data, cAudioMsg.data_len);
 

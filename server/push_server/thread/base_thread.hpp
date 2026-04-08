@@ -127,11 +127,13 @@ class CBaseGuard {
  public:
   CBaseGuard(CBaseMutex* lock) {
     m_lock = lock;
-    if (m_lock) m_lock->Lock();
+    if (m_lock)
+      m_lock->Lock();
   }
 
   ~CBaseGuard() {
-    if (m_lock) m_lock->Unlock();
+    if (m_lock)
+      m_lock->Unlock();
   }
 
  private:

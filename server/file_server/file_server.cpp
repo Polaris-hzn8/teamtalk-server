@@ -6,8 +6,8 @@
  brief:
 */
 
-#include "config_file_reader.h"
 #include "IM.BaseDefine.pb.h"
+#include "config_file_reader.h"
 #include "netlib.h"
 #include "version.h"
 
@@ -67,32 +67,27 @@ int main(int argc, char* argv[]) {
 
   CConfigFileReader config_file("file_server.conf");
 
-  char* str_client_listen_ip = config_file.GetConfigName("ClientListenIP");
-  char* str_client_listen_port = config_file.GetConfigName("ClientListenPort");
-  char* str_msg_server_listen_ip =
-      config_file.GetConfigName("MsgServerListenIP");
-  char* str_msg_server_listen_port =
-      config_file.GetConfigName("MsgServerListenPort");
+  std::string str_client_listen_ip = config_file.GetConfigValue("ClientListenIP");
+  std::string str_client_listen_port = config_file.GetConfigValue("ClientListenPort");
+  std::string str_msg_server_listen_ip = config_file.GetConfigValue("MsgServerListenIP");
+  std::string str_msg_server_listen_port = config_file.GetConfigValue("MsgServerListenPort");
 
-  char* str_task_timeout = config_file.GetConfigName("TaskTimeout");
+  uint32_t task_timeout = config_file.GetUint32Value("TaskTimeout", 60);
 
-  if (!str_client_listen_ip || !str_client_listen_port ||
-      !str_msg_server_listen_ip || !str_msg_server_listen_port) {
+  if (str_client_listen_ip.empty() || str_client_listen_port.empty() || str_msg_server_listen_ip.empty() ||
+      str_msg_server_listen_port.empty()) {
     log_info("config item missing, exit... ");
     return -1;
   }
 
-  uint16_t client_listen_port = atoi(str_client_listen_port);
+  uint16_t client_listen_port = config_file.GetUint32Value("ClientListenPort", 0);
+  uint16_t msg_server_listen_port = config_file.GetUint32Value("MsgServerListenPort", 0);
 
-  CStrExplode client_listen_ip_list(str_client_listen_ip, ';');
+  CStrExplode client_listen_ip_list(str_client_listen_ip.c_str(), ';');
   std::list<IM::BaseDefine::IpAddr> q;
   for (uint32_t i = 0; i < client_listen_ip_list.GetItemCnt(); i++) {
-    ConfigUtil::GetInstance()->AddAddress(client_listen_ip_list.GetItem(i),
-                                          client_listen_port);
+    ConfigUtil::GetInstance()->AddAddress(client_listen_ip_list.GetItem(i), client_listen_port);
   }
-
-  uint16_t msg_server_listen_port = atoi(str_msg_server_listen_port);
-  uint32_t task_timeout = atoi(str_task_timeout);
 
   ConfigUtil::GetInstance()->SetTaskTimeout(task_timeout);
 
@@ -101,30 +96,25 @@ int main(int argc, char* argv[]) {
 
   int ret = netlib_init();
 
-  if (ret == NETLIB_ERROR) return ret;
+  if (ret == NETLIB_ERROR)
+    return ret;
 
   for (uint32_t i = 0; i < client_listen_ip_list.GetItemCnt(); i++) {
-    ret = netlib_listen("0.0.0.0", client_listen_port, FileClientConnCallback,
-                        NULL);
+    ret = netlib_listen("0.0.0.0", client_listen_port, FileClientConnCallback, NULL);
     if (ret == NETLIB_ERROR) {
-      printf("listen %s:%d error!!\n", client_listen_ip_list.GetItem(i),
-             client_listen_port);
+      printf("listen %s:%d error!!\n", client_listen_ip_list.GetItem(i), client_listen_port);
       return ret;
     } else {
-      printf("server start listen on %s:%d\n", client_listen_ip_list.GetItem(i),
-             client_listen_port);
+      printf("server start listen on %s:%d\n", client_listen_ip_list.GetItem(i), client_listen_port);
     }
   }
 
-  ret = netlib_listen(str_msg_server_listen_ip, msg_server_listen_port,
-                      FileMsgServerConnCallback, NULL);
+  ret = netlib_listen(str_msg_server_listen_ip.c_str(), msg_server_listen_port, FileMsgServerConnCallback, NULL);
   if (ret == NETLIB_ERROR) {
-    printf("listen %s:%d error!!\n", str_msg_server_listen_ip,
-           msg_server_listen_port);
+    printf("listen %s:%d error!!\n", str_msg_server_listen_ip.c_str(), msg_server_listen_port);
     return ret;
   } else {
-    printf("server start listen on %s:%d\n", str_msg_server_listen_ip,
-           msg_server_listen_port);
+    printf("server start listen on %s:%d\n", str_msg_server_listen_ip.c_str(), msg_server_listen_port);
   }
 
   printf("now enter the event loop...\n");

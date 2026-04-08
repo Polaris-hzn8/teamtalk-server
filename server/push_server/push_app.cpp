@@ -16,7 +16,9 @@
 
 CSLog g_pushlog = CSLog(LOG_MODULE_PUSH);
 
-CPushApp::CPushApp() { m_bInit = FALSE; }
+CPushApp::CPushApp() {
+  m_bInit = FALSE;
+}
 
 CPushApp::~CPushApp() {}
 
@@ -56,39 +58,45 @@ BOOL CPushApp::UnInit() {
 
 BOOL CPushApp::Start() {
   if (m_bInit) {
-    string file_name = "push_server.conf";
+    std::string file_name = "push_server.conf";
     CConfigFileReader config_file(file_name.c_str());
-    char* listen_ip = config_file.GetConfigName("ListenIP");
-    char* str_listen_port = config_file.GetConfigName("ListenPort");
-    char* cert_path = config_file.GetConfigName("CertPath");
-    char* key_path = config_file.GetConfigName("KeyPath");
-    char* key_password = config_file.GetConfigName("KeyPassword");
-    char* sand_box = config_file.GetConfigName("SandBox");
-    if (!listen_ip || !str_listen_port || !cert_path || !key_path ||
-        !sand_box || !key_password) {
-      PUSH_SERVER_ERROR(
-          "push app config file: %s not exist or miss required parameter "
-          "obtained.",
-          file_name.c_str());
+    if (!config_file.IsLoadSuccess()) {
+      PUSH_SERVER_ERROR("push app config file: %s load failed.", file_name.c_str());
       return FALSE;
     }
-    uint32_t nsand_box = atoi(sand_box);
+
+    std::string listen_ip = config_file.GetConfigValue("ListenIP");
+    std::string str_listen_port = config_file.GetConfigValue("ListenPort");
+    std::string cert_path = config_file.GetConfigValue("CertPath");
+    std::string key_path = config_file.GetConfigValue("KeyPath");
+    std::string key_password = config_file.GetConfigValue("KeyPassword");
+    std::string sand_box = config_file.GetConfigValue("SandBox");
+
+    if (listen_ip.empty() || str_listen_port.empty() || cert_path.empty() || key_path.empty() || sand_box.empty() ||
+        key_password.empty()) {
+      PUSH_SERVER_ERROR(
+        "push app config file: %s not exist or miss required parameter "
+        "obtained.",
+        file_name.c_str());
+      return FALSE;
+    }
+
+    uint32_t nsand_box = config_file.GetUint32Value("SandBox", 0);
     if (nsand_box != 1 && nsand_box != 0) {
-      PUSH_SERVER_ERROR(
-          "push app config parameter: sand_box has invaid value: %u.",
-          nsand_box)
+      PUSH_SERVER_ERROR("push app config parameter: sand_box has invaid value: %u.", nsand_box);
       return FALSE;
     }
+
     apns_client_ptr pAPNSClient(new CAPNSClient(m_io));
     pAPNSClient->SetCertPath(cert_path);
     pAPNSClient->SetKeyPath(key_path);
     pAPNSClient->SetKeyPassword(key_password);
-    pAPNSClient->SetSandBox((BOOL)atoi(sand_box));
+    pAPNSClient->SetSandBox(static_cast<BOOL>(nsand_box));
     CSessionManager::GetInstance()->SetAPNSClient(pAPNSClient);
 
     push_server_ptr pPushServer(new CPushServer(m_io));
     pPushServer->SetListenIP(listen_ip);
-    pPushServer->SetPort(atoi(str_listen_port));
+    pPushServer->SetPort(config_file.GetIntValue("ListenPort", 0));
     CSessionManager::GetInstance()->SetPushServer(pPushServer);
 
     m_io.Start();
@@ -115,13 +123,11 @@ BOOL CPushApp::Stop() {
   if (m_bInit) {
     m_io.Stop();
     CSessionManager::GetInstance()->StopCheckPushSession();
-    apns_client_ptr pAPNSClient =
-        CSessionManager::GetInstance()->GetAPNSClient();
+    apns_client_ptr pAPNSClient = CSessionManager::GetInstance()->GetAPNSClient();
     if (pAPNSClient) {
       pAPNSClient->Stop();
     }
-    push_server_ptr pPushServer =
-        CSessionManager::GetInstance()->GetPushServer();
+    push_server_ptr pPushServer = CSessionManager::GetInstance()->GetPushServer();
     if (pPushServer) {
       pPushServer->Stop();
     }

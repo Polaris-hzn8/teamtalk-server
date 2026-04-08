@@ -68,8 +68,7 @@ bool CAudioModel::readAudios(list<IM::BaseDefine::MsgInfo>& lsMsg) {
   if (pDBConn) {
     for (auto it = lsMsg.begin(); it != lsMsg.end();) {
       IM::BaseDefine::MsgType nType = it->msg_type();
-      if ((IM::BaseDefine::MSG_TYPE_GROUP_AUDIO == nType) ||
-          (IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO == nType)) {
+      if ((IM::BaseDefine::MSG_TYPE_GROUP_AUDIO == nType) || (IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO == nType)) {
         string strSql = "select * from IMAudio where id=" + it->msg_data();
         CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
         if (pResultSet) {
@@ -108,9 +107,8 @@ bool CAudioModel::readAudios(list<IM::BaseDefine::MsgInfo>& lsMsg) {
  *
  *  @return 成功返回语音id，失败返回-1
  */
-int CAudioModel::saveAudioInfo(uint32_t nFromId, uint32_t nToId,
-                               uint32_t nCreateTime, const char* pAudioData,
-                               uint32_t nAudioLen) {
+int CAudioModel::saveAudioInfo(
+  uint32_t nFromId, uint32_t nToId, uint32_t nCreateTime, const char* pAudioData, uint32_t nAudioLen) {
   // parse audio data
   uint32_t nCostTime = CByteStream::ReadUint32((uchar_t*)pAudioData);
   uchar_t* pRealData = (uchar_t*)pAudioData + 4;
@@ -118,17 +116,16 @@ int CAudioModel::saveAudioInfo(uint32_t nFromId, uint32_t nToId,
   int nAudioId = -1;
 
   CHttpClient httpClient;
-  string strPath =
-      httpClient.UploadByteFile(m_strFileSite, pRealData, nRealLen);
+  string strPath = httpClient.UploadByteFile(m_strFileSite, pRealData, nRealLen);
   if (!strPath.empty()) {
     CDBManager* pDBManager = CDBManager::getInstance();
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
     if (pDBConn) {
       uint32_t nStartPos = 0;
       string strSql =
-          "insert into IMAudio(`fromId`, `toId`, `path`, `size`, `duration`, "
-          "`created`) "
-          "values(?, ?, ?, ?, ?, ?)";
+        "insert into IMAudio(`fromId`, `toId`, `path`, `size`, `duration`, "
+        "`created`) "
+        "values(?, ?, ?, ?, ?, ?)";
       replace_mark(strSql, nFromId, nStartPos);
       replace_mark(strSql, nToId, nStartPos);
       replace_mark(strSql, strPath, nStartPos);
@@ -161,7 +158,8 @@ int CAudioModel::saveAudioInfo(uint32_t nFromId, uint32_t nToId,
  *
  *  @return 成功返回true，失败返回false
  */
-bool CAudioModel::readAudioContent(uint32_t nCostTime, uint32_t nSize,
+bool CAudioModel::readAudioContent(uint32_t nCostTime,
+                                   uint32_t nSize,
                                    const string& strPath,
                                    IM::BaseDefine::MsgInfo& cMsg) {
   if (strPath.empty() || nCostTime == 0 || nSize == 0) {

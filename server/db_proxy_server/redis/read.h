@@ -109,8 +109,7 @@ int redisReaderGetReply(redisReader* r, void** reply);
 #define redisReplyReaderFree redisReaderFree
 #define redisReplyReaderFeed redisReaderFeed
 #define redisReplyReaderGetReply redisReaderGetReply
-#define redisReplyReaderSetPrivdata(_r, _p) \
-  (int)(((redisReader*)(_r))->privdata = (_p))
+#define redisReplyReaderSetPrivdata(_r, _p) (int)(((redisReader*)(_r))->privdata = (_p))
 #define redisReplyReaderGetObject(_r) (((redisReader*)(_r))->reply)
 #define redisReplyReaderGetError(_r) (((redisReader*)(_r))->errstr)
 

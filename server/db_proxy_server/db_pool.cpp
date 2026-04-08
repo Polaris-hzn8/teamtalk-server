@@ -204,10 +204,14 @@ int CDBConn::Init() {
   mysql_options(m_mysql, MYSQL_OPT_RECONNECT, &reconnect);
   mysql_options(m_mysql, MYSQL_SET_CHARSET_NAME, "utf8mb4");
 
-  if (!mysql_real_connect(m_mysql, m_pDBPool->GetDBServerIP(),
-                          m_pDBPool->GetUsername(), m_pDBPool->GetPasswrod(),
-                          m_pDBPool->GetDBName(), m_pDBPool->GetDBServerPort(),
-                          NULL, 0)) {
+  if (!mysql_real_connect(m_mysql,
+                          m_pDBPool->GetDBServerIP(),
+                          m_pDBPool->GetUsername(),
+                          m_pDBPool->GetPasswrod(),
+                          m_pDBPool->GetDBName(),
+                          m_pDBPool->GetDBServerPort(),
+                          NULL,
+                          0)) {
     log_info("mysql_real_connect failed: %s", mysql_error(m_mysql));
     return 2;
   }
@@ -215,14 +219,15 @@ int CDBConn::Init() {
   return 0;
 }
 
-const char* CDBConn::GetPoolName() { return m_pDBPool->GetPoolName(); }
+const char* CDBConn::GetPoolName() {
+  return m_pDBPool->GetPoolName();
+}
 
 CResultSet* CDBConn::ExecuteQuery(const char* sql_query) {
   mysql_ping(m_mysql);
 
   if (mysql_real_query(m_mysql, sql_query, strlen(sql_query))) {
-    log_info("mysql_real_query failed: %s, sql: %s", mysql_error(m_mysql),
-             sql_query);
+    log_info("mysql_real_query failed: %s, sql: %s", mysql_error(m_mysql), sql_query);
     return NULL;
   }
 
@@ -240,8 +245,7 @@ bool CDBConn::ExecuteUpdate(const char* sql_query) {
   mysql_ping(m_mysql);
 
   if (mysql_real_query(m_mysql, sql_query, strlen(sql_query))) {
-    log_info("mysql_real_query failed: %s, sql: %s", mysql_error(m_mysql),
-             sql_query);
+    log_info("mysql_real_query failed: %s, sql: %s", mysql_error(m_mysql), sql_query);
     return false;
   }
 
@@ -262,13 +266,19 @@ char* CDBConn::EscapeString(const char* content, uint32_t content_len) {
   return m_escape_string;
 }
 
-uint32_t CDBConn::GetInsertId() { return (uint32_t)mysql_insert_id(m_mysql); }
+uint32_t CDBConn::GetInsertId() {
+  return (uint32_t)mysql_insert_id(m_mysql);
+}
 
 //////////////////////////////////////////////////////////////
 // CDBPool
-CDBPool::CDBPool(const char* pool_name, const char* db_server_ip,
-                 uint16_t db_server_port, const char* username,
-                 const char* password, const char* db_name, int max_conn_cnt) {
+CDBPool::CDBPool(const char* pool_name,
+                 const char* db_server_ip,
+                 uint16_t db_server_port,
+                 const char* username,
+                 const char* password,
+                 const char* db_name,
+                 int max_conn_cnt) {
   m_pool_name = pool_name;
   m_db_server_ip = db_server_ip;
   m_db_server_port = db_server_port;
@@ -280,8 +290,7 @@ CDBPool::CDBPool(const char* pool_name, const char* db_server_ip,
 }
 
 CDBPool::~CDBPool() {
-  for (std::list<CDBConn*>::iterator it = m_free_list.begin();
-       it != m_free_list.end(); it++) {
+  for (std::list<CDBConn*>::iterator it = m_free_list.begin(); it != m_free_list.end(); it++) {
     CDBConn* pConn = *it;
     delete pConn;
   }
@@ -299,8 +308,7 @@ int CDBPool::Init() {
     m_free_list.push_back(pDBConn);
   }
 
-  log_info("db pool: %s, size: %d", m_pool_name.c_str(),
-           (int)m_free_list.size());
+  log_info("db pool: %s, size: %d", m_pool_name.c_str(), (int)m_free_list.size());
   return 0;
 }
 
@@ -326,8 +334,7 @@ CDBConn* CDBPool::GetDBConn() {
       } else {
         m_free_list.push_back(pDBConn);
         m_db_cur_conn_cnt++;
-        log_info("new db connection: %s, conn_cnt: %d", m_pool_name.c_str(),
-                 m_db_cur_conn_cnt);
+        log_info("new db connection: %s, conn_cnt: %d", m_pool_name.c_str(), m_db_cur_conn_cnt);
       }
     }
   }
@@ -343,9 +350,11 @@ void CDBPool::RelDBConn(CDBConn* pConn) {
 
   std::list<CDBConn*>::iterator it = m_free_list.begin();
   for (; it != m_free_list.end(); it++)
-    if (*it == pConn) break;
+    if (*it == pConn)
+      break;
 
-  if (it == m_free_list.end()) m_free_list.push_back(pConn);
+  if (it == m_free_list.end())
+    m_free_list.push_back(pConn);
 
   m_free_notify.Signal();
   m_free_notify.Unlock();
@@ -374,9 +383,13 @@ CDBManager* CDBManager::getInstance() {
  */
 int CDBManager::Init() {
   CConfigFileReader config_file("db_proxy_server.conf");
+  if (!config_file.IsLoadSuccess()) {
+    log_info("failed to load db_proxy_server.conf");
+    return 1;
+  }
 
-  char* db_instances = config_file.GetConfigName("DBInstances");
-  if (!db_instances) {
+  std::string db_instances = config_file.GetConfigValue("DBInstances");
+  if (db_instances.empty()) {
     log_info("not configure DBInstances");
     return 1;
   }
@@ -387,34 +400,34 @@ int CDBManager::Init() {
   char username[64];
   char password[64];
   char maxconncnt[64];
-  CStrExplode instances_name(db_instances, ',');
+  CStrExplode instances_name(db_instances.c_str(), ',');
 
   for (uint32_t i = 0; i < instances_name.GetItemCnt(); i++) {
     char* pool_name = instances_name.GetItem(i);
-    snprintf(host, 64, "%s_host", pool_name);
-    snprintf(port, 64, "%s_port", pool_name);
-    snprintf(dbname, 64, "%s_dbname", pool_name);
-    snprintf(username, 64, "%s_username", pool_name);
-    snprintf(password, 64, "%s_password", pool_name);
-    snprintf(maxconncnt, 64, "%s_maxconncnt", pool_name);
+    snprintf(host, sizeof(host), "%s_host", pool_name);
+    snprintf(port, sizeof(port), "%s_port", pool_name);
+    snprintf(dbname, sizeof(dbname), "%s_dbname", pool_name);
+    snprintf(username, sizeof(username), "%s_username", pool_name);
+    snprintf(password, sizeof(password), "%s_password", pool_name);
+    snprintf(maxconncnt, sizeof(maxconncnt), "%s_maxconncnt", pool_name);
 
-    char* db_host = config_file.GetConfigName(host);
-    char* str_db_port = config_file.GetConfigName(port);
-    char* db_dbname = config_file.GetConfigName(dbname);
-    char* db_username = config_file.GetConfigName(username);
-    char* db_password = config_file.GetConfigName(password);
-    char* str_maxconncnt = config_file.GetConfigName(maxconncnt);
+    std::string db_host = config_file.GetConfigValue(host);
+    std::string db_port_str = config_file.GetConfigValue(port);
+    std::string db_dbname = config_file.GetConfigValue(dbname);
+    std::string db_username = config_file.GetConfigValue(username);
+    std::string db_password = config_file.GetConfigValue(password);
+    std::string str_maxconncnt = config_file.GetConfigValue(maxconncnt);
 
-    if (!db_host || !str_db_port || !db_dbname || !db_username ||
-        !db_password || !str_maxconncnt) {
+    if (db_host.empty() || db_port_str.empty() || db_dbname.empty() || db_username.empty() || db_password.empty() ||
+        str_maxconncnt.empty()) {
       log_info("not configure db instance: %s", pool_name);
       return 2;
     }
 
-    int db_port = atoi(str_db_port);
-    int db_maxconncnt = atoi(str_maxconncnt);
-    CDBPool* pDBPool = new CDBPool(pool_name, db_host, db_port, db_username,
-                                   db_password, db_dbname, db_maxconncnt);
+    uint32_t db_port = config_file.GetUint32Value(port, 0);
+    uint32_t db_maxconncnt = config_file.GetUint32Value(maxconncnt, 10);
+    CDBPool* pDBPool = new CDBPool(
+      pool_name, db_host.c_str(), db_port, db_username.c_str(), db_password.c_str(), db_dbname.c_str(), db_maxconncnt);
     if (pDBPool->Init()) {
       log_info("init db instance failed: %s", pool_name);
       return 3;
@@ -434,8 +447,9 @@ CDBConn* CDBManager::GetDBConn(const char* dbpool_name) {
 }
 
 void CDBManager::RelDBConn(CDBConn* pConn) {
-  if (!pConn) return;
-  std::map<std::string, CDBPool*>::iterator it =
-      m_dbpool_map.find(pConn->GetPoolName());
-  if (it != m_dbpool_map.end()) it->second->RelDBConn(pConn);
+  if (!pConn)
+    return;
+  std::map<std::string, CDBPool*>::iterator it = m_dbpool_map.find(pConn->GetPoolName());
+  if (it != m_dbpool_map.end())
+    it->second->RelDBConn(pConn);
 }

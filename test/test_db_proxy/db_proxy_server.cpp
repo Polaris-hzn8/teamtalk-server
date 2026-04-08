@@ -6,14 +6,6 @@
  brief:
 */
 
-#include "cache_pool.h"
-#include "config_file_reader.h"
-#include "db_pool.h"
-#include "enc_dec.h"
-#include "http_client.h"
-#include "proxy_conn.h"
-#include "sync_center.h"
-#include "thread_pool.h"
 #include "business/AudioModel.h"
 #include "business/FileModel.h"
 #include "business/GroupMessageModel.h"
@@ -22,13 +14,20 @@
 #include "business/RelationModel.h"
 #include "business/SessionModel.h"
 #include "business/UserModel.h"
+#include "cache_pool.h"
+#include "config_file_reader.h"
+#include "db_pool.h"
+#include "enc_dec.h"
+#include "http_client.h"
 #include "netlib.h"
+#include "proxy_conn.h"
+#include "sync_center.h"
+#include "thread_pool.h"
 #include "version.h"
 
 string strAudioEnc;
 // this callback will be replaced by imconn_callback() in OnConnect()
-void proxy_serv_callback(void* callback_data, uint8_t msg, uint32_t handle,
-                         void* pParam) {
+void proxy_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   if (msg == NETLIB_MSG_CONNECT) {
     CProxyConn* pConn = new CProxyConn();
     pConn->OnConnect(handle);
@@ -47,16 +46,16 @@ static bool insertUser(DBUserInfo_t& cUser) {
     string strSql;
     if (0 == cUser.nId)
       strSql =
-          "insert into "
-          "IMUser(`salt`,`sex`,`nick`,`password`,`domain`,`name`,`phone`,`"
-          "email`,`avatar`,`sign_info`,`departId`,`status`,`created`,`updated`)"
-          " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "insert into "
+        "IMUser(`salt`,`sex`,`nick`,`password`,`domain`,`name`,`phone`,`"
+        "email`,`avatar`,`sign_info`,`departId`,`status`,`created`,`updated`)"
+        " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     else
       strSql =
-          "insert into "
-          "IMUser(`id`,`salt`,`sex`,`nick`,`password`,`domain`,`name`,`phone`,`"
-          "email`,`avatar`,`sign_info`,`departId`,`status`,`created`,`updated`)"
-          " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        "insert into "
+        "IMUser(`id`,`salt`,`sex`,`nick`,`password`,`domain`,`name`,`phone`,`"
+        "email`,`avatar`,`sign_info`,`departId`,`status`,`created`,`updated`)"
+        " values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     CPrepareStatement* stmt = new CPrepareStatement();
     if (stmt->Init(pDBConn->GetMysql(), strSql)) {
@@ -74,14 +73,14 @@ static bool insertUser(DBUserInfo_t& cUser) {
       CMd5::MD5_Calculate(strUserPass.c_str(), strUserPass.length(),
                           strUserPassMd5);  // 计算MD5后的用户密码
 
-      string strInPass =
-          strUserPassMd5 + int2string(nSalt);  // 计算MD5后的用户密码 + 混淆码
+      string strInPass = strUserPassMd5 + int2string(nSalt);  // 计算MD5后的用户密码 + 混淆码
       char szMd5[33];
       CMd5::MD5_Calculate(strInPass.c_str(), strInPass.length(), szMd5);
       strOutPass = szMd5;
       strSalt = int2string(nSalt);
 
-      if (0 != cUser.nId) stmt->SetParam(index++, cUser.nId);
+      if (0 != cUser.nId)
+        stmt->SetParam(index++, cUser.nId);
 
       stmt->SetParam(index++, strSalt);
       stmt->SetParam(index++, nGender);
@@ -123,15 +122,13 @@ static bool doLogin(const std::string& strName, const std::string& strPass) {
   CDBManager* pDBManger = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManger->GetDBConn("teamtalk_slave");
   if (pDBConn) {
-    string strSql =
-        "select * from IMUser where name='" + strName + "' and status=0";
+    string strSql = "select * from IMUser where name='" + strName + "' and status=0";
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet) {
       bRet = true;
       string strResult, strSalt;
       uint32_t nId, nGender, nDeptId, nStatus;
-      string strNick, strAvatar, strEmail, strRealName, strTel, strDomain,
-          strSignInfo;
+      string strNick, strAvatar, strEmail, strRealName, strTel, strDomain, strSignInfo;
       while (pResultSet->Next()) {
         nId = pResultSet->GetInt("id");
         strResult = pResultSet->GetString("password");
@@ -164,8 +161,10 @@ static bool doLogin(const std::string& strName, const std::string& strPass) {
   return bRet;
 }
 
-static void sendMessage(uint32_t from_user_id, uint32_t to_session_id,
-                        IM::BaseDefine::MsgType msg_type, string& msg_data) {
+static void sendMessage(uint32_t from_user_id,
+                        uint32_t to_session_id,
+                        IM::BaseDefine::MsgType msg_type,
+                        string& msg_data) {
   uint32_t nFromId = from_user_id;
   uint32_t nToId = to_session_id;
   uint32_t nCreateTime = (uint32_t)time(NULL);
@@ -185,19 +184,16 @@ static void sendMessage(uint32_t from_user_id, uint32_t to_session_id,
       CGroupMessageModel* pGroupMsgModel = CGroupMessageModel::getInstance();
       if (nMsgType == IM::BaseDefine::MSG_TYPE_GROUP_TEXT) {
         CGroupModel* pGroupModel = CGroupModel::getInstance();
-        if (pGroupModel->isValidateGroupId(nToId) &&
-            pGroupModel->isInGroup(nFromId, nToId)) {
-          nSessionId = CSessionModel::getInstance()->getSessionId(
-              nFromId, nToId, IM::BaseDefine::SESSION_TYPE_GROUP, false);
+        if (pGroupModel->isValidateGroupId(nToId) && pGroupModel->isInGroup(nFromId, nToId)) {
+          nSessionId =
+            CSessionModel::getInstance()->getSessionId(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_GROUP, false);
           if (INVALID_VALUE == nSessionId) {
-            nSessionId = CSessionModel::getInstance()->addSession(
-                nFromId, nToId, IM::BaseDefine::SESSION_TYPE_GROUP);
+            nSessionId = CSessionModel::getInstance()->addSession(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_GROUP);
           }
           if (nSessionId != INVALID_VALUE) {
             nMsgId = pGroupMsgModel->getMsgId(nToId);
             if (nMsgId != INVALID_VALUE) {
-              pGroupMsgModel->sendMessage(nFromId, nToId, nMsgType, nCreateTime,
-                                          nMsgId, msg_data);
+              pGroupMsgModel->sendMessage(nFromId, nToId, nMsgType, nCreateTime, nMsgId, msg_data);
               CSessionModel::getInstance()->updateSession(nSessionId, nNow);
             }
           }
@@ -208,20 +204,17 @@ static void sendMessage(uint32_t from_user_id, uint32_t to_session_id,
         }
       } else if (nMsgType == IM::BaseDefine::MSG_TYPE_GROUP_AUDIO) {
         CGroupModel* pGroupModel = CGroupModel::getInstance();
-        if (pGroupModel->isValidateGroupId(nToId) &&
-            pGroupModel->isInGroup(nFromId, nToId)) {
-          nSessionId = CSessionModel::getInstance()->getSessionId(
-              nFromId, nToId, IM::BaseDefine::SESSION_TYPE_GROUP, false);
+        if (pGroupModel->isValidateGroupId(nToId) && pGroupModel->isInGroup(nFromId, nToId)) {
+          nSessionId =
+            CSessionModel::getInstance()->getSessionId(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_GROUP, false);
           if (INVALID_VALUE == nSessionId) {
-            nSessionId = CSessionModel::getInstance()->addSession(
-                nFromId, nToId, IM::BaseDefine::SESSION_TYPE_GROUP);
+            nSessionId = CSessionModel::getInstance()->addSession(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_GROUP);
           }
           if (nSessionId != INVALID_VALUE) {
             nMsgId = pGroupMsgModel->getMsgId(nToId);
             if (nMsgId != INVALID_VALUE) {
-              pGroupMsgModel->sendAudioMessage(nFromId, nToId, nMsgType,
-                                               nCreateTime, nMsgId,
-                                               msg_data.c_str(), nMsgLen);
+              pGroupMsgModel->sendAudioMessage(
+                nFromId, nToId, nMsgType, nCreateTime, nMsgId, msg_data.c_str(), nMsgLen);
               CSessionModel::getInstance()->updateSession(nSessionId, nNow);
             }
           }
@@ -232,100 +225,102 @@ static void sendMessage(uint32_t from_user_id, uint32_t to_session_id,
         }
       } else if (nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_TEXT) {
         if (nFromId != nToId) {
-          nSessionId = CSessionModel::getInstance()->getSessionId(
-              nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
+          nSessionId =
+            CSessionModel::getInstance()->getSessionId(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
           if (INVALID_VALUE == nSessionId) {
-            nSessionId = CSessionModel::getInstance()->addSession(
-                nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE);
+            nSessionId = CSessionModel::getInstance()->addSession(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE);
           }
-          nPeerSessionId = CSessionModel::getInstance()->getSessionId(
-              nToId, nFromId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
+          nPeerSessionId =
+            CSessionModel::getInstance()->getSessionId(nToId, nFromId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
           if (INVALID_VALUE == nPeerSessionId) {
-            nSessionId = CSessionModel::getInstance()->addSession(
-                nToId, nFromId, IM::BaseDefine::SESSION_TYPE_SINGLE);
+            nSessionId = CSessionModel::getInstance()->addSession(nToId, nFromId, IM::BaseDefine::SESSION_TYPE_SINGLE);
           }
-          uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(
-              nFromId, nToId, true);
+          uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(nFromId, nToId, true);
           if (nSessionId != INVALID_VALUE && nRelateId != INVALID_VALUE) {
             nMsgId = pMsgModel->getMsgId(nRelateId);
             if (nMsgId != INVALID_VALUE) {
-              pMsgModel->sendMessage(nRelateId, nFromId, nToId, nMsgType,
-                                     nCreateTime, nMsgId, msg_data);
+              pMsgModel->sendMessage(nRelateId, nFromId, nToId, nMsgType, nCreateTime, nMsgId, msg_data);
               CSessionModel::getInstance()->updateSession(nSessionId, nNow);
               CSessionModel::getInstance()->updateSession(nPeerSessionId, nNow);
             } else {
               log_info(
-                  "msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, "
-                  "nSessionId=%u, nMsgType=%u",
-                  nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                "msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, "
+                "nSessionId=%u, nMsgType=%u",
+                nFromId,
+                nToId,
+                nRelateId,
+                nSessionId,
+                nMsgType);
             }
           } else {
             log_info(
-                "sessionId or relateId is invalid. fromId=%u, toId=%u, "
-                "nRelateId=%u, nSessionId=%u, nMsgType=%u",
-                nFromId, nToId, nRelateId, nSessionId, nMsgType);
+              "sessionId or relateId is invalid. fromId=%u, toId=%u, "
+              "nRelateId=%u, nSessionId=%u, nMsgType=%u",
+              nFromId,
+              nToId,
+              nRelateId,
+              nSessionId,
+              nMsgType);
           }
         } else {
-          log_info("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId,
-                   nToId, nMsgType);
+          log_info("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
         }
 
       } else if (nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO) {
         if (nFromId != nToId) {
-          nSessionId = CSessionModel::getInstance()->getSessionId(
-              nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
+          nSessionId =
+            CSessionModel::getInstance()->getSessionId(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
           if (INVALID_VALUE == nSessionId) {
-            nSessionId = CSessionModel::getInstance()->addSession(
-                nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE);
+            nSessionId = CSessionModel::getInstance()->addSession(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE);
           }
-          nPeerSessionId = CSessionModel::getInstance()->getSessionId(
-              nToId, nFromId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
+          nPeerSessionId =
+            CSessionModel::getInstance()->getSessionId(nToId, nFromId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
           if (INVALID_VALUE == nPeerSessionId) {
-            nSessionId = CSessionModel::getInstance()->addSession(
-                nToId, nFromId, IM::BaseDefine::SESSION_TYPE_SINGLE);
+            nSessionId = CSessionModel::getInstance()->addSession(nToId, nFromId, IM::BaseDefine::SESSION_TYPE_SINGLE);
           }
-          uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(
-              nFromId, nToId, true);
+          uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(nFromId, nToId, true);
           if (nSessionId != INVALID_VALUE && nRelateId != INVALID_VALUE) {
             nMsgId = pMsgModel->getMsgId(nRelateId);
             if (nMsgId != INVALID_VALUE) {
-              pMsgModel->sendAudioMessage(nRelateId, nFromId, nToId, nMsgType,
-                                          nCreateTime, nMsgId, msg_data.c_str(),
-                                          nMsgLen);
+              pMsgModel->sendAudioMessage(
+                nRelateId, nFromId, nToId, nMsgType, nCreateTime, nMsgId, msg_data.c_str(), nMsgLen);
               CSessionModel::getInstance()->updateSession(nSessionId, nNow);
               CSessionModel::getInstance()->updateSession(nPeerSessionId, nNow);
             } else {
               log_info(
-                  "msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, "
-                  "nSessionId=%u, nMsgType=%u",
-                  nFromId, nToId, nRelateId, nSessionId, nMsgType);
+                "msgId is invalid. fromId=%u, toId=%u, nRelateId=%u, "
+                "nSessionId=%u, nMsgType=%u",
+                nFromId,
+                nToId,
+                nRelateId,
+                nSessionId,
+                nMsgType);
             }
           } else {
             log_info(
-                "sessionId or relateId is invalid. fromId=%u, toId=%u, "
-                "nRelateId=%u, nSessionId=%u, nMsgType=%u",
-                nFromId, nToId, nRelateId, nSessionId, nMsgType);
+              "sessionId or relateId is invalid. fromId=%u, toId=%u, "
+              "nRelateId=%u, nSessionId=%u, nMsgType=%u",
+              nFromId,
+              nToId,
+              nRelateId,
+              nSessionId,
+              nMsgType);
           }
         } else {
-          log_info("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId,
-                   nToId, nMsgType);
+          log_info("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
         }
       }
 
-      log_info("fromId=%u, toId=%u, type=%u, msgId=%u, sessionId=%u", nFromId,
-               nToId, nMsgType, nMsgId, nSessionId);
+      log_info("fromId=%u, toId=%u, type=%u, msgId=%u, sessionId=%u", nFromId, nToId, nMsgType, nMsgId, nSessionId);
     } else {
-      log_info("msgLen error. fromId=%u, toId=%u, msgType=%u", nFromId, nToId,
-               nMsgType);
+      log_info("msgLen error. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
     }
   } else {
-    log_info("invalid msgType.fromId=%u, toId=%u, msgType=%u", nFromId, nToId,
-             nMsgType);
+    log_info("invalid msgType.fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
   }
 }
 
-static void getLatestMsgId(uint32_t user_id, uint32_t session_id,
-                           IM::BaseDefine::SessionType session_type) {
+static void getLatestMsgId(uint32_t user_id, uint32_t session_id, IM::BaseDefine::SessionType session_type) {
   uint32_t nUserId = user_id;
   IM::BaseDefine::SessionType nType = session_type;
   uint32_t nPeerId = session_id;
@@ -335,21 +330,17 @@ static void getLatestMsgId(uint32_t user_id, uint32_t session_id,
     if (IM::BaseDefine::SESSION_TYPE_SINGLE == nType) {
       string strMsg;
       IM::BaseDefine::MsgType nMsgType;
-      CMessageModel::getInstance()->getLastMsg(nUserId, nPeerId, nMsgId, strMsg,
-                                               nMsgType, 1);
+      CMessageModel::getInstance()->getLastMsg(nUserId, nPeerId, nMsgId, strMsg, nMsgType, 1);
     } else {
       string strMsg;
       IM::BaseDefine::MsgType nMsgType;
       uint32_t nFromId = INVALID_VALUE;
-      CGroupMessageModel::getInstance()->getLastMsg(nPeerId, nMsgId, strMsg,
-                                                    nMsgType, nFromId);
+      CGroupMessageModel::getInstance()->getLastMsg(nPeerId, nMsgId, strMsg, nMsgType, nFromId);
     }
-    log_info("userId=%u, peerId=%u, sessionType=%u, msgId=%u", nUserId, nPeerId,
-             nType, nMsgId);
+    log_info("userId=%u, peerId=%u, sessionType=%u, msgId=%u", nUserId, nPeerId, nType, nMsgId);
 
   } else {
-    log_info("invalid sessionType. userId=%u, peerId=%u, sessionType=%u",
-             nUserId, nPeerId, nType);
+    log_info("invalid sessionType. userId=%u, peerId=%u, sessionType=%u", nUserId, nPeerId, nType);
   }
 }
 
@@ -410,43 +401,42 @@ int main(int argc, char* argv[]) {
 
   CConfigFileReader config_file("dbproxyserver.conf");
 
-  char* listen_ip = config_file.GetConfigName("ListenIP");
-  char* str_listen_port = config_file.GetConfigName("ListenPort");
-  char* str_thread_num = config_file.GetConfigName("ThreadNum");
-  char* str_file_site = config_file.GetConfigName("MsfsSite");
-  char* str_aes_key = config_file.GetConfigName("aesKey");
+  std::string listen_ip = config_file.GetConfigValue("ListenIP");
+  std::string str_listen_port = config_file.GetConfigValue("ListenPort");
+  std::string str_thread_num = config_file.GetConfigValue("ThreadNum");
+  std::string str_file_site = config_file.GetConfigValue("MsfsSite");
+  std::string str_aes_key = config_file.GetConfigValue("aesKey");
 
-  if (!listen_ip || !str_listen_port || !str_thread_num || !str_file_site ||
-      !str_aes_key) {
+  if (listen_ip.empty() || str_listen_port.empty() || str_thread_num.empty() || str_file_site.empty() ||
+      str_aes_key.empty()) {
     log_info("missing ListenIP/ListenPort/ThreadNum/MsfsSite/aesKey, exit...");
     return -1;
   }
 
-  if (strlen(str_aes_key) != 32) {
+  if (str_aes_key.length() != 32) {
     log_info("aes key is invalied");
     return -2;
   }
-  string strAesKey(str_aes_key, 32);
+  std::string strAesKey(str_aes_key);
   CAes cAes = CAes(strAesKey);
-  string strAudio = "[语音]";
+  std::string strAudio = "[语音]";
   char* pAudioEnc;
   uint32_t nOutLen;
-  if (cAes.Encrypt(strAudio.c_str(), strAudio.length(), &pAudioEnc, nOutLen) ==
-      0) {
+  if (cAes.Encrypt(strAudio.c_str(), strAudio.length(), &pAudioEnc, nOutLen) == 0) {
     strAudioEnc.clear();
     strAudioEnc.append(pAudioEnc, nOutLen);
     cAes.Free(pAudioEnc);
   }
 
-  uint16_t listen_port = atoi(str_listen_port);
-  uint32_t thread_num = atoi(str_thread_num);
+  uint16_t listen_port = config_file.GetUint32Value("ListenPort", 0);
+  uint32_t thread_num = config_file.GetUint32Value("ThreadNum", 0);
 
-  string strFileSite(str_file_site);
-  CAudioModel::getInstance()->setUrl(strFileSite);
+  CAudioModel::getInstance()->setUrl(str_file_site);
 
   int ret = netlib_init();
 
-  if (ret == NETLIB_ERROR) return ret;
+  if (ret == NETLIB_ERROR)
+    return ret;
 
   /// yunfan add 2014.9.28
   // for 603 push
@@ -457,11 +447,11 @@ int main(int argc, char* argv[]) {
   CSyncCenter::getInstance()->init();
   CSyncCenter::getInstance()->startSync();
 
-  CStrExplode listen_ip_list(listen_ip, ';');
+  CStrExplode listen_ip_list(listen_ip.c_str(), ';');
   for (uint32_t i = 0; i < listen_ip_list.GetItemCnt(); i++) {
-    ret = netlib_listen(listen_ip_list.GetItem(i), listen_port,
-                        proxy_serv_callback, NULL);
-    if (ret == NETLIB_ERROR) return ret;
+    ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, proxy_serv_callback, NULL);
+    if (ret == NETLIB_ERROR)
+      return ret;
   }
 
   printf("server start listen on: %s:%d\n", listen_ip, listen_port);
@@ -524,13 +514,12 @@ int main(int argc, char* argv[]) {
       }
       if (j % 500 == 0) {
         small_for_end_time = get_tick_count();
-        printf("%d %d register user need time:%lums\n", j, REGISTER_SMALL_FOR,
-               small_for_end_time - small_for_start_time);
+        printf(
+          "%d %d register user need time:%lums\n", j, REGISTER_SMALL_FOR, small_for_end_time - small_for_start_time);
       }
     }
     small_for_end_time = get_tick_count();
-    printf("%d %d register user need time:%lums\n", i, REGISTER_SMALL_FOR,
-           small_for_end_time - small_for_start_time);
+    printf("%d %d register user need time:%lums\n", i, REGISTER_SMALL_FOR, small_for_end_time - small_for_start_time);
     if (!ret) {
       printf("insertUser big for failed\n");
       // break;
@@ -566,8 +555,7 @@ int main(int argc, char* argv[]) {
       }
     }
     small_for_end_time = get_tick_count();
-    printf("%d %d register login need time:%lums\n", i, LOGIN_SMALL_FOR,
-           small_for_end_time - small_for_start_time);
+    printf("%d %d register login need time:%lums\n", i, LOGIN_SMALL_FOR, small_for_end_time - small_for_start_time);
     if (!ret) {
       printf("insertUser failed\n");
       // break;
@@ -575,9 +563,8 @@ int main(int argc, char* argv[]) {
   }
 
   big_for_end_time = get_tick_count();
-  printf("total %d register user need time:%lums\n",
-         LOGIN_BIG_FOR * LOGIN_SMALL_FOR,
-         big_for_end_time - big_for_start_time);
+  printf(
+    "total %d register user need time:%lums\n", LOGIN_BIG_FOR * LOGIN_SMALL_FOR, big_for_end_time - big_for_start_time);
 #endif
 
 #if MSG_TEST
@@ -591,17 +578,14 @@ int main(int argc, char* argv[]) {
     for (int j = 0; j < MSG_SMALL_FOR; j++) {
       user_count++;
       string msg_data = "测试发送消息";
-      sendMessage(user_count, 1, IM::BaseDefine::MSG_TYPE_SINGLE_TEXT,
-                  msg_data);
+      sendMessage(user_count, 1, IM::BaseDefine::MSG_TYPE_SINGLE_TEXT, msg_data);
     }
     small_for_end_time = get_tick_count();
-    printf("%d %d test send need time:%lums\n", i, MSG_SMALL_FOR,
-           small_for_end_time - small_for_start_time);
+    printf("%d %d test send need time:%lums\n", i, MSG_SMALL_FOR, small_for_end_time - small_for_start_time);
   }
 
   big_for_end_time = get_tick_count();
-  printf("total %d test send need time:%lums\n\n", MSG_BIG_FOR * MSG_SMALL_FOR,
-         big_for_end_time - big_for_start_time);
+  printf("total %d test send need time:%lums\n\n", MSG_BIG_FOR * MSG_SMALL_FOR, big_for_end_time - big_for_start_time);
 #endif
 
 #if GET_LAST_MSG_TEST
@@ -618,8 +602,8 @@ int main(int argc, char* argv[]) {
       getLatestMsgId(user_count, 1, IM::BaseDefine::SESSION_TYPE_SINGLE);
     }
     small_for_end_time = get_tick_count();
-    printf("%d %d get last msg need time:%lums\n", i, GET_LAST_MSG_SMALL_FOR,
-           small_for_end_time - small_for_start_time);
+    printf(
+      "%d %d get last msg need time:%lums\n", i, GET_LAST_MSG_SMALL_FOR, small_for_end_time - small_for_start_time);
   }
 
   big_for_end_time = get_tick_count();

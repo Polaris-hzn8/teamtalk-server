@@ -7,8 +7,8 @@
 */
 
 #include "depart_action.h"
-#include "depart_model.h"
 #include "IM.Buddy.pb.h"
+#include "depart_model.h"
 #include "proxy_conn.h"
 
 namespace DB_PROXY {
@@ -47,15 +47,13 @@ void getChgedDepart(CImPdu* pPdu, uint32_t conn_uuid) {
       pDeptInfo->set_parent_dept_id(it->parent_dept_id());
       pDeptInfo->set_dept_status(it->dept_status());
     }
-    log_info("userId=%u, last_update=%u, cnt=%u", nUserId, nLastUpdate,
-             lsDeparts.size());
+    log_info("userId=%u, last_update=%u, cnt=%u", nUserId, nLastUpdate, lsDeparts.size());
 
-    msgResp.set_attach_data(msg.attach_data());             //设置附加消息
-    pPduRes->SetPBMsg(&msgResp);                            //设置消息体
-    pPduRes->SetSeqNum(pPdu->GetSeqNum());                  //设置消息序号
-    pPduRes->SetServiceId(IM::BaseDefine::SID_BUDDY_LIST);  // SetServiceId
-    pPduRes->SetCommandId(
-        IM::BaseDefine::CID_BUDDY_LIST_DEPARTMENT_RESPONSE);  // SetCommandId
+    msgResp.set_attach_data(msg.attach_data());                                 //设置附加消息
+    pPduRes->SetPBMsg(&msgResp);                                                //设置消息体
+    pPduRes->SetSeqNum(pPdu->GetSeqNum());                                      //设置消息序号
+    pPduRes->SetServiceId(IM::BaseDefine::SID_BUDDY_LIST);                      // SetServiceId
+    pPduRes->SetCommandId(IM::BaseDefine::CID_BUDDY_LIST_DEPARTMENT_RESPONSE);  // SetCommandId
 
     // 添加到响应消息队列中
     CProxyConn::AddResponsePdu(conn_uuid, pPduRes);

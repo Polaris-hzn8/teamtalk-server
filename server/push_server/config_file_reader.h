@@ -9,15 +9,26 @@
 #ifndef CONFIGFILEREADER_H_
 #define CONFIGFILEREADER_H_
 
+#include <cstdint>
 #include <map>
 #include <string>
 
 class CConfigFileReader {
  public:
-  CConfigFileReader(const char* filename);
+  explicit CConfigFileReader(const char* filename);
   ~CConfigFileReader();
 
-  char* GetConfigName(const char* name);
+  std::string GetConfigValue(const std::string& name);
+  std::string GetConfigValue(const char* name);
+
+  int GetIntValue(const std::string& name, int default_val = 0);
+  int GetIntValue(const char* name, int default_val = 0);
+  uint32_t GetUint32Value(const std::string& name, uint32_t default_val = 0);
+  uint32_t GetUint32Value(const char* name, uint32_t default_val = 0);
+  bool GetBoolValue(const std::string& name, bool default_val = false);
+  bool GetBoolValue(const char* name, bool default_val = false);
+
+  bool IsLoadSuccess() const { return m_load_ok; }
 
  private:
   void _LoadFile(const char* filename);
@@ -25,7 +36,7 @@ class CConfigFileReader {
   char* _TrimSpace(char* name);
 
   bool m_load_ok;
-  std::map<std::string, std::string>* m_config_map;
+  std::map<std::string, std::string> m_config_map;
 };
 
 #endif /* CONFIGFILEREADER_H_ */

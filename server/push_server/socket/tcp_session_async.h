@@ -63,8 +63,7 @@ class SOCKET_IO_DECLARE_CLASS CTCPSessionAsync : public CBaseIOStream {
  protected:
   BOOL m_bWaitForClose;
 
-  queue<CSimpleBuffer*>
-      m_sendqueue;  //待发送队列，只有非阻塞的TCP socket才会用到
+  queue<CSimpleBuffer*> m_sendqueue;  //待发送队列，只有非阻塞的TCP socket才会用到
   CBaseMutex m_sendqueuemutex;
 };
 

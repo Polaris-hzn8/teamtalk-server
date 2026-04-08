@@ -24,10 +24,9 @@ typedef struct {
 #define S42 10
 #define S43 15
 #define S44 21
-static unsigned char PADDING[64] = {
-    0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+static unsigned char PADDING[64] = {0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                    0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 #define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
 #define G(x, y, z) (((x) & (z)) | ((y) & (~z)))
 #define H(x, y, z) ((x) ^ (y) ^ (z))
@@ -57,8 +56,7 @@ static unsigned char PADDING[64] = {
     (a) = ROTATE_LEFT((a), (s));                        \
     (a) += (b);                                         \
   }
-static void MD5_Encode(unsigned char *output, unsigned int *input,
-                       unsigned int len) {
+static void MD5_Encode(unsigned char* output, unsigned int* input, unsigned int len) {
   unsigned int i, j;
   for (i = 0, j = 0; j < len; i++, j += 4) {
     output[j] = (unsigned char)(input[i] & 0xff);
@@ -67,12 +65,10 @@ static void MD5_Encode(unsigned char *output, unsigned int *input,
     output[j + 3] = (unsigned char)((input[i] >> 24) & 0xff);
   }
 }
-static void MD5_Decode(unsigned int *output, unsigned char *input,
-                       unsigned int len) {
+static void MD5_Decode(unsigned int* output, unsigned char* input, unsigned int len) {
   unsigned int i, j;
   for (i = 0, j = 0; j < len; i++, j += 4) {
-    output[i] = ((unsigned int)input[j]) | (((unsigned int)input[j + 1]) << 8) |
-                (((unsigned int)input[j + 2]) << 16) |
+    output[i] = ((unsigned int)input[j]) | (((unsigned int)input[j + 1]) << 8) | (((unsigned int)input[j + 2]) << 16) |
                 (((unsigned int)input[j + 3]) << 24);
   }
 }
@@ -151,25 +147,24 @@ static void MD5_Transform(unsigned int state[4], unsigned char block[64]) {
   state[1] += b;
   state[2] += c;
   state[3] += d;
-  memset((char *)x, 0, sizeof(x));
+  memset((char*)x, 0, sizeof(x));
 }
-void MD5_Init(MD5Context *context) {
+void MD5_Init(MD5Context* context) {
   context->count[0] = context->count[1] = 0;
   context->state[0] = 0x67452301;
   context->state[1] = 0xefcdab89;
   context->state[2] = 0x98badcfe;
   context->state[3] = 0x10325476;
 }
-void MD5_Update(MD5Context *context, unsigned char *buf, unsigned int len) {
+void MD5_Update(MD5Context* context, unsigned char* buf, unsigned int len) {
   unsigned int i, index, partLen;
   index = (unsigned int)((context->count[0] >> 3) & 0x3F);
-  if ((context->count[0] += ((unsigned int)len << 3)) <
-      ((unsigned int)len << 3))
+  if ((context->count[0] += ((unsigned int)len << 3)) < ((unsigned int)len << 3))
     context->count[1]++;
   context->count[1] += ((unsigned int)len >> 29);
   partLen = 64 - index;
   if (len >= partLen) {
-    memcpy((char *)&context->buffer[index], (char *)buf, partLen);
+    memcpy((char*)&context->buffer[index], (char*)buf, partLen);
     MD5_Transform(context->state, context->buffer);
     for (i = partLen; i + 63 < len; i += 64)
       MD5_Transform(context->state, &buf[i]);
@@ -177,9 +172,9 @@ void MD5_Update(MD5Context *context, unsigned char *buf, unsigned int len) {
   } else {
     i = 0;
   }
-  memcpy((char *)&context->buffer[index], (char *)&buf[i], len - i);
+  memcpy((char*)&context->buffer[index], (char*)&buf[i], len - i);
 }
-void MD5_Final(MD5Context *context, unsigned char digest[16]) {
+void MD5_Final(MD5Context* context, unsigned char digest[16]) {
   unsigned char bits[8];
   unsigned int index, padLen;
   MD5_Encode(bits, context->count, 8);
@@ -188,15 +183,15 @@ void MD5_Final(MD5Context *context, unsigned char digest[16]) {
   MD5_Update(context, PADDING, padLen);
   MD5_Update(context, bits, 8);
   MD5_Encode(digest, context->state, 16);
-  memset((char *)context, 0, sizeof(*context));
+  memset((char*)context, 0, sizeof(*context));
 }
 
-void MD5_Calculate(const char *pContent, unsigned int nLen, char *md5) {
+void MD5_Calculate(const char* pContent, unsigned int nLen, char* md5) {
   MD5Context context;
   unsigned char buff[16];
   int i;
   MD5_Init(&context);
-  MD5_Update(&context, (unsigned char *)pContent, nLen);
+  MD5_Update(&context, (unsigned char*)pContent, nLen);
   MD5_Final(&context, buff);
   for (i = 0; i < 16; i++) {
     sprintf(md5++, "%x", (buff[i] & 0xF0) >> 4);

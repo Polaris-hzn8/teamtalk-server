@@ -29,8 +29,6 @@ class CPostDataParser {
 };
 
 char* PackSendResult(uint32_t error_code, const char* error_msg = "");
-char* PackSendCreateGroupResult(uint32_t error_code, const char* error_msg,
-                                uint32_t group_id);
-char* PackGetUserIdByNickNameResult(
-    uint32_t result, std::list<IM::BaseDefine::UserInfo> user_list);
+char* PackSendCreateGroupResult(uint32_t error_code, const char* error_msg, uint32_t group_id);
+char* PackGetUserIdByNickNameResult(uint32_t result, std::list<IM::BaseDefine::UserInfo> user_list);
 #endif /* HTTPPDU_H_ */

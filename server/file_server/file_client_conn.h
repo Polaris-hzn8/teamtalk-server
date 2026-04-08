@@ -45,8 +45,7 @@ class FileClientConn : public CImConn {
   void _HandleClientFilePullFileReq(CImPdu* pdu);
   void _HandleClientFilePullFileRsp(CImPdu* pdu);
 
-  int _StatesNotify(int state, const std::string& task_id, uint32_t user_id,
-                    CImConn* conn);
+  int _StatesNotify(int state, const std::string& task_id, uint32_t user_id, CImConn* conn);
 
   // bool _IsAuth() const { return auth_; }
 
@@ -64,7 +63,6 @@ class FileClientConn : public CImConn {
 };
 
 void InitializeFileClientConn();
-void FileClientConnCallback(void* callback_data, uint8_t msg, uint32_t handle,
-                            void* param);
+void FileClientConnCallback(void* callback_data, uint8_t msg, uint32_t handle, void* param);
 
 #endif /* defined(FILE_SERVER_FILE_CLIENT_CONN_H_) */

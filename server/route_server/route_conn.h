@@ -37,8 +37,7 @@ class CRouteConn : public CImConn {
   void _BroadcastMsg(CImPdu* pPdu, CRouteConn* pFromConn = NULL);
 
  private:
-  void _UpdateUserStatus(uint32_t user_id, uint32_t status,
-                         uint32_t client_type);
+  void _UpdateUserStatus(uint32_t user_id, uint32_t status, uint32_t client_type);
   void _SendPduToUser(uint32_t user_id, CImPdu* pPdu, bool bAll);
 
  private:

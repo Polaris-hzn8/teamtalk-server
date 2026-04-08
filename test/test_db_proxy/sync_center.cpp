@@ -9,15 +9,15 @@
 #include "sync_center.h"
 #include <stdlib.h>
 #include <sys/signal.h>
-#include "cache_pool.h"
-#include "db_pool.h"
-#include "http_client.h"
-#include "lock.h"
 #include "business/Common.h"
 #include "business/GroupModel.h"
 #include "business/SessionModel.h"
 #include "business/UserModel.h"
+#include "cache_pool.h"
+#include "db_pool.h"
+#include "http_client.h"
 #include "json/json.h"
+#include "lock.h"
 
 static CLock* g_pLock = new CLock();
 static CRWLock* g_pRWDeptLock = new CRWLock();
@@ -41,10 +41,10 @@ CSyncCenter* CSyncCenter::getInstance() {
  *  构造函数
  */
 CSyncCenter::CSyncCenter()
-    : m_nGroupChatThreadId(0),
-      m_nLastUpdateGroup(time(NULL)),
-      m_bSyncGroupChatWaitting(true),
-      m_pLockGroupChat(new CLock())
+  : m_nGroupChatThreadId(0),
+    m_nLastUpdateGroup(time(NULL)),
+    m_bSyncGroupChatWaitting(true),
+    m_pLockGroupChat(new CLock())
 // m_pLock(new CLock())
 {
   m_pCondGroupChat = new CCondition(m_pLockGroupChat);
@@ -187,9 +187,9 @@ void* CSyncCenter::doSyncGroupChat(void* arg) {
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
     if (pDBConn) {
       string strSql =
-          "select id, lastChated from IMGroup where status=0 and lastChated "
-          ">=" +
-          int2string(m_pInstance->getLastUpdateGroup());
+        "select id, lastChated from IMGroup where status=0 and lastChated "
+        ">=" +
+        int2string(m_pInstance->getLastUpdateGroup());
       CResultSet* pResult = pDBConn->ExecuteQuery(strSql.c_str());
       if (pResult) {
         while (pResult->Next()) {
@@ -214,19 +214,17 @@ void* CSyncCenter::doSyncGroupChat(void* arg) {
       for (auto it1 = lsUsers.begin(); it1 != lsUsers.end(); ++it1) {
         uint32_t nUserId = *it1;
         uint32_t nSessionId = INVALID_VALUE;
-        nSessionId = CSessionModel::getInstance()->getSessionId(
-            nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP, true);
+        nSessionId =
+          CSessionModel::getInstance()->getSessionId(nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP, true);
         if (nSessionId != INVALID_VALUE) {
           CSessionModel::getInstance()->updateSession(nSessionId, nUpdate);
         } else {
-          CSessionModel::getInstance()->addSession(
-              nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP);
+          CSessionModel::getInstance()->addSession(nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP);
         }
       }
     }
     //    } while (!m_pInstance->m_pCondSync->waitTime(5*1000));
-  } while (m_pInstance->m_bSyncGroupChatWaitting &&
-           !(m_pInstance->m_pCondGroupChat->waitTime(5 * 1000)));
+  } while (m_pInstance->m_bSyncGroupChatWaitting && !(m_pInstance->m_pCondGroupChat->waitTime(5 * 1000)));
   //    } while(m_pInstance->m_bSyncGroupChatWaitting);
   m_bSyncGroupChatRuning = false;
   return NULL;

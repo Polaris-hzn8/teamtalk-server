@@ -12,7 +12,9 @@ CBaseIOStream::CBaseIOStream(CIOLoop* pio) {
   m_pio = pio;
 }
 
-CBaseIOStream::~CBaseIOStream(void) { Close(); }
+CBaseIOStream::~CBaseIOStream(void) {
+  Close();
+}
 
 BOOL CBaseIOStream::Bind(const char* szIP, uint32_t nPort) const {
   if (S_Bind(m_socket, szIP, nPort) == 0) {
@@ -32,4 +34,6 @@ void CBaseIOStream::Close() {
   }
 }
 
-void CBaseIOStream::ShutDown() { Close(); }
+void CBaseIOStream::ShutDown() {
+  Close();
+}

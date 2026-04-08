@@ -9,9 +9,9 @@
 #ifndef DBSERVCONN_H_
 #define DBSERVCONN_H_
 
+#include "im_conn.h"
 #include "route_serv_conn.h"
 #include "serv_info.h"
-#include "im_conn.h"
 
 class CDBServConn : public CImConn {
  public:
@@ -56,8 +56,7 @@ class CDBServConn : public CImConn {
   uint32_t m_serv_idx;
 };
 
-void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count,
-                       uint32_t concur_conn_cnt);
+void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count, uint32_t concur_conn_cnt);
 CDBServConn* get_db_serv_conn_for_login();
 CDBServConn* get_db_serv_conn();
 

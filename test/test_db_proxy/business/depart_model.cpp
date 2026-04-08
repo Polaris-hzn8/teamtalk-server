@@ -18,13 +18,11 @@ CDepartModel* CDepartModel::getInstance() {
   return m_pInstance;
 }
 
-void CDepartModel::getChgedDeptId(uint32_t& nLastTime,
-                                  list<uint32_t>& lsChangedIds) {
+void CDepartModel::getChgedDeptId(uint32_t& nLastTime, list<uint32_t>& lsChangedIds) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
   if (pDBConn) {
-    string strSql = "select id, updated from IMDepart where updated > " +
-                    int2string(nLastTime);
+    string strSql = "select id, updated from IMDepart where updated > " + int2string(nLastTime);
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet) {
       while (pResultSet->Next()) {
@@ -43,8 +41,7 @@ void CDepartModel::getChgedDeptId(uint32_t& nLastTime,
   }
 }
 
-void CDepartModel::getDepts(list<uint32_t>& lsDeptIds,
-                            list<IM::BaseDefine::DepartInfo>& lsDepts) {
+void CDepartModel::getDepts(list<uint32_t>& lsDeptIds, list<IM::BaseDefine::DepartInfo>& lsDepts) {
   if (lsDeptIds.empty()) {
     log("list is empty");
     return;
@@ -89,8 +86,7 @@ void CDepartModel::getDepts(list<uint32_t>& lsDeptIds,
   }
 }
 
-void CDepartModel::getDept(uint32_t nDeptId,
-                           IM::BaseDefine::DepartInfo& cDept) {
+void CDepartModel::getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
   if (pDBConn) {

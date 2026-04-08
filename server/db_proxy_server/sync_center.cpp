@@ -9,16 +9,16 @@
 #include <stdlib.h>
 #include <sys/signal.h>
 
-#include "cache_pool.h"
-#include "db_pool.h"
-#include "http_client.h"
-#include "lock.h"
-#include "sync_center.h"
 #include "business/Common.h"
 #include "business/GroupModel.h"
 #include "business/SessionModel.h"
 #include "business/UserModel.h"
+#include "cache_pool.h"
+#include "db_pool.h"
+#include "http_client.h"
 #include "json/json.h"
+#include "lock.h"
+#include "sync_center.h"
 
 static CLock* g_pLock = new CLock();
 static CRWLock* g_pRWDeptLock = new CRWLock();
@@ -28,28 +28,32 @@ bool CSyncCenter::m_bSyncGroupChatRuning = false;
 
 CSyncCenter* CSyncCenter::getInstance() {
   CAutoLock autoLock(g_pLock);
-  if (m_pInstance == NULL) m_pInstance = new CSyncCenter();
+  if (m_pInstance == NULL)
+    m_pInstance = new CSyncCenter();
   return m_pInstance;
 }
 
 CSyncCenter::CSyncCenter()
-    : m_nGroupChatThreadId(0),
-      m_nLastUpdateGroup(time(NULL)),
-      m_bSyncGroupChatWaitting(true),
-      m_pLockGroupChat(new CLock())
+  : m_nGroupChatThreadId(0),
+    m_nLastUpdateGroup(time(NULL)),
+    m_bSyncGroupChatWaitting(true),
+    m_pLockGroupChat(new CLock())
 // m_pLock(new CLock())
 {
   m_pCondGroupChat = new CCondition(m_pLockGroupChat);
 }
 
 CSyncCenter::~CSyncCenter() {
-  if (m_pLockGroupChat != NULL) delete m_pLockGroupChat;
-  if (m_pCondGroupChat != NULL) delete m_pCondGroupChat;
+  if (m_pLockGroupChat != NULL)
+    delete m_pLockGroupChat;
+  if (m_pCondGroupChat != NULL)
+    delete m_pCondGroupChat;
 }
 
 void CSyncCenter::getDept(uint32_t nDeptId, DBDeptInfo_t** pDept) {
   auto it = m_pDeptInfo->find(nDeptId);
-  if (it != m_pDeptInfo->end()) *pDept = it->second;
+  if (it != m_pDeptInfo->end())
+    *pDept = it->second;
 }
 
 std::string CSyncCenter::getDeptName(uint32_t nDeptId) {
@@ -57,7 +61,8 @@ std::string CSyncCenter::getDeptName(uint32_t nDeptId) {
   string strDeptName;
   DBDeptInfo_t* pDept = NULL;
   getDept(nDeptId, &pDept);
-  if (pDept != NULL) strDeptName = pDept->strName;
+  if (pDept != NULL)
+    strDeptName = pDept->strName;
   return strDeptName;
 }
 
@@ -74,7 +79,8 @@ void CSyncCenter::startSync() {
 void CSyncCenter::stopSync() {
   m_bSyncGroupChatWaitting = false;
   m_pCondGroupChat->notify();
-  while (m_bSyncGroupChatRuning) usleep(500);
+  while (m_bSyncGroupChatRuning)
+    usleep(500);
 }
 
 // 从cache里面加载上次同步的时间信息等
@@ -145,9 +151,9 @@ void* CSyncCenter::doSyncGroupChat(void* arg) {
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
     if (pDBConn) {
       std::string strSql =
-          "select id, lastChated from IMGroup where status=0 and lastChated "
-          ">=" +
-          int2string(m_pInstance->getLastUpdateGroup());
+        "select id, lastChated from IMGroup where status=0 and lastChated "
+        ">=" +
+        int2string(m_pInstance->getLastUpdateGroup());
       CResultSet* pResult = pDBConn->ExecuteQuery(strSql.c_str());
       if (pResult) {
         while (pResult->Next()) {
@@ -172,19 +178,17 @@ void* CSyncCenter::doSyncGroupChat(void* arg) {
       for (auto it1 = lsUsers.begin(); it1 != lsUsers.end(); ++it1) {
         uint32_t nUserId = *it1;
         uint32_t nSessionId = INVALID_VALUE;
-        nSessionId = CSessionModel::getInstance()->getSessionId(
-            nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP, true);
+        nSessionId =
+          CSessionModel::getInstance()->getSessionId(nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP, true);
         if (nSessionId != INVALID_VALUE) {
           CSessionModel::getInstance()->updateSession(nSessionId, nUpdate);
         } else {
-          CSessionModel::getInstance()->addSession(
-              nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP);
+          CSessionModel::getInstance()->addSession(nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP);
         }
       }
     }
     //    } while (!m_pInstance->m_pCondSync->waitTime(5*1000));
-  } while (m_pInstance->m_bSyncGroupChatWaitting &&
-           !(m_pInstance->m_pCondGroupChat->waitTime(5 * 1000)));
+  } while (m_pInstance->m_bSyncGroupChatWaitting && !(m_pInstance->m_pCondGroupChat->waitTime(5 * 1000)));
   //    } while(m_pInstance->m_bSyncGroupChatWaitting);
   m_bSyncGroupChatRuning = false;
   return NULL;

@@ -8,8 +8,8 @@
 */
 
 #include "server_register.h"
-#include "http_client.h"
 #include "cetcd.h"
+#include "http_client.h"
 #include "json/json.h"
 #include "public_define.h"
 using namespace IM::BaseDefine;
@@ -17,14 +17,13 @@ using namespace std;
 
 static LoginServerRegInfo g_reg_info;
 
-void server_register_timer_callback(void *callback_data, uint8_t msg,
-                                    uint32_t handle, void *pParam) {
+void server_register_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   cetcd_client cli;
-  cetcd_response *resp;
+  cetcd_response* resp;
   cetcd_array addrs;
 
   cetcd_array_init(&addrs, 3);
-  cetcd_array_append(&addrs, (void *)g_reg_info.reg_center_addr.c_str());
+  cetcd_array_append(&addrs, (void*)g_reg_info.reg_center_addr.c_str());
 
   cetcd_client_init(&cli, &addrs);
 
@@ -38,10 +37,8 @@ void server_register_timer_callback(void *callback_data, uint8_t msg,
   int ttl = (g_reg_info.ttl + 1000) / 1000;
   resp = cetcd_set(&cli, strKey.c_str(), strValue.c_str(), ttl);
   if (resp->err) {
-    printf("cetcd_set error :%d, %s (%s)\n", resp->err->ecode,
-           resp->err->message, resp->err->cause);
-    log("cetcd_set error :%d, %s (%s)\n", resp->err->ecode, resp->err->message,
-        resp->err->cause);
+    printf("cetcd_set error :%d, %s (%s)\n", resp->err->ecode, resp->err->message, resp->err->cause);
+    log("cetcd_set error :%d, %s (%s)\n", resp->err->ecode, resp->err->message, resp->err->cause);
     cetcd_response_release(resp);
     cetcd_array_destroy(&addrs);
     cetcd_client_destroy(&cli);
@@ -55,7 +52,7 @@ void server_register_timer_callback(void *callback_data, uint8_t msg,
   cetcd_client_destroy(&cli);
 }
 
-int init_server_register(const LoginServerRegInfo *reg_info) {
+int init_server_register(const LoginServerRegInfo* reg_info) {
   if (reg_info->ttl < 1000) {
     return -1;
   }
@@ -71,18 +68,17 @@ int init_server_register(const LoginServerRegInfo *reg_info) {
   // 第一步，检测service dir是否存在，如果不存在则创建
 
   cetcd_client cli;
-  cetcd_response *resp;
+  cetcd_response* resp;
   cetcd_array addrs;
 
   cetcd_array_init(&addrs, 3);
-  cetcd_array_append(&addrs, (void *)g_reg_info.reg_center_addr.c_str());
+  cetcd_array_append(&addrs, (void*)g_reg_info.reg_center_addr.c_str());
 
   cetcd_client_init(&cli, &addrs);
 
   resp = cetcd_mkdir(&cli, g_reg_info.service_dir.c_str(), 0);
   if (resp->err) {
-    printf("error :%d, %s (%s)\n", resp->err->ecode, resp->err->message,
-           resp->err->cause);
+    printf("error :%d, %s (%s)\n", resp->err->ecode, resp->err->message, resp->err->cause);
   }
   cetcd_response_print(resp);
 
@@ -96,10 +92,8 @@ int init_server_register(const LoginServerRegInfo *reg_info) {
   int ttl = (g_reg_info.ttl + 1000) / 1000;
   resp = cetcd_set(&cli, strKey.c_str(), strValue.c_str(), ttl);
   if (resp->err) {
-    printf("cetcd_set error :%d, %s (%s)\n", resp->err->ecode,
-           resp->err->message, resp->err->cause);
-    log("cetcd_set error :%d, %s (%s)\n", resp->err->ecode, resp->err->message,
-        resp->err->cause);
+    printf("cetcd_set error :%d, %s (%s)\n", resp->err->ecode, resp->err->message, resp->err->cause);
+    log("cetcd_set error :%d, %s (%s)\n", resp->err->ecode, resp->err->message, resp->err->cause);
     cetcd_response_release(resp);
     cetcd_array_destroy(&addrs);
     cetcd_client_destroy(&cli);

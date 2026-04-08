@@ -12,14 +12,14 @@
 
 #include <iostream>
 #include <vector>
+#include "IM.BaseDefine.pb.h"
+#include "IM.Buddy.pb.h"
 #include "client.h"
 #include "client_conn.h"
 #include "common.h"
-#include "IM.BaseDefine.pb.h"
-#include "IM.Buddy.pb.h"
+#include "netlib.h"
 #include "thread.h"
 #include "token_validator.h"
-#include "netlib.h"
 using namespace std;
 
 #define MAX_LINE_LEN 1024
@@ -40,21 +40,26 @@ int Split(const char* src, char* delim, IString* istr)  // split buf
 
   (*istr).num = 1;
   str = (char*)calloc(strlen(src) + 1, sizeof(char));
-  if (str == NULL) return 0;
+  if (str == NULL)
+    return 0;
   (*istr).str = (char**)calloc(1, sizeof(char*));
-  if ((*istr).str == NULL) return 0;
+  if ((*istr).str == NULL)
+    return 0;
   strcpy(str, src);
 
   p = strtok(str, delim);
   (*istr).str[0] = (char*)calloc(strlen(p) + 1, sizeof(char));
-  if ((*istr).str[0] == NULL) return 0;
+  if ((*istr).str[0] == NULL)
+    return 0;
   strcpy((*istr).str[0], p);
   for (i = 1; p = strtok(NULL, delim); i++) {
     (*istr).num++;
     (*istr).str = (char**)realloc((*istr).str, (i + 1) * sizeof(char*));
-    if ((*istr).str == NULL) return 0;
+    if ((*istr).str == NULL)
+      return 0;
     (*istr).str[i] = (char*)calloc(strlen(p) + 1, sizeof(char));
-    if ((*istr).str[0] == NULL) return 0;
+    if ((*istr).str[0] == NULL)
+      return 0;
     strcpy((*istr).str[i], p);
   }
   free(str);
@@ -97,8 +102,7 @@ void print_help() {
 
 void doLogin(const string& strName, const string& strPass) {
   try {
-    g_pClient =
-        new CClient(strName, strPass, g_login_domain);  // 只能对应一个客户端
+    g_pClient = new CClient(strName, strPass, g_login_domain);  // 只能对应一个客户端
   } catch (...) {
     printf("get error while alloc memory\n");
     PROMPTION;
@@ -111,15 +115,13 @@ void exec_cmd() {
     return;
   }
 
-  if (g_pClient && !g_pClient->isLogin() &&
-      g_cmd_string[0] != "quit")  // 连接超时的时候需要重新登录
+  if (g_pClient && !g_pClient->isLogin() && g_cmd_string[0] != "quit")  // 连接超时的时候需要重新登录
   {
     printf("wait the login result\n");
     return;
   }
 
-  if ((g_cmd_string[0] != "login" && g_cmd_string[0] != "quit") &&
-      (NULL == g_pClient || !g_pClient->isLogin())) {
+  if ((g_cmd_string[0] != "login" && g_cmd_string[0] != "quit") && (NULL == g_pClient || !g_pClient->isLogin())) {
     printf("please login.\n");
     printf("like:login darren 123456\n");
     printf("like:login king 123456\n");
@@ -140,9 +142,8 @@ void exec_cmd() {
     }
   } else if (strcmp(g_cmd_string[0].c_str(), "send") == 0) {
     if (g_cmd_num == 4) {
-      g_pClient->sendMsg(atoi(g_cmd_string[1].c_str()),
-                         IM::BaseDefine::MsgType(atoi(g_cmd_string[2].c_str())),
-                         g_cmd_string[3]);
+      g_pClient->sendMsg(
+        atoi(g_cmd_string[1].c_str()), IM::BaseDefine::MsgType(atoi(g_cmd_string[2].c_str())), g_cmd_string[3]);
     }
   } else if (strcmp(g_cmd_string[0].c_str(), "register") == 0) {
     if (g_cmd_num == 3) {
@@ -159,7 +160,8 @@ void exec_cmd() {
           lsUserId.push_back(atoi(istr.str[i]));
         }
         // when you don't ues it,you must to free memory.
-        for (int i = 0; i < istr.num; i++) free(istr.str[i]);
+        for (int i = 0; i < istr.num; i++)
+          free(istr.str[i]);
         free(istr.str);
         g_pClient->getUserInfo(lsUserId);
       } else {
@@ -237,7 +239,8 @@ int main(int argc, char* argv[]) {
 
   int ret = netlib_init();
 
-  if (ret == NETLIB_ERROR) return ret;
+  if (ret == NETLIB_ERROR)
+    return ret;
 
   netlib_eventloop();  // 客户端 netlib只负责网络数据的收发
 

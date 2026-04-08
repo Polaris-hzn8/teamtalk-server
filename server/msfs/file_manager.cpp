@@ -33,9 +33,10 @@ int FileManager::initDir() {
     u64 ret = File::mkdirNoRecursion(m_disk);
     if (ret) {
       log_info(
-          "The dir[%s] set error for code[%d], \
+        "The dir[%s] set error for code[%d], \
 				    its parent dir may no exists",
-          m_disk, ret);
+        m_disk,
+        ret);
       return -1;
     }
   }
@@ -81,17 +82,14 @@ string FileManager::createFileRelatePath() {
   u64 tid = (u64)pthread_self();
   char unique[40];
   snprintf(unique, 30, "%llu_%llu", usec, tid);
-  string path =
-      "/" + string(first) + "/" + string(second) + "/" + string(unique);
+  string path = "/" + string(first) + "/" + string(second) + "/" + string(unique);
   return string(path);
 }
 
-int FileManager::uploadFile(const char* type, const void* content, u32 size,
-                            char* url, char* ext) {
+int FileManager::uploadFile(const char* type, const void* content, u32 size, char* url, char* ext) {
   // check file size
   if (size > MAX_FILE_SIZE_PER_FILE) {
-    log_info("File size[%d] should less than [%d]", size,
-             MAX_FILE_SIZE_PER_FILE);
+    log_info("File size[%d] should less than [%d]", size, MAX_FILE_SIZE_PER_FILE);
     return -1;
   }
 
@@ -149,8 +147,7 @@ int FileManager::getAbsPathByUrl(const string& url, string& path) {
   return 0;
 }
 
-FileManager::Entry* FileManager::getOrCreateEntry(const std::string& url,
-                                                  bool create) {
+FileManager::Entry* FileManager::getOrCreateEntry(const std::string& url, bool create) {
   m_cs.Enter();
   EntryMap::iterator it = m_map.find(url);
   if (it != m_map.end()) {
@@ -248,11 +245,11 @@ void FileManager::updateMapCache() {
   }
 }
 
-int FileManager::insertEntry(const std::string& url, size_t fileSize,
-                             const void* content) {
+int FileManager::insertEntry(const std::string& url, size_t fileSize, const void* content) {
   if (m_map.size()) {
     EntryMap::iterator it = m_map.find(url);
-    if (it != m_map.end()) return -1;
+    if (it != m_map.end())
+      return -1;
   }
   Entry* e = new Entry();
   e->m_fileSize = fileSize;

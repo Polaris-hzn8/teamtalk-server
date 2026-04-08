@@ -7,13 +7,12 @@
 */
 
 #include "config_file_reader.h"
-#include "route_conn.h"
 #include "netlib.h"
+#include "route_conn.h"
 #include "version.h"
 
 // this callback will be replaced by imconn_callback() in OnConnect()
-void route_serv_callback(void* callback_data, uint8_t msg, uint32_t handle,
-                         void* pParam) {
+void route_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   if (msg == NETLIB_MSG_CONNECT) {
     CRouteConn* pConn = new CRouteConn();
     pConn->OnConnect(handle);
@@ -34,26 +33,27 @@ int main(int argc, char* argv[]) {
 
   CConfigFileReader config_file("route_server.conf");
 
-  char* listen_ip = config_file.GetConfigName("ListenIP");
-  char* str_listen_msg_port = config_file.GetConfigName("ListenMsgPort");
-  if (!listen_ip || !str_listen_msg_port) {
+  std::string listen_ip = config_file.GetConfigValue("ListenIP");
+  std::string str_listen_msg_port = config_file.GetConfigValue("ListenMsgPort");
+  if (listen_ip.empty() || str_listen_msg_port.empty()) {
     log_info("config item missing, exit... ");
     return -1;
   }
 
-  uint16_t listen_msg_port = atoi(str_listen_msg_port);
+  uint16_t listen_msg_port = config_file.GetUint32Value("ListenMsgPort", 0);
 
   int ret = netlib_init();
-  if (ret == NETLIB_ERROR) return ret;
+  if (ret == NETLIB_ERROR)
+    return ret;
 
-  CStrExplode listen_ip_list(listen_ip, ';');
+  CStrExplode listen_ip_list(listen_ip.c_str(), ';');
   for (uint32_t i = 0; i < listen_ip_list.GetItemCnt(); i++) {
-    ret = netlib_listen(listen_ip_list.GetItem(i), listen_msg_port,
-                        route_serv_callback, NULL);
-    if (ret == NETLIB_ERROR) return ret;
+    ret = netlib_listen(listen_ip_list.GetItem(i), listen_msg_port, route_serv_callback, NULL);
+    if (ret == NETLIB_ERROR)
+      return ret;
   }
 
-  printf("server start listen on: %s:%d\n", listen_ip, listen_msg_port);
+  printf("server start listen on: %s:%d\n", listen_ip.c_str(), listen_msg_port);
 
   init_routeconn_timer_callback();
 

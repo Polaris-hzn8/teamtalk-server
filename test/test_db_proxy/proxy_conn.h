@@ -33,7 +33,7 @@ class CProxyConn : public CImConn {
   void HandlePduBuf(uchar_t* pdu_buf, uint32_t pdu_len);
 
   static void AddResponsePdu(uint32_t conn_uuid, CImPdu* pPdu);  // 工作线程调用
-  static void SendResponsePduList();  // 主线程调用
+  static void SendResponsePduList();                             // 主线程调用
  private:
   // 由于处理请求和发送回复在两个线程，socket的handle可能重用，所以需要用一个一直增加的uuid来表示一个连接
   static uint32_t s_uuid_alloctor;

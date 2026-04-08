@@ -67,9 +67,13 @@ void CByteStream::WriteUint32(uchar_t* buf, uint32_t data) {
   buf[3] = static_cast<uchar_t>(data & 0xFF);
 }
 
-void CByteStream::operator<<(int8_t data) { _WriteByte(&data, 1); }
+void CByteStream::operator<<(int8_t data) {
+  _WriteByte(&data, 1);
+}
 
-void CByteStream::operator<<(uint8_t data) { _WriteByte(&data, 1); }
+void CByteStream::operator<<(uint8_t data) {
+  _WriteByte(&data, 1);
+}
 
 void CByteStream::operator<<(int16_t data) {
   unsigned char buf[2];
@@ -103,9 +107,13 @@ void CByteStream::operator<<(uint32_t data) {
   _WriteByte(buf, 4);
 }
 
-void CByteStream::operator>>(int8_t& data) { _ReadByte(&data, 1); }
+void CByteStream::operator>>(int8_t& data) {
+  _ReadByte(&data, 1);
+}
 
-void CByteStream::operator>>(uint8_t& data) { _ReadByte(&data, 1); }
+void CByteStream::operator>>(uint8_t& data) {
+  _ReadByte(&data, 1);
+}
 
 void CByteStream::operator>>(int16_t& data) {
   unsigned char buf[2];
@@ -184,7 +192,8 @@ uchar_t* CByteStream::ReadData(uint32_t& len) {
 }
 
 void CByteStream::_ReadByte(void* buf, uint32_t len) {
-  if (m_pos + len > m_len) return;
+  if (m_pos + len > m_len)
+    return;
 
   if (m_pSimpBuf)
     m_pSimpBuf->Read((char*)buf, len);
@@ -195,7 +204,8 @@ void CByteStream::_ReadByte(void* buf, uint32_t len) {
 }
 
 void CByteStream::_WriteByte(void* buf, uint32_t len) {
-  if (m_pBuf && (m_pos + len > m_len)) return;
+  if (m_pBuf && (m_pos + len > m_len))
+    return;
 
   if (m_pSimpBuf)
     m_pSimpBuf->Write((char*)buf, len);

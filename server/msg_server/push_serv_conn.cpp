@@ -23,14 +23,12 @@ static CPushServConn* g_master_push_conn = NULL;
 static serv_info_t* g_push_server_list = NULL;
 static uint32_t g_push_server_count = 0;  // 到PushServer的总连接数
 
-static void push_server_conn_timer_callback(void* callback_data, uint8_t msg,
-                                            uint32_t handle, void* pParam) {
+static void push_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ConnMap_t::iterator it_old;
   CPushServConn* pConn = NULL;
   uint64_t cur_time = get_tick_count();
 
-  for (ConnMap_t::iterator it = g_push_server_conn_map.begin();
-       it != g_push_server_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_push_server_conn_map.begin(); it != g_push_server_conn_map.end();) {
     it_old = it;
     it++;
 
@@ -62,8 +60,7 @@ void build_ios_push_flash(string& flash, uint32_t msg_type, uint32_t from_id) {
 
   string comm_flash = "您收到了一条消息";
   // 如果是带有图片链接的话，将消息体改变
-  if (pos_prefix != string::npos && pos_suffix != string::npos &&
-      pos_prefix < pos_suffix) {
+  if (pos_prefix != string::npos && pos_suffix != string::npos && pos_prefix < pos_suffix) {
     flash = comm_flash;
   } else {
     CImUser* pImUser = CImUserManager::GetInstance()->GetImUserById(from_id);
@@ -101,17 +98,17 @@ CPushServConn* get_push_serv_conn() {
   return push_conn;
 }
 
-CPushServConn::CPushServConn() { m_bOpen = false; }
+CPushServConn::CPushServConn() {
+  m_bOpen = false;
+}
 
 CPushServConn::~CPushServConn() {}
 
-void CPushServConn::Connect(const char* server_ip, uint16_t server_port,
-                            uint32_t serv_idx) {
+void CPushServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx) {
   // log_info("Connecting to Push Server %s:%d ", server_ip, server_port);
 
   m_serv_idx = serv_idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback,
-                            (void*)&g_push_server_conn_map);
+  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_push_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_push_server_conn_map.insert(make_pair(m_handle, this));
@@ -120,8 +117,7 @@ void CPushServConn::Connect(const char* server_ip, uint16_t server_port,
 
 void CPushServConn::Close() {
   // reset server information for the next connect
-  serv_reset<CPushServConn>(g_push_server_list, g_push_server_count,
-                            m_serv_idx);
+  serv_reset<CPushServConn>(g_push_server_list, g_push_server_count, m_serv_idx);
 
   m_bOpen = false;
   g_master_push_conn = NULL;

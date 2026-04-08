@@ -11,8 +11,7 @@
 
 namespace msfs {
 
-void replace_substrs(const char* search, size_t search_len, const char* replace,
-                     size_t replace_len, std::string* s) {
+void replace_substrs(const char* search, size_t search_len, const char* replace, size_t replace_len, std::string* s) {
   size_t pos = 0;
   while ((pos = s->find(search, pos, search_len)) != std::string::npos) {
     s->replace(pos, search_len, replace, replace_len);
@@ -27,7 +26,8 @@ bool starts_with(const char* s1, const char* s2) {
 bool ends_with(const char* s1, const char* s2) {
   size_t s1_length = strlen(s1);
   size_t s2_length = strlen(s2);
-  if (s2_length > s1_length) return false;
+  if (s2_length > s1_length)
+    return false;
   const char* start = s1 + (s1_length - s2_length);
   return strncmp(start, s2, s2_length) == 0;
 }

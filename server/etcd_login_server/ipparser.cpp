@@ -17,11 +17,11 @@ IpParser::IpParser() {}
 
 IpParser::~IpParser() {}
 
-bool IpParser::isTelcome(const char *pIp) {
+bool IpParser::isTelcome(const char* pIp) {
   if (!pIp) {
     return false;
   }
-  CStrExplode strExp((char *)pIp, '.');
+  CStrExplode strExp((char*)pIp, '.');
   if (strExp.GetItemCnt() != 4) {
     return false;
   }

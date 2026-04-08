@@ -18,14 +18,12 @@ bool CInterLoginStrategy::doLogin(const std::string& strName,
   CDBConn* pDBConn = pDBManger->GetDBConn("teamtalk_slave");
 
   if (pDBConn) {
-    std::string strSql =
-        "select * from IMUser where name='" + strName + "' and status=0";
+    std::string strSql = "select * from IMUser where name='" + strName + "' and status=0";
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet) {
       std::string strResult, strSalt;
       uint32_t nId, nGender, nDeptId, nStatus;
-      std::string strNick, strAvatar, strEmail, strRealName, strTel, strDomain,
-          strSignInfo;
+      std::string strNick, strAvatar, strEmail, strRealName, strTel, strDomain, strSignInfo;
       while (pResultSet->Next()) {
         /* 结果集遍历 提取出查询到的用户信息 */
         // 用户id、密码、盐值以及其他相关字段

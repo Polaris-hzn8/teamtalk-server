@@ -235,8 +235,7 @@ static int32_t S_GetTOS(S_SOCKET nSockFd, int32_t* nTOS) {
  *  @return 0 success, -1 fail.
  */
 static int32_t S_SetReuseAddr(S_SOCKET nSockFd, BOOL bReuse) {
-  return setsockopt(nSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&bReuse,
-                    sizeof(bReuse));
+  return setsockopt(nSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&bReuse, sizeof(bReuse));
 }
 
 /**
@@ -282,8 +281,7 @@ static int32_t S_SetRecvTimeOut(S_SOCKET nSockFd, int32_t nRecvTimeOut) {
  *  @return 0 succes, -1 fail.
  */
 static int32_t S_SetSendBuffSize(S_SOCKET nSockFd, int32_t nSendBuffSize) {
-  return setsockopt(nSockFd, SOL_SOCKET, SO_SNDBUF, &nSendBuffSize,
-                    sizeof(nSendBuffSize));
+  return setsockopt(nSockFd, SOL_SOCKET, SO_SNDBUF, &nSendBuffSize, sizeof(nSendBuffSize));
 }
 
 /**
@@ -295,8 +293,7 @@ static int32_t S_SetSendBuffSize(S_SOCKET nSockFd, int32_t nSendBuffSize) {
  *  @return 0 succes, -1 fail.
  */
 static int32_t S_SetRecvBuffSize(S_SOCKET nSockFd, int32_t nRecvBuffSize) {
-  return setsockopt(nSockFd, SOL_SOCKET, SO_RCVBUF, &nRecvBuffSize,
-                    sizeof(nRecvBuffSize));
+  return setsockopt(nSockFd, SOL_SOCKET, SO_RCVBUF, &nRecvBuffSize, sizeof(nRecvBuffSize));
 }
 
 /**
@@ -336,8 +333,7 @@ static int32_t S_LingerOff(S_SOCKET nSockFd) {
   struct linger so_linger;
   so_linger.l_onoff = FALSE;  // system default setting
   so_linger.l_linger = 0;
-  return setsockopt(nSockFd, SOL_SOCKET, SO_LINGER, &so_linger,
-                    sizeof(so_linger));
+  return setsockopt(nSockFd, SOL_SOCKET, SO_LINGER, &so_linger, sizeof(so_linger));
 }
 
 //?
@@ -356,8 +352,7 @@ static int32_t S_LingerOn(S_SOCKET nSockFd, uint16_t nTimeOutSec) {
 #endif
   so_linger.l_onoff = TRUE;
   so_linger.l_linger = nTimeOutSec;
-  return setsockopt(nSockFd, SOL_SOCKET, SO_LINGER, &so_linger,
-                    sizeof(so_linger));
+  return setsockopt(nSockFd, SOL_SOCKET, SO_LINGER, &so_linger, sizeof(so_linger));
 }
 
 //?
@@ -370,8 +365,7 @@ static int32_t S_LingerOn(S_SOCKET nSockFd, uint16_t nTimeOutSec) {
  *  @return 0 success, -1 fail
  */
 static int32_t S_SetNoDelay(S_SOCKET nSockFd, BOOL bNoDelay) {
-  return setsockopt(nSockFd, IPPROTO_TCP, TCP_NODELAY, (char*)&bNoDelay,
-                    sizeof(bNoDelay));
+  return setsockopt(nSockFd, IPPROTO_TCP, TCP_NODELAY, (char*)&bNoDelay, sizeof(bNoDelay));
 }
 
 /**
@@ -411,8 +405,7 @@ static int32_t S_Recv(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize) {
  *
  *  @return count of data sent, -1 for errror.
  */
-static int32_t S_SendTo(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen,
-                        const char* szIP, int32_t nPort) {
+static int32_t S_SendTo(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen, const char* szIP, int32_t nPort) {
   sockaddr_in addr;
   memset(&addr, 0, sizeof(sockaddr_in));
   addr.sin_family = AF_INET;
@@ -433,8 +426,7 @@ static int32_t S_SendTo(S_SOCKET nSockFd, void* pBuf, int32_t nBufLen,
  *
  *  @return count of data received, -1 for error.
  */
-static int32_t S_RecvFrom(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize,
-                          char* szIP, int32_t* nPort) {
+static int32_t S_RecvFrom(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize, char* szIP, int32_t* nPort) {
   if (szIP == NULL || nPort == NULL) {
     return S_SOCKET_ERROR;
   }
@@ -442,8 +434,7 @@ static int32_t S_RecvFrom(S_SOCKET nSockFd, void* pBuf, int32_t nBufSize,
   char peer_ip[32] = {0};
   sockaddr_in peer_addr;
   socklen_t addr_len = sizeof(sockaddr_in);
-  int32_t ret =
-      recvfrom(nSockFd, pBuf, nBufSize, 0, (sockaddr*)&peer_addr, &addr_len);
+  int32_t ret = recvfrom(nSockFd, pBuf, nBufSize, 0, (sockaddr*)&peer_addr, &addr_len);
   if (ret >= 0) {
     inet_ntop(AF_INET, (void*)&(peer_addr.sin_addr), peer_ip, sizeof(peer_ip));
     strcpy(szIP, peer_ip);
@@ -473,8 +464,7 @@ static int32_t S_GetSockName(S_SOCKET nSockFd, char* szIP, int32_t* nPort) {
   char host_ip[32] = {0};
   struct sockaddr_in host_addr;
   int32_t addr_len = sizeof(host_addr);
-  int32_t ret =
-      getsockname(nSockFd, (struct sockaddr*)&host_addr, (socklen_t*)&addr_len);
+  int32_t ret = getsockname(nSockFd, (struct sockaddr*)&host_addr, (socklen_t*)&addr_len);
   if (ret == 0) {
     inet_ntop(AF_INET, &host_addr.sin_addr, host_ip, sizeof(host_ip));
     strcpy(szIP, host_ip);
@@ -502,8 +492,7 @@ static int32_t S_GetPeerName(S_SOCKET nSockFd, char* szIP, int32_t* nPort) {
   char peer_ip[32] = {0};
   struct sockaddr_in peer_addr;
   int32_t addr_len = sizeof(peer_addr);
-  int32_t ret =
-      getpeername(nSockFd, (struct sockaddr*)&peer_addr, (socklen_t*)&addr_len);
+  int32_t ret = getpeername(nSockFd, (struct sockaddr*)&peer_addr, (socklen_t*)&addr_len);
   if (ret == 0) {
     inet_ntop(AF_INET, &peer_addr.sin_addr, peer_ip, sizeof(peer_ip));
     strcpy(szIP, peer_ip);
@@ -551,7 +540,9 @@ static int32_t S_GetHostByName(const char* szName, char* szIP) {
  *
  *  @return
  */
-static uint32_t S_ntohl(uint32_t netlong) { return ntohl(netlong); }
+static uint32_t S_ntohl(uint32_t netlong) {
+  return ntohl(netlong);
+}
 
 /**
  *  S_htonl
@@ -560,7 +551,9 @@ static uint32_t S_ntohl(uint32_t netlong) { return ntohl(netlong); }
  *
  *  @return
  */
-static uint32_t S_htonl(uint32_t hostlong) { return htonl(hostlong); }
+static uint32_t S_htonl(uint32_t hostlong) {
+  return htonl(hostlong);
+}
 
 /**
  *  S_ntohs
@@ -569,7 +562,9 @@ static uint32_t S_htonl(uint32_t hostlong) { return htonl(hostlong); }
  *
  *  @return
  */
-static uint16_t S_ntohs(uint16_t netshort) { return ntohs(netshort); }
+static uint16_t S_ntohs(uint16_t netshort) {
+  return ntohs(netshort);
+}
 
 /**
  *  S_htons
@@ -578,7 +573,9 @@ static uint16_t S_ntohs(uint16_t netshort) { return ntohs(netshort); }
  *
  *  @return
  */
-static uint16_t S_htons(uint16_t hostshort) { return htons(hostshort); }
+static uint16_t S_htons(uint16_t hostshort) {
+  return htons(hostshort);
+}
 
 /**
  *  S_ntohll
@@ -588,8 +585,7 @@ static uint16_t S_htons(uint16_t hostshort) { return htons(hostshort); }
  *  @return
  */
 static uint64_t S_ntohll(uint64_t val) {
-  return (((uint64_t)htonl((int32_t)((val << 32) >> 32))) << 32) |
-         (uint32_t)htonl((int32_t)(val >> 32));
+  return (((uint64_t)htonl((int32_t)((val << 32) >> 32))) << 32) | (uint32_t)htonl((int32_t)(val >> 32));
 }
 
 /**
@@ -600,8 +596,7 @@ static uint64_t S_ntohll(uint64_t val) {
  *  @return
  */
 static uint64_t S_htonll(uint64_t val) {
-  return (((uint64_t)htonl((int32_t)((val << 32) >> 32))) << 32) |
-         (uint32_t)htonl((int32_t)(val >> 32));
+  return (((uint64_t)htonl((int32_t)((val << 32) >> 32))) << 32) | (uint32_t)htonl((int32_t)(val >> 32));
 }
 
 #ifdef __cplusplus

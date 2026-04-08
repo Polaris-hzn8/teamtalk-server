@@ -17,8 +17,7 @@ CUserInfo::CUserInfo() {}
 CUserInfo::~CUserInfo() {}
 
 void CUserInfo::AddClientType(uint32_t client_type) {
-  std::map<uint32_t, uint32_t>::iterator it =
-      m_clientTypeList.find(client_type);
+  std::map<uint32_t, uint32_t>::iterator it = m_clientTypeList.find(client_type);
   if (it != m_clientTypeList.end()) {
     it->second += 1;
   } else {
@@ -27,8 +26,7 @@ void CUserInfo::AddClientType(uint32_t client_type) {
 }
 
 void CUserInfo::RemoveClientType(uint32_t client_type) {
-  std::map<uint32_t, uint32_t>::iterator it =
-      m_clientTypeList.find(client_type);
+  std::map<uint32_t, uint32_t>::iterator it = m_clientTypeList.find(client_type);
   if (it != m_clientTypeList.end()) {
     uint32_t count = it->second;
     count -= 1;
@@ -50,8 +48,7 @@ bool CUserInfo::FindRouteConn(CRouteConn* pConn) {
 }
 
 uint32_t CUserInfo::GetCountByClientType(uint32_t client_type) {
-  std::map<uint32_t, uint32_t>::iterator it =
-      m_clientTypeList.find(client_type);
+  std::map<uint32_t, uint32_t>::iterator it = m_clientTypeList.find(client_type);
   if (it != m_clientTypeList.end()) {
     return it->second;
   } else {
@@ -67,7 +64,9 @@ bool CUserInfo::IsMsgConnNULL() {
   }
 }
 
-void CUserInfo::ClearClientType() { m_clientTypeList.clear(); }
+void CUserInfo::ClearClientType() {
+  m_clientTypeList.clear();
+}
 
 bool CUserInfo::IsPCClientLogin() {
   bool bRet = false;

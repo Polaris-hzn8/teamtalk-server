@@ -28,26 +28,18 @@ class CImUser {
   bool IsValidate() { return m_bValidate; }
   void SetValidated() { m_bValidate = true; }
   uint32_t GetPCLoginStatus() { return m_pc_login_status; }
-  void SetPCLoginStatus(uint32_t pc_login_status) {
-    m_pc_login_status = pc_login_status;
-  }
+  void SetPCLoginStatus(uint32_t pc_login_status) { m_pc_login_status = pc_login_status; }
 
   user_conn_t GetUserConn();
 
   bool IsMsgConnEmpty() { return m_conn_map.empty(); }
-  void AddMsgConn(uint32_t handle, CMsgConn* pMsgConn) {
-    m_conn_map[handle] = pMsgConn;
-  }
+  void AddMsgConn(uint32_t handle, CMsgConn* pMsgConn) { m_conn_map[handle] = pMsgConn; }
   void DelMsgConn(uint32_t handle) { m_conn_map.erase(handle); }
   CMsgConn* GetMsgConn(uint32_t handle);
   void ValidateMsgConn(uint32_t handle, CMsgConn* pMsgConn);
 
-  void AddUnValidateMsgConn(CMsgConn* pMsgConn) {
-    m_unvalidate_conn_set.insert(pMsgConn);
-  }
-  void DelUnValidateMsgConn(CMsgConn* pMsgConn) {
-    m_unvalidate_conn_set.erase(pMsgConn);
-  }
+  void AddUnValidateMsgConn(CMsgConn* pMsgConn) { m_unvalidate_conn_set.insert(pMsgConn); }
+  void DelUnValidateMsgConn(CMsgConn* pMsgConn) { m_unvalidate_conn_set.erase(pMsgConn); }
   CMsgConn* GetUnValidateMsgConn(uint32_t handle);
 
   std::map<uint32_t, CMsgConn*>& GetMsgConnMap() { return m_conn_map; }
@@ -55,14 +47,12 @@ class CImUser {
   void BroadcastPdu(CImPdu* pPdu, CMsgConn* pFromConn = NULL);
   void BroadcastPduWithOutMobile(CImPdu* pPdu, CMsgConn* pFromConn = NULL);
   void BroadcastPduToMobile(CImPdu* pPdu, CMsgConn* pFromConn = NULL);
-  void BroadcastClientMsgData(CImPdu* pPdu, uint32_t msg_id,
-                              CMsgConn* pFromConn = NULL, uint32_t from_id = 0);
+  void BroadcastClientMsgData(CImPdu* pPdu, uint32_t msg_id, CMsgConn* pFromConn = NULL, uint32_t from_id = 0);
   void BroadcastData(void* buff, uint32_t len, CMsgConn* pFromConn = NULL);
 
   void HandleKickUser(CMsgConn* pConn, uint32_t reason);
 
-  bool KickOutSameClientType(uint32_t client_type, uint32_t reason,
-                             CMsgConn* pFromConn = NULL);
+  bool KickOutSameClientType(uint32_t client_type, uint32_t reason, CMsgConn* pFromConn = NULL);
 
   uint32_t GetClientTypeFlag();
 
@@ -102,8 +92,7 @@ class CImUserManager {
 
   void RemoveAll();
   void GetOnlineUserInfo(std::list<user_stat_t>* online_user_info);
-  void GetUserConnCnt(std::list<user_conn_t>* user_conn_list,
-                      uint32_t& total_conn_cnt);
+  void GetUserConnCnt(std::list<user_conn_t>* user_conn_list, uint32_t& total_conn_cnt);
 
   void BroadcastPdu(CImPdu* pdu, uint32_t client_type_flag);
 

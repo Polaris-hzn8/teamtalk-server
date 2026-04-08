@@ -21,9 +21,7 @@ class CByteStream {
   CByteStream(CSimpleBuffer* pSimpBuf, uint32_t pos);
   ~CByteStream() {}
 
-  unsigned char* GetBuf() {
-    return m_pSimpBuf ? (uchar_t*)m_pSimpBuf->GetBuffer() : m_pBuf;
-  }
+  unsigned char* GetBuf() { return m_pSimpBuf ? (uchar_t*)m_pSimpBuf->GetBuffer() : m_pBuf; }
   uint32_t GetPos() { return m_pos; }
   uint32_t GetLen() { return m_len; }
   void Skip(uint32_t len) { m_pos += len; }

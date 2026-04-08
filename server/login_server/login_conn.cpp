@@ -41,15 +41,13 @@ std::map<uint32_t, msg_serv_info_t*> g_msg_serv_info;
  * @param handle        句柄 表示连接的标识
  * @param pParam        参数 用于传递额外的数据
  */
-void login_conn_timer_callback(void* callback_data, uint8_t msg,
-                               uint32_t handle, void* pParam) {
+void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   // 1.获取当前时间 cur_time，通过 get_tick_count() 函数获取
   uint64_t cur_time = get_tick_count();
 
   // 2.遍历 g_client_conn_map 中的所有连接对象，并调用每个连接对象的 OnTimer()
   // 函数，传入当前时间 cur_time
-  for (ConnMap_t::iterator it = g_client_conn_map.begin();
-       it != g_client_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_client_conn_map.begin(); it != g_client_conn_map.end();) {
     //在每次迭代之前，将当前迭代器 it 的值赋给另一个迭代器
     // it_old，以便在删除连接对象时不影响迭代过程
     ConnMap_t::iterator it_old = it;
@@ -63,8 +61,7 @@ void login_conn_timer_callback(void* callback_data, uint8_t msg,
 
   // 3.遍历 g_msg_serv_conn_map 中的所有连接对象，并调用每个连接对象的 OnTimer()
   // 函数，传入当前时间 cur_time
-  for (ConnMap_t::iterator it = g_msg_serv_conn_map.begin();
-       it != g_msg_serv_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_msg_serv_conn_map.begin(); it != g_msg_serv_conn_map.end();) {
     ConnMap_t::iterator it_old = it;
     it++;
     CLoginConn* pConn = (CLoginConn*)it_old->second;
@@ -102,8 +99,7 @@ void CLoginConn::Close() {
       g_msg_serv_conn_map.erase(m_handle);
 
       // 4.查找 g_msg_serv_info 中是否存在该连接句柄的消息服务器信息
-      map<uint32_t, msg_serv_info_t*>::iterator it =
-          g_msg_serv_info.find(m_handle);
+      map<uint32_t, msg_serv_info_t*>::iterator it = g_msg_serv_info.find(m_handle);
       if (it != g_msg_serv_info.end()) {
         // 4-1.获取对应的消息服务器信息对象指针 pMsgServInfo
         msg_serv_info_t* pMsgServInfo = it->second;
@@ -111,8 +107,7 @@ void CLoginConn::Close() {
         // 中减去该消息服务器的当前连接数
         g_total_online_user_cnt -= pMsgServInfo->cur_conn_cnt;
         // 4-3.输出日志信息，表示从消息服务器断开连接
-        log_info("onclose from MsgServer: %s:%u ",
-                 pMsgServInfo->hostname.c_str(), pMsgServInfo->port);
+        log_info("onclose from MsgServer: %s:%u ", pMsgServInfo->hostname.c_str(), pMsgServInfo->port);
         // 4-4.删除消息服务器信息对象，并释放内存
         delete pMsgServInfo;
         // 4-5.从 g_msg_serv_info 中移除消息服务器信息
@@ -152,7 +147,9 @@ void CLoginConn::OnConnect2(net_handle_t handle, int conn_type) {
 /**
  * 连接关闭的回调函数，关闭连接
  */
-void CLoginConn::OnClose() { Close(); }
+void CLoginConn::OnClose() {
+  Close();
+}
 
 /**
  * 定时器回调函数，
@@ -164,7 +161,8 @@ void CLoginConn::OnTimer(uint64_t curr_tick) {
     // 1.如果是客户端连接 则执行客户端超时检查逻辑
     // 判断当前时间戳 curr_tick 是否超过上次接收数据的时间戳加上客户端超时时间
     // CLIENT_TIMEOUT 如果超时，则调用Close()函数关闭连接
-    if (curr_tick > m_last_recv_tick + CLIENT_TIMEOUT) Close();
+    if (curr_tick > m_last_recv_tick + CLIENT_TIMEOUT)
+      Close();
   } else {
     // 2.否则执行消息服务器超时检查逻辑
     // 2-1.对于消息服务器连接，判断当前时间戳curr_tick是否超过上次发送心跳的时间戳加上心跳间隔时间
@@ -232,12 +230,15 @@ void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu) {
   g_total_online_user_cnt += pMsgServInfo->cur_conn_cnt;
 
   log_info(
-      "MsgServInfo, ip_addr1=%s, ip_addr2=%s, port=%d, max_conn_cnt=%d, "
-      "cur_conn_cnt=%d, "
-      "hostname: %s. ",
-      pMsgServInfo->ip_addr1.c_str(), pMsgServInfo->ip_addr2.c_str(),
-      pMsgServInfo->port, pMsgServInfo->max_conn_cnt,
-      pMsgServInfo->cur_conn_cnt, pMsgServInfo->hostname.c_str());
+    "MsgServInfo, ip_addr1=%s, ip_addr2=%s, port=%d, max_conn_cnt=%d, "
+    "cur_conn_cnt=%d, "
+    "hostname: %s. ",
+    pMsgServInfo->ip_addr1.c_str(),
+    pMsgServInfo->ip_addr2.c_str(),
+    pMsgServInfo->port,
+    pMsgServInfo->max_conn_cnt,
+    pMsgServInfo->cur_conn_cnt,
+    pMsgServInfo->hostname.c_str());
 }
 
 /**
@@ -251,8 +252,7 @@ void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu) {
     msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
 
     uint32_t action = msg.user_action();
-    if (action ==
-        USER_CNT_INC) {  // msg_server收到client登录后通知login_server上线加一
+    if (action == USER_CNT_INC) {  // msg_server收到client登录后通知login_server上线加一
       pMsgServInfo->cur_conn_cnt++;
       g_total_online_user_cnt++;
     } else {  // 下线减一
@@ -260,8 +260,10 @@ void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu) {
       g_total_online_user_cnt--;
     }
 
-    log_info("%s:%d, cur_cnt=%u, total_cnt=%u ", pMsgServInfo->hostname.c_str(),
-             pMsgServInfo->port, pMsgServInfo->cur_conn_cnt,
+    log_info("%s:%d, cur_cnt=%u, total_cnt=%u ",
+             pMsgServInfo->hostname.c_str(),
+             pMsgServInfo->port,
+             pMsgServInfo->cur_conn_cnt,
              g_total_online_user_cnt);
   }
 }
@@ -292,13 +294,11 @@ void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu) {
   // return a message server with minimum concurrent connection count
   msg_serv_info_t* pMsgServInfo;
   uint32_t min_user_cnt = (uint32_t)-1;
-  map<uint32_t, msg_serv_info_t*>::iterator it_min_conn = g_msg_serv_info.end(),
-                                            it;
+  map<uint32_t, msg_serv_info_t*>::iterator it_min_conn = g_msg_serv_info.end(), it;
 
   for (it = g_msg_serv_info.begin(); it != g_msg_serv_info.end(); it++) {
     pMsgServInfo = it->second;
-    if ((pMsgServInfo->cur_conn_cnt < pMsgServInfo->max_conn_cnt) &&
-        (pMsgServInfo->cur_conn_cnt < min_user_cnt)) {
+    if ((pMsgServInfo->cur_conn_cnt < pMsgServInfo->max_conn_cnt) && (pMsgServInfo->cur_conn_cnt < min_user_cnt)) {
       it_min_conn = it;
       min_user_cnt = pMsgServInfo->cur_conn_cnt;
     }

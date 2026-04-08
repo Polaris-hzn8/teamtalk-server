@@ -20,8 +20,7 @@ CDepartModel* CDepartModel::getInstance() {
 }
 
 //从数据库中获取最近更新时间后发生变化的部门ID列表
-void CDepartModel::getChgedDeptId(uint32_t& nLastTime,
-                                  list<uint32_t>& lsChangedIds) {
+void CDepartModel::getChgedDeptId(uint32_t& nLastTime, list<uint32_t>& lsChangedIds) {
   // 1.获取 CDBManager 的单例实例
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
@@ -30,10 +29,8 @@ void CDepartModel::getChgedDeptId(uint32_t& nLastTime,
     // 2.如果成功获取到数据库连接对象
     // 2-1.构建SQL查询语句，查询IMDepart表中更新时间大于给定最后更新时间
     // nLastTime 的部门ID和更新时间
-    string strSql = "select id, updated from IMDepart where updated > " +
-                    int2string(nLastTime);
-    CResultSet* pResultSet =
-        pDBConn->ExecuteQuery(strSql.c_str());  //结果集对象 pResultSet
+    string strSql = "select id, updated from IMDepart where updated > " + int2string(nLastTime);
+    CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());  //结果集对象 pResultSet
     if (pResultSet) {
       //遍历结果集，对于每条记录获取部门ID和更新时间
       while (pResultSet->Next()) {
@@ -41,7 +38,8 @@ void CDepartModel::getChgedDeptId(uint32_t& nLastTime,
         uint32_t nUpdated = pResultSet->GetInt("updated");  //更新时间
         //如果部门的更新时间大于当前最后更新时间 nLastTime，则更新 nLastTime
         //的值为部门的更新时间
-        if (nLastTime < nUpdated) nLastTime = nUpdated;
+        if (nLastTime < nUpdated)
+          nLastTime = nUpdated;
         //将部门ID添加到变更的部门ID列表 lsChangedIds 中
         lsChangedIds.push_back(id);
       }
@@ -55,8 +53,7 @@ void CDepartModel::getChgedDeptId(uint32_t& nLastTime,
 }
 
 //从数据库中获取给定部门ID列表中的部门信息
-void CDepartModel::getDepts(list<uint32_t>& lsDeptIds,
-                            list<IM::BaseDefine::DepartInfo>& lsDepts) {
+void CDepartModel::getDepts(list<uint32_t>& lsDeptIds, list<IM::BaseDefine::DepartInfo>& lsDepts) {
   if (lsDeptIds.empty()) {
     log_info("list is empty");
     return;
@@ -115,8 +112,7 @@ void CDepartModel::getDepts(list<uint32_t>& lsDeptIds,
   }
 }
 
-void CDepartModel::getDept(uint32_t nDeptId,
-                           IM::BaseDefine::DepartInfo& cDept) {
+void CDepartModel::getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
   if (pDBConn) {

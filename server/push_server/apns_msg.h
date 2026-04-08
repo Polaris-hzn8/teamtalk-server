@@ -83,17 +83,11 @@ class CAPNSGateWayMsg : public CBaseMsg {
 
   BOOL SerializeToArray();
 
-  void SetDeviceToken(string strDeviceToken) {
-    m_strDeviceToken = strDeviceToken;
-  }
+  void SetDeviceToken(string strDeviceToken) { m_strDeviceToken = strDeviceToken; }
   const string& GetDeviceToken() { return m_strDeviceToken; }
-  void SetNotificationID(uint32_t nNotificationID) {
-    m_nNotificationID = nNotificationID;
-  }
+  void SetNotificationID(uint32_t nNotificationID) { m_nNotificationID = nNotificationID; }
   uint32_t GetNotificationID() { return m_nNotificationID; }
-  void SetExpirationDate(uint32_t nExpirationDate) {
-    m_nExpirationDate = nExpirationDate;
-  }
+  void SetExpirationDate(uint32_t nExpirationDate) { m_nExpirationDate = nExpirationDate; }
   uint32_t GetExpirationDate() { return m_nExpirationDate; }
   void SetPriority(char cPriority) { m_cPriority = cPriority; }
   char GetPriority() { return m_cPriority; }
@@ -105,19 +99,13 @@ class CAPNSGateWayMsg : public CBaseMsg {
   uint32_t GetBadge() { return m_nBadge; }
   void SetAlterBody(string strAlterBody) { m_strAlterBody = strAlterBody; }
   const string& GetAlterBody() { return m_strAlterBody; }
-  void SetActionLocKey(string strActionLocKey) {
-    m_strActionLocKey = strActionLocKey;
-  }
+  void SetActionLocKey(string strActionLocKey) { m_strActionLocKey = strActionLocKey; }
   const string& GetActionLocKey() { return m_strActionLocKey; }
   void SetLocKey(string strLocKey) { m_strLocKey = strLocKey; }
   const string& GetLocKey() { return m_strLocKey; }
-  void SetLocArgsList(list<string>& LocArgsList) {
-    m_LocArgsList = LocArgsList;
-  }
+  void SetLocArgsList(list<string>& LocArgsList) { m_LocArgsList = LocArgsList; }
   const list<string>& GetLocArgsList() { return m_LocArgsList; }
-  void SetLaunchImage(string strLaunchImage) {
-    m_strLaunchImage = strLaunchImage;
-  }
+  void SetLaunchImage(string strLaunchImage) { m_strLaunchImage = strLaunchImage; }
   const string& GetLaunchImage() { return m_strLaunchImage; }
 
  private:
@@ -154,9 +142,7 @@ class CAPNSGateWayResMsg : public CBaseMsg {
   uint8_t GetCommandID() { return m_CommandID; }
   uint8_t GetStatus() { return m_Status; }
   uint32_t GetNotificationID() { return m_NotificationID; }
-  uint32_t GetResMsgLength() {
-    return sizeof(m_CommandID) + sizeof(m_Status) + sizeof(m_NotificationID);
-  }
+  uint32_t GetResMsgLength() { return sizeof(m_CommandID) + sizeof(m_Status) + sizeof(m_NotificationID); }
 
  private:
   uint8_t m_CommandID;

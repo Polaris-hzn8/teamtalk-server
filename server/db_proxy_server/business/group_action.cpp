@@ -8,10 +8,10 @@
 
 #include "group_action.h"
 #include "../ProxyConn.h"
-#include "group_model.h"
 #include "IM.BaseDefine.pb.h"
 #include "IM.Group.pb.h"
 #include "IM.Server.pb.h"
+#include "group_model.h"
 #include "public_define.h"
 
 namespace DB_PROXY {
@@ -39,11 +39,10 @@ void createGroup(CImPdu* pPdu, uint32_t conn_uuid) {
         uint32_t nUserId = msg.member_id_list(i);
         setMember.insert(nUserId);
       }
-      log_info("createGroup.%d create %s, userCnt=%u", nUserId,
-               strGroupName.c_str(), setMember.size());
+      log_info("createGroup.%d create %s, userCnt=%u", nUserId, strGroupName.c_str(), setMember.size());
 
-      uint32_t nGroupId = CGroupModel::getInstance()->createGroup(
-          nUserId, strGroupName, strGroupAvatar, nGroupType, setMember);
+      uint32_t nGroupId =
+        CGroupModel::getInstance()->createGroup(nUserId, strGroupName, strGroupAvatar, nGroupType, setMember);
       msgResp.set_user_id(nUserId);
       msgResp.set_group_name(strGroupName);
       for (auto it = setMember.begin(); it != setMember.end(); ++it) {
@@ -56,8 +55,11 @@ void createGroup(CImPdu* pPdu, uint32_t conn_uuid) {
         msgResp.set_result_code(1);
       }
 
-      log_info("createGroup.%d create %s, userCnt=%u, result:%d", nUserId,
-               strGroupName.c_str(), setMember.size(), msgResp.result_code());
+      log_info("createGroup.%d create %s, userCnt=%u, result:%d",
+               nUserId,
+               strGroupName.c_str(),
+               setMember.size(),
+               msgResp.result_code());
 
       msgResp.set_attach_data(msg.attach_data());
       pPduRes->SetPBMsg(&msgResp);
@@ -66,8 +68,7 @@ void createGroup(CImPdu* pPdu, uint32_t conn_uuid) {
       pPduRes->SetCommandId(IM::BaseDefine::CID_GROUP_CREATE_RESPONSE);
       CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
     } else {
-      log_info("invalid group type.userId=%u, groupType=%u, groupName=%s",
-               nUserId, nGroupType, strGroupName.c_str());
+      log_info("invalid group type.userId=%u, groupType=%u, groupName=%s", nUserId, nGroupType, strGroupName.c_str());
     }
   } else {
     log_info("parse pb failed");
@@ -89,18 +90,15 @@ void getNormalGroupList(CImPdu* pPdu, uint32_t conn_uuid) {
     uint32_t nUserId = msg.user_id();
 
     list<IM::BaseDefine::GroupVersionInfo> lsGroup;
-    CGroupModel::getInstance()->getUserGroup(nUserId, lsGroup,
-                                             IM::BaseDefine::GROUP_TYPE_NORMAL);
+    CGroupModel::getInstance()->getUserGroup(nUserId, lsGroup, IM::BaseDefine::GROUP_TYPE_NORMAL);
     msgResp.set_user_id(nUserId);
     for (auto it = lsGroup.begin(); it != lsGroup.end(); ++it) {
-      IM::BaseDefine::GroupVersionInfo* pGroupVersion =
-          msgResp.add_group_version_list();
+      IM::BaseDefine::GroupVersionInfo* pGroupVersion = msgResp.add_group_version_list();
       pGroupVersion->set_group_id(it->group_id());
       pGroupVersion->set_version(it->version());
     }
 
-    log_info("getNormalGroupList. userId=%u, count=%d", nUserId,
-             msgResp.group_version_list_size());
+    log_info("getNormalGroupList. userId=%u, count=%d", nUserId, msgResp.group_version_list_size());
 
     msgResp.set_attach_data(msg.attach_data());
     pPduRes->SetPBMsg(&msgResp);
@@ -181,8 +179,7 @@ void modifyMember(CImPdu* pPdu, uint32_t conn_uuid) {
     uint32_t nUserId = msg.user_id();
     uint32_t nGroupId = msg.group_id();
     IM::BaseDefine::GroupModifyType nType = msg.change_type();
-    if (IM::BaseDefine::GroupModifyType_IsValid(nType) &&
-        CGroupModel::getInstance()->isValidateGroupId(nGroupId)) {
+    if (IM::BaseDefine::GroupModifyType_IsValid(nType) && CGroupModel::getInstance()->isValidateGroupId(nGroupId)) {
       CImPdu* pPduRes = new CImPdu;
 
       uint32_t nCnt = msg.member_id_list_size();
@@ -191,8 +188,7 @@ void modifyMember(CImPdu* pPdu, uint32_t conn_uuid) {
         setUserId.insert(msg.member_id_list(i));
       }
       list<uint32_t> lsCurUserId;
-      bool bRet = CGroupModel::getInstance()->modifyGroupMember(
-          nUserId, nGroupId, nType, setUserId, lsCurUserId);
+      bool bRet = CGroupModel::getInstance()->modifyGroupMember(nUserId, nGroupId, nType, setUserId, lsCurUserId);
       msgResp.set_user_id(nUserId);
       msgResp.set_group_id(nGroupId);
       msgResp.set_change_type(nType);
@@ -206,10 +202,12 @@ void modifyMember(CImPdu* pPdu, uint32_t conn_uuid) {
           msgResp.add_cur_user_id_list(*it);
         }
       }
-      log_info(
-          "userId=%u, groupId=%u, result=%u, changeCount:%u, currentCount=%u",
-          nUserId, nGroupId, bRet ? 0 : 1, msgResp.chg_user_id_list_size(),
-          msgResp.cur_user_id_list_size());
+      log_info("userId=%u, groupId=%u, result=%u, changeCount:%u, currentCount=%u",
+               nUserId,
+               nGroupId,
+               bRet ? 0 : 1,
+               msgResp.chg_user_id_list_size(),
+               msgResp.cur_user_id_list_size());
       msgResp.set_attach_data(msg.attach_data());
       pPduRes->SetPBMsg(&msgResp);
       pPduRes->SetSeqNum(pPdu->GetSeqNum());
@@ -218,9 +216,11 @@ void modifyMember(CImPdu* pPdu, uint32_t conn_uuid) {
       CProxyConn::AddResponsePdu(conn_uuid, pPduRes);
     } else {
       log_info(
-          "invalid groupModifyType or groupId. userId=%u, groupId=%u, "
-          "groupModifyType=%u",
-          nUserId, nGroupId, nType);
+        "invalid groupModifyType or groupId. userId=%u, groupId=%u, "
+        "groupModifyType=%u",
+        nUserId,
+        nGroupId,
+        nType);
     }
   } else {
     log_info("parse pb failed");
@@ -242,15 +242,13 @@ void setGroupPush(CImPdu* pPdu, uint32_t conn_uuid) {
     uint32_t nStatus = msg.shield_status();
     if (CGroupModel::getInstance()->isValidateGroupId(nGroupId)) {
       CImPdu* pPduRes = new CImPdu;
-      bool bRet = CGroupModel::getInstance()->setPush(
-          nUserId, nGroupId, IM_GROUP_SETTING_PUSH, nStatus);
+      bool bRet = CGroupModel::getInstance()->setPush(nUserId, nGroupId, IM_GROUP_SETTING_PUSH, nStatus);
 
       msgResp.set_user_id(nUserId);
       msgResp.set_group_id(nGroupId);
       msgResp.set_result_code(bRet ? 0 : 1);
 
-      log_info("userId=%u, groupId=%u, result=%u", nUserId, nGroupId,
-               msgResp.result_code());
+      log_info("userId=%u, groupId=%u, result=%u", nUserId, nGroupId, msgResp.result_code());
 
       msgResp.set_attach_data(msg.attach_data());
       pPduRes->SetPBMsg(&msgResp);
@@ -289,8 +287,7 @@ void getGroupPush(CImPdu* pPdu, uint32_t conn_uuid) {
 
       msgResp.set_group_id(nGroupId);
       for (auto it = lsPush.begin(); it != lsPush.end(); ++it) {
-        IM::BaseDefine::ShieldStatus* pStatus =
-            msgResp.add_shield_status_list();
+        IM::BaseDefine::ShieldStatus* pStatus = msgResp.add_shield_status_list();
         //            *pStatus = *it;
         pStatus->set_user_id(it->user_id());
         pStatus->set_group_id(it->group_id());

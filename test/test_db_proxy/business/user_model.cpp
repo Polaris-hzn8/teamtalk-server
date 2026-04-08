@@ -33,8 +33,7 @@ void CUserModel::getChangedId(uint32_t& nLastTime, list<uint32_t>& lsIds) {
     if (nLastTime == 0) {
       strSql = "select id, updated from IMUser where status != 3";
     } else {
-      strSql = "select id, updated from IMUser where updated>=" +
-               int2string(nLastTime);
+      strSql = "select id, updated from IMUser where updated>=" + int2string(nLastTime);
     }
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet) {
@@ -56,8 +55,7 @@ void CUserModel::getChangedId(uint32_t& nLastTime, list<uint32_t>& lsIds) {
   }
 }
 
-void CUserModel::getUsers(list<uint32_t> lsIds,
-                          list<IM::BaseDefine::UserInfo>& lsUsers) {
+void CUserModel::getUsers(list<uint32_t> lsIds, list<IM::BaseDefine::UserInfo>& lsUsers) {
   if (lsIds.empty()) {
     log("list is empty");
     return;
@@ -144,15 +142,12 @@ bool CUserModel::updateUser(DBUserInfo_t& cUser) {
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
     uint32_t nNow = (uint32_t)time(NULL);
-    string strSql =
-        "update IMUser set `sex`=" + int2string(cUser.nSex) + ", `nick`='" +
-        cUser.strNick + "', `domain`='" + cUser.strDomain + "', `name`='" +
-        cUser.strName + "', `phone`='" + cUser.strTel + "', `email`='" +
-        cUser.strEmail + "', `avatar`='" + cUser.strAvatar +
-        "', `sign_info`='" + cUser.sign_info + "', `departId`='" +
-        int2string(cUser.nDeptId) + "', `status`=" + int2string(cUser.nStatus) +
-        ", `updated`=" + int2string(nNow) +
-        " where id=" + int2string(cUser.nId);
+    string strSql = "update IMUser set `sex`=" + int2string(cUser.nSex) + ", `nick`='" + cUser.strNick +
+                    "', `domain`='" + cUser.strDomain + "', `name`='" + cUser.strName + "', `phone`='" + cUser.strTel +
+                    "', `email`='" + cUser.strEmail + "', `avatar`='" + cUser.strAvatar + "', `sign_info`='" +
+                    cUser.sign_info + "', `departId`='" + int2string(cUser.nDeptId) +
+                    "', `status`=" + int2string(cUser.nStatus) + ", `updated`=" + int2string(nNow) +
+                    " where id=" + int2string(cUser.nId);
     bRet = pDBConn->ExecuteUpdate(strSql.c_str());
     if (!bRet) {
       log("updateUser: update failed:%s", strSql.c_str());
@@ -170,10 +165,10 @@ bool CUserModel::insertUser(DBUserInfo_t& cUser) {
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
     string strSql =
-        "insert into "
-        "IMUser(`id`,`sex`,`nick`,`domain`,`name`,`phone`,`email`,`avatar`,`"
-        "sign_info`,`departId`,`status`,`created`,`updated`) "
-        "values(?,?,?,?,?,?,?,?,?,?,?,?)";
+      "insert into "
+      "IMUser(`id`,`sex`,`nick`,`domain`,`name`,`phone`,`email`,`avatar`,`"
+      "sign_info`,`departId`,`status`,`created`,`updated`) "
+      "values(?,?,?,?,?,?,?,?,?,?,?,?)";
     CPrepareStatement* stmt = new CPrepareStatement();
     if (stmt->Init(pDBConn->GetMysql(), strSql)) {
       uint32_t nNow = (uint32_t)time(NULL);
@@ -208,29 +203,25 @@ bool CUserModel::insertUser(DBUserInfo_t& cUser) {
   return bRet;
 }
 
-void CUserModel::clearUserCounter(uint32_t nUserId, uint32_t nPeerId,
-                                  IM::BaseDefine::SessionType nSessionType) {
+void CUserModel::clearUserCounter(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefine::SessionType nSessionType) {
   if (IM::BaseDefine::SessionType_IsValid(nSessionType)) {
     CacheManager* pCacheManager = CacheManager::getInstance();
     CacheConn* pCacheConn = pCacheManager->GetCacheConn("unread");
     if (pCacheConn) {
       // Clear P2P msg Counter
       if (nSessionType == IM::BaseDefine::SESSION_TYPE_SINGLE) {
-        int nRet = pCacheConn->hdel("unread_" + int2string(nUserId),
-                                    int2string(nPeerId));
+        int nRet = pCacheConn->hdel("unread_" + int2string(nUserId), int2string(nPeerId));
         if (!nRet) {
           log("hdel failed %d->%d", nPeerId, nUserId);
         }
       }
       // Clear Group msg Counter
       else if (nSessionType == IM::BaseDefine::SESSION_TYPE_GROUP) {
-        string strGroupKey =
-            int2string(nPeerId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
+        string strGroupKey = int2string(nPeerId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
         map<string, string> mapGroupCount;
         bool bRet = pCacheConn->hgetAll(strGroupKey, mapGroupCount);
         if (bRet) {
-          string strUserKey = int2string(nUserId) + "_" + int2string(nPeerId) +
-                              GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
+          string strUserKey = int2string(nUserId) + "_" + int2string(nPeerId) + GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
           string strReply = pCacheConn->hmset(strUserKey, mapGroupCount);
           if (strReply.empty()) {
             log("hmset %s failed !", strUserKey.c_str());
@@ -244,20 +235,18 @@ void CUserModel::clearUserCounter(uint32_t nUserId, uint32_t nPeerId,
       log("no cache connection for unread");
     }
   } else {
-    log("invalid sessionType. userId=%u, fromId=%u, sessionType=%u", nUserId,
-        nPeerId, nSessionType);
+    log("invalid sessionType. userId=%u, fromId=%u, sessionType=%u", nUserId, nPeerId, nSessionType);
   }
 }
 
-void CUserModel::setCallReport(uint32_t nUserId, uint32_t nPeerId,
-                               IM::BaseDefine::ClientType nClientType) {
+void CUserModel::setCallReport(uint32_t nUserId, uint32_t nPeerId, IM::BaseDefine::ClientType nClientType) {
   if (IM::BaseDefine::ClientType_IsValid(nClientType)) {
     CDBManager* pDBManager = CDBManager::getInstance();
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
     if (pDBConn) {
       string strSql =
-          "insert into IMCallLog(`userId`, `peerId`, "
-          "`clientType`,`created`,`updated`) values(?,?,?,?,?)";
+        "insert into IMCallLog(`userId`, `peerId`, "
+        "`clientType`,`created`,`updated`) values(?,?,?,?,?)";
       CPrepareStatement* stmt = new CPrepareStatement();
       if (stmt->Init(pDBConn->GetMysql(), strSql)) {
         uint32_t nNow = (uint32_t)time(NULL);
@@ -281,8 +270,7 @@ void CUserModel::setCallReport(uint32_t nUserId, uint32_t nPeerId,
     }
 
   } else {
-    log("invalid clienttype. userId=%u, peerId=%u, clientType=%u", nUserId,
-        nPeerId, nClientType);
+    log("invalid clienttype. userId=%u, peerId=%u, clientType=%u", nUserId, nPeerId, nClientType);
   }
 }
 
@@ -296,8 +284,7 @@ bool CUserModel::updateUserSignInfo(uint32_t user_id, const string& sign_info) {
   CDBConn* db_conn = db_manager->GetDBConn("teamtalk_master");
   if (db_conn) {
     uint32_t now = (uint32_t)time(NULL);
-    string str_sql = "update IMUser set `sign_info`='" + sign_info +
-                     "', `updated`=" + int2string(now) +
+    string str_sql = "update IMUser set `sign_info`='" + sign_info + "', `updated`=" + int2string(now) +
                      " where id=" + int2string(user_id);
     rv = db_conn->ExecuteUpdate(str_sql.c_str());
     if (!rv) {
@@ -317,8 +304,7 @@ bool CUserModel::getUserSingInfo(uint32_t user_id, string* sign_info) {
   CDBManager* db_manager = CDBManager::getInstance();
   CDBConn* db_conn = db_manager->GetDBConn("teamtalk_slave");
   if (db_conn) {
-    string str_sql =
-        "select sign_info from IMUser where id=" + int2string(user_id);
+    string str_sql = "select sign_info from IMUser where id=" + int2string(user_id);
     CResultSet* result_set = db_conn->ExecuteQuery(str_sql.c_str());
     if (result_set) {
       if (result_set->Next()) {
@@ -343,9 +329,8 @@ bool CUserModel::updatePushShield(uint32_t user_id, uint32_t shield_status) {
   CDBConn* db_conn = db_manager->GetDBConn("teamtalk_master");
   if (db_conn) {
     uint32_t now = (uint32_t)time(NULL);
-    string str_sql =
-        "update IMUser set `push_shield_status`=" + int2string(shield_status) +
-        ", `updated`=" + int2string(now) + " where id=" + int2string(user_id);
+    string str_sql = "update IMUser set `push_shield_status`=" + int2string(shield_status) +
+                     ", `updated`=" + int2string(now) + " where id=" + int2string(user_id);
     rv = db_conn->ExecuteUpdate(str_sql.c_str());
     if (!rv) {
       log("updatePushShield: update failed:%s", str_sql.c_str());
@@ -364,8 +349,7 @@ bool CUserModel::getPushShield(uint32_t user_id, uint32_t* shield_status) {
   CDBManager* db_manager = CDBManager::getInstance();
   CDBConn* db_conn = db_manager->GetDBConn("teamtalk_slave");
   if (db_conn) {
-    string str_sql =
-        "select push_shield_status from IMUser where id=" + int2string(user_id);
+    string str_sql = "select push_shield_status from IMUser where id=" + int2string(user_id);
     CResultSet* result_set = db_conn->ExecuteQuery(str_sql.c_str());
     if (result_set) {
       if (result_set->Next()) {

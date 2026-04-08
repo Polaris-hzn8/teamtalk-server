@@ -28,14 +28,12 @@ static string g_msg_server_ip_addr2;
 static uint16_t g_msg_server_port;
 static uint32_t g_max_conn_cnt;
 
-void login_server_conn_timer_callback(void* callback_data, uint8_t msg,
-                                      uint32_t handle, void* pParam) {
+void login_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ConnMap_t::iterator it_old;
   CLoginServConn* pConn = NULL;
   uint64_t cur_time = get_tick_count();
 
-  for (ConnMap_t::iterator it = g_login_server_conn_map.begin();
-       it != g_login_server_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_login_server_conn_map.begin(); it != g_login_server_conn_map.end();) {
     it_old = it;
     it++;
 
@@ -44,14 +42,15 @@ void login_server_conn_timer_callback(void* callback_data, uint8_t msg,
   }
 
   // reconnect LoginServer
-  serv_check_reconnect<CLoginServConn>(g_login_server_list,
-                                       g_login_server_count);
+  serv_check_reconnect<CLoginServConn>(g_login_server_list, g_login_server_count);
 }
 
-void init_login_serv_conn(serv_info_t* server_list, uint32_t server_count,
+void init_login_serv_conn(serv_info_t* server_list,
+                          uint32_t server_count,
                           const char* msg_server_ip_addr1,
                           const char* msg_server_ip_addr2,
-                          uint16_t msg_server_port, uint32_t max_conn_cnt) {
+                          uint16_t msg_server_port,
+                          uint32_t max_conn_cnt) {
   g_login_server_list = server_list;
   g_login_server_count = server_count;
 
@@ -90,16 +89,16 @@ void send_to_all_login_server(CImPdu* pPdu) {
   }
 }
 
-CLoginServConn::CLoginServConn() { m_bOpen = false; }
+CLoginServConn::CLoginServConn() {
+  m_bOpen = false;
+}
 
 CLoginServConn::~CLoginServConn() {}
 
-void CLoginServConn::Connect(const char* server_ip, uint16_t server_port,
-                             uint32_t serv_idx) {
+void CLoginServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx) {
   log_info("Connecting to LoginServer %s:%d ", server_ip, server_port);
   m_serv_idx = serv_idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback,
-                            (void*)&g_login_server_conn_map);
+  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_login_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_login_server_conn_map.insert(make_pair(m_handle, this));
@@ -107,8 +106,7 @@ void CLoginServConn::Connect(const char* server_ip, uint16_t server_port,
 }
 
 void CLoginServConn::Close() {
-  serv_reset<CLoginServConn>(g_login_server_list, g_login_server_count,
-                             m_serv_idx);
+  serv_reset<CLoginServConn>(g_login_server_list, g_login_server_count, m_serv_idx);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     netlib_close(m_handle);

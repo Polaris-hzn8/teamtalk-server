@@ -31,6 +31,6 @@ typedef struct {
  */
 // int init_server_register(string &ip, int port, string &key, uint64_t
 // interval);
-int init_server_register(const LoginServerRegInfo *reg_info);
+int init_server_register(const LoginServerRegInfo* reg_info);
 
 #endif /* SERVER_REGISTER_H_ */

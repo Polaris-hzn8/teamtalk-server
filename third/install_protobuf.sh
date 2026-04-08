@@ -63,7 +63,7 @@ build_protobuf(){
     tar -zxvf $PROTOBUF.tar.gz
     cd $PROTOBUF
     ./configure --prefix=$CUR_DIR/protobuf
-    make
+    make -j$(nproc)
     make install
 }
 

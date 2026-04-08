@@ -47,8 +47,7 @@ class CGroupChat {
  private:
   CGroupChat() {}  // for singleton;
 
-  void _SendPduToUser(CImPdu* pPdu, uint32_t user_id,
-                      CMsgConn* pReqConn = NULL);
+  void _SendPduToUser(CImPdu* pPdu, uint32_t user_id, CMsgConn* pReqConn = NULL);
 
  private:
   static CGroupChat* s_group_chat_instance;

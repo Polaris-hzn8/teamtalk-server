@@ -38,7 +38,6 @@ class FileMsgServerConn : public CImConn {
 };
 
 void InitializeFileMsgServerConn();
-void FileMsgServerConnCallback(void* callback_data, uint8_t msg,
-                               uint32_t handle, void* param);
+void FileMsgServerConnCallback(void* callback_data, uint8_t msg, uint32_t handle, void* param);
 
 #endif  // _FILE_SERVER_FILE_MSG_SERVER_CONN_H_

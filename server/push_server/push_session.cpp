@@ -23,10 +23,8 @@ CPushSession::~CPushSession() {
 
 BOOL CPushSession::Start() {
   m_pSession->DoClose.connect(&m_handler, &CPushSessionHandler::OnClose);
-  m_pSession->DoException.connect(&m_handler,
-                                  &CPushSessionHandler::OnException);
-  m_pSession->DoRecv.connect((CBaseHandler*)&m_handler,
-                             &CPushSessionHandler::OnRecv);
+  m_pSession->DoException.connect(&m_handler, &CPushSessionHandler::OnException);
+  m_pSession->DoRecv.connect((CBaseHandler*)&m_handler, &CPushSessionHandler::OnRecv);
   SetHeartBeat(S_GetTickCount());
   return TRUE;
 }

@@ -17,10 +17,8 @@ class CFileModel {
   virtual ~CFileModel();
   static CFileModel* getInstance();
 
-  void getOfflineFile(uint32_t userId,
-                      std::list<IM::BaseDefine::OfflineFileInfo>& lsOffline);
-  void addOfflineFile(uint32_t fromId, uint32_t toId, std::string& taskId,
-                      std::string& fileName, uint32_t fileSize);
+  void getOfflineFile(uint32_t userId, std::list<IM::BaseDefine::OfflineFileInfo>& lsOffline);
+  void addOfflineFile(uint32_t fromId, uint32_t toId, std::string& taskId, std::string& fileName, uint32_t fileSize);
   void delOfflineFile(uint32_t fromId, uint32_t toId, std::string& taskId);
 
  private:

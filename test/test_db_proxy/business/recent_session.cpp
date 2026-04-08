@@ -12,8 +12,8 @@
 #include "../CachePool.h"
 #include "../DBPool.h"
 #include "../ProxyConn.h"
-#include "group_model.h"
 #include "IM.Buddy.pb.h"
+#include "group_model.h"
 #include "recent_session.h"
 #include "session_model.h"
 #include "user_model.h"
@@ -38,12 +38,10 @@ void getRecentSession(CImPdu* pPdu, uint32_t conn_uuid) {
 
     // 获取最近联系人列表
     list<IM::BaseDefine::ContactSessionInfo> lsContactList;
-    CSessionModel::getInstance()->getRecentSession(nUserId, nLastTime,
-                                                   lsContactList);
+    CSessionModel::getInstance()->getRecentSession(nUserId, nLastTime, lsContactList);
     msgResp.set_user_id(nUserId);
     for (auto it = lsContactList.begin(); it != lsContactList.end(); ++it) {
-      IM::BaseDefine::ContactSessionInfo* pContact =
-          msgResp.add_contact_session_list();
+      IM::BaseDefine::ContactSessionInfo* pContact = msgResp.add_contact_session_list();
       //            *pContact = *it;
       pContact->set_session_id(it->session_id());
       pContact->set_session_type(it->session_type());
@@ -55,15 +53,13 @@ void getRecentSession(CImPdu* pPdu, uint32_t conn_uuid) {
       pContact->set_latest_msg_from_user_id(it->latest_msg_from_user_id());
     }
 
-    log("userId=%u, last_time=%u, count=%u", nUserId, nLastTime,
-        msgResp.contact_session_list_size());
+    log("userId=%u, last_time=%u, count=%u", nUserId, nLastTime, msgResp.contact_session_list_size());
 
     msgResp.set_attach_data(msg.attach_data());
     pPduResp->SetPBMsg(&msgResp);
     pPduResp->SetSeqNum(pPdu->GetSeqNum());
     pPduResp->SetServiceId(IM::BaseDefine::SID_BUDDY_LIST);
-    pPduResp->SetCommandId(
-        IM::BaseDefine::CID_BUDDY_LIST_RECENT_CONTACT_SESSION_RESPONSE);
+    pPduResp->SetCommandId(IM::BaseDefine::CID_BUDDY_LIST_RECENT_CONTACT_SESSION_RESPONSE);
     CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
   } else {
     log("parse pb failed");
@@ -88,8 +84,7 @@ void deleteRecentSession(CImPdu* pPdu, uint32_t conn_uuid) {
     IM::BaseDefine::SessionType nType = msg.session_type();
     if (IM::BaseDefine::SessionType_IsValid(nType)) {
       bool bRet = false;
-      uint32_t nSessionId = CSessionModel::getInstance()->getSessionId(
-          nUserId, nPeerId, nType, false);
+      uint32_t nSessionId = CSessionModel::getInstance()->getSessionId(nUserId, nPeerId, nType, false);
       if (nSessionId != INVALID_VALUE) {
         bRet = CSessionModel::getInstance()->removeSession(nSessionId);
         // if remove session success, we need to clear the unread msg count
@@ -97,8 +92,7 @@ void deleteRecentSession(CImPdu* pPdu, uint32_t conn_uuid) {
           CUserModel::getInstance()->clearUserCounter(nUserId, nPeerId, nType);
         }
       }
-      log("userId=%d, peerId=%d, result=%s", nUserId, nPeerId,
-          bRet ? "success" : "failed");
+      log("userId=%d, peerId=%d, result=%s", nUserId, nPeerId, bRet ? "success" : "failed");
 
       msgResp.set_attach_data(msg.attach_data());
       msgResp.set_user_id(nUserId);
@@ -111,8 +105,7 @@ void deleteRecentSession(CImPdu* pPdu, uint32_t conn_uuid) {
       pPduResp->SetCommandId(IM::BaseDefine::CID_BUDDY_LIST_REMOVE_SESSION_RES);
       CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
     } else {
-      log("invalied session_type. userId=%u, peerId=%u, seseionType=%u",
-          nUserId, nPeerId, nType);
+      log("invalied session_type. userId=%u, peerId=%u, seseionType=%u", nUserId, nPeerId, nType);
     }
   } else {
     log("parse pb failed");

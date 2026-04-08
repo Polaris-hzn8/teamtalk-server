@@ -49,8 +49,7 @@ struct OfflineFileHeader {
   }
 
   void set_task_id(std::string& _task_id) {
-    strncpy(task_id, _task_id.c_str(),
-            128 < _task_id.length() ? 128 : _task_id.length());
+    strncpy(task_id, _task_id.c_str(), 128 < _task_id.length() ? 128 : _task_id.length());
   }
 
   void set_from_user_id(uint32_t id) { sprintf(from_user_id, "%u", id); }
@@ -59,25 +58,17 @@ struct OfflineFileHeader {
 
   void set_create_time(time_t t) { sprintf(create_time, "%ld", t); }
 
-  void set_file_name(const char* p) {
-    sprintf(file_name, p, 512 < strlen(p) ? 512 : strlen(p));
-  }
+  void set_file_name(const char* p) { sprintf(file_name, p, 512 < strlen(p) ? 512 : strlen(p)); }
 
   void set_file_size(uint32_t size) { sprintf(file_size, "%u", size); }
 
   std::string get_task_id() const { return task_id; }
 
-  uint32_t get_from_user_id() const {
-    return string2int(std::string(from_user_id));
-  }
+  uint32_t get_from_user_id() const { return string2int(std::string(from_user_id)); }
 
-  uint32_t get_to_user_id() const {
-    return string2int(std::string(to_user_id));
-  }
+  uint32_t get_to_user_id() const { return string2int(std::string(to_user_id)); }
 
-  uint32_t get_create_time() const {
-    return string2int(std::string(create_time));
-  }
+  uint32_t get_create_time() const { return string2int(std::string(create_time)); }
 
   std::string get_file_name() const { return file_name; }
 
@@ -95,8 +86,10 @@ struct OfflineFileHeader {
 //----------------------------------------------------------------------------
 class BaseTransferTask {
  public:
-  BaseTransferTask(const std::string& task_id, uint32_t from_user_id,
-                   uint32_t to_user_id, const std::string& file_name,
+  BaseTransferTask(const std::string& task_id,
+                   uint32_t from_user_id,
+                   uint32_t to_user_id,
+                   const std::string& file_name,
                    uint32_t file_size);
   virtual ~BaseTransferTask() {}
 
@@ -111,13 +104,9 @@ class BaseTransferTask {
   inline void set_state(int state) { state_ = state; }
   inline int state() const { return state_; }
 
-  uint32_t GetOpponent(uint32_t user_id) const {
-    return (user_id == from_user_id_ ? user_id : from_user_id_);
-  }
+  uint32_t GetOpponent(uint32_t user_id) const { return (user_id == from_user_id_ ? user_id : from_user_id_); }
 
-  CImConn* GetOpponentConn(uint32_t user_id) const {
-    return (user_id == from_user_id_ ? to_conn_ : from_conn_);
-  }
+  CImConn* GetOpponentConn(uint32_t user_id) const { return (user_id == from_user_id_ ? to_conn_ : from_conn_); }
 
   CImConn* GetFromConn() { return from_conn_; }
   CImConn* GetToConn() { return to_conn_; }
@@ -140,22 +129,15 @@ class BaseTransferTask {
     }
   }
 
-  inline bool CheckFromUserID(uint32_t user_id) const {
-    return from_user_id_ == user_id;
-  }
+  inline bool CheckFromUserID(uint32_t user_id) const { return from_user_id_ == user_id; }
 
-  inline bool CheckToUserID(uint32_t user_id) const {
-    return to_user_id_ == user_id;
-  }
+  inline bool CheckToUserID(uint32_t user_id) const { return to_user_id_ == user_id; }
 
-  inline bool CheckUserID(uint32_t user_id) const {
-    return user_id == from_user_id_ || user_id == to_user_id_;
-  }
+  inline bool CheckUserID(uint32_t user_id) const { return user_id == from_user_id_ || user_id == to_user_id_; }
 
   bool IsWaitTranfering() const {
     bool rv = false;
-    if (state_ == kTransferTaskStateWaitingTransfer ||
-        state_ == kTransferTaskStateWaitingUpload ||
+    if (state_ == kTransferTaskStateWaitingTransfer || state_ == kTransferTaskStateWaitingUpload ||
         kTransferTaskStateWaitingDownload) {
       rv = true;
     }
@@ -167,24 +149,14 @@ class BaseTransferTask {
   // int StatesNotify(int state, const std::string& task_id, uint32_t user_id);
 
   // 检查状态
-  virtual bool ChangePullState(uint32_t user_id, int file_role) {
-    return false;
-  }
+  virtual bool ChangePullState(uint32_t user_id, int file_role) { return false; }
 
   // 检查输入是否合法
-  virtual bool CheckByUserIDAndFileRole(uint32_t user_id, int file_role) const {
-    return false;
-  }
+  virtual bool CheckByUserIDAndFileRole(uint32_t user_id, int file_role) const { return false; }
 
-  virtual int DoRecvData(uint32_t user_id, uint32_t offset, const char* data,
-                         uint32_t data_size) {
-    return -1;
-  }
+  virtual int DoRecvData(uint32_t user_id, uint32_t offset, const char* data, uint32_t data_size) { return -1; }
 
-  virtual int DoPullFileRequest(uint32_t user_id, uint32_t offset,
-                                uint32_t data_size, std::string* data) {
-    return -1;
-  }
+  virtual int DoPullFileRequest(uint32_t user_id, uint32_t offset, uint32_t data_size, std::string* data) { return -1; }
 
  protected:
   // uint32_t    transfer_mode; // FILE_TYPE_ONLINE realtime, FILE_TYPE_OFFLINE
@@ -210,11 +182,12 @@ typedef std::map<CImConn*, BaseTransferTask*> TransferTaskConnkMap;
 //----------------------------------------------------------------------------
 class OnlineTransferTask : public BaseTransferTask {
  public:
-  OnlineTransferTask(const std::string& task_id, uint32_t from_user_id,
-                     uint32_t to_user_id, const std::string& file_name,
+  OnlineTransferTask(const std::string& task_id,
+                     uint32_t from_user_id,
+                     uint32_t to_user_id,
+                     const std::string& file_name,
                      uint32_t file_size)
-      : BaseTransferTask(task_id, from_user_id, to_user_id, file_name,
-                         file_size) {
+    : BaseTransferTask(task_id, from_user_id, to_user_id, file_name, file_size) {
     mac_seq_num_ = 0;
   }
 
@@ -225,10 +198,8 @@ class OnlineTransferTask : public BaseTransferTask {
   virtual bool ChangePullState(uint32_t user_id, int file_role);
   virtual bool CheckByUserIDAndFileRole(uint32_t user_id, int file_role) const;
 
-  virtual int DoRecvData(uint32_t user_id, uint32_t offset, const char* data,
-                         uint32_t data_size);
-  virtual int DoPullFileRequest(uint32_t user_id, uint32_t offset,
-                                uint32_t data_size, std::string* data);
+  virtual int DoRecvData(uint32_t user_id, uint32_t offset, const char* data, uint32_t data_size);
+  virtual int DoPullFileRequest(uint32_t user_id, uint32_t offset, uint32_t data_size, std::string* data);
 
   void SetSeqNum(uint32_t seq_num) { mac_seq_num_ = seq_num; }
 
@@ -244,11 +215,12 @@ class OnlineTransferTask : public BaseTransferTask {
 
 class OfflineTransferTask : public BaseTransferTask {
  public:
-  OfflineTransferTask(const std::string& task_id, uint32_t from_user_id,
-                      uint32_t to_user_id, const std::string& file_name,
+  OfflineTransferTask(const std::string& task_id,
+                      uint32_t from_user_id,
+                      uint32_t to_user_id,
+                      const std::string& file_name,
                       uint32_t file_size)
-      : BaseTransferTask(task_id, from_user_id, to_user_id, file_name,
-                         file_size) {
+    : BaseTransferTask(task_id, from_user_id, to_user_id, file_name, file_size) {
     //        file_header_ = NULL;
     fp_ = NULL;
     transfered_idx_ = 0;
@@ -267,18 +239,15 @@ class OfflineTransferTask : public BaseTransferTask {
     }
   }
 
-  static OfflineTransferTask* LoadFromDisk(const std::string& task_id,
-                                           uint32_t user_id);
+  static OfflineTransferTask* LoadFromDisk(const std::string& task_id, uint32_t user_id);
 
   virtual uint32_t GetTransMode() const;
 
   virtual bool ChangePullState(uint32_t user_id, int file_role);
   virtual bool CheckByUserIDAndFileRole(uint32_t user_id, int file_role) const;
 
-  virtual int DoRecvData(uint32_t user_id, uint32_t offset, const char* data,
-                         uint32_t data_size);
-  virtual int DoPullFileRequest(uint32_t user_id, uint32_t offset,
-                                uint32_t data_size, std::string* data);
+  virtual int DoRecvData(uint32_t user_id, uint32_t offset, const char* data, uint32_t data_size);
+  virtual int DoPullFileRequest(uint32_t user_id, uint32_t offset, uint32_t data_size, std::string* data);
 
   inline int GetSegmentSize() const { return sengment_size_; }
 
@@ -296,7 +265,8 @@ class OfflineTransferTask : public BaseTransferTask {
   // 迭代器
   inline int SetMaxSegmentSize(uint32_t file_size) {
     int seg_size = file_size / SEGMENT_SIZE;
-    if (file_size_ % SEGMENT_SIZE != 0) seg_size = file_size / SEGMENT_SIZE + 1;
+    if (file_size_ % SEGMENT_SIZE != 0)
+      seg_size = file_size / SEGMENT_SIZE + 1;
     return seg_size;
   }
 

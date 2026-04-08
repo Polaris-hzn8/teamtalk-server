@@ -18,8 +18,7 @@ class CDepartModel {
   ~CDepartModel() {}
   static CDepartModel* getInstance();
   void getChgedDeptId(uint32_t& nLastTime, std::list<uint32_t>& lsChangedIds);
-  void getDepts(std::list<uint32_t>& lsDeptIds,
-                std::list<IM::BaseDefine::DepartInfo>& lsDepts);
+  void getDepts(std::list<uint32_t>& lsDeptIds, std::list<IM::BaseDefine::DepartInfo>& lsDepts);
   void getDept(uint32_t nDeptId, IM::BaseDefine::DepartInfo& cDept);
 
  private:

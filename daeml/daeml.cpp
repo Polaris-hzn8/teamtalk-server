@@ -13,8 +13,10 @@
 /* Close all file descriptors >= fd */
 static void close_all_fds(int fd) {
   int fd_limit = sysconf(_SC_OPEN_MAX);
-  if (fd_limit > 128) fd_limit = 128;
-  while (fd < fd_limit) close(fd++);
+  if (fd_limit > 128)
+    fd_limit = 128;
+  while (fd < fd_limit)
+    close(fd++);
 }
 
 /**
@@ -58,7 +60,8 @@ static int create_daemon(int nochdir, int noclose, int asroot) {
   }
 
   // 切换目录
-  if (!nochdir) chdir("/");
+  if (!nochdir)
+    chdir("/");
 
   // 关闭并重定向标准文件描述符
   if (!noclose) {
@@ -71,7 +74,8 @@ static int create_daemon(int nochdir, int noclose, int asroot) {
     dup2(fd, STDIN_FILENO);
     dup2(fd, STDOUT_FILENO);
     dup2(fd, STDERR_FILENO);
-    if (fd > STDERR_FILENO) close(fd);
+    if (fd > STDERR_FILENO)
+      close(fd);
   }
   return 0;
 }
@@ -86,7 +90,9 @@ static void PrintUsage(const char* prog_name) {
           "    program_name - Program (with path) to run as daemon.\n\n"
           "Example:\n"
           "    %s ./myprog - Run 'myprog' as daemon.\n\n",
-          prog_name, prog_name, prog_name);
+          prog_name,
+          prog_name,
+          prog_name);
 }
 
 // ./daemon_loader <program_path> [program_args...]
@@ -114,7 +120,6 @@ int main(int argc, char* argv[]) {
   // execl(argv[1], argv[1], NULL);
 
   // execv 失败
-  fprintf(stdout, "Error: Failed to execute '%s', errno=%d\n", target_path,
-          errno);
+  fprintf(stdout, "Error: Failed to execute '%s', errno=%d\n", target_path, errno);
   return EXIT_FAILURE;
 }

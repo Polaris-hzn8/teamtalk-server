@@ -11,8 +11,7 @@
 namespace msfs {
 
 // Replaces all occurrences of "search" with "replace".
-void replace_substrs(const char* search, size_t search_len, const char* replace,
-                     size_t replace_len, std::string* s);
+void replace_substrs(const char* search, size_t search_len, const char* replace, size_t replace_len, std::string* s);
 
 // True iff s1 starts with s2.
 bool starts_with(const char* s1, const char* s2);

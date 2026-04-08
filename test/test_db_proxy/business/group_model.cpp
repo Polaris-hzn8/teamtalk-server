@@ -14,9 +14,9 @@
 #include "group_message_model.h"
 #include "group_model.h"
 #include "im_pdu_base.h"
+#include "public_define.h"
 #include "session_model.h"
 #include "user_model.h"
-#include "public_define.h"
 
 CGroupModel* CGroupModel::m_pInstance = NULL;
 
@@ -45,7 +45,8 @@ CGroupModel* CGroupModel::getInstance() {
  *
  *  @return 成功返回群Id，失败返回0;
  */
-uint32_t CGroupModel::createGroup(uint32_t nUserId, const string& strGroupName,
+uint32_t CGroupModel::createGroup(uint32_t nUserId,
+                                  const string& strGroupName,
                                   const string& strGroupAvatar,
                                   uint32_t nGroupType,
                                   set<uint32_t>& setMember) {
@@ -60,8 +61,7 @@ uint32_t CGroupModel::createGroup(uint32_t nUserId, const string& strGroupName,
     // remove repeat user
 
     // insert IMGroup
-    if (!insertNewGroup(nUserId, strGroupName, strGroupAvatar, nGroupType,
-                        (uint32_t)setMember.size(), nGroupId)) {
+    if (!insertNewGroup(nUserId, strGroupName, strGroupAvatar, nGroupType, (uint32_t)setMember.size(), nGroupId)) {
       break;
     }
     bool bRet = CGroupMessageModel::getInstance()->resetMsgId(nGroupId);
@@ -78,15 +78,13 @@ uint32_t CGroupModel::createGroup(uint32_t nUserId, const string& strGroupName,
   return nGroupId;
 }
 
-bool CGroupModel::removeGroup(uint32_t nUserId, uint32_t nGroupId,
-                              list<uint32_t>& lsCurUserId) {
+bool CGroupModel::removeGroup(uint32_t nUserId, uint32_t nGroupId, list<uint32_t>& lsCurUserId) {
   bool bRet = false;
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   set<uint32_t> setGroupUsers;
   if (pDBConn) {
-    string strSql =
-        "select creator from IMGroup where id=" + int2string(nGroupId);
+    string strSql = "select creator from IMGroup where id=" + int2string(nGroupId);
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet) {
       uint32_t nCreator;
@@ -103,8 +101,7 @@ bool CGroupModel::removeGroup(uint32_t nUserId, uint32_t nGroupId,
     }
 
     if (bRet) {
-      strSql = "select userId from IMGroupMember where groupId=" +
-               int2string(nGroupId);
+      strSql = "select userId from IMGroupMember where groupId=" + int2string(nGroupId);
       CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
       if (pResultSet) {
         while (pResultSet->Next()) {
@@ -124,9 +121,7 @@ bool CGroupModel::removeGroup(uint32_t nUserId, uint32_t nGroupId,
   return bRet;
 }
 
-void CGroupModel::getUserGroup(uint32_t nUserId,
-                               list<IM::BaseDefine::GroupVersionInfo>& lsGroup,
-                               uint32_t nGroupType) {
+void CGroupModel::getUserGroup(uint32_t nUserId, list<IM::BaseDefine::GroupVersionInfo>& lsGroup, uint32_t nGroupType) {
   list<uint32_t> lsGroupId;
   getUserGroupIds(nUserId, lsGroupId, 0);
   if (lsGroupId.size() != 0) {
@@ -134,9 +129,8 @@ void CGroupModel::getUserGroup(uint32_t nUserId,
   }
 }
 
-void CGroupModel::getGroupInfo(
-    map<uint32_t, IM::BaseDefine::GroupVersionInfo>& mapGroupId,
-    list<IM::BaseDefine::GroupInfo>& lsGroupInfo) {
+void CGroupModel::getGroupInfo(map<uint32_t, IM::BaseDefine::GroupVersionInfo>& mapGroupId,
+                               list<IM::BaseDefine::GroupInfo>& lsGroupInfo) {
   if (!mapGroupId.empty()) {
     CDBManager* pDBManager = CDBManager::getInstance();
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
@@ -151,8 +145,7 @@ void CGroupModel::getGroupInfo(
           strClause += ("," + int2string(it->first));
         }
       }
-      string strSql = "select * from IMGroup where id in (" + strClause +
-                      ") order by updated desc";
+      string strSql = "select * from IMGroup where id in (" + strClause + ") order by updated desc";
       CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
       if (pResultSet) {
         while (pResultSet->Next()) {
@@ -164,15 +157,13 @@ void CGroupModel::getGroupInfo(
             cGroupInfo.set_version(nVersion);
             cGroupInfo.set_group_name(pResultSet->GetString("name"));
             cGroupInfo.set_group_avatar(pResultSet->GetString("avatar"));
-            IM::BaseDefine::GroupType nGroupType =
-                IM::BaseDefine::GroupType(pResultSet->GetInt("type"));
+            IM::BaseDefine::GroupType nGroupType = IM::BaseDefine::GroupType(pResultSet->GetInt("type"));
             if (IM::BaseDefine::GroupType_IsValid(nGroupType)) {
               cGroupInfo.set_group_type(nGroupType);
               cGroupInfo.set_group_creator_id(pResultSet->GetInt("creator"));
               lsGroupInfo.push_back(cGroupInfo);
             } else {
-              log("invalid groupType. groupId=%u, groupType=%u", nGroupId,
-                  nGroupType);
+              log("invalid groupType. groupId=%u, groupType=%u", nGroupId, nGroupType);
             }
           }
         }
@@ -192,7 +183,8 @@ void CGroupModel::getGroupInfo(
   }
 }
 
-bool CGroupModel::modifyGroupMember(uint32_t nUserId, uint32_t nGroupId,
+bool CGroupModel::modifyGroupMember(uint32_t nUserId,
+                                    uint32_t nGroupId,
                                     IM::BaseDefine::GroupModifyType nType,
                                     set<uint32_t>& setUserId,
                                     list<uint32_t>& lsCurUserId) {
@@ -207,8 +199,7 @@ bool CGroupModel::modifyGroupMember(uint32_t nUserId, uint32_t nGroupId,
         removeSession(nGroupId, setUserId);
         break;
       default:
-        log("unknown type:%u while modify group.%u->%u", nType, nUserId,
-            nGroupId);
+        log("unknown type:%u while modify group.%u->%u", nType, nUserId, nGroupId);
         break;
     }
     // if modify group member success, need to inc the group version and clear
@@ -217,8 +208,7 @@ bool CGroupModel::modifyGroupMember(uint32_t nUserId, uint32_t nGroupId,
       incGroupVersion(nGroupId);
       for (auto it = setUserId.begin(); it != setUserId.end(); ++it) {
         uint32_t nUserId = *it;
-        CUserModel::getInstance()->clearUserCounter(
-            nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP);
+        CUserModel::getInstance()->clearUserCounter(nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP);
       }
     }
   } else {
@@ -227,9 +217,11 @@ bool CGroupModel::modifyGroupMember(uint32_t nUserId, uint32_t nGroupId,
   return bRet;
 }
 
-bool CGroupModel::insertNewGroup(uint32_t nUserId, const string& strGroupName,
+bool CGroupModel::insertNewGroup(uint32_t nUserId,
+                                 const string& strGroupName,
                                  const string& strGroupAvatar,
-                                 uint32_t nGroupType, uint32_t nMemberCnt,
+                                 uint32_t nGroupType,
+                                 uint32_t nMemberCnt,
                                  uint32_t& nGroupId) {
   bool bRet = false;
   nGroupId = INVALID_VALUE;
@@ -237,9 +229,9 @@ bool CGroupModel::insertNewGroup(uint32_t nUserId, const string& strGroupName,
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
     string strSql =
-        "insert into IMGroup(`name`, `avatar`, `creator`, `type`,`userCnt`, "
-        "`status`, `version`, `lastChated`, `updated`, `created`) "
-        "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "insert into IMGroup(`name`, `avatar`, `creator`, `type`,`userCnt`, "
+      "`status`, `version`, `lastChated`, `updated`, `created`) "
+      "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     CPrepareStatement* pStmt = new CPrepareStatement();
     if (pStmt->Init(pDBConn->GetMysql(), strSql)) {
@@ -291,9 +283,8 @@ bool CGroupModel::insertNewMember(uint32_t nGroupId, set<uint32_t>& setUsers) {
           strClause += ("," + int2string(*it));
         }
       }
-      string strSql = "select userId from IMGroupMember where groupId=" +
-                      int2string(nGroupId) + " and userId in (" + strClause +
-                      ")";
+      string strSql =
+        "select userId from IMGroupMember where groupId=" + int2string(nGroupId) + " and userId in (" + strClause + ")";
       CResultSet* pResult = pDBConn->ExecuteQuery(strSql.c_str());
       set<uint32_t> setHasUser;
       if (pResult) {
@@ -324,14 +315,12 @@ bool CGroupModel::insertNewMember(uint32_t nGroupId, set<uint32_t>& setUsers) {
               }
             }
 
-            strSql = "update IMGroupMember set status=0, updated=" +
-                     int2string(nCreated) +
-                     " where groupId=" + int2string(nGroupId) +
-                     " and userId in (" + strClause + ")";
+            strSql = "update IMGroupMember set status=0, updated=" + int2string(nCreated) +
+                     " where groupId=" + int2string(nGroupId) + " and userId in (" + strClause + ")";
             pDBConn->ExecuteUpdate(strSql.c_str());
           }
           strSql =
-              "insert into IMGroupMember(`groupId`, `userId`, `status`, `created`, `updated`) values\
+            "insert into IMGroupMember(`groupId`, `userId`, `status`, `created`, `updated`) values\
                     (?,?,?,?,?)";
 
           // 插入新成员
@@ -361,9 +350,8 @@ bool CGroupModel::insertNewMember(uint32_t nGroupId, set<uint32_t>& setUsers) {
             ++it;
           }
           if (nIncMemberCnt != 0) {
-            strSql = "update IMGroup set userCnt=userCnt+" +
-                     int2string(nIncMemberCnt) +
-                     " where id=" + int2string(nGroupId);
+            strSql =
+              "update IMGroup set userCnt=userCnt+" + int2string(nIncMemberCnt) + " where id=" + int2string(nGroupId);
             pDBConn->ExecuteUpdate(strSql.c_str());
           }
 
@@ -388,20 +376,16 @@ bool CGroupModel::insertNewMember(uint32_t nGroupId, set<uint32_t>& setUsers) {
   return bRet;
 }
 
-void CGroupModel::getUserGroupIds(uint32_t nUserId, list<uint32_t>& lsGroupId,
-                                  uint32_t nLimited) {
+void CGroupModel::getUserGroupIds(uint32_t nUserId, list<uint32_t>& lsGroupId, uint32_t nLimited) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
   if (pDBConn) {
     string strSql;
     if (nLimited != 0) {
-      strSql = "select groupId from IMGroupMember where userId=" +
-               int2string(nUserId) +
-               " and status = 0 order by updated desc, id desc limit " +
-               int2string(nLimited);
+      strSql = "select groupId from IMGroupMember where userId=" + int2string(nUserId) +
+               " and status = 0 order by updated desc, id desc limit " + int2string(nLimited);
     } else {
-      strSql = "select groupId from IMGroupMember where userId=" +
-               int2string(nUserId) +
+      strSql = "select groupId from IMGroupMember where userId=" + int2string(nUserId) +
                " and status = 0 order by updated desc, id desc";
     }
 
@@ -421,17 +405,16 @@ void CGroupModel::getUserGroupIds(uint32_t nUserId, list<uint32_t>& lsGroupId,
   }
 }
 
-void CGroupModel::getGroupVersion(
-    list<uint32_t>& lsGroupId, list<IM::BaseDefine::GroupVersionInfo>& lsGroup,
-    uint32_t nGroupType) {
+void CGroupModel::getGroupVersion(list<uint32_t>& lsGroupId,
+                                  list<IM::BaseDefine::GroupVersionInfo>& lsGroup,
+                                  uint32_t nGroupType) {
   if (!lsGroupId.empty()) {
     CDBManager* pDBManager = CDBManager::getInstance();
     CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
     if (pDBConn) {
       string strClause;
       bool bFirst = true;
-      for (list<uint32_t>::iterator it = lsGroupId.begin();
-           it != lsGroupId.end(); ++it) {
+      for (list<uint32_t>::iterator it = lsGroupId.begin(); it != lsGroupId.end(); ++it) {
         if (bFirst) {
           bFirst = false;
           strClause = int2string(*it);
@@ -440,8 +423,7 @@ void CGroupModel::getGroupVersion(
         }
       }
 
-      string strSql =
-          "select id,version from IMGroup where id in (" + strClause + ")";
+      string strSql = "select id,version from IMGroup where id in (" + strClause + ")";
       if (0 != nGroupType) {
         strSql += " and type=" + int2string(nGroupType);
       }
@@ -486,8 +468,7 @@ bool CGroupModel::isInGroup(uint32_t nUserId, uint32_t nGroupId) {
   return bRet;
 }
 
-bool CGroupModel::hasModifyPermission(uint32_t nUserId, uint32_t nGroupId,
-                                      IM::BaseDefine::GroupModifyType nType) {
+bool CGroupModel::hasModifyPermission(uint32_t nUserId, uint32_t nGroupId, IM::BaseDefine::GroupModifyType nType) {
   if (nUserId == 0) {
     return true;
   }
@@ -496,17 +477,14 @@ bool CGroupModel::hasModifyPermission(uint32_t nUserId, uint32_t nGroupId,
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
   if (pDBConn) {
-    string strSql =
-        "select creator, type from IMGroup where id=" + int2string(nGroupId);
+    string strSql = "select creator, type from IMGroup where id=" + int2string(nGroupId);
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet) {
       while (pResultSet->Next()) {
         uint32_t nCreator = pResultSet->GetInt("creator");
-        IM::BaseDefine::GroupType nGroupType =
-            IM::BaseDefine::GroupType(pResultSet->GetInt("type"));
+        IM::BaseDefine::GroupType nGroupType = IM::BaseDefine::GroupType(pResultSet->GetInt("type"));
         if (IM::BaseDefine::GroupType_IsValid(nGroupType)) {
-          if (IM::BaseDefine::GROUP_TYPE_TMP == nGroupType &&
-              IM::BaseDefine::GROUP_MODIFY_TYPE_ADD == nType) {
+          if (IM::BaseDefine::GROUP_TYPE_TMP == nGroupType && IM::BaseDefine::GROUP_MODIFY_TYPE_ADD == nType) {
             bRet = true;
             break;
           } else {
@@ -528,8 +506,7 @@ bool CGroupModel::hasModifyPermission(uint32_t nUserId, uint32_t nGroupId,
   return bRet;
 }
 
-bool CGroupModel::addMember(uint32_t nGroupId, set<uint32_t>& setUser,
-                            list<uint32_t>& lsCurUserId) {
+bool CGroupModel::addMember(uint32_t nGroupId, set<uint32_t>& setUser, list<uint32_t>& lsCurUserId) {
   // 去掉已经存在的用户ID
   removeRepeatUser(nGroupId, setUser);
   bool bRet = insertNewMember(nGroupId, setUser);
@@ -537,8 +514,7 @@ bool CGroupModel::addMember(uint32_t nGroupId, set<uint32_t>& setUser,
   return bRet;
 }
 
-bool CGroupModel::removeMember(uint32_t nGroupId, set<uint32_t>& setUser,
-                               list<uint32_t>& lsCurUserId) {
+bool CGroupModel::removeMember(uint32_t nGroupId, set<uint32_t>& setUser, list<uint32_t>& lsCurUserId) {
   if (setUser.size() <= 0) {
     return true;
   }
@@ -559,9 +535,8 @@ bool CGroupModel::removeMember(uint32_t nGroupId, set<uint32_t>& setUser,
           strClause += ("," + int2string(*it));
         }
       }
-      string strSql = "update IMGroupMember set status=1 where  groupId =" +
-                      int2string(nGroupId) + " and userId in(" + strClause +
-                      ")";
+      string strSql = "update IMGroupMember set status=1 where  groupId =" + int2string(nGroupId) + " and userId in(" +
+                      strClause + ")";
       pDBConn->ExecuteUpdate(strSql.c_str());
 
       // 从redis中删除成员
@@ -605,8 +580,7 @@ void CGroupModel::removeRepeatUser(uint32_t nGroupId, set<uint32_t>& setUser) {
   }
 }
 
-bool CGroupModel::setPush(uint32_t nUserId, uint32_t nGroupId, uint32_t nType,
-                          uint32_t nStatus) {
+bool CGroupModel::setPush(uint32_t nUserId, uint32_t nGroupId, uint32_t nType, uint32_t nStatus) {
   bool bRet = false;
   if (!isInGroup(nUserId, nGroupId)) {
     log("user:%d is not in group:%d", nUserId, nGroupId);
@@ -630,8 +604,7 @@ bool CGroupModel::setPush(uint32_t nUserId, uint32_t nGroupId, uint32_t nType,
   return bRet;
 }
 
-void CGroupModel::getPush(uint32_t nGroupId, list<uint32_t>& lsUser,
-                          list<IM::BaseDefine::ShieldStatus>& lsPush) {
+void CGroupModel::getPush(uint32_t nGroupId, list<uint32_t>& lsUser, list<IM::BaseDefine::ShieldStatus>& lsPush) {
   if (lsUser.empty()) {
     return;
   }
@@ -644,8 +617,7 @@ void CGroupModel::getPush(uint32_t nGroupId, list<uint32_t>& lsUser,
     pCacheManager->RelCacheConn(pCacheConn);
     if (bRet) {
       for (auto it = lsUser.begin(); it != lsUser.end(); ++it) {
-        string strField =
-            int2string(*it) + "_" + int2string(IM_GROUP_SETTING_PUSH);
+        string strField = int2string(*it) + "_" + int2string(IM_GROUP_SETTING_PUSH);
         auto itResult = mapResult.find(strField);
         IM::BaseDefine::ShieldStatus status;
         status.set_group_id(nGroupId);
@@ -691,8 +663,7 @@ void CGroupModel::updateGroupChat(uint32_t nGroupId) {
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
     uint32_t nNow = (uint32_t)time(NULL);
-    string strSql = "update IMGroup set lastChated=" + int2string(nNow) +
-                    " where id=" + int2string(nGroupId);
+    string strSql = "update IMGroup set lastChated=" + int2string(nNow) + " where id=" + int2string(nGroupId);
     pDBConn->ExecuteUpdate(strSql.c_str());
     pDBManager->RelDBConn(pDBConn);
   } else {
@@ -736,12 +707,11 @@ bool CGroupModel::isValidateGroupId(uint32_t nGroupId) {
   return bRet;
 }
 
-void CGroupModel::removeSession(uint32_t nGroupId,
-                                const set<uint32_t>& setUser) {
+void CGroupModel::removeSession(uint32_t nGroupId, const set<uint32_t>& setUser) {
   for (auto it = setUser.begin(); it != setUser.end(); ++it) {
     uint32_t nUserId = *it;
-    uint32_t nSessionId = CSessionModel::getInstance()->getSessionId(
-        nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP, false);
+    uint32_t nSessionId =
+      CSessionModel::getInstance()->getSessionId(nUserId, nGroupId, IM::BaseDefine::SESSION_TYPE_GROUP, false);
     CSessionModel::getInstance()->removeSession(nSessionId);
   }
 }
@@ -751,8 +721,7 @@ bool CGroupModel::incGroupVersion(uint32_t nGroupId) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
-    string strSql =
-        "update IMGroup set version=version+1 where id=" + int2string(nGroupId);
+    string strSql = "update IMGroup set version=version+1 where id=" + int2string(nGroupId);
     if (pDBConn->ExecuteUpdate(strSql.c_str())) {
       bRet = true;
     }
@@ -768,8 +737,7 @@ void CGroupModel::fillGroupMember(list<IM::BaseDefine::GroupInfo>& lsGroups) {
     list<uint32_t> lsUserIds;
     uint32_t nGroupId = it->group_id();
     getGroupUser(nGroupId, lsUserIds);
-    for (auto itUserId = lsUserIds.begin(); itUserId != lsUserIds.end();
-         ++itUserId) {
+    for (auto itUserId = lsUserIds.begin(); itUserId != lsUserIds.end(); ++itUserId) {
       it->add_group_member_list(*itUserId);
     }
   }
@@ -797,8 +765,7 @@ void CGroupModel::clearGroupMember(uint32_t nGroupId) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
-    string strSql =
-        "delete from IMGroupMember where groupId=" + int2string(nGroupId);
+    string strSql = "delete from IMGroupMember where groupId=" + int2string(nGroupId);
     pDBConn->ExecuteUpdate(strSql.c_str());
     pDBManager->RelDBConn(pDBConn);
   } else {

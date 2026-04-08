@@ -27,14 +27,12 @@ static serv_info_t* g_file_server_list;
 static uint32_t g_file_server_count;
 static CFileHandler* s_file_handler = NULL;
 
-void file_server_conn_timer_callback(void* callback_data, uint8_t msg,
-                                     uint32_t handle, void* pParam) {
+void file_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ConnMap_t::iterator it_old;
   CFileServConn* pConn = NULL;
   uint64_t cur_time = get_tick_count();
 
-  for (ConnMap_t::iterator it = g_file_server_conn_map.begin();
-       it != g_file_server_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_file_server_conn_map.begin(); it != g_file_server_conn_map.end();) {
     it_old = it;
     it++;
     pConn = (CFileServConn*)it_old->second;
@@ -97,13 +95,11 @@ CFileServConn::CFileServConn() {
 
 CFileServConn::~CFileServConn() {}
 
-void CFileServConn::Connect(const char* server_ip, uint16_t server_port,
-                            uint32_t idx) {
+void CFileServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t idx) {
   log_info("Connecting to FileServer %s:%d ", server_ip, server_port);
 
   m_serv_idx = idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback,
-                            (void*)&g_file_server_conn_map);
+  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_file_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_file_server_conn_map.insert(make_pair(m_handle, this));
@@ -111,8 +107,7 @@ void CFileServConn::Connect(const char* server_ip, uint16_t server_port,
 }
 
 void CFileServConn::Close() {
-  serv_reset<CFileServConn>(g_file_server_list, g_file_server_count,
-                            m_serv_idx);
+  serv_reset<CFileServConn>(g_file_server_list, g_file_server_count, m_serv_idx);
 
   m_bOpen = false;
   if (m_handle != NETLIB_INVALID_HANDLE) {
@@ -176,8 +171,7 @@ void CFileServConn::HandlePdu(CImPdu* pPdu) {
 
 void CFileServConn::_HandleFileMsgTransRsp(CImPdu* pPdu) {
   IM::Server::IMFileTransferRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t result = msg.result_code();
   uint32_t from_id = msg.from_user_id();
@@ -186,12 +180,16 @@ void CFileServConn::_HandleFileMsgTransRsp(CImPdu* pPdu) {
   uint32_t file_size = msg.file_size();
   string task_id = msg.task_id();
   uint32_t trans_mode = msg.trans_mode();
-  CDbAttachData attach((uchar_t*)msg.attach_data().c_str(),
-                       msg.attach_data().length());
+  CDbAttachData attach((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   log_info(
-      "HandleFileMsgTransRsp, result: %u, from_user_id: %u, to_user_id: %u, file_name: %s, \
+    "HandleFileMsgTransRsp, result: %u, from_user_id: %u, to_user_id: %u, file_name: %s, \
         task_id: %s, trans_mode: %u. ",
-      result, from_id, to_id, file_name.c_str(), task_id.c_str(), trans_mode);
+    result,
+    from_id,
+    to_id,
+    file_name.c_str(),
+    task_id.c_str(),
+    trans_mode);
 
   const list<IM::BaseDefine::IpAddr>* ip_addr_list = GetFileServerIPList();
 
@@ -202,8 +200,7 @@ void CFileServConn::_HandleFileMsgTransRsp(CImPdu* pPdu) {
   msg2.set_file_name(file_name);
   msg2.set_task_id(task_id);
   msg2.set_trans_mode((IM::BaseDefine::TransferFileType)trans_mode);
-  for (list<IM::BaseDefine::IpAddr>::const_iterator it = ip_addr_list->begin();
-       it != ip_addr_list->end(); it++) {
+  for (list<IM::BaseDefine::IpAddr>::const_iterator it = ip_addr_list->begin(); it != ip_addr_list->end(); it++) {
     IM::BaseDefine::IpAddr ip_addr_tmp = *it;
     IM::BaseDefine::IpAddr* ip_addr = msg2.add_ip_addr_list();
     ip_addr->set_ip(ip_addr_tmp.ip());
@@ -216,8 +213,7 @@ void CFileServConn::_HandleFileMsgTransRsp(CImPdu* pPdu) {
   pdu.SetSeqNum(pPdu->GetSeqNum());
   uint32_t handle = attach.GetHandle();
 
-  CMsgConn* pFromConn =
-      CImUserManager::GetInstance()->GetMsgConnByHandle(from_id, handle);
+  CMsgConn* pFromConn = CImUserManager::GetInstance()->GetMsgConnByHandle(from_id, handle);
   if (pFromConn) {
     pFromConn->SendPdu(&pdu);
   }
@@ -231,9 +227,7 @@ void CFileServConn::_HandleFileMsgTransRsp(CImPdu* pPdu) {
     msg3.set_task_id(task_id);
     msg3.set_trans_mode((IM::BaseDefine::TransferFileType)trans_mode);
     msg3.set_offline_ready(0);
-    for (list<IM::BaseDefine::IpAddr>::const_iterator it =
-             ip_addr_list->begin();
-         it != ip_addr_list->end(); it++) {
+    for (list<IM::BaseDefine::IpAddr>::const_iterator it = ip_addr_list->begin(); it != ip_addr_list->end(); it++) {
       IM::BaseDefine::IpAddr ip_addr_tmp = *it;
       IM::BaseDefine::IpAddr* ip_addr = msg3.add_ip_addr_list();
       ip_addr->set_ip(ip_addr_tmp.ip());
@@ -260,14 +254,12 @@ void CFileServConn::_HandleFileMsgTransRsp(CImPdu* pPdu) {
 
 void CFileServConn::_HandleFileServerIPRsp(CImPdu* pPdu) {
   IM::Server::IMFileServerIPRsp msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   uint32_t ip_addr_cnt = msg.ip_addr_list_size();
 
   for (uint32_t i = 0; i < ip_addr_cnt; i++) {
     IM::BaseDefine::IpAddr ip_addr = msg.ip_addr_list(i);
-    log_info("_HandleFileServerIPRsp -> %s : %d ", ip_addr.ip().c_str(),
-             ip_addr.port());
+    log_info("_HandleFileServerIPRsp -> %s : %d ", ip_addr.ip().c_str(), ip_addr.port());
     m_ip_list.push_back(ip_addr);
   }
 }

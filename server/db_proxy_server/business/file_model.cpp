@@ -23,14 +23,11 @@ CFileModel* CFileModel::getInstance() {
   return m_pInstance;
 }
 
-void CFileModel::getOfflineFile(
-    uint32_t userId, list<IM::BaseDefine::OfflineFileInfo>& lsOffline) {
+void CFileModel::getOfflineFile(uint32_t userId, list<IM::BaseDefine::OfflineFileInfo>& lsOffline) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
   if (pDBConn) {
-    string strSql =
-        "select * from IMTransmitFile where toId=" + int2string(userId) +
-        " and status=0 order by created";
+    string strSql = "select * from IMTransmitFile where toId=" + int2string(userId) + " and status=0 order by created";
     CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
     if (pResultSet) {
       while (pResultSet->Next()) {
@@ -51,15 +48,14 @@ void CFileModel::getOfflineFile(
   }
 }
 
-void CFileModel::addOfflineFile(uint32_t fromId, uint32_t toId, string& taskId,
-                                string& fileName, uint32_t fileSize) {
+void CFileModel::addOfflineFile(uint32_t fromId, uint32_t toId, string& taskId, string& fileName, uint32_t fileSize) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
     string strSql =
-        "insert into IMTransmitFile "
-        "(`fromId`,`toId`,`fileName`,`size`,`taskId`,`status`,`created`,`"
-        "updated`) values(?,?,?,?,?,?,?,?)";
+      "insert into IMTransmitFile "
+      "(`fromId`,`toId`,`fileName`,`size`,`taskId`,`status`,`created`,`"
+      "updated`) values(?,?,?,?,?,?,?,?)";
 
     // 必须在释放连接前delete
     // CPrepareStatement对象，否则有可能多个线程操作mysql对象，会crash
@@ -91,20 +87,16 @@ void CFileModel::addOfflineFile(uint32_t fromId, uint32_t toId, string& taskId,
   }
 }
 
-void CFileModel::delOfflineFile(uint32_t fromId, uint32_t toId,
-                                string& taskId) {
+void CFileModel::delOfflineFile(uint32_t fromId, uint32_t toId, string& taskId) {
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
   if (pDBConn) {
-    string strSql =
-        "delete from IMTransmitFile where  fromId=" + int2string(fromId) +
-        " and toId=" + int2string(toId) + " and taskId='" + taskId + "'";
+    string strSql = "delete from IMTransmitFile where  fromId=" + int2string(fromId) + " and toId=" + int2string(toId) +
+                    " and taskId='" + taskId + "'";
     if (pDBConn->ExecuteUpdate(strSql.c_str())) {
-      log_info("delete offline file success.%d->%d:%s", fromId, toId,
-               taskId.c_str());
+      log_info("delete offline file success.%d->%d:%s", fromId, toId, taskId.c_str());
     } else {
-      log_info("delete offline file failed.%d->%d:%s", fromId, toId,
-               taskId.c_str());
+      log_info("delete offline file failed.%d->%d:%s", fromId, toId, taskId.c_str());
     }
     pDBManager->RelDBConn(pDBConn);
   } else {

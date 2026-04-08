@@ -60,9 +60,11 @@ CGroupMessageModel* CGroupMessageModel::getInstance() {
  *
  *  @return 成功返回true 失败返回false
  */
-bool CGroupMessageModel::sendMessage(uint32_t nFromId, uint32_t nGroupId,
+bool CGroupMessageModel::sendMessage(uint32_t nFromId,
+                                     uint32_t nGroupId,
                                      IM::BaseDefine::MsgType nMsgType,
-                                     uint32_t nCreateTime, uint32_t nMsgId,
+                                     uint32_t nCreateTime,
+                                     uint32_t nMsgId,
                                      const string& strMsgContent) {
   bool bRet = false;
   if (CGroupModel::getInstance()->isInGroup(nFromId, nGroupId)) {
@@ -125,9 +127,11 @@ bool CGroupMessageModel::sendMessage(uint32_t nFromId, uint32_t nGroupId,
  *
  *  @return 成功返回true，失败返回false
  */
-bool CGroupMessageModel::sendAudioMessage(uint32_t nFromId, uint32_t nGroupId,
+bool CGroupMessageModel::sendAudioMessage(uint32_t nFromId,
+                                          uint32_t nGroupId,
                                           IM::BaseDefine::MsgType nMsgType,
-                                          uint32_t nCreateTime, uint32_t nMsgId,
+                                          uint32_t nCreateTime,
+                                          uint32_t nMsgId,
                                           const char* pMsgContent,
                                           uint32_t nMsgLen) {
   if (nMsgLen <= 4) {
@@ -140,14 +144,12 @@ bool CGroupMessageModel::sendAudioMessage(uint32_t nFromId, uint32_t nGroupId,
   }
 
   CAudioModel* pAudioModel = CAudioModel::getInstance();
-  int nAudioId = pAudioModel->saveAudioInfo(nFromId, nGroupId, nCreateTime,
-                                            pMsgContent, nMsgLen);
+  int nAudioId = pAudioModel->saveAudioInfo(nFromId, nGroupId, nCreateTime, pMsgContent, nMsgLen);
 
   bool bRet = true;
   if (nAudioId != -1) {
     string strMsg = int2string(nAudioId);
-    bRet =
-        sendMessage(nFromId, nGroupId, nMsgType, nCreateTime, nMsgId, strMsg);
+    bRet = sendMessage(nFromId, nGroupId, nMsgType, nCreateTime, nMsgId, strMsg);
   } else {
     bRet = false;
   }
@@ -163,20 +165,17 @@ bool CGroupMessageModel::sendAudioMessage(uint32_t nFromId, uint32_t nGroupId,
  *
  *  @return 成功返回true，失败返回false
  */
-bool CGroupMessageModel::clearMessageCount(uint32_t nUserId,
-                                           uint32_t nGroupId) {
+bool CGroupMessageModel::clearMessageCount(uint32_t nUserId, uint32_t nGroupId) {
   bool bRet = false;
   CacheManager* pCacheManager = CacheManager::getInstance();
   CacheConn* pCacheConn = pCacheManager->GetCacheConn("unread");
   if (pCacheConn) {
-    string strGroupKey =
-        int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
+    string strGroupKey = int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
     map<string, string> mapGroupCount;
     bool bRet = pCacheConn->hgetAll(strGroupKey, mapGroupCount);
     pCacheManager->RelCacheConn(pCacheConn);
     if (bRet) {
-      string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) +
-                          GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
+      string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) + GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
       string strReply = pCacheConn->hmset(strUserKey, mapGroupCount);
       if (strReply.empty()) {
         log("hmset %s failed !", strUserKey.c_str());
@@ -205,14 +204,12 @@ bool CGroupMessageModel::incMessageCount(uint32_t nUserId, uint32_t nGroupId) {
   CacheManager* pCacheManager = CacheManager::getInstance();
   CacheConn* pCacheConn = pCacheManager->GetCacheConn("unread");
   if (pCacheConn) {
-    string strGroupKey =
-        int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
+    string strGroupKey = int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
     pCacheConn->hincrBy(strGroupKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD, 1);
     map<string, string> mapGroupCount;
     bool bRet = pCacheConn->hgetAll(strGroupKey, mapGroupCount);
     if (bRet) {
-      string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) +
-                          GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
+      string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) + GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
       string strReply = pCacheConn->hmset(strUserKey, mapGroupCount);
       if (!strReply.empty()) {
         bRet = true;
@@ -238,29 +235,24 @@ bool CGroupMessageModel::incMessageCount(uint32_t nUserId, uint32_t nGroupId) {
  *  @param nMsgCnt  获取的长度
  *  @param lsMsg    消息列表
  */
-void CGroupMessageModel::getMessage(uint32_t nUserId, uint32_t nGroupId,
-                                    uint32_t nMsgId, uint32_t nMsgCnt,
-                                    list<IM::BaseDefine::MsgInfo>& lsMsg) {
+void CGroupMessageModel::getMessage(
+  uint32_t nUserId, uint32_t nGroupId, uint32_t nMsgId, uint32_t nMsgCnt, list<IM::BaseDefine::MsgInfo>& lsMsg) {
   // 根据 count 和 lastId 获取信息
   string strTableName = "IMGroupMessage_" + int2string(nGroupId % 8);
 
   CDBManager* pDBManager = CDBManager::getInstance();
   CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
   if (pDBConn) {
-    uint32_t nUpdated =
-        CGroupModel::getInstance()->getUserJoinTime(nGroupId, nUserId);
+    uint32_t nUpdated = CGroupModel::getInstance()->getUserJoinTime(nGroupId, nUserId);
     // 如果nMsgId 为0 表示客户端想拉取最新的nMsgCnt条消息
     string strSql;
     if (nMsgId == 0) {
-      strSql = "select * from " + strTableName +
-               " where groupId = " + int2string(nGroupId) +
-               " and status = 0 and created>=" + int2string(nUpdated) +
-               " order by created desc, id desc limit " + int2string(nMsgCnt);
+      strSql = "select * from " + strTableName + " where groupId = " + int2string(nGroupId) +
+               " and status = 0 and created>=" + int2string(nUpdated) + " order by created desc, id desc limit " +
+               int2string(nMsgCnt);
     } else {
-      strSql = "select * from " + strTableName +
-               " where groupId = " + int2string(nGroupId) +
-               " and msgId<=" + int2string(nMsgId) +
-               " and status = 0 and created>=" + int2string(nUpdated) +
+      strSql = "select * from " + strTableName + " where groupId = " + int2string(nGroupId) +
+               " and msgId<=" + int2string(nMsgId) + " and status = 0 and created>=" + int2string(nUpdated) +
                " order by created desc, id desc limit " + int2string(nMsgCnt);
     }
 
@@ -272,15 +264,13 @@ void CGroupMessageModel::getMessage(uint32_t nUserId, uint32_t nGroupId,
         msg.set_msg_id(pResultSet->GetInt("msgId"));
         msg.set_from_session_id(pResultSet->GetInt("userId"));
         msg.set_create_time(pResultSet->GetInt("created"));
-        IM::BaseDefine::MsgType nMsgType =
-            IM::BaseDefine::MsgType(pResultSet->GetInt("type"));
+        IM::BaseDefine::MsgType nMsgType = IM::BaseDefine::MsgType(pResultSet->GetInt("type"));
         if (IM::BaseDefine::MsgType_IsValid(nMsgType)) {
           msg.set_msg_type(nMsgType);
           msg.set_msg_data(pResultSet->GetString("content"));
           lsMsg.push_back(msg);
         } else {
-          log("invalid msgType. userId=%u, groupId=%u, msgType=%u", nUserId,
-              nGroupId, nMsgType);
+          log("invalid msgType. userId=%u, groupId=%u, msgType=%u", nUserId, nGroupId, nMsgType);
         }
       }
       delete pResultSet;
@@ -304,9 +294,9 @@ void CGroupMessageModel::getMessage(uint32_t nUserId, uint32_t nGroupId,
  *  @param lsUnreadCount
  * 每个会话的未读信息包含了条数，最后一个消息的Id，最后一个消息的类型，最后一个消息的类容
  */
-void CGroupMessageModel::getUnreadMsgCount(
-    uint32_t nUserId, uint32_t& nTotalCnt,
-    list<IM::BaseDefine::UnreadInfo>& lsUnreadCount) {
+void CGroupMessageModel::getUnreadMsgCount(uint32_t nUserId,
+                                           uint32_t& nTotalCnt,
+                                           list<IM::BaseDefine::UnreadInfo>& lsUnreadCount) {
   list<uint32_t> lsGroupId;
   CGroupModel::getInstance()->getUserGroupIds(nUserId, lsGroupId, 0);
   uint32_t nCount = 0;
@@ -316,23 +306,18 @@ void CGroupMessageModel::getUnreadMsgCount(
   if (pCacheConn) {
     for (auto it = lsGroupId.begin(); it != lsGroupId.end(); ++it) {
       uint32_t nGroupId = *it;
-      string strGroupKey =
-          int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
-      string strGroupCnt =
-          pCacheConn->hget(strGroupKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
+      string strGroupKey = int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
+      string strGroupCnt = pCacheConn->hget(strGroupKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
       if (strGroupCnt.empty()) {
         //                log("hget %s : count failed !", strGroupKey.c_str());
         continue;
       }
       uint32_t nGroupCnt = (uint32_t)(atoi(strGroupCnt.c_str()));
 
-      string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) +
-                          GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
-      string strUserCnt =
-          pCacheConn->hget(strUserKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
+      string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) + GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
+      string strUserCnt = pCacheConn->hget(strUserKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
 
-      uint32_t nUserCnt =
-          (strUserCnt.empty() ? 0 : ((uint32_t)atoi(strUserCnt.c_str())));
+      uint32_t nUserCnt = (strUserCnt.empty() ? 0 : ((uint32_t)atoi(strUserCnt.c_str())));
       if (nGroupCnt >= nUserCnt) {
         nCount = nGroupCnt - nUserCnt;
       }
@@ -354,8 +339,7 @@ void CGroupMessageModel::getUnreadMsgCount(
           cUnreadInfo.set_latest_msg_from_user_id(nFromId);
           lsUnreadCount.push_back(cUnreadInfo);
         } else {
-          log("invalid msgType. userId=%u, groupId=%u, msgType=%u, msgId=%u",
-              nUserId, nGroupId, nType, nMsgId);
+          log("invalid msgType. userId=%u, groupId=%u, msgType=%u, msgId=%u", nUserId, nGroupId, nType, nMsgId);
         }
       }
     }
@@ -395,10 +379,8 @@ uint32_t CGroupMessageModel::getMsgId(uint32_t nGroupId) {
  *  @param strMsgData 最后一条消息的内容,引用
  *  @param nMsgType   最后一条消息的类型,引用
  */
-void CGroupMessageModel::getLastMsg(uint32_t nGroupId, uint32_t& nMsgId,
-                                    string& strMsgData,
-                                    IM::BaseDefine::MsgType& nMsgType,
-                                    uint32_t& nFromId) {
+void CGroupMessageModel::getLastMsg(
+  uint32_t nGroupId, uint32_t& nMsgId, string& strMsgData, IM::BaseDefine::MsgType& nMsgType, uint32_t& nFromId) {
   string strTableName = "IMGroupMessage_" + int2string(nGroupId % 8);
 
   CDBManager* pDBManager = CDBManager::getInstance();
@@ -437,8 +419,7 @@ void CGroupMessageModel::getLastMsg(uint32_t nGroupId, uint32_t& nMsgId,
  *  @param nUserId   用户Id
  *  @param nTotalCnt 未读计数之后,引用
  */
-void CGroupMessageModel::getUnReadCntAll(uint32_t nUserId,
-                                         uint32_t& nTotalCnt) {
+void CGroupMessageModel::getUnReadCntAll(uint32_t nUserId, uint32_t& nTotalCnt) {
   list<uint32_t> lsGroupId;
   CGroupModel::getInstance()->getUserGroupIds(nUserId, lsGroupId, 0);
   uint32_t nCount = 0;
@@ -448,23 +429,18 @@ void CGroupMessageModel::getUnReadCntAll(uint32_t nUserId,
   if (pCacheConn) {
     for (auto it = lsGroupId.begin(); it != lsGroupId.end(); ++it) {
       uint32_t nGroupId = *it;
-      string strGroupKey =
-          int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
-      string strGroupCnt =
-          pCacheConn->hget(strGroupKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
+      string strGroupKey = int2string(nGroupId) + GROUP_TOTAL_MSG_COUNTER_REDIS_KEY_SUFFIX;
+      string strGroupCnt = pCacheConn->hget(strGroupKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
       if (strGroupCnt.empty()) {
         //                log("hget %s : count failed !", strGroupKey.c_str());
         continue;
       }
       uint32_t nGroupCnt = (uint32_t)(atoi(strGroupCnt.c_str()));
 
-      string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) +
-                          GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
-      string strUserCnt =
-          pCacheConn->hget(strUserKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
+      string strUserKey = int2string(nUserId) + "_" + int2string(nGroupId) + GROUP_USER_MSG_COUNTER_REDIS_KEY_SUFFIX;
+      string strUserCnt = pCacheConn->hget(strUserKey, GROUP_COUNTER_SUBKEY_COUNTER_FIELD);
 
-      uint32_t nUserCnt =
-          (strUserCnt.empty() ? 0 : ((uint32_t)atoi(strUserCnt.c_str())));
+      uint32_t nUserCnt = (strUserCnt.empty() ? 0 : ((uint32_t)atoi(strUserCnt.c_str())));
       if (nGroupCnt >= nUserCnt) {
         nCount = nGroupCnt - nUserCnt;
       }
@@ -478,7 +454,8 @@ void CGroupMessageModel::getUnReadCntAll(uint32_t nUserId,
   }
 }
 
-void CGroupMessageModel::getMsgByMsgId(uint32_t nUserId, uint32_t nGroupId,
+void CGroupMessageModel::getMsgByMsgId(uint32_t nUserId,
+                                       uint32_t nGroupId,
                                        const list<uint32_t>& lsMsgId,
                                        list<IM::BaseDefine::MsgInfo>& lsMsg) {
   if (!lsMsgId.empty()) {
@@ -487,8 +464,7 @@ void CGroupMessageModel::getMsgByMsgId(uint32_t nUserId, uint32_t nGroupId,
       CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_slave");
       if (pDBConn) {
         string strTableName = "IMGroupMessage_" + int2string(nGroupId % 8);
-        uint32_t nUpdated =
-            CGroupModel::getInstance()->getUserJoinTime(nGroupId, nUserId);
+        uint32_t nUpdated = CGroupModel::getInstance()->getUserJoinTime(nGroupId, nUserId);
         string strClause;
         bool bFirst = true;
         for (auto it = lsMsgId.begin(); it != lsMsgId.end(); ++it) {
@@ -500,12 +476,9 @@ void CGroupMessageModel::getMsgByMsgId(uint32_t nUserId, uint32_t nGroupId,
           }
         }
 
-        string strSql =
-            "select * from " + strTableName +
-            " where groupId=" + int2string(nGroupId) + " and msgId in (" +
-            strClause +
-            ") and status=0 and created >= " + int2string(nUpdated) +
-            " order by created desc, id desc limit 100";
+        string strSql = "select * from " + strTableName + " where groupId=" + int2string(nGroupId) + " and msgId in (" +
+                        strClause + ") and status=0 and created >= " + int2string(nUpdated) +
+                        " order by created desc, id desc limit 100";
         CResultSet* pResultSet = pDBConn->ExecuteQuery(strSql.c_str());
         if (pResultSet) {
           while (pResultSet->Next()) {
@@ -513,15 +486,13 @@ void CGroupMessageModel::getMsgByMsgId(uint32_t nUserId, uint32_t nGroupId,
             msg.set_msg_id(pResultSet->GetInt("msgId"));
             msg.set_from_session_id(pResultSet->GetInt("userId"));
             msg.set_create_time(pResultSet->GetInt("created"));
-            IM::BaseDefine::MsgType nMsgType =
-                IM::BaseDefine::MsgType(pResultSet->GetInt("type"));
+            IM::BaseDefine::MsgType nMsgType = IM::BaseDefine::MsgType(pResultSet->GetInt("type"));
             if (IM::BaseDefine::MsgType_IsValid(nMsgType)) {
               msg.set_msg_type(nMsgType);
               msg.set_msg_data(pResultSet->GetString("content"));
               lsMsg.push_back(msg);
             } else {
-              log("invalid msgType. userId=%u, groupId=%u, msgType=%u", nUserId,
-                  nGroupId, nMsgType);
+              log("invalid msgType. userId=%u, groupId=%u, msgType=%u", nUserId, nGroupId, nMsgType);
             }
           }
           delete pResultSet;

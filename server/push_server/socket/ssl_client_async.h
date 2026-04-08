@@ -29,8 +29,7 @@ class CSSLClientAsync : public CTCPClientAsync {
   string GetKeyFile() { return m_strKeyFile; }
   string GetKeyPassword() { return m_strKeyPassword; }
 
-  BOOL InitSSL(const char* cert_file = NULL, const char* key_file = NULL,
-               const char* key_password = NULL);
+  BOOL InitSSL(const char* cert_file = NULL, const char* key_file = NULL, const char* key_password = NULL);
   void UnInitSSL();
   virtual void OnConnect(BOOL bConnected);
   virtual void OnRecv();

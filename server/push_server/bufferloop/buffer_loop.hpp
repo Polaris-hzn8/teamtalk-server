@@ -64,8 +64,7 @@ class CBufferLoop {
    */
   char get_buffer_tmp(char* pbuffer, int nbuffer_size, int* nreal_buffer_size) {
     bool bret = true;
-    int nrealsize =
-        (nbuffer_size < get_used_size() ? nbuffer_size : get_used_size());
+    int nrealsize = (nbuffer_size < get_used_size() ? nbuffer_size : get_used_size());
     if (m_nhead_pos <= m_ntail_pos) {
       memcpy(pbuffer, &m_pbuffer[m_nhead_pos], nrealsize);
     } else {
@@ -126,8 +125,7 @@ class CBufferLoop {
    */
   bool get_buffer(char* pbuffer, int nbuffer_size, int* nreal_buffer_size) {
     bool bret = true;
-    int nrealsize =
-        (nbuffer_size < get_used_size() ? nbuffer_size : get_used_size());
+    int nrealsize = (nbuffer_size < get_used_size() ? nbuffer_size : get_used_size());
     if (m_nhead_pos <= m_ntail_pos) {
       memcpy(pbuffer, &m_pbuffer[m_nhead_pos], nrealsize);
     } else {
@@ -202,9 +200,11 @@ class CSimpleBuffer {
   }
 
   int Read(char* pbuf, int nlen) {
-    if (nlen > m_nwrite_offset) nlen = m_nwrite_offset;
+    if (nlen > m_nwrite_offset)
+      nlen = m_nwrite_offset;
 
-    if (pbuf) memcpy(pbuf, m_pbuffer, nlen);
+    if (pbuf)
+      memcpy(pbuf, m_pbuffer, nlen);
 
     m_nwrite_offset -= nlen;
     memmove(m_pbuffer, m_pbuffer + nlen, m_nwrite_offset);

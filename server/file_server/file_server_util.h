@@ -34,29 +34,19 @@ typedef struct file_header_t {
     memset(file_type, 0, 64);
   }
 
-  void set_task_id(const char* p) {
-    strncpy(task_id, p, 128 < strlen(p) ? 128 : strlen(p));
-  }
+  void set_task_id(const char* p) { strncpy(task_id, p, 128 < strlen(p) ? 128 : strlen(p)); }
 
-  void set_from_user_id(const char* p) {
-    strncpy(from_user_id, p, 64 < strlen(p) ? 64 : strlen(p));
-  }  // idtourl
+  void set_from_user_id(const char* p) { strncpy(from_user_id, p, 64 < strlen(p) ? 64 : strlen(p)); }  // idtourl
 
-  void set_from_user_id(uint32_t id) {
-    strcpy(from_user_id, idtourl(id));
-  }  // warn! idtourl
+  void set_from_user_id(uint32_t id) { strcpy(from_user_id, idtourl(id)); }  // warn! idtourl
 
-  void set_to_user_id(const char* p) {
-    strncpy(to_user_id, p, 64 < strlen(p) ? 64 : strlen(p));
-  }
+  void set_to_user_id(const char* p) { strncpy(to_user_id, p, 64 < strlen(p) ? 64 : strlen(p)); }
 
   void set_to_user_id(uint32_t id) { strcpy(to_user_id, idtourl(id)); }
 
   void set_create_time(time_t t) { sprintf(create_time, "%ld", t); }
 
-  void set_file_name(const char* p) {
-    sprintf(file_name, p, 512 < strlen(p) ? 512 : strlen(p));
-  }
+  void set_file_name(const char* p) { sprintf(file_name, p, 512 < strlen(p) ? 512 : strlen(p)); }
 
   void set_file_size(uint32_t size) { sprintf(file_size, "%d", size); }
 } file_header;  // offline file head struct
@@ -147,8 +137,7 @@ typedef struct transfer_task_t {
   }
 
   void release() {
-    std::map<uint32_t, upload_package_t*>::iterator itor =
-        upload_packages.begin();
+    std::map<uint32_t, upload_package_t*>::iterator itor = upload_packages.begin();
     for (; itor != upload_packages.end();) {
       if (!itor->second) {
         upload_packages.erase(itor++);
@@ -177,17 +166,11 @@ typedef struct transfer_task_t {
     }
   }
 
-  uint32_t GetOpponent(uint32_t user_id) {
-    return (user_id == from_user_id ? to_user_id : from_user_id);
-  }
+  uint32_t GetOpponent(uint32_t user_id) { return (user_id == from_user_id ? to_user_id : from_user_id); }
 
-  CImConn* GetOpponentConn(uint32_t user_id) {
-    return (user_id == from_user_id ? to_conn : from_conn);
-  }
+  CImConn* GetOpponentConn(uint32_t user_id) { return (user_id == from_user_id ? to_conn : from_conn); }
 
-  CImConn* GetConn(uint32_t user_id) {
-    return (user_id == from_user_id ? from_conn : to_conn);
-  }
+  CImConn* GetConn(uint32_t user_id) { return (user_id == from_user_id ? from_conn : to_conn); }
 } transfer_task;
 
 int generate_id(char* id);

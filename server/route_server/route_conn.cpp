@@ -7,9 +7,9 @@
 */
 
 #include "route_conn.h"
-#include "user_info.h"
 #include "netlib.h"
 #include "public_define.h"
+#include "user_info.h"
 
 #include "IM.Buddy.pb.h"
 #include "IM.Group.pb.h"
@@ -34,11 +34,9 @@ CUserInfo* GetUserInfo(uint32_t user_id) {
   return pUser;
 }
 
-void route_serv_timer_callback(void* callback_data, uint8_t msg,
-                               uint32_t handle, void* pParam) {
+void route_serv_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   uint64_t cur_time = get_tick_count();
-  for (ConnMap_t::iterator it = g_route_conn_map.begin();
-       it != g_route_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_route_conn_map.begin(); it != g_route_conn_map.end();) {
     ConnMap_t::iterator it_old = it;
     it++;
     CRouteConn* pConn = (CRouteConn*)it_old->second;
@@ -50,7 +48,9 @@ void init_routeconn_timer_callback() {
   netlib_register_timer(route_serv_timer_callback, NULL, 1000);
 }
 
-CRouteConn::CRouteConn() { m_bMaster = false; }
+CRouteConn::CRouteConn() {
+  m_bMaster = false;
+}
 
 CRouteConn::~CRouteConn() {}
 
@@ -62,8 +62,7 @@ void CRouteConn::Close() {
 
   // remove all user info from this MessageServer
   UserInfoMap_t::iterator it_old;
-  for (UserInfoMap_t::iterator it = g_user_map.begin();
-       it != g_user_map.end();) {
+  for (UserInfoMap_t::iterator it = g_user_map.begin(); it != g_user_map.end();) {
     it_old = it;
     it++;
 
@@ -137,16 +136,14 @@ void CRouteConn::HandlePdu(CImPdu* pPdu) {
       _BroadcastMsg(pPdu);
       break;
     default:
-      log_info("CRouteConn::HandlePdu, wrong cmd id: %d ",
-               pPdu->GetCommandId());
+      log_info("CRouteConn::HandlePdu, wrong cmd id: %d ", pPdu->GetCommandId());
       break;
   }
 }
 
 void CRouteConn::_HandleOnlineUserInfo(CImPdu* pPdu) {
   IM::Server::IMOnlineUserInfo msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_count = msg.user_stat_list_size();
 
@@ -154,21 +151,18 @@ void CRouteConn::_HandleOnlineUserInfo(CImPdu* pPdu) {
 
   for (uint32_t i = 0; i < user_count; i++) {
     IM::BaseDefine::ServerUserStat server_user_stat = msg.user_stat_list(i);
-    _UpdateUserStatus(server_user_stat.user_id(), server_user_stat.status(),
-                      server_user_stat.client_type());
+    _UpdateUserStatus(server_user_stat.user_id(), server_user_stat.status(), server_user_stat.client_type());
   }
 }
 
 void CRouteConn::_HandleUserStatusUpdate(CImPdu* pPdu) {
   IM::Server::IMUserStatusUpdate msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_status = msg.user_status();
   uint32_t user_id = msg.user_id();
   uint32_t client_type = msg.client_type();
-  log_info("HandleUserStatusUpdate, status=%u, uid=%u, client_type=%u ",
-           user_status, user_id, client_type);
+  log_info("HandleUserStatusUpdate, status=%u, uid=%u, client_type=%u ", user_status, user_id, client_type);
 
   _UpdateUserStatus(user_id, user_status, client_type);
 
@@ -193,7 +187,8 @@ void CRouteConn::_HandleUserStatusUpdate(CImPdu* pPdu) {
         _BroadcastMsg(&pdu);
     } else {
       // 只要pc端在线，则不管上线的是pc还是移动端，都通知msg_server
-      if (pUser->IsPCClientLogin()) _BroadcastMsg(&pdu);
+      if (pUser->IsPCClientLogin())
+        _BroadcastMsg(&pdu);
     }
   }
 
@@ -225,8 +220,7 @@ void CRouteConn::_HandleUserStatusUpdate(CImPdu* pPdu) {
 
 void CRouteConn::_HandleRoleSet(CImPdu* pPdu) {
   IM::Server::IMRoleSet msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t master = msg.master();
   log_info("HandleRoleSet, master=%u, handle=%u ", master, m_handle);
@@ -239,13 +233,11 @@ void CRouteConn::_HandleRoleSet(CImPdu* pPdu) {
 
 void CRouteConn::_HandleUsersStatusRequest(CImPdu* pPdu) {
   IM::Buddy::IMUsersStatReq msg;
-  CHECK_PB_PARSE_MSG(
-      msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t request_id = msg.user_id();
   uint32_t query_count = msg.user_id_list_size();
-  log_info("HandleUserStatusReq, req_id=%u, query_count=%u ", request_id,
-           query_count);
+  log_info("HandleUserStatusReq, req_id=%u, query_count=%u ", request_id, query_count);
 
   IM::Buddy::IMUsersStatRsp msg2;
   msg2.set_user_id(request_id);
@@ -276,8 +268,7 @@ void CRouteConn::_HandleUsersStatusRequest(CImPdu* pPdu) {
 /*
  * update user status info, the logic seems complex
  */
-void CRouteConn::_UpdateUserStatus(uint32_t user_id, uint32_t status,
-                                   uint32_t client_type) {
+void CRouteConn::_UpdateUserStatus(uint32_t user_id, uint32_t status, uint32_t client_type) {
   CUserInfo* pUser = GetUserInfo(user_id);
   if (pUser) {
     if (pUser->FindRouteConn(this)) {
@@ -328,8 +319,7 @@ void CRouteConn::_SendPduToUser(uint32_t user_id, CImPdu* pPdu, bool bAll) {
   CUserInfo* pUser = GetUserInfo(user_id);
   if (pUser) {
     std::set<CRouteConn*>* pUserSet = pUser->GetRouteConn();
-    for (std::set<CRouteConn*>::iterator it = pUserSet->begin();
-         it != pUserSet->end(); it++) {
+    for (std::set<CRouteConn*>::iterator it = pUserSet->begin(); it != pUserSet->end(); it++) {
       CRouteConn* pToConn = *it;
       if (bAll || pToConn != this) {
         pToConn->Send(pPdu->GetBuffer(), pPdu->GetLength());

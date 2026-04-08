@@ -2,7 +2,9 @@
 #include "io_loop.h"
 #include "socket_io_define.h"
 
-CIOLoop::CIOLoop(void) { m_bCloseRequest = FALSE; }
+CIOLoop::CIOLoop(void) {
+  m_bCloseRequest = FALSE;
+}
 
 CIOLoop::~CIOLoop(void) {}
 
@@ -32,7 +34,8 @@ void CIOLoop::Run() {
     FD_ZERO(&fd_write);
     FD_ZERO(&fd_error);
     FD_SET(m_waker.GetWakeSocket(), &fd_read);
-    if (m_waker.GetWakeSocket() > nMaxfd) nMaxfd = m_waker.GetWakeSocket();
+    if (m_waker.GetWakeSocket() > nMaxfd)
+      nMaxfd = m_waker.GetWakeSocket();
     m_MapMutex.Lock();
     map<S_SOCKET, CBaseIOStream*> mapTmp = m_MapIOStreamBySocket;
     m_MapMutex.Unlock();
@@ -42,12 +45,14 @@ void CIOLoop::Run() {
       if (pIOStream->CheckConnect() == FALSE) {
         //如果是要检查TCP CLIENT是否连接，则不设置可读
         FD_SET(it->first, &fd_read);
-        if (it->first > nMaxfd) nMaxfd = it->first;
+        if (it->first > nMaxfd)
+          nMaxfd = it->first;
       }
       if (pIOStream->CheckWrite() == TRUE) {
         //设置可写
         FD_SET(it->first, &fd_write);
-        if (it->first > nMaxfd) nMaxfd = it->first;
+        if (it->first > nMaxfd)
+          nMaxfd = it->first;
         //设置错误信号，用于windows的tcp
         // connect超时检查，同时查看是否有其他触发错误
         FD_SET(it->first, &fd_error);
@@ -79,8 +84,7 @@ void CIOLoop::Run() {
         if (FD_ISSET(it1->first, &fd_write)) {
           CBaseIOStream* pIOStream = _GetHandlerBySock(it1->first);
           if (pIOStream != NULL) {
-            if (pIOStream->GetSockType() == SOCK_TCP_CLIENT &&
-                pIOStream->CheckConnect()) {
+            if (pIOStream->GetSockType() == SOCK_TCP_CLIENT && pIOStream->CheckConnect()) {
 #if (defined(_WIN32) || defined(_WIN64))
               pIOStream->OnConnect(TRUE);
 //#elif defined(__linux__) //mac???
@@ -89,13 +93,11 @@ void CIOLoop::Run() {
               int32_t nError, nCode;
               socklen_t nLen;
               nLen = sizeof(nError);
-              nCode = getsockopt(pIOStream->GetSocket(), SOL_SOCKET, SO_ERROR,
-                                 &nError, &nLen);
+              nCode = getsockopt(pIOStream->GetSocket(), SOL_SOCKET, SO_ERROR, &nError, &nLen);
               if (nCode < 0 || nError) {
                 //连接失败
                 // linux的超时失败是也是根据这个可以判断
-                SOCKET_IO_WARN("socket connect failed, nCode: %d, nError: %d.",
-                               nCode, nError);
+                SOCKET_IO_WARN("socket connect failed, nCode: %d, nError: %d.", nCode, nError);
                 pIOStream->OnConnect(FALSE);
               } else {
                 //连接成功
@@ -115,9 +117,9 @@ void CIOLoop::Run() {
             //对于不存在的IP(即linux会报111错误),或者IP存在，端口不存在(即linux会报110错误)
             //都是超时错误
             if (pIOStream->CheckConnect() == TRUE) {
-              SOCKET_IO_WARN(
-                  "socket connect time out, remote ip: %s, port: %d.",
-                  pIOStream->GetRemoteIP(), pIOStream->GetRemotePort());
+              SOCKET_IO_WARN("socket connect time out, remote ip: %s, port: %d.",
+                             pIOStream->GetRemoteIP(),
+                             pIOStream->GetRemotePort());
               pIOStream->OnConnect(FALSE);
             } else {
               SOCKET_IO_WARN("err_fds, %d.", (int32_t)pIOStream->GetSockType());

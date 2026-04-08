@@ -33,10 +33,8 @@ void getUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid) {
     std::list<IM::BaseDefine::UnreadInfo> lsUnreadCount;
     uint32_t nTotalCnt = 0;
 
-    CMessageModel::getInstance()->getUnreadMsgCount(nUserId, nTotalCnt,
-                                                    lsUnreadCount);
-    CGroupMessageModel::getInstance()->getUnreadMsgCount(nUserId, nTotalCnt,
-                                                         lsUnreadCount);
+    CMessageModel::getInstance()->getUnreadMsgCount(nUserId, nTotalCnt, lsUnreadCount);
+    CGroupMessageModel::getInstance()->getUnreadMsgCount(nUserId, nTotalCnt, lsUnreadCount);
     msgResp.set_user_id(nUserId);
     msgResp.set_total_cnt(nTotalCnt);
     for (auto it = lsUnreadCount.begin(); it != lsUnreadCount.end(); ++it) {
@@ -51,8 +49,7 @@ void getUnreadMsgCounter(CImPdu* pPdu, uint32_t conn_uuid) {
       pInfo->set_latest_msg_from_user_id(it->latest_msg_from_user_id());
     }
 
-    log_info("userId=%d, unreadCnt=%u, totalCount=%u", nUserId,
-             msgResp.unreadinfo_list_size(), nTotalCnt);
+    log_info("userId=%d, unreadCnt=%u, totalCount=%u", nUserId, msgResp.unreadinfo_list_size(), nTotalCnt);
     msgResp.set_attach_data(msg.attach_data());
     pPduResp->SetPBMsg(&msgResp);
     pPduResp->SetSeqNum(pPdu->GetSeqNum());
@@ -97,8 +94,7 @@ void setDevicesToken(CImPdu* pPdu, uint32_t conn_uuid) {
         strValue = strToken;
       }
 
-      std::string strOldValue =
-          pCacheConn->get("device_" + int2string(nUserId));
+      std::string strOldValue = pCacheConn->get("device_" + int2string(nUserId));
       if (!strOldValue.empty()) {
         size_t nPos = strOldValue.find(":");
         if (nPos != string::npos) {
@@ -115,15 +111,13 @@ void setDevicesToken(CImPdu* pPdu, uint32_t conn_uuid) {
       std::string strNewValue = int2string(nUserId);
       pCacheConn->set("device_" + strToken, strNewValue);
 
-      log_info("setDeviceToken. userId=%u, deviceToken=%s", nUserId,
-               strToken.c_str());
+      log_info("setDeviceToken. userId=%u, deviceToken=%s", nUserId, strToken.c_str());
       pCacheManager->RelCacheConn(pCacheConn);
     } else {
       log_info("no cache connection for token");
     }
 
-    log_info("setDeviceToken. userId=%u, deviceToken=%s", nUserId,
-             strToken.c_str());
+    log_info("setDeviceToken. userId=%u, deviceToken=%s", nUserId, strToken.c_str());
     msgResp.set_attach_data(msg.attach_data());
     msgResp.set_user_id(nUserId);
     pPduResp->SetPBMsg(&msgResp);
@@ -150,7 +144,8 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid) {
     bool is_check_shield_status = false;
     time_t now = time(NULL);
     struct tm* stm = localtime(&now);
-    if (stm->tm_hour >= 22 || stm->tm_hour <= 7) is_check_shield_status = true;
+    if (stm->tm_hour >= 22 || stm->tm_hour <= 7)
+      is_check_shield_status = true;
 
     if (pCacheConn) {
       std::vector<std::string> vecTokens;
@@ -174,14 +169,12 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid) {
             if (nPos != string::npos) {
               std::string strType = strValue.substr(0, nPos);
               std::string strToken = strValue.substr(nPos + 1);
-              IM::BaseDefine::ClientType nClientType =
-                  IM::BaseDefine::ClientType(0);
+              IM::BaseDefine::ClientType nClientType = IM::BaseDefine::ClientType(0);
               if (strType == "ios") {
                 // 过滤出已经设置勿打扰并且为晚上22：00～07：00
                 uint32_t shield_status = 0;
                 if (is_check_shield_status) {
-                  CUserModel::getInstance()->getPushShield(nUserId,
-                                                           &shield_status);
+                  CUserModel::getInstance()->getPushShield(nUserId, &shield_status);
                 }
 
                 if (shield_status == 1) {
@@ -196,16 +189,13 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid) {
                 nClientType = IM::BaseDefine::CLIENT_TYPE_ANDROID;
               }
               if (IM::BaseDefine::ClientType_IsValid(nClientType)) {
-                IM::BaseDefine::UserTokenInfo* pToken =
-                    msgResp.add_user_token_info();
+                IM::BaseDefine::UserTokenInfo* pToken = msgResp.add_user_token_info();
                 pToken->set_user_id(nUserId);
                 pToken->set_token(strToken);
                 pToken->set_user_type(nClientType);
                 uint32_t nTotalCnt = 0;
-                CMessageModel::getInstance()->getUnReadCntAll(nUserId,
-                                                              nTotalCnt);
-                CGroupMessageModel::getInstance()->getUnReadCntAll(nUserId,
-                                                                   nTotalCnt);
+                CMessageModel::getInstance()->getUnReadCntAll(nUserId, nTotalCnt);
+                CGroupMessageModel::getInstance()->getUnReadCntAll(nUserId, nTotalCnt);
                 pToken->set_push_count(nTotalCnt);
                 pToken->set_push_type(1);
               } else {
@@ -225,8 +215,7 @@ void getDevicesToken(CImPdu* pPdu, uint32_t conn_uuid) {
       log_info("no cache connection for token");
     }
 
-    log_info("req devices token.reqCnt=%u, resCnt=%u", nCnt,
-             msgResp.user_token_info_size());
+    log_info("req devices token.reqCnt=%u, resCnt=%u", nCnt, msgResp.user_token_info_size());
 
     msgResp.set_attach_data(msg.attach_data());
     pPduResp->SetPBMsg(&msgResp);

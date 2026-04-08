@@ -21,9 +21,7 @@ void CAPNSFeedBackHandler::OnClose(uint32_t nsockid) {
 }
 
 void CAPNSFeedBackHandler::OnException(uint32_t nsockid, int32_t nErrorCode) {
-  PUSH_SERVER_WARN(
-      "apns feedback client has exception, sockid: %u, error code: %u.",
-      nsockid, nErrorCode);
+  PUSH_SERVER_WARN("apns feedback client has exception, sockid: %u, error code: %u.", nsockid, nErrorCode);
   apns_client_ptr pClient = CSessionManager::GetInstance()->GetAPNSClient();
   if (pClient) {
     pClient->StopFeedBackClient();
@@ -44,8 +42,7 @@ void CAPNSFeedBackHandler::OnRecvData(const char* szBuf, int32_t nBufSize) {
     if (msg.ParseFromArray(m_Msg.Data(), m_Msg.GetDataLength())) {
       uint32_t time = msg.GetTime();
       string token = msg.GetToken();
-      PUSH_SERVER_INFO("apns feedback client recv resp, token: %s.",
-                       token.c_str());
+      PUSH_SERVER_INFO("apns feedback client recv resp, token: %s.", token.c_str());
     } else {
       PUSH_SERVER_ERROR("CAPNSFeedBackResMsg, msg parse failed.");
       apns_client_ptr pClient = CSessionManager::GetInstance()->GetAPNSClient();

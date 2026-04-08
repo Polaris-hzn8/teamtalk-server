@@ -7,11 +7,11 @@
 */
 
 #include "route_serv_conn.h"
+#include "IM.Other.pb.h"
+#include "IM.Server.pb.h"
 #include "db_serv_conn.h"
 #include "http_conn.h"
 #include "http_pdu.h"
-#include "IM.Other.pb.h"
-#include "IM.Server.pb.h"
 #include "im_pdu_base.h"
 using namespace std;
 
@@ -23,14 +23,12 @@ static serv_info_t* g_route_server_list;
 static uint32_t g_route_server_count;
 static CRouteServConn* g_master_rs_conn = NULL;
 
-void route_server_conn_timer_callback(void* callback_data, uint8_t msg,
-                                      uint32_t handle, void* pParam) {
+void route_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ConnMap_t::iterator it_old;
   CRouteServConn* pConn = NULL;
   uint64_t cur_time = get_tick_count();
 
-  for (ConnMap_t::iterator it = g_route_server_conn_map.begin();
-       it != g_route_server_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_route_server_conn_map.begin(); it != g_route_server_conn_map.end();) {
     it_old = it;
     it++;
 
@@ -39,8 +37,7 @@ void route_server_conn_timer_callback(void* callback_data, uint8_t msg,
   }
 
   // reconnect RouteServer
-  serv_check_reconnect<CRouteServConn>(g_route_server_list,
-                                       g_route_server_count);
+  serv_check_reconnect<CRouteServConn>(g_route_server_list, g_route_server_count);
 }
 
 void init_route_serv_conn(serv_info_t* server_list, uint32_t server_count) {
@@ -77,7 +74,9 @@ void send_to_all_route_server(CImPdu* pPdu) {
 }
 
 // get the oldest route server connection
-CRouteServConn* get_route_serv_conn() { return g_master_rs_conn; }
+CRouteServConn* get_route_serv_conn() {
+  return g_master_rs_conn;
+}
 
 void update_master_route_serv_conn() {
   uint64_t oldest_connect_time = (uint64_t)-1;
@@ -87,8 +86,7 @@ void update_master_route_serv_conn() {
 
   for (uint32_t i = 0; i < g_route_server_count; i++) {
     pConn = (CRouteServConn*)g_route_server_list[i].serv_conn;
-    if (pConn && pConn->IsOpen() &&
-        (pConn->GetConnectTime() < oldest_connect_time)) {
+    if (pConn && pConn->IsOpen() && (pConn->GetConnectTime() < oldest_connect_time)) {
       pOldestConn = pConn;
       oldest_connect_time = pConn->GetConnectTime();
     }
@@ -114,13 +112,11 @@ CRouteServConn::CRouteServConn() {
 
 CRouteServConn::~CRouteServConn() {}
 
-void CRouteServConn::Connect(const char* server_ip, uint16_t server_port,
-                             uint32_t idx) {
+void CRouteServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t idx) {
   log_info("Connecting to RouteServer %s:%d ", server_ip, server_port);
 
   m_serv_idx = idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback,
-                            (void*)&g_route_server_conn_map);
+  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_route_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_route_server_conn_map.insert(make_pair(m_handle, this));
@@ -128,8 +124,7 @@ void CRouteServConn::Connect(const char* server_ip, uint16_t server_port,
 }
 
 void CRouteServConn::Close() {
-  serv_reset<CRouteServConn>(g_route_server_list, g_route_server_count,
-                             m_serv_idx);
+  serv_reset<CRouteServConn>(g_route_server_list, g_route_server_count, m_serv_idx);
 
   m_bOpen = false;
   if (m_handle != NETLIB_INVALID_HANDLE) {

@@ -11,8 +11,8 @@
 
 #include <vector>
 #include "../base/util.h"
-#include "thread_pool.h"
 #include "hiredis.h"
+#include "thread_pool.h"
 
 class CachePool;
 
@@ -62,8 +62,7 @@ class CacheConn {
 
 class CachePool {
  public:
-  CachePool(const char* pool_name, const char* server_ip, int server_port,
-            int db_num, int max_conn_cnt);
+  CachePool(const char* pool_name, const char* server_ip, int server_port, int db_num, int max_conn_cnt);
   virtual ~CachePool();
 
   int Init();

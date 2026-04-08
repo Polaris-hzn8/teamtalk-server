@@ -23,29 +23,19 @@ struct FileHeader {
     file_type[0] = '\0';
   }
 
-  void set_task_id(const char* p) {
-    strncpy(task_id, p, 128 < strlen(p) ? 128 : strlen(p));
-  }
+  void set_task_id(const char* p) { strncpy(task_id, p, 128 < strlen(p) ? 128 : strlen(p)); }
 
-  void set_from_user_id(const char* p) {
-    strncpy(from_user_id, p, 64 < strlen(p) ? 64 : strlen(p));
-  }  // idtourl
+  void set_from_user_id(const char* p) { strncpy(from_user_id, p, 64 < strlen(p) ? 64 : strlen(p)); }  // idtourl
 
-  void set_from_user_id(uint32_t id) {
-    strcpy(from_user_id, idtourl(id));
-  }  // warn! idtourl
+  void set_from_user_id(uint32_t id) { strcpy(from_user_id, idtourl(id)); }  // warn! idtourl
 
-  void set_to_user_id(const char* p) {
-    strncpy(to_user_id, p, 64 < strlen(p) ? 64 : strlen(p));
-  }
+  void set_to_user_id(const char* p) { strncpy(to_user_id, p, 64 < strlen(p) ? 64 : strlen(p)); }
 
   void set_to_user_id(uint32_t id) { strcpy(to_user_id, idtourl(id)); }
 
   void set_create_time(time_t t) { sprintf(create_time, "%ld", t); }
 
-  void set_file_name(const char* p) {
-    sprintf(file_name, p, 512 < strlen(p) ? 512 : strlen(p));
-  }
+  void set_file_name(const char* p) { sprintf(file_name, p, 512 < strlen(p) ? 512 : strlen(p)); }
 
   void set_file_size(uint32_t size) { sprintf(file_size, "%d", size); }
 

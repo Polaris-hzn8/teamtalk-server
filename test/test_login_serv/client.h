@@ -9,8 +9,8 @@
 #ifndef __CLIENT_H__
 #define __CLIENT_H__
 #include <iostream>
-#include "client_conn.h"
 #include "IM.BaseDefine.pb.h"
+#include "client_conn.h"
 #include "i_packet_callback.h"
 #include "ostype.h"
 
@@ -20,8 +20,7 @@ typedef hash_map<uint32_t, IM::BaseDefine::UserInfo*> CMapId2User_t;
 typedef hash_map<string, IM::BaseDefine::UserInfo*> CMapNick2User_t;
 class CClient : public IPacketCallback {
  public:
-  CClient(const string& strName, const string& strPass,
-          const string strDomain = "http://192.168.2.132:8080");
+  CClient(const string& strName, const string& strPass, const string strDomain = "http://192.168.2.132:8080");
   ~CClient();
 
  public:
@@ -39,12 +38,10 @@ class CClient : public IPacketCallback {
   uint32_t login(const string& strName, const string& strPass);
   uint32_t getChangedUser();
   uint32_t getUserInfo(list<uint32_t>& lsUserId);
-  uint32_t sendMsg(uint32_t nToId, IM::BaseDefine::MsgType nType,
-                   const string& strMsg);
+  uint32_t sendMsg(uint32_t nToId, IM::BaseDefine::MsgType nType, const string& strMsg);
   uint32_t getUnreadMsgCnt();
   uint32_t getRecentSession();
-  uint32_t getMsgList(IM::BaseDefine::SessionType nType, uint32_t nPeerId,
-                      uint32_t nMsgId, uint32_t nMsgCnt);
+  uint32_t getMsgList(IM::BaseDefine::SessionType nType, uint32_t nPeerId, uint32_t nMsgId, uint32_t nMsgCnt);
   uint32_t sendReadAck();
   uint32_t registerUser(const string& strName, const string& strNick);
 
@@ -52,26 +49,30 @@ class CClient : public IPacketCallback {
   virtual void onError(uint32_t nSeqNo, uint32_t nCmd, const string& strMsg);
   virtual void onConnect();
   virtual void onClose();
-  virtual void onLogin(uint32_t nSeqNo, uint32_t nResultCode, string& strMsg,
-                       IM::BaseDefine::UserInfo* pUser = NULL);
-  virtual void onGetChangedUser(uint32_t nSeqNo,
-                                const list<IM::BaseDefine::UserInfo>& lsUser);
-  virtual void onGetUserInfo(uint32_t nSeqNo,
-                             const list<IM::BaseDefine::UserInfo>& lsUser);
-  virtual void onSendMsg(uint32_t nSeqNo, uint32_t nSendId, uint32_t nRecvId,
-                         IM::BaseDefine::SessionType nType, uint32_t nMsgId);
-  virtual void onGetUnreadMsgCnt(
-      uint32_t nSeqNo, uint32_t nUserId, uint32_t nTotalCnt,
-      const list<IM::BaseDefine::UnreadInfo>& lsUnreadCnt);
-  virtual void onGetRecentSession(
-      uint32_t nSeqNo, uint32_t nUserId,
-      const list<IM::BaseDefine::ContactSessionInfo>& lsSession);
-  virtual void onGetMsgList(uint32_t nSeqNo, uint32_t nUserId, uint32_t nPeerId,
-                            IM::BaseDefine::SessionType nType, uint32_t nMsgId,
+  virtual void onLogin(uint32_t nSeqNo, uint32_t nResultCode, string& strMsg, IM::BaseDefine::UserInfo* pUser = NULL);
+  virtual void onGetChangedUser(uint32_t nSeqNo, const list<IM::BaseDefine::UserInfo>& lsUser);
+  virtual void onGetUserInfo(uint32_t nSeqNo, const list<IM::BaseDefine::UserInfo>& lsUser);
+  virtual void onSendMsg(
+    uint32_t nSeqNo, uint32_t nSendId, uint32_t nRecvId, IM::BaseDefine::SessionType nType, uint32_t nMsgId);
+  virtual void onGetUnreadMsgCnt(uint32_t nSeqNo,
+                                 uint32_t nUserId,
+                                 uint32_t nTotalCnt,
+                                 const list<IM::BaseDefine::UnreadInfo>& lsUnreadCnt);
+  virtual void onGetRecentSession(uint32_t nSeqNo,
+                                  uint32_t nUserId,
+                                  const list<IM::BaseDefine::ContactSessionInfo>& lsSession);
+  virtual void onGetMsgList(uint32_t nSeqNo,
+                            uint32_t nUserId,
+                            uint32_t nPeerId,
+                            IM::BaseDefine::SessionType nType,
+                            uint32_t nMsgId,
                             uint32_t nMsgCnt,
                             const list<IM::BaseDefine::MsgInfo>& lsMsg);
-  virtual void onRecvMsg(uint32_t nSeqNo, uint32_t nFromId, uint32_t nToId,
-                         uint32_t nMsgId, uint32_t nCreateTime,
+  virtual void onRecvMsg(uint32_t nSeqNo,
+                         uint32_t nFromId,
+                         uint32_t nToId,
+                         uint32_t nMsgId,
+                         uint32_t nCreateTime,
                          IM::BaseDefine::MsgType nMsgType,
                          const string& strMsgData);
 

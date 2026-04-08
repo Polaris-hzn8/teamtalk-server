@@ -11,8 +11,8 @@
 
 #include <iostream>
 
-#include "serv_info.h"
 #include "im_conn.h"
+#include "serv_info.h"
 
 class CPushServConn : public CImConn {
  public:
@@ -40,7 +40,6 @@ class CPushServConn : public CImConn {
 
 CPushServConn* get_push_serv_conn();
 void init_push_serv_conn(serv_info_t* server_list, uint32_t server_count);
-void build_ios_push_flash(std::string& flash, uint32_t msg_type,
-                          uint32_t from_id);
+void build_ios_push_flash(std::string& flash, uint32_t msg_type, uint32_t from_id);
 
 #endif  // _PUSH_SERVCONN_H_

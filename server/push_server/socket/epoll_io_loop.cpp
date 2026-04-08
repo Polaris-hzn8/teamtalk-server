@@ -55,7 +55,8 @@ void CEpollIOLoop::Run() {
   while (TRUE) {
     struct epoll_event* events = new epoll_event[_GetEpollSize()];
     int32_t nfds = epoll_wait(m_eid, events, _GetEpollSize(), -1);
-    if (nfds <= 0) continue;
+    if (nfds <= 0)
+      continue;
     for (int32_t i = 0; i < nfds; i++) {
       S_SOCKET sock = events[i].data.fd;
       if (sock == m_waker.GetWakeSocket()) {
@@ -69,8 +70,7 @@ void CEpollIOLoop::Run() {
             pIOStream->OnAccept();
           } else {
             pIOStream->OnRecv();
-            SOCKET_IO_TRACE("socket recv data, sock id: %d.",
-                            pIOStream->GetSocketID());
+            SOCKET_IO_TRACE("socket recv data, sock id: %d.", pIOStream->GetSocketID());
           }
         } else {
           //调试的时候可能数据还没读，但是对象已经没了，需要清掉
@@ -82,8 +82,7 @@ void CEpollIOLoop::Run() {
         SOCKET_IO_DEBUG("socket write event.");
         CBaseIOStream* pIOStream = _GetHandlerBySock(sock);
         if (pIOStream != NULL) {
-          if (pIOStream->GetSockType() == SOCK_TCP_CLIENT &&
-              pIOStream->CheckConnect()) {
+          if (pIOStream->GetSockType() == SOCK_TCP_CLIENT && pIOStream->CheckConnect()) {
             //连接成功
             pIOStream->OnConnect(TRUE);
           }
@@ -94,28 +93,23 @@ void CEpollIOLoop::Run() {
         SOCKET_IO_DEBUG("socket error event.");
         CBaseIOStream* pIOStream = _GetHandlerBySock(sock);
         if (pIOStream != NULL) {
-          if (pIOStream->GetSockType() == SOCK_TCP_CLIENT &&
-              pIOStream->CheckConnect()) {
+          if (pIOStream->GetSockType() == SOCK_TCP_CLIENT && pIOStream->CheckConnect()) {
             int32_t nError, nCode;
             socklen_t nLen;
             nLen = sizeof(nError);
-            nCode = getsockopt(pIOStream->GetSocket(), SOL_SOCKET, SO_ERROR,
-                               &nError, &nLen);
+            nCode = getsockopt(pIOStream->GetSocket(), SOL_SOCKET, SO_ERROR, &nError, &nLen);
             if (nCode < 0 || nError) {
               //连接失败
-              SOCKET_IO_WARN("socket connect failed, nCode: %d, nError: %d.",
-                             nCode, nError);
+              SOCKET_IO_WARN("socket connect failed, nCode: %d, nError: %d.", nCode, nError);
               pIOStream->OnConnect(FALSE);
             }
           } else {
             int32_t nError, nCode;
             socklen_t nLen;
             nLen = sizeof(nError);
-            nCode = getsockopt(pIOStream->GetSocket(), SOL_SOCKET, SO_ERROR,
-                               &nError, &nLen);
+            nCode = getsockopt(pIOStream->GetSocket(), SOL_SOCKET, SO_ERROR, &nError, &nLen);
             //连接失败
-            SOCKET_IO_WARN("socket error event, nCode: %d, nError: %d.", nCode,
-                           nError);
+            SOCKET_IO_WARN("socket error event, nCode: %d, nError: %d.", nCode, nError);
             pIOStream->ShutDown();
           }
         }
@@ -171,12 +165,10 @@ void CEpollIOLoop::Add_WriteEvent(CBaseIOStream* piostream) {
     return;
   }
   m_MapMutex.Lock();
-  if (m_MapIOStreamBySocket.find(piostream->GetSocket()) !=
-      m_MapIOStreamBySocket.end()) {
+  if (m_MapIOStreamBySocket.find(piostream->GetSocket()) != m_MapIOStreamBySocket.end()) {
     struct epoll_event ev;
     ev.data.fd = piostream->GetSocket();
-    if (piostream->GetSockType() == SOCK_TCP_CLIENT &&
-        piostream->CheckConnect()) {
+    if (piostream->GetSockType() == SOCK_TCP_CLIENT && piostream->CheckConnect()) {
       SOCKET_IO_DEBUG("add write event for check connect.");
       //用于判断是否connect成功
       //对于111(Connection refused)(即连接一个不存在的IP)错误或者110(Connection
@@ -207,8 +199,7 @@ void CEpollIOLoop::Remove_WriteEvent(CBaseIOStream* piostream) {
     return;
   }
   m_MapMutex.Lock();
-  if (m_MapIOStreamBySocket.find(piostream->GetSocket()) !=
-      m_MapIOStreamBySocket.end()) {
+  if (m_MapIOStreamBySocket.find(piostream->GetSocket()) != m_MapIOStreamBySocket.end()) {
     struct epoll_event ev;
     ev.data.fd = piostream->GetSocket();
     ev.events = EPOLLIN | EPOLLERR;

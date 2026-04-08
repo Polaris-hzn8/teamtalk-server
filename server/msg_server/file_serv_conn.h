@@ -10,10 +10,10 @@
 #define _FILE_SERVCONN_
 
 #include <iostream>
-#include "base_socket.h"
 #include "IM.BaseDefine.pb.h"
-#include "serv_info.h"
+#include "base_socket.h"
 #include "im_conn.h"
+#include "serv_info.h"
 
 class CFileServConn : public CImConn {
  public:
@@ -31,9 +31,7 @@ class CFileServConn : public CImConn {
 
   virtual void HandlePdu(CImPdu* pPdu);
 
-  const std::list<IM::BaseDefine::IpAddr>* GetFileServerIPList() {
-    return &m_ip_list;
-  }
+  const std::list<IM::BaseDefine::IpAddr>* GetFileServerIPList() { return &m_ip_list; }
 
  private:
   void _HandleFileMsgTransRsp(CImPdu* pPdu);

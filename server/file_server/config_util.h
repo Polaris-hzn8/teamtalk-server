@@ -18,9 +18,7 @@ class ConfigUtil : public Singleton<ConfigUtil> {
   ~ConfigUtil() {}
 
   void AddAddress(const char* ip, uint16_t port);
-  const std::list<IM::BaseDefine::IpAddr>& GetAddressList() const {
-    return addrs_;
-  }
+  const std::list<IM::BaseDefine::IpAddr>& GetAddressList() const { return addrs_; }
 
   void SetTaskTimeout(uint32_t timeout) { task_timeout_ = timeout; }
   uint32_t GetTaskTimeout() const { return task_timeout_; }

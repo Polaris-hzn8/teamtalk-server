@@ -15,11 +15,9 @@
 #include "transfer_task_manager.h"
 using namespace IM::BaseDefine;
 
-static ConnMap_t
-    g_file_msg_server_conn_map;  // connection with others, on connect insert...
+static ConnMap_t g_file_msg_server_conn_map;  // connection with others, on connect insert...
 
-void FileMsgServerConnCallback(void* callback_data, uint8_t msg,
-                               uint32_t handle, void* param) {
+void FileMsgServerConnCallback(void* callback_data, uint8_t msg, uint32_t handle, void* param) {
   if (msg == NETLIB_MSG_CONNECT) {
     FileMsgServerConn* conn = new FileMsgServerConn();
     conn->OnConnect(handle);
@@ -28,11 +26,9 @@ void FileMsgServerConnCallback(void* callback_data, uint8_t msg,
   }
 }
 
-void FileMsgServerConnTimerCallback(void* callback_data, uint8_t msg,
-                                    uint32_t handle, void* pParam) {
+void FileMsgServerConnTimerCallback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   uint64_t cur_time = get_tick_count();
-  for (ConnMap_t::iterator it = g_file_msg_server_conn_map.begin();
-       it != g_file_msg_server_conn_map.end();) {
+  for (ConnMap_t::iterator it = g_file_msg_server_conn_map.begin(); it != g_file_msg_server_conn_map.end();) {
     ConnMap_t::iterator it_old = it;
     it++;
 
@@ -67,8 +63,7 @@ void FileMsgServerConn::OnConnect(net_handle_t handle) {
 
   g_file_msg_server_conn_map.insert(std::make_pair(handle, this));
   netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)imconn_callback);
-  netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA,
-                (void*)&g_file_msg_server_conn_map);
+  netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)&g_file_msg_server_conn_map);
 }
 
 void FileMsgServerConn::OnClose() {
@@ -83,7 +78,9 @@ void FileMsgServerConn::OnTimer(uint64_t curr_tick) {
   }
 }
 
-void FileMsgServerConn::OnWrite() { CImConn::OnWrite(); }
+void FileMsgServerConn::OnWrite() {
+  CImConn::OnWrite();
+}
 
 void FileMsgServerConn::HandlePdu(CImPdu* pdu) {
   switch (pdu->GetCommandId()) {
@@ -104,12 +101,13 @@ void FileMsgServerConn::HandlePdu(CImPdu* pdu) {
   }
 }
 
-void FileMsgServerConn::_HandleHeartBeat(CImPdu* pdu) { SendPdu(pdu); }
+void FileMsgServerConn::_HandleHeartBeat(CImPdu* pdu) {
+  SendPdu(pdu);
+}
 
 void FileMsgServerConn::_HandleMsgFileTransferReq(CImPdu* pdu) {
   IM::Server::IMFileTransferReq transfer_req;
-  CHECK_PB_PARSE_MSG(
-      transfer_req.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
+  CHECK_PB_PARSE_MSG(transfer_req.ParseFromArray(pdu->GetBodyData(), pdu->GetBodyLength()));
 
   uint32_t from_id = transfer_req.from_user_id();
   uint32_t to_id = transfer_req.to_user_id();
@@ -132,15 +130,17 @@ void FileMsgServerConn::_HandleMsgFileTransferReq(CImPdu* pdu) {
       break;
     }
     log_info(
-        "trams_mode=%d, task_id=%s, from_id=%d, to_id=%d, file_name=%s, "
-        "file_size=%d",
-        transfer_req.trans_mode(), task_id.c_str(), from_id, to_id,
-        transfer_req.file_name().c_str(), transfer_req.file_size());
+      "trams_mode=%d, task_id=%s, from_id=%d, to_id=%d, file_name=%s, "
+      "file_size=%d",
+      transfer_req.trans_mode(),
+      task_id.c_str(),
+      from_id,
+      to_id,
+      transfer_req.file_name().c_str(),
+      transfer_req.file_size());
 
-    BaseTransferTask* transfer_task =
-        TransferTaskManager::GetInstance()->NewTransferTask(
-            transfer_req.trans_mode(), task_id, from_id, to_id,
-            transfer_req.file_name(), transfer_req.file_size());
+    BaseTransferTask* transfer_task = TransferTaskManager::GetInstance()->NewTransferTask(
+      transfer_req.trans_mode(), task_id, from_id, to_id, transfer_req.file_name(), transfer_req.file_size());
 
     if (transfer_task == NULL) {
       // 创建未成功
@@ -156,13 +156,15 @@ void FileMsgServerConn::_HandleMsgFileTransferReq(CImPdu* pdu) {
     // need_seq_no = false;
 
     log_info(
-        "Create task succeed, task id %s, task type %d, from user %d, to user "
-        "%d",
-        task_id.c_str(), transfer_req.trans_mode(), from_id, to_id);
+      "Create task succeed, task id %s, task type %d, from user %d, to user "
+      "%d",
+      task_id.c_str(),
+      transfer_req.trans_mode(),
+      from_id,
+      to_id);
   } while (0);
 
-  ::SendMessageLite(this, SID_OTHER, CID_OTHER_FILE_TRANSFER_RSP,
-                    pdu->GetSeqNum(), &transfer_rsp);
+  ::SendMessageLite(this, SID_OTHER, CID_OTHER_FILE_TRANSFER_RSP, pdu->GetSeqNum(), &transfer_rsp);
 
   if (!rv) {
     // 未创建成功，关闭连接
@@ -173,17 +175,13 @@ void FileMsgServerConn::_HandleMsgFileTransferReq(CImPdu* pdu) {
 void FileMsgServerConn::_HandleGetServerAddressReq(CImPdu* pPdu) {
   IM::Server::IMFileServerIPRsp msg;
 
-  const std::list<IM::BaseDefine::IpAddr>& addrs =
-      ConfigUtil::GetInstance()->GetAddressList();
+  const std::list<IM::BaseDefine::IpAddr>& addrs = ConfigUtil::GetInstance()->GetAddressList();
 
-  for (std::list<IM::BaseDefine::IpAddr>::const_iterator it = addrs.begin();
-       it != addrs.end(); ++it) {
+  for (std::list<IM::BaseDefine::IpAddr>::const_iterator it = addrs.begin(); it != addrs.end(); ++it) {
     IM::BaseDefine::IpAddr* addr = msg.add_ip_addr_list();
     *addr = *it;
-    log_info("Upload file_client_conn addr info, ip=%s, port=%d",
-             addr->ip().c_str(), addr->port());
+    log_info("Upload file_client_conn addr info, ip=%s, port=%d", addr->ip().c_str(), addr->port());
   }
 
-  SendMessageLite(this, SID_OTHER, CID_OTHER_FILE_SERVER_IP_RSP,
-                  pPdu->GetSeqNum(), &msg);
+  SendMessageLite(this, SID_OTHER, CID_OTHER_FILE_SERVER_IP_RSP, pPdu->GetSeqNum(), &msg);
 }

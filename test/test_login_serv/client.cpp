@@ -12,9 +12,8 @@
 #include "json/json.h"
 #include "md5.h"
 
-CClient::CClient(const string& strName, const string& strPass,
-                 const string strDomain)
-    : m_strName(strName), m_strLoginDomain(strDomain), m_nLastGetUser(0) {
+CClient::CClient(const string& strName, const string& strPass, const string strDomain)
+  : m_strName(strName), m_strLoginDomain(strDomain), m_nLastGetUser(0) {
   m_client_conn = NULL;
   char md5[33];
   md5[32] = '\0';
@@ -25,12 +24,12 @@ CClient::CClient(const string& strName, const string& strPass,
 
 CClient::~CClient() {}
 
-static void TimerCallback(void* callback_data, uint8_t msg, uint32_t handle,
-                          void* pParam) {
+static void TimerCallback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   CClient* client = (CClient*)pParam;
   if (client && client->isLogin()) {
     uint64_t cur_time = get_tick_count();
-    if (client->getConn()) client->getConn()->OnTimer(cur_time);
+    if (client->getConn())
+      client->getConn()->OnTimer(cur_time);
   }
 }
 
@@ -77,8 +76,7 @@ void CClient::connect() {
   }
 
   m_client_conn = new ClientConn(this);  // 用来连接msg_server
-  m_nHandle =
-      m_client_conn->connect(strPriorIp.c_str(), nPort, m_strName, m_strPass);
+  m_nHandle = m_client_conn->connect(strPriorIp.c_str(), nPort, m_strName, m_strPass);
   if (m_nHandle != INVALID_SOCKET) {
     netlib_register_timer(TimerCallback, this, 1000);
   } else {
@@ -114,8 +112,7 @@ uint32_t CClient::login(const string& strName, const string& strPass) {
   return m_client_conn->login(strName, strPass);
 }
 
-void CClient::onLogin(uint32_t nSeqNo, uint32_t nResultCode, string& strMsg,
-                      IM::BaseDefine::UserInfo* pUser) {
+void CClient::onLogin(uint32_t nSeqNo, uint32_t nResultCode, string& strMsg, IM::BaseDefine::UserInfo* pUser) {
   if (nResultCode != 0) {
     printf("login failed.errorCode=%u, msg=%s\n", nResultCode, strMsg.c_str());
     return;
@@ -135,8 +132,7 @@ uint32_t CClient::getChangedUser() {
   return m_client_conn->getUser(nUserId, m_nLastGetUser);
 }
 
-void CClient::onGetChangedUser(uint32_t nSeqNo,
-                               const list<IM::BaseDefine::UserInfo>& lsUser) {
+void CClient::onGetChangedUser(uint32_t nSeqNo, const list<IM::BaseDefine::UserInfo>& lsUser) {
   for (auto it = lsUser.begin(); it != lsUser.end(); ++it) {
     IM::BaseDefine::UserInfo* pUserInfo = new IM::BaseDefine::UserInfo();
     *pUserInfo = *it;
@@ -145,8 +141,7 @@ void CClient::onGetChangedUser(uint32_t nSeqNo,
     if (it->status() != 3) {
       auto it1 = m_mapId2UserInfo.find(nUserId);
       if (it1 == m_mapId2UserInfo.end()) {
-        m_mapId2UserInfo.insert(
-            pair<uint32_t, IM::BaseDefine::UserInfo*>(nUserId, pUserInfo));
+        m_mapId2UserInfo.insert(pair<uint32_t, IM::BaseDefine::UserInfo*>(nUserId, pUserInfo));
       } else {
         delete it1->second;
         m_mapId2UserInfo[nUserId] = pUserInfo;
@@ -154,8 +149,7 @@ void CClient::onGetChangedUser(uint32_t nSeqNo,
 
       auto it2 = m_mapNick2UserInfo.find(strNick);
       if (it2 == m_mapNick2UserInfo.end()) {
-        m_mapNick2UserInfo.insert(
-            pair<string, IM::BaseDefine::UserInfo*>(strNick, pUserInfo));
+        m_mapNick2UserInfo.insert(pair<string, IM::BaseDefine::UserInfo*>(strNick, pUserInfo));
       } else {
         delete it1->second;
         m_mapNick2UserInfo[strNick] = pUserInfo;
@@ -169,24 +163,21 @@ uint32_t CClient::getUserInfo(list<uint32_t>& lsUserId) {
   return m_client_conn->getUserInfo(nUserId, lsUserId);
 }
 
-void CClient::onGetUserInfo(uint32_t nSeqNo,
-                            const list<IM::BaseDefine::UserInfo>& lsUser) {
+void CClient::onGetUserInfo(uint32_t nSeqNo, const list<IM::BaseDefine::UserInfo>& lsUser) {
   printf("%s  onGetUserInfo\n", __FUNCTION__);
 
   for (auto iter = lsUser.begin(); iter != lsUser.end(); iter++) {
-    printf("name:%s nick:%s\n", iter->user_real_name().c_str(),
-           iter->user_nick_name().c_str());
+    printf("name:%s nick:%s\n", iter->user_real_name().c_str(), iter->user_nick_name().c_str());
   }
 }
 
-uint32_t CClient::sendMsg(uint32_t nToId, IM::BaseDefine::MsgType nType,
-                          const string& strMsg) {
+uint32_t CClient::sendMsg(uint32_t nToId, IM::BaseDefine::MsgType nType, const string& strMsg) {
   uint32_t nFromId = m_cSelfInfo.user_id();
   return m_client_conn->sendMessage(nFromId, nToId, nType, strMsg);
 }
 
-void CClient::onSendMsg(uint32_t nSeqNo, uint32_t nSendId, uint32_t nRecvId,
-                        IM::BaseDefine::SessionType nType, uint32_t nMsgId) {
+void CClient::onSendMsg(
+  uint32_t nSeqNo, uint32_t nSendId, uint32_t nRecvId, IM::BaseDefine::SessionType nType, uint32_t nMsgId) {
   printf("send msg succes. seqNo:%u, msgId:%u\n", nSeqNo, nMsgId);
 }
 
@@ -195,11 +186,11 @@ uint32_t CClient::getUnreadMsgCnt() {
   return m_client_conn->getUnreadMsgCnt(nUserId);
 }
 
-void CClient::onGetUnreadMsgCnt(
-    uint32_t nSeqNo, uint32_t nUserId, uint32_t nTotalCnt,
-    const list<IM::BaseDefine::UnreadInfo>& lsUnreadCnt) {
-  printf("%s  nSeqNo:%d, nUserId:%d, nTotalCnt:%d\n", __FUNCTION__, nSeqNo,
-         nUserId, nTotalCnt);
+void CClient::onGetUnreadMsgCnt(uint32_t nSeqNo,
+                                uint32_t nUserId,
+                                uint32_t nTotalCnt,
+                                const list<IM::BaseDefine::UnreadInfo>& lsUnreadCnt) {
+  printf("%s  nSeqNo:%d, nUserId:%d, nTotalCnt:%d\n", __FUNCTION__, nSeqNo, nUserId, nTotalCnt);
 }
 
 uint32_t CClient::getRecentSession() {
@@ -207,35 +198,49 @@ uint32_t CClient::getRecentSession() {
   return m_client_conn->getRecentSession(nUserId, m_nLastGetSession);
 }
 
-void CClient::onGetRecentSession(
-    uint32_t nSeqNo, uint32_t nUserId,
-    const list<IM::BaseDefine::ContactSessionInfo>& lsSession) {
-  printf("%s nSeqNo:%u, nUserId:%u, Sessions:%d\n", __FUNCTION__, nSeqNo,
-         nUserId, lsSession.size());
+void CClient::onGetRecentSession(uint32_t nSeqNo,
+                                 uint32_t nUserId,
+                                 const list<IM::BaseDefine::ContactSessionInfo>& lsSession) {
+  printf("%s nSeqNo:%u, nUserId:%u, Sessions:%d\n", __FUNCTION__, nSeqNo, nUserId, lsSession.size());
 }
 
-uint32_t CClient::getMsgList(IM::BaseDefine::SessionType nType,
-                             uint32_t nPeerId, uint32_t nMsgId,
-                             uint32_t nMsgCnt) {
+uint32_t CClient::getMsgList(IM::BaseDefine::SessionType nType, uint32_t nPeerId, uint32_t nMsgId, uint32_t nMsgCnt) {
   uint32_t nUserId = m_cSelfInfo.user_id();
   return m_client_conn->getMsgList(nUserId, nType, nPeerId, nMsgId, nMsgCnt);
 }
 
-void CClient::onGetMsgList(uint32_t nSeqNo, uint32_t nUserId, uint32_t nPeerId,
-                           IM::BaseDefine::SessionType nType, uint32_t nMsgId,
+void CClient::onGetMsgList(uint32_t nSeqNo,
+                           uint32_t nUserId,
+                           uint32_t nPeerId,
+                           IM::BaseDefine::SessionType nType,
+                           uint32_t nMsgId,
                            uint32_t nMsgCnt,
                            const list<IM::BaseDefine::MsgInfo>& lsMsg) {
   printf(
-      "%s nSeqNo:%u, nUserId:%u, nPeerId:%u, nMsgId:%d, nMsgType:%d, "
-      "nMsgCnt:%d\n",
-      __FUNCTION__, nSeqNo, nUserId, nPeerId, nMsgId, nType, nMsgCnt);
+    "%s nSeqNo:%u, nUserId:%u, nPeerId:%u, nMsgId:%d, nMsgType:%d, "
+    "nMsgCnt:%d\n",
+    __FUNCTION__,
+    nSeqNo,
+    nUserId,
+    nPeerId,
+    nMsgId,
+    nType,
+    nMsgCnt);
 }
 
-void CClient::onRecvMsg(uint32_t nSeqNo, uint32_t nFromId, uint32_t nToId,
-                        uint32_t nMsgId, uint32_t nCreateTime,
+void CClient::onRecvMsg(uint32_t nSeqNo,
+                        uint32_t nFromId,
+                        uint32_t nToId,
+                        uint32_t nMsgId,
+                        uint32_t nCreateTime,
                         IM::BaseDefine::MsgType nMsgType,
                         const string& strMsgData) {
   printf("%s nSeqNo:%u, nFromId:%u, nToId:%u, nMsgId:%d, nMsgType:%d, Msg:%s\n",
-         __FUNCTION__, nSeqNo, nFromId, nToId, nMsgId, nMsgType,
+         __FUNCTION__,
+         nSeqNo,
+         nFromId,
+         nToId,
+         nMsgId,
+         nMsgType,
          strMsgData.c_str());
 }

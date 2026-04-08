@@ -25,14 +25,12 @@ BOOL CPushServer::Start() {
   m_pServer->DoClose.connect(&m_handler, &CPushServerHandler::OnClose);
 
   if (m_pServer->Bind(GetListenIP().c_str(), GetPort()) == FALSE) {
-    PUSH_SERVER_ERROR("push server bind failed, ip: %s, port: %u.",
-                      GetListenIP().c_str(), GetPort());
+    PUSH_SERVER_ERROR("push server bind failed, ip: %s, port: %u.", GetListenIP().c_str(), GetPort());
     return FALSE;
   }
 
   m_pServer->Listen();
-  PUSH_SERVER_DEBUG("push server start successed, ip: %s, port: %u.",
-                    GetListenIP().c_str(), GetPort());
+  PUSH_SERVER_DEBUG("push server start successed, ip: %s, port: %u.", GetListenIP().c_str(), GetPort());
   return TRUE;
 }
 

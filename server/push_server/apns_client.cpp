@@ -111,8 +111,7 @@ BOOL CAPNSClient::_GetAPNSServerAddress() {
     m_strGatewayIP = szIP;
     m_nGatewayPort = s_apn_servers[gateway_index].port;
   } else {
-    PUSH_SERVER_WARN("parse gateway host failed, %s.",
-                     s_apn_servers[gateway_index].host);
+    PUSH_SERVER_WARN("parse gateway host failed, %s.", s_apn_servers[gateway_index].host);
     return bRet;
   }
 
@@ -121,8 +120,7 @@ BOOL CAPNSClient::_GetAPNSServerAddress() {
     m_strFeedbackIP = szIP;
     m_nFeedbackPort = s_apn_servers[feedback_index].port;
   } else {
-    PUSH_SERVER_WARN("parse feedback host failed, %s.",
-                     s_apn_servers[feedback_index].host);
+    PUSH_SERVER_WARN("parse feedback host failed, %s.", s_apn_servers[feedback_index].host);
     return bRet;
   }
   bRet = TRUE;
@@ -131,19 +129,13 @@ BOOL CAPNSClient::_GetAPNSServerAddress() {
 
 BOOL CAPNSClient::ConnectGateway() {
   BOOL bRet = FALSE;
-  m_pGatewayClient->DoConnect.connect(&m_gatewayhandler,
-                                      &CAPNSClientHandler::OnConnect);
-  m_pGatewayClient->DoClose.connect(&m_gatewayhandler,
-                                    &CAPNSClientHandler::OnClose);
-  m_pGatewayClient->DoException.connect(&m_gatewayhandler,
-                                        &CAPNSClientHandler::OnException);
-  m_pGatewayClient->DoRecv.connect((CBaseHandler*)&m_gatewayhandler,
-                                   &CAPNSClientHandler::OnRecv);
-  m_pGatewayClient->DoSSLConnect.connect(&m_gatewayhandler,
-                                         &CAPNSClientHandler::OnSSLConnect);
+  m_pGatewayClient->DoConnect.connect(&m_gatewayhandler, &CAPNSClientHandler::OnConnect);
+  m_pGatewayClient->DoClose.connect(&m_gatewayhandler, &CAPNSClientHandler::OnClose);
+  m_pGatewayClient->DoException.connect(&m_gatewayhandler, &CAPNSClientHandler::OnException);
+  m_pGatewayClient->DoRecv.connect((CBaseHandler*)&m_gatewayhandler, &CAPNSClientHandler::OnRecv);
+  m_pGatewayClient->DoSSLConnect.connect(&m_gatewayhandler, &CAPNSClientHandler::OnSSLConnect);
 
-  if (m_pGatewayClient->InitSSL(GetCertPath().c_str(), GetKeyPath().c_str(),
-                                GetKeyPassword().c_str()) == FALSE) {
+  if (m_pGatewayClient->InitSSL(GetCertPath().c_str(), GetKeyPath().c_str(), GetKeyPassword().c_str()) == FALSE) {
     PUSH_SERVER_ERROR("gateway client init ssl failed.");
     return bRet;
   }
@@ -157,19 +149,13 @@ BOOL CAPNSClient::ConnectGateway() {
 
 BOOL CAPNSClient::ConnectFeedback() {
   BOOL bRet = FALSE;
-  m_pFeedbackClient->DoConnect.connect(&m_feedbackhandler,
-                                       &CAPNSFeedBackHandler::OnConnect);
-  m_pFeedbackClient->DoClose.connect(&m_feedbackhandler,
-                                     &CAPNSFeedBackHandler::OnClose);
-  m_pFeedbackClient->DoException.connect(&m_feedbackhandler,
-                                         &CAPNSFeedBackHandler::OnException);
-  m_pFeedbackClient->DoRecv.connect((CBaseHandler*)&m_feedbackhandler,
-                                    &CAPNSFeedBackHandler::OnRecv);
-  m_pFeedbackClient->DoSSLConnect.connect(&m_feedbackhandler,
-                                          &CAPNSFeedBackHandler::OnSSLConnect);
+  m_pFeedbackClient->DoConnect.connect(&m_feedbackhandler, &CAPNSFeedBackHandler::OnConnect);
+  m_pFeedbackClient->DoClose.connect(&m_feedbackhandler, &CAPNSFeedBackHandler::OnClose);
+  m_pFeedbackClient->DoException.connect(&m_feedbackhandler, &CAPNSFeedBackHandler::OnException);
+  m_pFeedbackClient->DoRecv.connect((CBaseHandler*)&m_feedbackhandler, &CAPNSFeedBackHandler::OnRecv);
+  m_pFeedbackClient->DoSSLConnect.connect(&m_feedbackhandler, &CAPNSFeedBackHandler::OnSSLConnect);
 
-  if (m_pFeedbackClient->InitSSL(GetCertPath().c_str(), GetKeyPath().c_str(),
-                                 GetKeyPassword().c_str()) == FALSE) {
+  if (m_pFeedbackClient->InitSSL(GetCertPath().c_str(), GetKeyPath().c_str(), GetKeyPassword().c_str()) == FALSE) {
     PUSH_SERVER_ERROR("feedback client init ssl failed.");
     return bRet;
   }
@@ -230,8 +216,7 @@ void CAPNSClient::CheckConnectFeedback() {
 }
 
 void CAPNSClient::StartReConnectGateway() {
-  m_timer.StartTimer(TIMER_INDEX_RECONNECT_APNS_GATEWAY, CAPNSClient::TimerProc,
-                     TIME_RECONNECT_APNS_GATEWAY, this);
+  m_timer.StartTimer(TIMER_INDEX_RECONNECT_APNS_GATEWAY, CAPNSClient::TimerProc, TIME_RECONNECT_APNS_GATEWAY, this);
 }
 
 void CAPNSClient::StopReConnectGateway() {
@@ -239,9 +224,8 @@ void CAPNSClient::StopReConnectGateway() {
 }
 
 void CAPNSClient::StartCheckConnectGateway() {
-  m_timer.StartTimer(TIMER_INDEX_CHECK_CONNECT_APNS_GATEWAY,
-                     CAPNSClient::TimerProc, TIME_CHECK_CONNECT_APNS_GATEWAY,
-                     this);
+  m_timer.StartTimer(
+    TIMER_INDEX_CHECK_CONNECT_APNS_GATEWAY, CAPNSClient::TimerProc, TIME_CHECK_CONNECT_APNS_GATEWAY, this);
 }
 
 void CAPNSClient::StopCheckConnectGateway() {
@@ -249,9 +233,7 @@ void CAPNSClient::StopCheckConnectGateway() {
 }
 
 void CAPNSClient::StartReConnectFeedback() {
-  m_timer.StartTimer(TIMER_INDEX_RECONNECT_APNS_FEEDBACK,
-                     CAPNSClient::TimerProc, TIME_RECONNECT_APNS_FEEDBACK,
-                     this);
+  m_timer.StartTimer(TIMER_INDEX_RECONNECT_APNS_FEEDBACK, CAPNSClient::TimerProc, TIME_RECONNECT_APNS_FEEDBACK, this);
 }
 
 void CAPNSClient::StopReConnectFeedback() {
@@ -259,9 +241,8 @@ void CAPNSClient::StopReConnectFeedback() {
 }
 
 void CAPNSClient::StartCheckConnectFeedback() {
-  m_timer.StartTimer(TIMER_INDEX_CHECK_CONNECT_APNS_FEEDBACK,
-                     CAPNSClient::TimerProc, TIME_CHECK_CONNECT_APNS_FEEDBACK,
-                     this);
+  m_timer.StartTimer(
+    TIMER_INDEX_CHECK_CONNECT_APNS_FEEDBACK, CAPNSClient::TimerProc, TIME_CHECK_CONNECT_APNS_FEEDBACK, this);
 }
 
 void CAPNSClient::StopCheckConnectFeedback() {

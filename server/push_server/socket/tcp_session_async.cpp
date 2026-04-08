@@ -15,13 +15,14 @@ CTCPSessionAsync::CTCPSessionAsync(CIOLoop* pIO) : CBaseIOStream(pIO) {
  *	@param[in] nSock
  *	@return
  */
-CTCPSessionAsync::CTCPSessionAsync(CIOLoop* pIO, S_SOCKET nSock)
-    : CBaseIOStream(pIO) {
+CTCPSessionAsync::CTCPSessionAsync(CIOLoop* pIO, S_SOCKET nSock) : CBaseIOStream(pIO) {
   SetSockType(SOCK_TCP_SESSION);
   SetSocket(nSock);
 }
 
-CTCPSessionAsync::~CTCPSessionAsync(void) { ShutDown(); }
+CTCPSessionAsync::~CTCPSessionAsync(void) {
+  ShutDown();
+}
 
 /**	@fn	void CTCPSessionAsync::SetSocket(S_SOCKET nSock)
  *	@brief
@@ -88,8 +89,7 @@ int32_t CTCPSessionAsync::SendBufferAsync() {
   }
   CSimpleBuffer* pBufferLoop = m_sendqueue.front();
   m_sendqueuemutex.Unlock();
-  int32_t nRet = S_Send(GetSocket(), (void*)pBufferLoop->GetBuffer(),
-                        pBufferLoop->GetWriteOffset());
+  int32_t nRet = S_Send(GetSocket(), (void*)pBufferLoop->GetBuffer(), pBufferLoop->GetWriteOffset());
   if (nRet < 0) {
 #if (defined(_WIN32) || defined(_WIN64))
     int32_t nError = ::GetLastError();
@@ -113,8 +113,7 @@ int32_t CTCPSessionAsync::SendBufferAsync() {
     int32_t nSize = 0;
     //将未成功的数据重新放置buffer loop中，待下次发送
     pBufferLoop->Read(NULL, nRet);
-    SOCKET_IO_INFO("send tcp data, send size: %d, less than %d.", nRet,
-                   pBufferLoop->GetWriteOffset());
+    SOCKET_IO_INFO("send tcp data, send size: %d, less than %d.", nRet, pBufferLoop->GetWriteOffset());
   } else {
     m_sendqueuemutex.Lock();
     delete pBufferLoop;
@@ -189,8 +188,7 @@ int32_t CTCPSessionAsync::SendMsgAsync(const char* szBuf, int32_t nBufSize) {
     m_sendqueuemutex.Unlock();
     //有数据放入待发送队列，则注册为写事件
     m_pio->Add_WriteEvent(this);
-    SOCKET_IO_INFO("send tcp data, send size: %d, less than %d.", nRet,
-                   nBufSize);
+    SOCKET_IO_INFO("send tcp data, send size: %d, less than %d.", nRet, nBufSize);
   }
   return nErrorCode;
 }
@@ -205,8 +203,7 @@ void CTCPSessionAsync::_Close() {
       m_pio->Remove_Handler(this);
     }
     S_CloseSocket(GetSocket());
-    SOCKET_IO_WARN("close socket, sock %d, real sock: %d.", GetSocketID(),
-                   GetSocket());
+    SOCKET_IO_WARN("close socket, sock %d, real sock: %d.", GetSocketID(), GetSocket());
     m_socket = S_INVALID_SOCKET;
     DoClose(GetSocketID());
     _ClearSendBuffer();

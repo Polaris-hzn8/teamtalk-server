@@ -85,9 +85,13 @@ class CDBConn {
 
 class CDBPool {
  public:
-  CDBPool(const char* pool_name, const char* db_server_ip,
-          uint16_t db_server_port, const char* username, const char* password,
-          const char* db_name, int max_conn_cnt);
+  CDBPool(const char* pool_name,
+          const char* db_server_ip,
+          uint16_t db_server_port,
+          const char* username,
+          const char* password,
+          const char* db_name,
+          int max_conn_cnt);
   virtual ~CDBPool();
 
   int Init();
