@@ -33,31 +33,33 @@
 
 # vscode_folders
 .vscode/
+.cursor/
 
 # version
-src/base/version.h
+server/ttbase/version.h
 
 #hiredis
-src/third/hiredis/*
-!src/third/hiredis/hiredis-master.zip
+third/hiredis/*
+!third/hiredis/hiredis-master.zip
 
 # log4cxx
-src/third/log4cxx/*
-!src/third/log4cxx/apache-log4cxx-0.10.0.tar.gz
-!src/third/log4cxx/console.cpp
-!src/third/log4cxx/inputstreamreader.cpp
-!src/third/log4cxx/socketoutputstream.cpp
+third/log4cxx/*
+!third/log4cxx/apache-log4cxx-0.10.0.tar.gz
+!third/log4cxx/console.cpp
+!third/log4cxx/inputstreamreader.cpp
+!third/log4cxx/socketoutputstream.cpp
 
 # protobuff
-src/third/protobuf/*
-!src/third/protobuf/protobuf-2.6.1.tar.gz
+third/protobuf/*
+!third/protobuf/protobuf-2.6.1.tar.gz
 
 # daeml
-src/daeml/daeml
+daeml/daeml
 
 # cmake
 bin/
 build/
+teamtalk_build/
 
 # output_pack
 im-server-*.tar.gz

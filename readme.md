@@ -27,7 +27,7 @@ TeamTalk 服务端后台，**C++** 实现。整体为 **多进程 IM 类架构**
 ```
 teamtalk-server/
 ├── build_server.sh         # 编译与打包入口（在仓库根执行；内部自动 cd 到 src/）
-├── format_code.sh          # 使用 Google 风格（.clang-format）格式化 src/ 下自有代码
+├── format_code.py          # Python 格式化入口，使用 Google 风格（.clang-format）格式化自有 C/C++ 代码
 ├── .clang-format           # clang-format 规则（BasedOnStyle: Google）
 ├── readme.md
 └── src/
@@ -78,15 +78,15 @@ teamtalk-server/
 
 ## 代码格式化
 
-依赖系统已安装的 **`clang-format`**（或通过环境变量指定：`CLANG_FORMAT=clang-format-15 ./format_code.sh`）。
+依赖系统已安装的 **`python3`** 与 **`clang-format`**（或通过环境变量指定：`CLANG_FORMAT=clang-format-15 ./format_code.py`）。
 
 在**仓库根目录**执行：
 
 ```bash
-./format_code.sh
+./format_code.py
 ```
 
-默认格式化 `src/` 下 C/C++ 源文件，并 **跳过 `src/third/`**，避免改动第三方代码。规则由根目录 **`.clang-format`** 指定（Google 风格）。
+默认格式化 `daeml/`、`server/`、`test/` 下的 C/C++ 源文件，并 **跳过任意 `third/` 目录**，避免改动第三方代码。规则由根目录 **`.clang-format`** 指定（Google 风格）。
 
 ---
 

@@ -19,8 +19,8 @@ SRC_DIR="${ROOT_DIR}/src"
 
 # ========== 打包配置 ==========
 LIB_DIR="lib"
-PACK_FOLDER_NAME="im_server_pack"
-PACKAGE_PREFIX="im-server"
+PACK_FOLDER_NAME="package"
+PACKAGE_PREFIX="teamtalk-server"
 
 # ========== 服务器列表 ==========
 SERVERS=(
