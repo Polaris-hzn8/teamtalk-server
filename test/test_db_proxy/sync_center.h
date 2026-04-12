@@ -9,13 +9,13 @@
 #ifndef __CACHEMANAGER_H__
 #define __CACHEMANAGER_H__
 
+#include <condition_variable>
 #include <list>
 #include <map>
+#include <mutex>
 
 #include "IM.BaseDefine.pb.h"
-#include "condition.h"
 #include "im_pdu_base.h"
-#include "lock.h"
 #include "ostype.h"
 #include "public_define.h"
 
@@ -24,11 +24,11 @@ class CSyncCenter {
   static CSyncCenter* getInstance();
 
   uint32_t getLastUpdate() {
-    CAutoLock auto_lock(&last_update_lock_);
+    std::lock_guard<std::mutex> auto_lock(last_update_lock_);
     return m_nLastUpdate;
   }
   uint32_t getLastUpdateGroup() {
-    CAutoLock auto_lock(&last_update_lock_);
+    std::lock_guard<std::mutex> auto_lock(last_update_lock_);
     return m_nLastUpdateGroup;
   }
   string getDeptName(uint32_t nDeptId);
@@ -52,8 +52,8 @@ class CSyncCenter {
   uint32_t m_nLastUpdateGroup;
   uint32_t m_nLastUpdate;
 
-  CCondition* m_pCondGroupChat;
-  CLock* m_pLockGroupChat;
+  std::condition_variable m_condGroupChat;
+  std::mutex m_lockGroupChat;
   static bool m_bSyncGroupChatRuning;
   bool m_bSyncGroupChatWaitting;
 #ifdef _WIN32
@@ -61,7 +61,7 @@ class CSyncCenter {
 #else
   pthread_t m_nGroupChatThreadId;
 #endif
-  CLock last_update_lock_;
+  std::mutex last_update_lock_;
 };
 
 #endif /*defined(__CACHEMANAGER_H__) */

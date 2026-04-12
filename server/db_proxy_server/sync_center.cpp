@@ -8,6 +8,8 @@
 
 #include <stdlib.h>
 #include <sys/signal.h>
+#include <mutex>
+#include <shared_mutex>
 
 #include "business/Common.h"
 #include "business/GroupModel.h"
@@ -17,17 +19,16 @@
 #include "db_pool.h"
 #include "http_client.h"
 #include "json/json.h"
-#include "lock.h"
 #include "sync_center.h"
 
-static CLock* g_pLock = new CLock();
-static CRWLock* g_pRWDeptLock = new CRWLock();
+static std::mutex* g_pLock = new std::mutex();
+static std::shared_mutex* g_pRWDeptLock = new std::shared_mutex();
 
 CSyncCenter* CSyncCenter::m_pInstance = NULL;
 bool CSyncCenter::m_bSyncGroupChatRuning = false;
 
 CSyncCenter* CSyncCenter::getInstance() {
-  CAutoLock autoLock(g_pLock);
+  std::lock_guard<std::mutex> autoLock(*g_pLock);
   if (m_pInstance == NULL)
     m_pInstance = new CSyncCenter();
   return m_pInstance;
@@ -36,18 +37,11 @@ CSyncCenter* CSyncCenter::getInstance() {
 CSyncCenter::CSyncCenter()
   : m_nGroupChatThreadId(0),
     m_nLastUpdateGroup(time(NULL)),
-    m_bSyncGroupChatWaitting(true),
-    m_pLockGroupChat(new CLock())
-// m_pLock(new CLock())
+    m_bSyncGroupChatWaitting(true)
 {
-  m_pCondGroupChat = new CCondition(m_pLockGroupChat);
 }
 
 CSyncCenter::~CSyncCenter() {
-  if (m_pLockGroupChat != NULL)
-    delete m_pLockGroupChat;
-  if (m_pCondGroupChat != NULL)
-    delete m_pCondGroupChat;
 }
 
 void CSyncCenter::getDept(uint32_t nDeptId, DBDeptInfo_t** pDept) {
@@ -57,7 +51,7 @@ void CSyncCenter::getDept(uint32_t nDeptId, DBDeptInfo_t** pDept) {
 }
 
 std::string CSyncCenter::getDeptName(uint32_t nDeptId) {
-  CAutoRWLock autoLock(g_pRWDeptLock);
+  std::shared_lock<std::shared_mutex> autoLock(*g_pRWDeptLock);
   string strDeptName;
   DBDeptInfo_t* pDept = NULL;
   getDept(nDeptId, &pDept);
@@ -78,7 +72,7 @@ void CSyncCenter::startSync() {
 // 利用条件变量停止同步
 void CSyncCenter::stopSync() {
   m_bSyncGroupChatWaitting = false;
-  m_pCondGroupChat->notify();
+  m_condGroupChat.notify_one();
   while (m_bSyncGroupChatRuning)
     usleep(500);
 }
@@ -188,7 +182,10 @@ void* CSyncCenter::doSyncGroupChat(void* arg) {
       }
     }
     //    } while (!m_pInstance->m_pCondSync->waitTime(5*1000));
-  } while (m_pInstance->m_bSyncGroupChatWaitting && !(m_pInstance->m_pCondGroupChat->waitTime(5 * 1000)));
+  } while (m_pInstance->m_bSyncGroupChatWaitting && !([&]() {
+    std::unique_lock<std::mutex> lock(m_pInstance->m_lockGroupChat);
+    return m_pInstance->m_condGroupChat.wait_for(lock, std::chrono::milliseconds(5000)) == std::cv_status::timeout;
+  }()));
   //    } while(m_pInstance->m_bSyncGroupChatWaitting);
   m_bSyncGroupChatRuning = false;
   return NULL;

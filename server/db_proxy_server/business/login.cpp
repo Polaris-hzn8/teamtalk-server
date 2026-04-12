@@ -9,6 +9,7 @@
 #include "login.h"
 #include <list>
 #include <unordered_map>
+#include <mutex>
 #include "IM.Server.pb.h"
 #include "base64.h"
 #include "common.h"
@@ -25,7 +26,7 @@ namespace DB_PROXY {
 
 CInterLoginStrategy g_loginStrategy;
 
-CLock g_cLimitLock;
+std::mutex g_cLimitLock;
 std::unordered_map<std::string, std::list<uint32_t>> g_hmLimits;
 
 void doLogin(CImPdu* pPdu, uint32_t conn_uuid) {
@@ -42,7 +43,7 @@ void doLogin(CImPdu* pPdu, uint32_t conn_uuid) {
 
     // 登录次数限制检查 30分钟内
     do {
-      CAutoLock cAutoLock(&g_cLimitLock);
+      std::lock_guard<std::mutex> cAutoLock(g_cLimitLock);
 
       // 获取对应用户名的错误登录时间列表
       std::list<uint32_t>& lsErrorTime = g_hmLimits[strDomain];
@@ -101,14 +102,14 @@ void doLogin(CImPdu* pPdu, uint32_t conn_uuid) {
       msgResp.set_result_code(0);
       msgResp.set_result_string("成功");
 
-      CAutoLock cAutoLock(&g_cLimitLock);
+      std::lock_guard<std::mutex> cAutoLock(g_cLimitLock);
       std::list<uint32_t>& lsErrorTime = g_hmLimits[strDomain];
       lsErrorTime.clear();
     } else {
       /* 登录失败密码信息有误 */
       uint32_t tmCurrent = time(NULL);
 
-      CAutoLock cAutoLock(&g_cLimitLock);
+      std::lock_guard<std::mutex> cAutoLock(g_cLimitLock);
       std::list<uint32_t>& lsErrorTime = g_hmLimits[strDomain];
       lsErrorTime.push_front(tmCurrent);
 

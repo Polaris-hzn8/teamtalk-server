@@ -18,6 +18,7 @@
 #endif
 #include <pthread.h>
 #include <unordered_map>
+#include <mutex>
 
 #include "config_file_reader.h"
 #include "file_manager.h"
@@ -160,7 +161,7 @@ class CHttpConn : public CRefObject {
 
   CHttpParserWrapper m_HttpParser;
 
-  static CLock s_list_lock;
+  static std::mutex s_list_lock;
   static std::list<Response_t*> s_response_pdu_list;  // 主线程发送回复消息
 };
 
