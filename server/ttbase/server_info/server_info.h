@@ -13,8 +13,8 @@
 #define SERVINFO_H_
 
 #include <string>
-#include "config_reader.h"
-#include "im_conn.h"
+#include <teamtalk/imcore/netlib/imconn/conn.h>
+#include <teamtalk/imcore/config_reader/config_reader.h>
 
 #define MAX_RECONNECT_CNT 64  //最大重连次数
 #define MIN_RECONNECT_CNT 4   //最小重连次数

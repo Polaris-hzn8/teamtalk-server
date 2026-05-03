@@ -7,7 +7,7 @@
 */
 
 #include <cstdio>
-#include "serv_info.h"
+#include "server_info.h"
 
 // 读取服务器配置信息
 serv_info_t* read_server_config(CConfigReader* config_file,

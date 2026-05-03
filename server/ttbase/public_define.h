@@ -9,19 +9,35 @@
 #ifndef _public_define_h
 #define _public_define_h
 
-#include <stdint.h>
-#include <iostream>
 #include <set>
 #include <string>
+#include <stdint.h>
+#include <iostream>
 #include <unordered_map>
 
-#include "ostype.h"
-
-#ifndef NOTUSED_ARG
-#define NOTUSED_ARG(x) (void)(x)
-#endif
-
 #define XIAO_T_UID 99999999
+#define MAX_MSG_LEN 4096
+
+// client type
+#define CLIENT_TYPE_FLAG_NONE 0x00
+#define CLIENT_TYPE_FLAG_PC 0x01
+#define CLIENT_TYPE_FLAG_MOBILE 0x02
+#define CLIENT_TYPE_FLAG_BOTH 0x03
+
+typedef unsigned char uchar_t;
+
+// enum {
+//     CLIENT_TYPE_WINDOWS     = 0x01,
+//     CLIENT_TYPE_MAC         = 0x02,
+//     CLIENT_TYPE_IOS         = 0x11,
+//     CLIENT_TYPE_ANDROID     = 0x12,
+// };
+
+enum {
+  GENDER_UNKNOWN = 0,
+  GENDER_MAN = 1,
+  GENDER_WOMAN = 2,
+};
 
 enum {
   USER_CNT_INC = 1,
@@ -42,17 +58,16 @@ enum {
   IM_PC_LOGIN_STATUS_OFF = 0,
 };
 
-// client type:
-#define CLIENT_TYPE_FLAG_NONE 0x00
-#define CLIENT_TYPE_FLAG_PC 0x01
-#define CLIENT_TYPE_FLAG_MOBILE 0x02
-#define CLIENT_TYPE_FLAG_BOTH 0x03
+// enum {
+//     SESSION_TYPE_SINGLE     = 0x01,
+//     SESSION_TYPE_GROUP      = 0x02,
+// };
 
 // enum {
-//     CLIENT_TYPE_WINDOWS     = 0x01,
-//     CLIENT_TYPE_MAC         = 0x02,
-//     CLIENT_TYPE_IOS         = 0x11,
-//     CLIENT_TYPE_ANDROID     = 0x12,
+//     MSG_TYPE_SINGLE_TEXT    = 0x01,
+//     MSG_TYPE_SINGLE_AUDIO   = 0x02,
+//     MSG_TYPE_GROUP_TEXT     = 0x11,
+//     MSG_TYPE_GROUP_AUDIO    = 0x12,
 // };
 
 ///////////////////////////////////CHECK_CLIENT_TYPE_PC/////////////////////////
@@ -73,24 +88,6 @@ enum {
     }                                  \
     bRet;                              \
   })
-
-enum {
-  GENDER_UNKNOWN = 0,
-  GENDER_MAN = 1,
-  GENDER_WOMAN = 2,
-};
-
-// enum {
-//     SESSION_TYPE_SINGLE     = 0x01,
-//     SESSION_TYPE_GROUP      = 0x02,
-// };
-
-// enum {
-//     MSG_TYPE_SINGLE_TEXT    = 0x01,
-//     MSG_TYPE_SINGLE_AUDIO   = 0x02,
-//     MSG_TYPE_GROUP_TEXT     = 0x11,
-//     MSG_TYPE_GROUP_AUDIO    = 0x12,
-// };
 
 ///////////////////////////////////////////////CHECK_MSG_TYPE_SINGLE//////////////////////////////////////////////////
 #define CHECK_MSG_TYPE_SINGLE(type)                                                                          \
@@ -194,7 +191,5 @@ typedef struct {
   std::set<std::string> authed_ips;         //已授权的IP地址集合
   std::set<std::string> authed_interfaces;  //已授权的接口名称集合
 } auth_struct;
-
-#define MAX_MSG_LEN 4096
 
 #endif
