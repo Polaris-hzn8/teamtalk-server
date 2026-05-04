@@ -9,8 +9,10 @@
 #include <cstdio>
 #include "server_info.h"
 
+namespace teamtalk::sbase::server_info {
+
 // 读取服务器配置信息
-serv_info_t* read_server_config(CConfigReader* config_file,
+serv_info_t* read_server_config(ttconfig::CConfigReader* config_file,
                                 const char* server_ip_format,
                                 const char* server_port_format,
                                 uint32_t& server_count) {
@@ -27,8 +29,10 @@ serv_info_t* read_server_config(CConfigReader* config_file,
     std::string server_port_value = config_file->GetConfigValue(server_port_key);
 
     // 配置项不存在
-    if (server_ip_value.empty() || server_port_value.empty())
+    if (server_ip_value.empty() || server_port_value.empty()) {
       break;
+    }
+
     server_count++;
   }
 
@@ -46,3 +50,5 @@ serv_info_t* read_server_config(CConfigReader* config_file,
   }
   return server_list;
 }
+
+} // namespace teamtalk::sbase::server_info

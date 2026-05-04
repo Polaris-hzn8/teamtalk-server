@@ -9,12 +9,17 @@
     3.重置服务器连接
 */
 
-#ifndef SERVINFO_H_
-#define SERVINFO_H_
+#ifndef TEAMTALK_SBASERVER_INFO_SERVER_INFO_H
+#define TEAMTALK_SBASERVER_INFO_SERVER_INFO_H
 
 #include <string>
 #include <teamtalk/imcore/netlib/imconn/conn.h>
 #include <teamtalk/imcore/config_reader/config_reader.h>
+
+namespace teamtalk::sbase::server_info {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttconfig = teamtalk::imcore::config_reader;
 
 #define MAX_RECONNECT_CNT 64  //最大重连次数
 #define MIN_RECONNECT_CNT 4   //最小重连次数
@@ -25,7 +30,7 @@ typedef struct {
   uint16_t server_port;    //端口
   uint32_t idle_cnt;       //空闲计数
   uint32_t reconnect_cnt;  //重连计数
-  CImConn* serv_conn;      //服务器连接对象
+  ttnetlib::CImConn* serv_conn;      //服务器连接对象
 } serv_info_t;
 
 // 初始化服务器列表
@@ -72,9 +77,11 @@ void serv_reset(serv_info_t* server_list, uint32_t server_count, uint32_t serv_i
 }
 
 //读取服务器配置信息
-serv_info_t* read_server_config(CConfigReader* config_file,
+serv_info_t* read_server_config(ttconfig::CConfigReader* config_file,
                                 const char* server_ip_format,
                                 const char* server_port_format,
                                 uint32_t& server_count);
 
-#endif
+} // namespace teamtalk::sbase::server_info
+
+#endif // TEAMTALK_SBASERVER_INFO_SERVER_INFO_H

@@ -6,8 +6,8 @@
  brief:
 */
 
-#ifndef _public_define_h
-#define _public_define_h
+#ifndef TEAMTALK_SBASE_PUBLIC_DEFINE_H
+#define TEAMTALK_SBASE_PUBLIC_DEFINE_H
 
 #include <set>
 #include <string>
@@ -192,4 +192,4 @@ typedef struct {
   std::set<std::string> authed_interfaces;  //已授权的接口名称集合
 } auth_struct;
 
-#endif
+#endif // TEAMTALK_SBASE_PUBLIC_DEFINE_H

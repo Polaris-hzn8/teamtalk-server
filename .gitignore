@@ -36,7 +36,7 @@
 .cursor/
 
 # version
-server/ttbase/version.h
+server/sbase/version.h
 
 #hiredis
 third/hiredis/*
