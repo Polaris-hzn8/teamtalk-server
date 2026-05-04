@@ -51,4 +51,4 @@ serv_info_t* read_server_config(ttconfig::CConfigReader* config_file,
   return server_list;
 }
 
-} // namespace teamtalk::sbase::server_info
+}  // namespace teamtalk::sbase::server_info

@@ -26,11 +26,11 @@ namespace ttconfig = teamtalk::imcore::config_reader;
 
 //服务器信息结构体
 typedef struct {
-  std::string server_ip;   // IP
-  uint16_t server_port;    //端口
-  uint32_t idle_cnt;       //空闲计数
-  uint32_t reconnect_cnt;  //重连计数
-  ttnetlib::CImConn* serv_conn;      //服务器连接对象
+  std::string server_ip;         // IP
+  uint16_t server_port;          //端口
+  uint32_t idle_cnt;             //空闲计数
+  uint32_t reconnect_cnt;        //重连计数
+  ttnetlib::CImConn* serv_conn;  //服务器连接对象
 } serv_info_t;
 
 // 初始化服务器列表
@@ -82,6 +82,6 @@ serv_info_t* read_server_config(ttconfig::CConfigReader* config_file,
                                 const char* server_port_format,
                                 uint32_t& server_count);
 
-} // namespace teamtalk::sbase::server_info
+}  // namespace teamtalk::sbase::server_info
 
-#endif // TEAMTALK_SBASERVER_INFO_SERVER_INFO_H
+#endif  // TEAMTALK_SBASERVER_INFO_SERVER_INFO_H

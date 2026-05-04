@@ -40,18 +40,12 @@ CSyncCenter* CSyncCenter::getInstance() {
 /**
  *  构造函数
  */
-CSyncCenter::CSyncCenter()
-  : m_nGroupChatThreadId(0),
-    m_nLastUpdateGroup(time(NULL)),
-    m_bSyncGroupChatWaitting(true)
-{
-}
+CSyncCenter::CSyncCenter() : m_nGroupChatThreadId(0), m_nLastUpdateGroup(time(NULL)), m_bSyncGroupChatWaitting(true) {}
 
 /**
  *  析构函数
  */
-CSyncCenter::~CSyncCenter() {
-}
+CSyncCenter::~CSyncCenter() {}
 
 void CSyncCenter::getDept(uint32_t nDeptId, DBDeptInfo_t** pDept) {
   auto it = m_pDeptInfo->find(nDeptId);
@@ -216,9 +210,10 @@ void* CSyncCenter::doSyncGroupChat(void* arg) {
     }
     //    } while (!m_pInstance->m_pCondSync->waitTime(5*1000));
   } while (m_pInstance->m_bSyncGroupChatWaitting && !([&]() {
-    std::unique_lock<std::mutex> lock(m_pInstance->m_lockGroupChat);
-    return m_pInstance->m_condGroupChat.wait_for(lock, std::chrono::milliseconds(5000)) == std::cv_status::timeout;
-  }()));
+             std::unique_lock<std::mutex> lock(m_pInstance->m_lockGroupChat);
+             return m_pInstance->m_condGroupChat.wait_for(lock, std::chrono::milliseconds(5000)) ==
+                    std::cv_status::timeout;
+           }()));
   //    } while(m_pInstance->m_bSyncGroupChatWaitting);
   m_bSyncGroupChatRuning = false;
   return NULL;

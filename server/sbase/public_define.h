@@ -192,4 +192,4 @@ typedef struct {
   std::set<std::string> authed_interfaces;  //已授权的接口名称集合
 } auth_struct;
 
-#endif // TEAMTALK_SBASE_PUBLIC_DEFINE_H
+#endif  // TEAMTALK_SBASE_PUBLIC_DEFINE_H
