@@ -31,28 +31,23 @@ target_compile_definitions(login_server PRIVATE
     LINUX_DAEMON
 )
 
-# 头文件路径
-include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/src
-    ${SDK_DIR}/protobuf/include
-)
-
 link_directories(
     "${SDK_DIR}/teamtalk-imcore/lib"
     "${SDK_DIR}/protobuf/lib"
+    "${SDK_DIR}/teamtalk-sbase/lib"
 )
 
 target_include_directories(login_server PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${SDK_DIR}/teamtalk-imcore/include"
+    "${SDK_DIR}/teamtalk-sbase/include"
     "${SDK_DIR}/protobuf/include"
 )
 
-find_package(Threads REQUIRED)
 target_link_libraries(login_server PRIVATE
     teamtalk-sbase
     teamtalk-imcore
     protobuf-lite
-    Threads::Threads
+    pthread
 )
