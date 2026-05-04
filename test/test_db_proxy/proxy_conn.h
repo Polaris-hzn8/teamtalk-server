@@ -39,7 +39,7 @@ class CProxyConn : public CImConn {
   static uint32_t s_uuid_alloctor;
   uint32_t m_uuid;
 
-  static CLock s_list_lock;
+  static std::mutex s_list_lock;
   static list<ResponsePdu_t*> s_response_pdu_list;  // 主线程发送回复消息
 };
 

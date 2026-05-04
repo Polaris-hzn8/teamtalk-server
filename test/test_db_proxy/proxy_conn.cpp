@@ -20,7 +20,7 @@ static UserMap_t g_uuid_conn_map;
 static CHandlerMap* s_handler_map;
 
 uint32_t CProxyConn::s_uuid_alloctor = 0;
-CLock CProxyConn::s_list_lock;
+std::mutex CProxyConn::s_list_lock;
 list<ResponsePdu_t*> CProxyConn::s_response_pdu_list;
 static CThreadPool g_thread_pool;
 

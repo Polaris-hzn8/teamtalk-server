@@ -15,7 +15,7 @@ static HttpConnMap_t g_http_conn_map;
 
 // conn_handle 从0开始递增，可以防止因socket handle重用引起的一些冲突
 static uint32_t g_conn_handle_generator = 0;
-CLock CHttpConn::s_list_lock;
+std::mutex CHttpConn::s_list_lock;
 std::list<Response_t*> CHttpConn::s_response_pdu_list;
 
 CHttpConn* FindHttpConnByHandle(uint32_t conn_handle) {

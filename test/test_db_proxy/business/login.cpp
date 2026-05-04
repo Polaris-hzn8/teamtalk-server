@@ -8,6 +8,7 @@
 
 #include "login.h"
 #include <list>
+#include <mutex>
 #include "../HttpClient.h"
 #include "../ProxyConn.h"
 #include "../SyncCenter.h"
@@ -23,7 +24,7 @@
 CInterLoginStrategy g_loginStrategy;
 
 hash_map<string, list<uint32_t>> g_hmLimits;
-CLock g_cLimitLock;
+std::mutex g_cLimitLock;
 namespace DB_PROXY {
 
 void doLogin(CImPdu* pPdu, uint32_t conn_uuid) {
@@ -39,7 +40,7 @@ void doLogin(CImPdu* pPdu, uint32_t conn_uuid) {
     msgResp.set_attach_data(msg.attach_data());
 
     do {
-      CAutoLock cAutoLock(&g_cLimitLock);
+      std::lock_guard<std::mutex> cAutoLock(g_cLimitLock);
       list<uint32_t>& lsErrorTime = g_hmLimits[strDomain];
       uint32_t tmNow = time(NULL);
 
@@ -99,13 +100,13 @@ void doLogin(CImPdu* pPdu, uint32_t conn_uuid) {
       msgResp.set_result_string("成功");
 
       // 如果登陆成功，则清除错误尝试限制
-      CAutoLock cAutoLock(&g_cLimitLock);
+      std::lock_guard<std::mutex> cAutoLock(g_cLimitLock);
       list<uint32_t>& lsErrorTime = g_hmLimits[strDomain];
       lsErrorTime.clear();
     } else {
       // 密码错误，记录一次登陆失败
       uint32_t tmCurrent = time(NULL);
-      CAutoLock cAutoLock(&g_cLimitLock);
+      std::lock_guard<std::mutex> cAutoLock(g_cLimitLock);
       list<uint32_t>& lsErrorTime = g_hmLimits[strDomain];
       lsErrorTime.push_front(tmCurrent);
 
