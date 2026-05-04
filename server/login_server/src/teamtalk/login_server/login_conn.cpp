@@ -1,20 +1,15 @@
-/*
- Reviser: Polaris_hzn8
- Email: 3453851623@qq.com
- filename: LoginConn.cpp
- Update Time: Thu 15 Jun 2023 00:45:21 CST
- brief:
+/**
+ * @author: luochenhao
+ * @email: lch2022fox@163.com
+ * @time: Mon 04 May 2026 19:31:25 CST
+ * @brief: 登录服务tcp连接管理
 */
 
-#include "IM.Login.pb.h"
-#include "IM.Other.pb.h"
-#include "IM.Server.pb.h"
-
-#include "login_conn.h"
-#include "public_define.h"
-
-using namespace IM::BaseDefine;
-using namespace std;
+#include <public_define.h>
+#include <teamtalk/imcore/ttidl/login.pb.h>
+#include <teamtalk/imcore/ttidl/other.pb.h>
+#include <teamtalk/imcore/ttidl/service.pb.h>
+#include <teamtalk/login_server/login_conn.h>
 
 // 客户端连接管理 handle -> ImConn
 static ConnMap_t g_client_conn_map;

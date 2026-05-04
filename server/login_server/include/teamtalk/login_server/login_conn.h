@@ -6,12 +6,17 @@
  brief:
 */
 
-#ifndef LOGINCONN_H_
-#define LOGINCONN_H_
+#ifndef TEAMTALK_LOGIN_SERVER_LOGIN_CONN_H_
+#define TEAMTALK_LOGIN_SERVER_LOGIN_CONN_H_
 
-#include "im_conn.h"
+#include <teamtalk/imcore/netlib/imconn/conn.h>
 
-enum { LOGIN_CONN_TYPE_CLIENT = 1, LOGIN_CONN_TYPE_MSG_SERV };
+namespace teamtalk::login_server {
+
+enum {
+  LOGIN_CONN_TYPE_CLIENT = 1,
+  LOGIN_CONN_TYPE_MSG_SERV = 2
+};
 
 typedef struct {
   std::string ip_addr1;   // 电信IP
@@ -22,7 +27,7 @@ typedef struct {
   std::string hostname;   // 消息服务器的主机名
 } msg_serv_info_t;
 
-class CLoginConn : public CImConn {
+class CLoginConn : public teamtalk::imcore::netlib::CImConn {
  public:
   CLoginConn();
   virtual ~CLoginConn();
@@ -42,9 +47,11 @@ class CLoginConn : public CImConn {
   void _HandleUserCntUpdate(CImPdu* pPdu);   //处理用户数量更新
 
  private:
-  int m_conn_type;
+  uint8_t m_conn_type;
 };
 
 void init_login_conn();
 
-#endif
+}  // namespace teamtalk::login_server
+
+#endif  // TEAMTALK_LOGIN_SERVER_LOGIN_CONN_H_

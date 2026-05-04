@@ -6,17 +6,14 @@
  brief:
 */
 
-#include "http_conn.h"
-#include "http_parser_wrapper.h"
-#include "ipparser.h"
-#include "json/json.h"
-#include "login_conn.h"
-using namespace std;
+#include <json/json.h>
+#include <teamtalk/login_server/http_conn.h>
+#include <teamtalk/login_server/login_conn.h>
+#include <teamtalk/login_server/common/ip_parser.h>
+#include <teamtalk/login_server/server_config/server_config.h>
+#include <teamtalk/imcore/http_client/http_parser_wrapper.h>
 
 extern std::map<uint32_t, msg_serv_info_t*> g_msg_serv_info;
-extern IpParser* pIpParser;
-extern string strMsfsUrl;
-extern string strDiscovery;
 
 static HttpConnMap_t g_http_conn_map;
 // conn_handle 从0开始递增，可以防止因socket handle重用引起的一些冲突
@@ -258,22 +255,24 @@ void CHttpConn::_HandleMsgServRequest(string& url, string& post_data) {
     Send((void*)szContent, strlen(szContent));
     delete[] szContent;
     return;
-  } else {  // 找到合适的msg_server
+  } else { 
+    // 返回合适的消息服务器地址
     Json::Value value;
     value["code"] = 0;
     value["msg"] = "";
+    const auto& cfg = ttserver::LoginServerConfig::Instance();
     if (pIpParser->isTelcome(GetPeerIP())) {
       value["priorIP"] = string(it_min_conn->second->ip_addr1);
       value["backupIP"] = string(it_min_conn->second->ip_addr2);
-      value["msfsPrior"] = strMsfsUrl;
-      value["msfsBackup"] = strMsfsUrl;
+      value["msfsPrior"] = cfg.msfs_url();
+      value["msfsBackup"] = cfg.msfs_url();
     } else {
       value["priorIP"] = string(it_min_conn->second->ip_addr2);
       value["backupIP"] = string(it_min_conn->second->ip_addr1);
-      value["msfsPrior"] = strMsfsUrl;
-      value["msfsBackup"] = strMsfsUrl;
+      value["msfsPrior"] = cfg.msfs_url();
+      value["msfsBackup"] = cfg.msfs_url();
     }
-    value["discovery"] = strDiscovery;
+    value["discovery"] = cfg.discovery();
     value["port"] = int2string(it_min_conn->second->port);
     string strContent = value.toStyledString();
     char* szContent = new char[HTTP_RESPONSE_HTML_MAX];
@@ -286,6 +285,6 @@ void CHttpConn::_HandleMsgServRequest(string& url, string& post_data) {
 }
 
 void CHttpConn::OnWriteComlete() {
-  log_info("write complete ");
+  log_info("http connection write complete ");
   Close();
 }

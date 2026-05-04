@@ -6,13 +6,17 @@
  brief:
 */
 
-#ifndef _HTTP_CONN_H_
-#define _HTTP_CONN_H_
+#ifndef TEAMTALK_LOGIN_SERVER_HTTP_CONN_H_
+#define TEAMTALK_LOGIN_SERVER_HTTP_CONN_H_
 
 #include <unordered_map>
-#include "http_parser_wrapper.h"
-#include "netlib.h"
-#include "util.h"
+#include <teamtalk/imcore/common/tools.h>
+#include <teamtalk/imcore/common/ref_object.h>
+#include <teamtalk/imcore/netlib/core/netlib.h>
+#include <teamtalk/imcore/netlib/impdu/simple_buffer.h>
+#include <teamtalk/imcore/http_client/http_parser_wrapper.h>
+
+namespace teamtalk::login_server {
 
 #define HTTP_CONN_TIMEOUT 60000
 
@@ -31,7 +35,7 @@ enum {
   CONN_STATE_CLOSED,
 };
 
-class CHttpConn : public CRefObject {
+class CHttpConn : public teamtalk::imcore::common::CRefObject {
  public:
   CHttpConn();
   virtual ~CHttpConn();
@@ -72,6 +76,9 @@ class CHttpConn : public CRefObject {
 typedef std::unordered_map<uint32_t, CHttpConn*> HttpConnMap_t;
 
 CHttpConn* FindHttpConnByHandle(uint32_t handle);
+
 void init_http_conn();
 
-#endif  // _HTTP_CONN_H_
+}  // namespace teamtalk::login_server
+
+#endif  // TEAMTALK_LOGIN_SERVER_HTTP_CONN_H_
