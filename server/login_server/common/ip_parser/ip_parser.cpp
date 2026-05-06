@@ -6,10 +6,11 @@
  brief:
 */
 
-#include "ip_parser.h"
+#include <teamtalk/imcore/slog/slog.h>
 #include <teamtalk/imcore/string/str_explode.h>
+#include <common/ip_parser/ip_parser.h>
 
-namespace teamtalk::login_server {
+namespace teamtalk::login_server::common::ip_parser {
 
 using namespace teamtalk::imcore::string;
 
@@ -26,4 +27,4 @@ bool is_telcome(const char* ip) {
   return true;
 }
 
-}  // namespace teamtalk::login_server
+}  // namespace teamtalk::login_server::common::ip_parser

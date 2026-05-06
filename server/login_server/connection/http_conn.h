@@ -6,8 +6,8 @@
  brief:
 */
 
-#ifndef TEAMTALK_LOGIN_SERVER_HTTP_CONN_H_
-#define TEAMTALK_LOGIN_SERVER_HTTP_CONN_H_
+#ifndef TEAMTALK_LOGIN_SERVER_CONNECTION_HTTP_CONN_H_
+#define TEAMTALK_LOGIN_SERVER_CONNECTION_HTTP_CONN_H_
 
 #include <unordered_map>
 #include <teamtalk/imcore/common/tools.h>
@@ -16,7 +16,7 @@
 #include <teamtalk/imcore/netlib/impdu/simple_buffer.h>
 #include <teamtalk/imcore/http_client/http_parser_wrapper.h>
 
-namespace teamtalk::login_server {
+namespace teamtalk::login_server::connection {
 
 #define HTTP_CONN_TIMEOUT 60000
 
@@ -64,13 +64,13 @@ class CHttpConn : public teamtalk::imcore::common::CRefObject {
   uint32_t m_state;
   std::string m_peer_ip;
   uint16_t m_peer_port;
-  CSimpleBuffer m_in_buf;
-  CSimpleBuffer m_out_buf;
-
+  
   uint64_t m_last_send_tick;
   uint64_t m_last_recv_tick;
 
-  CHttpParserWrapper m_cHttpParser;
+  teamtalk::imcore::netlib::CSimpleBuffer m_in_buf;
+  teamtalk::imcore::netlib::CSimpleBuffer m_out_buf;
+  teamtalk::imcore::http_client::CHttpParserWrapper m_cHttpParser;
 };
 
 typedef std::unordered_map<uint32_t, CHttpConn*> HttpConnMap_t;
@@ -79,6 +79,6 @@ CHttpConn* FindHttpConnByHandle(uint32_t handle);
 
 void init_http_conn();
 
-}  // namespace teamtalk::login_server
+}  // namespace teamtalk::login_server::connection
 
-#endif  // TEAMTALK_LOGIN_SERVER_HTTP_CONN_H_
+#endif  // TEAMTALK_LOGIN_SERVER_CONNECTION_HTTP_CONN_H_

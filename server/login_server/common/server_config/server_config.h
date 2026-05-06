@@ -8,13 +8,14 @@
  *    后续新增配置项：加成员、在 LoadFromFile 里赋值、提供 getter 方法
 */
 
-#ifndef TEAMTALK_LOGIN_SERVER_SERVER_CONFIG_H_
-#define TEAMTALK_LOGIN_SERVER_SERVER_CONFIG_H_
+#ifndef TEAMTALK_LOGIN_SERVER_COMMON_SERVER_CONFIG_SERVER_CONFIG_H_
+#define TEAMTALK_LOGIN_SERVER_COMMON_SERVER_CONFIG_SERVER_CONFIG_H_
 
 #include <string>
+#include <vector>
 #include <cstdint>
 
-namespace teamtalk::login_server {
+namespace teamtalk::login_server::common::server_config {
 
 class LoginServerConfig {
  public:
@@ -32,6 +33,13 @@ class LoginServerConfig {
   const std::string& msg_server_listen_ip() const { return msg_server_listen_ip_; }
   uint16_t msg_server_port() const { return msg_server_port_; }
 
+  /** ClientListenIP */
+  const std::vector<std::string>& client_listen_addresses() const { return client_listen_addrs_; }
+  /** MsgServerListenIP */
+  const std::vector<std::string>& msg_server_listen_addresses() const { return msg_server_listen_addrs_; }
+  /** HttpListenIP */
+  const std::vector<std::string>& http_listen_addresses() const { return http_listen_addrs_; }
+
   const std::string& msfs_url() const { return msfs_url_; }
   const std::string& discovery() const { return discovery_; }
 
@@ -48,8 +56,12 @@ class LoginServerConfig {
   uint16_t msg_server_port_ = 0;
   std::string msfs_url_;
   std::string discovery_;
+
+  std::vector<std::string> client_listen_addrs_;
+  std::vector<std::string> msg_server_listen_addrs_;
+  std::vector<std::string> http_listen_addrs_;
 };
 
-}  // namespace teamtalk::login_server
+}  // namespace teamtalk::login_server::common::server_config
 
-#endif  // TEAMTALK_LOGIN_SERVER_SERVER_CONFIG_H_
+#endif  // TEAMTALK_LOGIN_SERVER_COMMON_SERVER_CONFIG_SERVER_CONFIG_H_

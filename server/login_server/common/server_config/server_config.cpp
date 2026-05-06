@@ -5,10 +5,29 @@
  * @brief: 读取 login_server.conf 配置文件
 */
 
-#include "server_config.h"
 #include <teamtalk/imcore/config_reader/config_reader.h>
+#include <common/server_config/server_config.h>
 
-namespace teamtalk::login_server {
+namespace teamtalk::login_server::common::server_config {
+
+namespace {
+/** 按分号拆分字符串，跳过空片段 */
+void split_by_semicolon(const std::string& raw, std::vector<std::string>* out) {
+  out->clear();
+  if (raw.empty()) {
+    return;
+  }
+  size_t pos = 0;
+  while (pos < raw.size()) {
+    size_t sep = raw.find(';', pos);
+    const size_t end = (sep == std::string::npos) ? raw.size() : sep;
+    if (end > pos) {
+      out->emplace_back(raw, pos, end - pos);
+    }
+    pos = (sep == std::string::npos) ? raw.size() : sep + 1;
+  }
+}
+}  // namespace
 
 LoginServerConfig& LoginServerConfig::Instance() {
   static LoginServerConfig inst;
@@ -16,7 +35,7 @@ LoginServerConfig& LoginServerConfig::Instance() {
 }
 
 bool LoginServerConfig::LoadFromFile(const std::string& path) {
-  teamtalk::imcore::config_reader::CConfigFileReader config_file(path.c_str());
+  teamtalk::imcore::config_reader::CConfigReader config_file(path.c_str());
 
   client_listen_ip_ = config_file.GetConfigValue("ClientListenIP");
   http_listen_ip_ = config_file.GetConfigValue("HttpListenIP");
@@ -35,7 +54,16 @@ bool LoginServerConfig::LoadFromFile(const std::string& path) {
   client_port_ = static_cast<uint16_t>(config_file.GetUint32Value("ClientPort", 0));
   msg_server_port_ = static_cast<uint16_t>(config_file.GetUint32Value("MsgServerPort", 0));
   http_port_ = static_cast<uint16_t>(config_file.GetUint32Value("HttpPort", 0));
+
+  split_by_semicolon(client_listen_ip_, &client_listen_addrs_);
+  split_by_semicolon(msg_server_listen_ip_, &msg_server_listen_addrs_);
+  split_by_semicolon(http_listen_ip_, &http_listen_addrs_);
+
+  if (msg_server_listen_addrs_.empty() || http_listen_addrs_.empty()) {
+    return false;
+  }
+
   return true;
 }
 
-}  // namespace teamtalk::login_server
+}  // namespace teamtalk::login_server::common::server_config
