@@ -7,7 +7,7 @@
 */
 
 #include <cstdio>
-#include "server_info.h"
+#include <teamtalk/sbase/server_info/server_info.h>
 
 namespace teamtalk::sbase::server_info {
 

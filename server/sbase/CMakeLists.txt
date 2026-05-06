@@ -28,7 +28,7 @@ add_definitions(
 add_compile_options(-g -W -Wall)
 
 include_directories(
-    "${CMAKE_SOURCE_DIR}"
+    "${CMAKE_SOURCE_DIR}/include"
     ${SDK_DIR}/teamtalk-imcore/include
     ${SDK_DIR}/protobuf/include
 )
@@ -55,7 +55,8 @@ install(TARGETS teamtalk-sbase
     RUNTIME DESTINATION bin
 )
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/" DESTINATION include
+install(DIRECTORY include/
+    DESTINATION include
     FILES_MATCHING
     PATTERN "*.h"
     PATTERN "*.hpp"
