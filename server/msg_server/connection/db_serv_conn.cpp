@@ -13,7 +13,7 @@
 #include "group_chat.h"
 #include "im_pdu_base.h"
 #include "im_user.h"
-#include "jsonxx.h"
+#include <json/json.h>
 #include "msg_conn.h"
 #include "public_define.h"
 #include "push_serv_conn.h"
@@ -766,12 +766,16 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
   //    "from_id": "1345232",
   //    "group_type": "12353",
   //}
-  jsonxx::Object json_obj;
-  json_obj << "msg_type" << (uint32_t)msg2.msg_type();
-  json_obj << "from_id" << from_id;
+  Json::Value json_obj(Json::objectValue);
+  json_obj["msg_type"] = static_cast<uint32_t>(msg2.msg_type());
+  json_obj["from_id"] = from_id;
   if (CHECK_MSG_TYPE_GROUP(msg2.msg_type())) {
-    json_obj << "group_id" << to_id;
+    json_obj["group_id"] = to_id;
   }
+
+  Json::StreamWriterBuilder builder;
+  builder["indentation"] = "";
+  const std::string json_data = Json::writeString(builder, json_obj);
 
   uint32_t user_token_cnt = msg.user_token_info_size();
   log_info("HandleGetDeviceTokenResponse, user_token_cnt = %u.", user_token_cnt);
@@ -799,7 +803,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
     CImUser* pUser = CImUserManager::GetInstance()->GetImUserById(user_id);
     if (pUser) {
       msg3.set_flash(msg_data);
-      msg3.set_data(json_obj.json());
+      msg3.set_data(json_data);
       IM::BaseDefine::UserTokenInfo* user_token_tmp = msg3.add_user_token_list();
       user_token_tmp->set_user_id(user_id);
       user_token_tmp->set_user_type((IM::BaseDefine::ClientType)client_type);
@@ -816,7 +820,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(CImPdu* pPdu) {
     } else {
       IM::Server::IMPushToUserReq msg4;
       msg4.set_flash(msg_data);
-      msg4.set_data(json_obj.json());
+      msg4.set_data(json_data);
       IM::BaseDefine::UserTokenInfo* user_token_tmp = msg4.add_user_token_list();
       user_token_tmp->set_user_id(user_id);
       user_token_tmp->set_user_type((IM::BaseDefine::ClientType)client_type);

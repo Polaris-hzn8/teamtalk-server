@@ -17,6 +17,7 @@ endif()
 set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
 set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
 set(BASE_LIB_DIR ${BASE_DIR}/bin)
+set(SDK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../.sdk)
 
 add_definitions(
     -g -W -Wall
@@ -36,24 +37,25 @@ include_directories(
     ${BASE_DIR}
     ${BASE_DIR}/common
     ${BASE_DIR}/http
-    ${BASE_DIR}/jsoncpp
     ${BASE_DIR}/netlib
     ${BASE_DIR}/netlib/impdu
     ${BASE_DIR}/netlib/pbgen
     ${BASE_DIR}/threadpool
     ${THIRD_DIR}/slog/include
     ${THIRD_DIR}/protobuf/include
-    ${THIRD_DIR}/libsecurity/include)
+    ${THIRD_DIR}/libsecurity/include
+    ${SDK_DIR}/jsoncpp/include)
 
 link_directories(
     ${PB_LIB_DIR}
     ${SLOG_LIB_DIR}
     ${BASE_LIB_DIR}
-    ${SECURITY_LIB_DIR})
+    ${SECURITY_LIB_DIR}
+    ${SDK_DIR}/jsoncpp/lib)
 
 add_executable(msg_server ${SRC_LIST})
 
-target_link_libraries(msg_server base slog protobuf-lite crypto pthread)
+target_link_libraries(msg_server base slog protobuf-lite crypto pthread jsoncpp)
  
 # rpath动态库查找
 set_target_properties(msg_server PROPERTIES

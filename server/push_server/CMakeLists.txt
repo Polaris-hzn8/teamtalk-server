@@ -16,6 +16,7 @@ file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
 set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
 set(BASE_LIB_DIR ${BASE_DIR}/bin)
+set(SDK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../.sdk)
 
 add_definitions(
     -g -W -Wall
@@ -34,16 +35,18 @@ include_directories(
     ./
     ${BASE_DIR}/netlib/pbgen
     ${THIRD_DIR}/slog/include
-    ${THIRD_DIR}/protobuf/include)
+    ${THIRD_DIR}/protobuf/include
+    ${SDK_DIR}/jsoncpp/include)
 
 link_directories(
     ${PB_LIB_DIR}
     ${SLOG_LIB_DIR}
-    ${BASE_LIB_DIR})
+    ${BASE_LIB_DIR}
+    ${SDK_DIR}/jsoncpp/lib)
 
 add_executable(push_server ${SRC_LIST1} ${SRC_LIST2} ${SRC_LIST3} ${SRC_LIST4} ${SRC_LIST5})
 
-target_link_libraries(push_server base slog pthread protobuf-lite ssl)
+target_link_libraries(push_server base slog pthread protobuf-lite ssl jsoncpp)
 
 # rpath动态库查找
 set_target_properties(push_server PROPERTIES

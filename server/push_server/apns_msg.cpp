@@ -9,8 +9,8 @@
 #include "apns_msg.h"
 #include <arpa/inet.h>
 #include <string.h>
+#include <json/json.h>
 #include "byte_stream.h"
-#include "jsonxx.h"
 #include "push_define.h"
 
 CAPNSGateWayMsg::CAPNSGateWayMsg() {
@@ -108,51 +108,48 @@ BOOL CAPNSGateWayMsg::SerializeToArray() {
 }
 
 string CAPNSGateWayMsg::_BuildPayload() {
-  jsonxx::Object payload_obj, aps_obj, alert_obj;
-  if (GetAlterBody().length() != 0) {
-    alert_obj << "body" << GetAlterBody();
-  }
-  if (GetActionLocKey().length() != 0) {
-    alert_obj << "action-loc-key" << GetActionLocKey();
-  }
-  // alert_obj << "action-loc-key" << "View" ;
+  Json::Value payload(Json::objectValue);
+  Json::Value aps(Json::objectValue);
+  Json::Value alert(Json::objectValue);
 
-  if (GetLocKey().length() != 0) {
-    alert_obj << "loc-key" << GetLocKey();
+  if (!GetAlterBody().empty()) {
+    alert["body"] = GetAlterBody();
   }
-
-  if (GetLocArgsList().size() != 0) {
-    jsonxx::Array loc_args_array;
+  if (!GetActionLocKey().empty()) {
+    alert["action-loc-key"] = GetActionLocKey();
+  }
+  if (!GetLocKey().empty()) {
+    alert["loc-key"] = GetLocKey();
+  }
+  if (!GetLocArgsList().empty()) {
+    Json::Value loc_args(Json::arrayValue);
     const list<string>& loc_args_list = GetLocArgsList();
-    for (list<string>::const_iterator it = loc_args_list.begin(); it != loc_args_list.end(); it++) {
-      loc_args_array << *it;
+    for (list<string>::const_iterator it = loc_args_list.begin(); it != loc_args_list.end(); ++it) {
+      loc_args.append(*it);
     }
-    alert_obj << "loc-args" << loc_args_list;
+    alert["loc-args"] = loc_args;
   }
-
-  if (GetLaunchImage().length() != 0) {
-    alert_obj << "launch-image" << GetLaunchImage();
+  if (!GetLaunchImage().empty()) {
+    alert["launch-image"] = GetLaunchImage();
   }
 
   if (GetSound() == FALSE) {
-    // TODO:静音推送
-    // aps_obj << "alert" << alert_obj;
-    aps_obj << "badge" << GetBadge();
-    // aps_obj << "sound" << string(g_silent_music);
+    // TODO: 静音推送：当前逻辑仅设置 badge
+    aps["badge"] = GetBadge();
   } else {
-    aps_obj << "alert" << alert_obj;
-    aps_obj << "badge" << GetBadge();
-    aps_obj << "sound"
-            << "bingbong.aiff";
+    aps["alert"] = alert;
+    aps["badge"] = GetBadge();
+    aps["sound"] = "bingbong.aiff";
   }
 
-  // custom_data
-  // custom_obj << "custom" << GetCustomData();
+  payload["aps"] = aps;
+  payload["custom"] = GetCustomData();
 
-  payload_obj << "aps" << aps_obj;
-  payload_obj << "custom" << GetCustomData();
-  PUSH_SERVER_DEBUG("%s", payload_obj.json().c_str());
-  return payload_obj.json();
+  Json::StreamWriterBuilder builder;
+  builder["indentation"] = "";
+  const std::string json = Json::writeString(builder, payload);
+  PUSH_SERVER_DEBUG("%s", json.c_str());
+  return json;
 }
 
 CAPNSGateWayResMsg::CAPNSGateWayResMsg() {
