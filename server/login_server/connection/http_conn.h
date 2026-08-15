@@ -13,7 +13,7 @@
 #include <teamtalk/imcore/common/tools.h>
 #include <teamtalk/imcore/common/ref_object.h>
 #include <teamtalk/imcore/netlib/core/netlib.h>
-#include <teamtalk/imcore/netlib/impdu/simple_buffer.h>
+#include <teamtalk/imcore/netlib/core/simple_buffer.h>
 #include <teamtalk/imcore/http_client/http_parser_wrapper.h>
 
 namespace teamtalk::login_server::connection {

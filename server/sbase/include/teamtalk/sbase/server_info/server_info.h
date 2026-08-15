@@ -13,7 +13,7 @@
 #define TEAMTALK_SBASERVER_INFO_SERVER_INFO_H
 
 #include <string>
-#include <teamtalk/imcore/netlib/imconn/conn.h>
+#include <teamtalk/imcore/netlib/core/im_conn.h>
 #include <teamtalk/imcore/config_reader/config_reader.h>
 
 namespace teamtalk::sbase::server_info {

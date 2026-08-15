@@ -1,5 +1,6 @@
+
 #include <mutex>
-#include <msg_server_registry/msg_server_registry.h>
+#include "msg_server_registry.h"
 
 namespace teamtalk::login_server::msg_server_registry {
 

@@ -6,6 +6,7 @@
 */
 
 #include <memory>
+
 #include <teamtalk/sbase/global_define.h>
 #include <teamtalk/imcore/slog/slog.h>
 #include <teamtalk/imcore/common/tools.h>
@@ -13,21 +14,20 @@
 #include <teamtalk/imcore/ttidl/other.pb.h>
 #include <teamtalk/imcore/ttidl/service.pb.h>
 
-#include <connection/login_conn.h>
-#include <common/msg_server_registry/msg_server_registry.h>
+#include "connection/login_conn.h"
+#include "msg_server_registry/msg_server_registry.h"
 
 namespace teamtalk::login_server::connection {
 
-using namespace teamtalk::imcore::netlib;
-using namespace teamtalk::login_server::common::msg_server_registry;
-
 namespace ttidl = teamtalk::imcore::ttidl;
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttmsgregistry = teamtalk::login_server::msg_server_registry;
 
 // 客户端连接管理 handle -> ImConn
-static ConnMap_t g_client_conn_map;
+static ttnetlib::ConnMap_t g_client_conn_map;
 
 // 消息服务器连接管理 handle -> ImConn
-static ConnMap_t g_msg_serv_conn_map;
+static ttnetlib::ConnMap_t g_msg_serv_conn_map;
 
 // 全局在线用户总数（聚合所有已注册消息服务器）
 static uint32_t g_total_online_users = 0;
@@ -45,15 +45,17 @@ static uint32_t g_total_online_users = 0;
  * @param pParam        参数 用于传递额外的数据
  */
 void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
+  NOTUSED_ARG(pParam);
+
   // 获取当前时间
   uint64_t cur_time = teamtalk::imcore::common::get_tick_count();
 
   // 遍历 g_client_conn_map 中的所有连接对象，并调用每个连接对象的 OnTimer()
   // 函数，传入当前时间 cur_time
-  for (ConnMap_t::iterator it = g_client_conn_map.begin(); it != g_client_conn_map.end();) {
+  for (ttnetlib::ConnMap_t::iterator it = g_client_conn_map.begin(); it != g_client_conn_map.end();) {
     //在每次迭代之前，将当前迭代器 it 的值赋给另一个迭代器
     // it_old，以便在删除连接对象时不影响迭代过程
-    ConnMap_t::iterator it_old = it;
+    ttnetlib::ConnMap_t::iterator it_old = it;
     //将迭代器 it 向后移动到下一个元素，以便在下一次循环时处理下一个连接对象
     it++;
     //通过 it_old->second 获取连接对象的指针，并将其转换为 CLoginConn* 类型
@@ -64,8 +66,8 @@ void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle
 
   // 遍历 g_msg_serv_conn_map 中的所有连接对象，并调用每个连接对象的 OnTimer()
   // 函数，传入当前时间 cur_time
-  for (ConnMap_t::iterator it = g_msg_serv_conn_map.begin(); it != g_msg_serv_conn_map.end();) {
-    ConnMap_t::iterator it_old = it;
+  for (ttnetlib::ConnMap_t::iterator it = g_msg_serv_conn_map.begin(); it != g_msg_serv_conn_map.end();) {
+    ttnetlib::ConnMap_t::iterator it_old = it;
     it++;
     CLoginConn* pConn = (CLoginConn*)it_old->second;
     pConn->OnTimer(cur_time);
@@ -79,7 +81,7 @@ void init_login_conn() {
   //作为参数传入，表示定时器触发时会调用该回调函数 第二个参数为
   // NULL，表示不传递任何参数给回调函数 最后一个参数 1000
   //表示定时器的触发间隔，以毫秒为单位，这里设置为每隔1秒触发一次
-  netlib_register_timer(login_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(login_conn_timer_callback, NULL, 1000);
 }
 
 CLoginConn::CLoginConn() {}
@@ -93,7 +95,7 @@ void CLoginConn::Close() {
   // 首先判断连接句柄 m_handle 是否为有效句柄 NETLIB_INVALID_HANDLE
   if (m_handle != NETLIB_INVALID_HANDLE) {
     // 1.调用netlib_close()函数关闭连接
-    netlib_close(m_handle);
+    ttnetlib::netlib_close(m_handle);
     if (m_conn_type == LOGIN_CONN_TYPE_CLIENT) {
       // 2.连接类型是客户端连接，则从 g_client_conn_map 中移除该连接
       g_client_conn_map.erase(m_handle);
@@ -102,7 +104,7 @@ void CLoginConn::Close() {
       g_msg_serv_conn_map.erase(m_handle);
 
       // 4.移除该连接句柄对应的消息服务器信息
-      std::unique_ptr<msg_serv_info_t> pMsgServInfo = MsgServerRegistry::Instance().RemoveByHandle(m_handle);
+      std::unique_ptr<ttmsgregistry::msg_serv_info_t> pMsgServInfo = ttmsgregistry::MsgServerRegistry::Instance().RemoveByHandle(m_handle);
       if (pMsgServInfo) {
         // 4-2.从总在线用户数 g_total_online_users
         // 中减去该消息服务器的当前连接数
@@ -127,7 +129,7 @@ void CLoginConn::OnConnect2(net_handle_t handle, int conn_type) {
   m_conn_type = conn_type;
   //根据连接类型，选择使用 g_client_conn_map 或 g_msg_serv_conn_map
   //作为连接映射容器，将其地址赋值给 conn_map 指针
-  ConnMap_t* conn_map = &g_msg_serv_conn_map;
+  ttnetlib::ConnMap_t* conn_map = &g_msg_serv_conn_map;
   if (conn_type == LOGIN_CONN_TYPE_CLIENT) {
     conn_map = &g_client_conn_map;
   } else {
@@ -135,10 +137,10 @@ void CLoginConn::OnConnect2(net_handle_t handle, int conn_type) {
   }
   //使用 netlib_option() 函数设置连接句柄的回调函数为
   // imconn_callback，以便在收到事件时回调相应的处理函数
-  netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)imconn_callback);
+  ttnetlib::netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)ttnetlib::imconn_callback);
   //使用 netlib_option() 函数设置连接句柄的回调数据为连接映射容器 conn_map
   //的地址，以便在回调函数中可以获取到相应的连接对象
-  netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)conn_map);
+  ttnetlib::netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)conn_map);
 }
 
 /**
@@ -167,7 +169,7 @@ void CLoginConn::OnTimer(uint64_t curr_tick) {
     if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
       //如果超时则构造心跳消息IMHeartBeat，封装成CImPdu对象并设置服务ID和命令ID
       ttidl::other::IMHeartBeat msg;
-      CImPdu pdu;
+      ttnetlib::CImPdu pdu;
       pdu.SetPBMsg(&msg);
       pdu.SetServiceId(ttidl::base_define::SID_OTHER);
       pdu.SetCommandId(ttidl::base_define::CID_OTHER_HEARTBEAT);
@@ -188,7 +190,7 @@ void CLoginConn::OnTimer(uint64_t curr_tick) {
  * HandlePdu在imconn.cpp的OnRead函数中调用
  * 处理接收到的 PDU 消息的函数，根据命令 ID 分发处理不同的消息
  */
-void CLoginConn::HandlePdu(CImPdu* pPdu) {
+void CLoginConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
   log_info("HandlePdu = %u", pPdu->GetCommandId());
   switch (pPdu->GetCommandId()) {
     case ttidl::base_define::CID_OTHER_HEARTBEAT:
@@ -211,8 +213,8 @@ void CLoginConn::HandlePdu(CImPdu* pPdu) {
 /**
  * 处理消息服务器信息的函数，解析并存储消息服务器信息
  */
-void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu) {
-  std::unique_ptr<msg_serv_info_t> pMsgServInfo(new msg_serv_info_t);
+void CLoginConn::_HandleMsgServInfo(ttnetlib::CImPdu* pPdu) {
+  std::unique_ptr<ttmsgregistry::msg_serv_info_t> pMsgServInfo(new ttmsgregistry::msg_serv_info_t);
   ttidl::service::IMMsgServInfo msg;
   msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
 
@@ -222,8 +224,8 @@ void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu) {
   pMsgServInfo->max_conn_cnt = msg.max_conn_cnt();
   pMsgServInfo->cur_conn_cnt = msg.cur_conn_cnt();
   pMsgServInfo->hostname = msg.host_name();
-  msg_serv_info_t* msg_info = pMsgServInfo.get();
-  MsgServerRegistry::Instance().Upsert(m_handle, std::move(pMsgServInfo));
+  ttmsgregistry::msg_serv_info_t* msg_info = pMsgServInfo.get();
+  ttmsgregistry::MsgServerRegistry::Instance().Upsert(m_handle, std::move(pMsgServInfo));
 
   g_total_online_users += msg_info->cur_conn_cnt;
 
@@ -242,14 +244,14 @@ void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu) {
 /**
  * 处理用户在线人数更新的函数 根据用户上线和下线更新用户计数
  */
-void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu) {
+void CLoginConn::_HandleUserCntUpdate(ttnetlib::CImPdu* pPdu) {
   ttidl::service::IMUserCntUpdate msg;
   msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
 
   const uint32_t action = msg.user_action();
   const int32_t delta = (action == USER_CNT_INC) ? 1 : -1;
-  msg_serv_info_t updated_info;
-  if (!MsgServerRegistry::Instance().UpdateConnCount(m_handle, delta, &updated_info)) {
+  ttmsgregistry::msg_serv_info_t updated_info;
+  if (!ttmsgregistry::MsgServerRegistry::Instance().UpdateConnCount(m_handle, delta, &updated_info)) {
     return;
   }
 
@@ -269,17 +271,17 @@ void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu) {
 /**
  * 处理消息服务器请求 根据在线用户数和消息服务器连接状态返回合适的消息服务器信息
  */
-void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu) {
+void CLoginConn::_HandleMsgServRequest(ttnetlib::CImPdu* pPdu) {
   ttidl::login::IMMsgServReq msg;
   msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
 
   log_info("HandleMsgServReq. ");
 
   // no MessageServer available
-  if (MsgServerRegistry::Instance().Empty()) {
+  if (ttmsgregistry::MsgServerRegistry::Instance().Empty()) {
     ttidl::login::IMMsgServRsp msg;
     msg.set_result_code(ttidl::base_define::REFUSE_REASON_NO_MSG_SERVER);
-    CImPdu pdu;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
     pdu.SetServiceId(ttidl::base_define::SID_LOGIN);
     pdu.SetCommandId(ttidl::base_define::CID_LOGIN_RES_MSGSERVER);
@@ -290,14 +292,14 @@ void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu) {
   }
 
   // return a message server with minimum concurrent connection count
-  msg_serv_info_t target_msg_serv;
-  const bool found = MsgServerRegistry::Instance().PickLeastLoaded(&target_msg_serv);
+  ttmsgregistry::msg_serv_info_t target_msg_serv;
+  const bool found = ttmsgregistry::MsgServerRegistry::Instance().PickLeastLoaded(&target_msg_serv);
 
   if (!found) {
     log_info("All TCP MsgServer are full ");
     ttidl::login::IMMsgServRsp msg;
     msg.set_result_code(ttidl::base_define::REFUSE_REASON_MSG_SERVER_FULL);
-    CImPdu pdu;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
     pdu.SetServiceId(ttidl::base_define::SID_LOGIN);
     pdu.SetCommandId(ttidl::base_define::CID_LOGIN_RES_MSGSERVER);
@@ -309,7 +311,7 @@ void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu) {
     msg.set_prior_ip(target_msg_serv.ip_addr1);
     msg.set_backip_ip(target_msg_serv.ip_addr2);
     msg.set_port(target_msg_serv.port);
-    CImPdu pdu;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
     pdu.SetServiceId(ttidl::base_define::SID_LOGIN);
     pdu.SetCommandId(ttidl::base_define::CID_LOGIN_RES_MSGSERVER);

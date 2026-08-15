@@ -5,8 +5,8 @@
  * @brief: 读取 login_server.conf 配置文件
 */
 
-#include <teamtalk/imcore/config_reader/config_reader.h>
 #include <common/server_config/server_config.h>
+#include <teamtalk/imcore/config_reader/config_reader.h>
 
 namespace teamtalk::login_server::common::server_config {
 

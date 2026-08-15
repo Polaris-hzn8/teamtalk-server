@@ -9,8 +9,7 @@
 #ifndef TEAMTALK_LOGIN_SERVER_CONNECTION_LOGIN_CONN_H_
 #define TEAMTALK_LOGIN_SERVER_CONNECTION_LOGIN_CONN_H_
 
-#include <teamtalk/imcore/netlib/imconn/conn.h>
-#include <common/msg_server_registry/msg_server_registry.h>
+#include <teamtalk/imcore/netlib/core/im_conn.h>
 
 namespace teamtalk::login_server::connection {
 

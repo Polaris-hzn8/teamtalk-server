@@ -7,15 +7,16 @@
 */
 
 #include <json/json.h>
+
 #include <teamtalk/imcore/slog/slog.h>
 #include <teamtalk/imcore/string/string.h>
 #include <teamtalk/imcore/http_client/http_parser_wrapper.h>
 #include <teamtalk/sbase/global_define.h>
 
-#include <connection/http_conn.h>
-#include <common/ip_parser/ip_parser.h>
-#include <common/server_config/server_config.h>
-#include <msg_server_registry/msg_server_registry.h>
+#include "connection/http_conn.h"
+#include "common/ip_parser/ip_parser.h"
+#include "common/server_config/server_config.h"
+#include "msg_server_registry/msg_server_registry.h"
 
 namespace teamtalk::login_server::connection {
 
@@ -69,6 +70,8 @@ void httpconn_callback(void* callback_data, uint8_t msg, uint32_t handle, uint32
 }
 
 void http_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
+  NOTUSED_ARG(pParam);
+
   CHttpConn* pConn = NULL;
   HttpConnMap_t::iterator it, it_old;
   uint64_t cur_time = ttcommon::get_tick_count();
@@ -89,7 +92,7 @@ void init_http_conn() {
 //////////////////////////
 CHttpConn::CHttpConn() {
   m_busy = false;
-  m_sock_handle = INVALID_HANDLE;
+  m_sock_handle = NETLIB_INVALID_HANDLE;
   m_state = CONN_STATE_IDLE;
 
   m_last_send_tick = m_last_recv_tick = ttcommon::get_tick_count();
@@ -228,10 +231,10 @@ void CHttpConn::OnTimer(uint64_t curr_tick) {
 
 // Add By Lanhu 2014-12-19 通过登陆IP来优选电信还是联通IP
 void CHttpConn::_HandleMsgServRequest(std::string& url, std::string& post_data) {
-  msg_serv_info_t target_msg_serv;
+  ttmsgregistry::msg_serv_info_t target_msg_serv;
   log_info("url:%s, post_data:%s", url.c_str(), post_data.c_str());
 
-  if (MsgServerRegistry::Instance().Empty())  // 没有可用的msg_server
+  if (ttmsgregistry::MsgServerRegistry::Instance().Empty())  // 没有可用的msg_server
   {
     Json::Value value;
     value["code"] = 1;
@@ -244,7 +247,7 @@ void CHttpConn::_HandleMsgServRequest(std::string& url, std::string& post_data) 
     return;
   }
 
-  const bool found = MsgServerRegistry::Instance().PickLeastLoaded(&target_msg_serv);
+  const bool found = ttmsgregistry::MsgServerRegistry::Instance().PickLeastLoaded(&target_msg_serv);
 
   if (!found) {
     log_info("all msg_servers are full");
