@@ -6,6 +6,7 @@
  brief:
 */
 
+#include "enc_dec.h"
 #include "db_serv_conn.h"
 #include "attach_data.h"
 #include "enc_dec.h"
@@ -38,7 +39,7 @@ static uint32_t g_db_server_login_count = 0;  // 到进行登录处理的DBServe
 static CGroupChat* s_group_chat = NULL;
 static CFileHandler* s_file_handler = NULL;
 
-extern CAes* pAes;
+CAes* pAes = new CAes(str_aes_key);
 
 static void db_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ConnMap_t::iterator it_old;

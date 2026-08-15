@@ -6,20 +6,17 @@
  brief:
 */
 
-#include "config_file_reader.h"
-#include "db_serv_conn.h"
-#include "enc_dec.h"
-#include "file_serv_conn.h"
-#include "login_serv_conn.h"
-#include "msg_conn.h"
-#include "netlib.h"
-#include "push_serv_conn.h"
-#include "route_serv_conn.h"
-#include "version.h"
+#include <teamtalk/sbase/version.h>
+#include <teamtalk/sbase/global_define.h>
+#include <teamtalk/imcore/netlib/core/netlib.h>
+#include <teamtalk/imcore/config_reader/config_reader.h>
 
-#define DEFAULT_CONCURRENT_DB_CONN_CNT 10
-
-CAes* pAes;
+#include <connection/msg_conn.h>
+#include <connection/db_serv_conn.h>
+#include <connection/file_serv_conn.h>
+#include <connection/push_serv_conn.h>
+#include <connection/login_serv_conn.h>
+#include <connection/route_serv_conn.h>
 
 // for client connect in
 void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
@@ -27,7 +24,7 @@ void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* 
     CMsgConn* pConn = new CMsgConn();
     pConn->OnConnect(handle);
   } else {
-    log_info("!!!error msg: %d ", msg);
+    log_info("!error msg: %d ", msg);
   }
 }
 
@@ -90,8 +87,6 @@ int main(int argc, char* argv[]) {
     log_info("aes key is invalied");
     return -1;
   }
-
-  pAes = new CAes(str_aes_key);
 
   if (listen_ip.empty() || str_listen_port.empty() || ip_addr1.empty()) {
     log_info("config file miss, exit... ");

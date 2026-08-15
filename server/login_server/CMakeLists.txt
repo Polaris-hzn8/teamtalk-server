@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SDK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../.sdk)
 
-file(GLOB_RECURSE LOGIN_SERVER_SOURCES
+file(GLOB_RECURSE SOURCE_LIST
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/*.cc"
     "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
@@ -19,7 +19,7 @@ link_directories(
     ${SDK_DIR}/jsoncpp/lib
 )
 
-add_executable(login_server ${LOGIN_SERVER_SOURCES})
+add_executable(login_server ${SOURCE_LIST})
 
 target_include_directories(login_server PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}"

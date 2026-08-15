@@ -1,5 +1,5 @@
-#ifndef TEAMTALK_LOGIN_SERVER_COMMON_MSG_SERVER_REGISTRY_MSG_SERVER_REGISTRY_H_
-#define TEAMTALK_LOGIN_SERVER_COMMON_MSG_SERVER_REGISTRY_MSG_SERVER_REGISTRY_H_
+#ifndef TEAMTALK_LOGIN_SERVER_MSG_SERVER_REGISTRY_MSG_SERVER_REGISTRY_H_
+#define TEAMTALK_LOGIN_SERVER_MSG_SERVER_REGISTRY_MSG_SERVER_REGISTRY_H_
 
 #include <map>
 #include <memory>
@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <shared_mutex>
 
-namespace teamtalk::login_server::common::msg_server_registry {
+namespace teamtalk::login_server::msg_server_registry {
 
 typedef struct {
   std::string ip_addr1;   // 电信IP
@@ -38,6 +38,6 @@ class MsgServerRegistry {
   mutable std::shared_mutex mutex_;
 };
 
-}  // namespace teamtalk::login_server::common::msg_server_registry
+}  // namespace teamtalk::login_server::msg_server_registry
 
-#endif  // TEAMTALK_LOGIN_SERVER_COMMON_MSG_SERVER_REGISTRY_MSG_SERVER_REGISTRY_H_
+#endif  // TEAMTALK_LOGIN_SERVER_MSG_SERVER_REGISTRY_MSG_SERVER_REGISTRY_H_

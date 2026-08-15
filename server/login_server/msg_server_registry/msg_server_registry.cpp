@@ -1,7 +1,7 @@
-#include <common/msg_server_registry/msg_server_registry.h>
 #include <mutex>
+#include <msg_server_registry/msg_server_registry.h>
 
-namespace teamtalk::login_server::common::msg_server_registry {
+namespace teamtalk::login_server::msg_server_registry {
 
 MsgServerRegistry& MsgServerRegistry::Instance() {
   static MsgServerRegistry instance;
@@ -71,4 +71,4 @@ std::unique_ptr<msg_serv_info_t> MsgServerRegistry::RemoveByHandle(uint32_t hand
   return info;
 }
 
-}  // namespace teamtalk::login_server::common::msg_server_registry
+}  // namespace teamtalk::login_server::msg_server_registry

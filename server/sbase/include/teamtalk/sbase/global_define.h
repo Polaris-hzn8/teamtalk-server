@@ -15,6 +15,9 @@
 #include <iostream>
 #include <unordered_map>
 
+// 默认最大并发数据库连接数
+#define DEFAULT_CONCURRENT_DB_CONN_CNT 10
+
 #define XIAO_T_UID 99999999
 #define MAX_MSG_LEN 4096
 

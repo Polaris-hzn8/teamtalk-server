@@ -17,7 +17,7 @@
 #include "http_query.h"
 #include "route_serv_conn.h"
 
-#define DEFAULT_CONCURRENT_DB_CONN_CNT 2
+#include <teamtalk/sbase/global_define.h>
 
 // for client connect in
 void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {

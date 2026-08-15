@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
   signal(SIGPIPE, SIG_IGN);
 
   // 加载配置文件
-  auto& cfg = ttservcfg::LoginServerConfig::Instance();
+  auto& cfg = ttservcfg::ServerConfig::Instance();
   if (!cfg.LoadFromFile("login_server.conf")) {
     log_info("config item missing, exit... ");
     return -1;

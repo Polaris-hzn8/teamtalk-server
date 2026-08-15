@@ -12,19 +12,19 @@
 #include <teamtalk/imcore/http_client/http_parser_wrapper.h>
 #include <teamtalk/sbase/global_define.h>
 
-#include <common/ip_parser/ip_parser.h>
-#include <common/msg_server_registry/msg_server_registry.h>
-#include <common/server_config/server_config.h>
 #include <connection/http_conn.h>
+#include <common/ip_parser/ip_parser.h>
+#include <common/server_config/server_config.h>
+#include <msg_server_registry/msg_server_registry.h>
 
 namespace teamtalk::login_server::connection {
 
+namespace ttstr = teamtalk::imcore::string;
 namespace ttcommon = teamtalk::imcore::common;
 namespace ttnetlib = teamtalk::imcore::netlib;
-namespace ttstr = teamtalk::imcore::string;
-using namespace teamtalk::login_server::common::msg_server_registry;
-namespace ttservcfg = teamtalk::login_server::common::server_config;
 namespace ttipparser = teamtalk::login_server::common::ip_parser;
+namespace ttservcfg = teamtalk::login_server::common::server_config;
+namespace ttmsgregistry = teamtalk::login_server::msg_server_registry;
 
 static HttpConnMap_t g_http_conn_map;
 
@@ -262,7 +262,7 @@ void CHttpConn::_HandleMsgServRequest(std::string& url, std::string& post_data) 
     Json::Value value;
     value["code"] = 0;
     value["msg"] = "";
-    const auto& cfg = ttservcfg::LoginServerConfig::Instance();
+    const auto& cfg = ttservcfg::ServerConfig::Instance();
     if (ttipparser::is_telcome(GetPeerIP())) {
       value["priorIP"] = std::string(target_msg_serv.ip_addr1);
       value["backupIP"] = std::string(target_msg_serv.ip_addr2);

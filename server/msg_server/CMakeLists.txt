@@ -1,64 +1,52 @@
-cmake_minimum_required(VERSION 2.6)
-project(msgserver)
+cmake_minimum_required(VERSION 3.10)
+project(msg_server)
 
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_LIST)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../base)
-set(THIRD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../third)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin")
-file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
-if(APPLE)
-    set(SECURITY_LIB_DIR ${THIRD_DIR}/libsecurity/lib/mac)
-elseif(UNIX)
-    set(SECURITY_LIB_DIR ${THIRD_DIR}/libsecurity/lib/unix)
-endif()
-set(PB_LIB_DIR ${THIRD_DIR}/protobuf/lib)
-set(SLOG_LIB_DIR ${THIRD_DIR}/slog/lib)
-set(BASE_LIB_DIR ${BASE_DIR}/bin)
 set(SDK_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../.sdk)
 
-add_definitions(
-    -g -W -Wall
-    -D_REENTRANT
-    -D_FILE_OFFSET_BITS=64
-    -DAC_HAS_INFO
-    -DAC_HAS_WARNING
-    -DAC_HAS_ERROR
-    -DAC_HAS_CRITICAL
-    -DAC_HAS_DEBUG
-    -DTIXML_USE_STL
-    -DLINUX_DAEMON
-    -std=c++11)
-
-include_directories(
-    ./
-    ${BASE_DIR}
-    ${BASE_DIR}/common
-    ${BASE_DIR}/http
-    ${BASE_DIR}/netlib
-    ${BASE_DIR}/netlib/impdu
-    ${BASE_DIR}/netlib/pbgen
-    ${BASE_DIR}/threadpool
-    ${THIRD_DIR}/slog/include
-    ${THIRD_DIR}/protobuf/include
-    ${THIRD_DIR}/libsecurity/include
-    ${SDK_DIR}/jsoncpp/include)
+file(GLOB_RECURSE SOURCE_LIST
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.c"
+)
 
 link_directories(
-    ${PB_LIB_DIR}
-    ${SLOG_LIB_DIR}
-    ${BASE_LIB_DIR}
-    ${SECURITY_LIB_DIR}
-    ${SDK_DIR}/jsoncpp/lib)
+    ${SDK_DIR}/teamtalk-imcore/lib
+    ${SDK_DIR}/teamtalk-sbase/lib
+    ${SDK_DIR}/protobuf/lib
+    ${SDK_DIR}/jsoncpp/lib
+)
 
-add_executable(msg_server ${SRC_LIST})
+add_executable(msg_server ${SOURCE_LIST})
 
-target_link_libraries(msg_server base slog protobuf-lite crypto pthread jsoncpp)
- 
-# rpath动态库查找
-set_target_properties(msg_server PROPERTIES
-    INSTALL_RPATH "$ORIGIN/../lib"
-    BUILD_WITH_INSTALL_RPATH TRUE
+target_include_directories(msg_server PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${SDK_DIR}/teamtalk-imcore/include"
+    "${SDK_DIR}/teamtalk-sbase/include"
+    "${SDK_DIR}/protobuf/include"
+    "${SDK_DIR}/jsoncpp/include"
+)
+
+target_compile_options(msg_server PRIVATE -g -W -Wall)
+target_compile_definitions(login_server PRIVATE
+    _REENTRANT
+    _FILE_OFFSET_BITS=64
+    AC_HAS_INFO
+    AC_HAS_WARNING
+    AC_HAS_ERROR
+    AC_HAS_CRITICAL
+    AC_HAS_DEBUG
+    TIXML_USE_STL
+    LINUX_DAEMON
+)
+
+target_link_libraries(login_server PRIVATE
+    teamtalk-sbase
+    teamtalk-imcore
+    protobuf-lite
+    jsoncpp
+    pthread
+    curl
 )
