@@ -3,7 +3,6 @@
   SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
 <cross-domain-policy>
 	<site-control permitted-cross-domain-policies="all" />
-  	<allow-access-from domain="*.mogu.com" to-ports="*" />
-  	<allow-access-from domain="*.mogujie.com" to-ports="*" />
-  	<allow-access-from domain="*.mogujie.org" to-ports="*" />
+  	<allow-access-from domain="*.baidu.com" to-ports="*" />
+  	<allow-access-from domain="*.baidu.org" to-ports="*" />
 </cross-domain-policy>

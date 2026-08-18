@@ -2,32 +2,20 @@
  * @author: luochenhao
  * @email: lch2022fox@163.com
  * @time: Mon 04 May 2026 19:20:53 CST
- * @brief: 读取 login_server.conf 配置文件
-*/
+ * @brief: 读取 msg_server.conf 配置文件
+ */
 
-#include <common/server_config/server_config.h>
 #include <teamtalk/imcore/config_reader/config_reader.h>
+#include <teamtalk/imcore/string/string.h>
+#include <teamtalk/sbase/global_define.h>
 
-namespace teamtalk::login_server::common::server_config {
+#include "server_config.h"
 
-namespace {
-/** 按分号拆分字符串，跳过空片段 */
-void split_by_semicolon(const std::string& raw, std::vector<std::string>* out) {
-  out->clear();
-  if (raw.empty()) {
-    return;
-  }
-  size_t pos = 0;
-  while (pos < raw.size()) {
-    size_t sep = raw.find(';', pos);
-    const size_t end = (sep == std::string::npos) ? raw.size() : sep;
-    if (end > pos) {
-      out->emplace_back(raw, pos, end - pos);
-    }
-    pos = (sep == std::string::npos) ? raw.size() : sep + 1;
-  }
-}
-}  // namespace
+namespace teamtalk::msg_server::common::server_config {
+
+
+using ttconfig = teamtalk::imcore::config_reader::CConfigReader;
+using ttstring = teamtalk::imcore::string;
 
 ServerConfig& ServerConfig::Instance() {
   static ServerConfig inst;
@@ -35,35 +23,50 @@ ServerConfig& ServerConfig::Instance() {
 }
 
 bool ServerConfig::LoadFromFile(const std::string& path) {
-  teamtalk::imcore::config_reader::CConfigReader config_file(path.c_str());
+  ttconfig config_file(path.c_str());
 
-  client_listen_ip_ = config_file.GetConfigValue("ClientListenIP");
-  http_listen_ip_ = config_file.GetConfigValue("HttpListenIP");
-  std::string str_http_port = config_file.GetConfigValue("HttpPort");
-  msg_server_listen_ip_ = config_file.GetConfigValue("MsgServerListenIP");
-  std::string str_msg_server_port = config_file.GetConfigValue("MsgServerPort");
-  msfs_url_ = config_file.GetConfigValue("msfs");
-  discovery_ = config_file.GetConfigValue("discovery");
+  std::string listen_ip = config_file.GetConfigValue("ListenIP");
+  ttstring::str_explode(listen_ip, ';', listen_addrs_);
 
-  if (msg_server_listen_ip_.empty() || str_msg_server_port.empty() ||
-      http_listen_ip_.empty() || str_http_port.empty() ||
-      msfs_url_.empty() || discovery_.empty()) {
+  listen_port_ = static_cast<uint16_t>(config_file.GetUint32Value("ListenPort", 0));
+
+  ip_addr1_ = config_file.GetConfigValue("IpAddr1");
+  ip_addr2_ = config_file.GetConfigValue("IpAddr2");
+
+  aes_key_ = config_file.GetConfigValue("aesKey");
+
+  max_conn_cnt_ = config_file.GetUint32Value("MaxConnCnt", 0);
+  concurrent_db_conn_cnt_ = config_file.GetUint32Value("ConcurrentDBConnCnt", DEFAULT_CONCURRENT_DB_CONN_CNT);
+
+  db_servers_ = config_file.ReadNumberedEndpoints("DBServerIP", "DBServerPort");
+  login_servers_ = config_file.ReadNumberedEndpoints("LoginServerIP", "LoginServerPort");
+  route_servers_ = config_file.ReadNumberedEndpoints("RouteServerIP", "RouteServerPort");
+  push_servers_ = config_file.ReadNumberedEndpoints("PushServerIP", "PushServerPort");
+  file_servers_ = config_file.ReadNumberedEndpoints("FileServerIP", "FileServerPort");
+
+  if (!db_servers_.empty() && concurrent_db_conn_cnt_ > 0) {
+    uint32_t expanded_count = static_cast<uint32_t>(db_servers_.size()) * concurrent_db_conn_cnt_;
+    expanded_db_servers_.resize(expanded_count);
+    for (uint32_t i = 0; i < expanded_count; i++) {
+      uint32_t idx = i / concurrent_db_conn_cnt_;
+      expanded_db_servers_[i] = db_servers_[idx];
+    }
+  }
+
+  if (listen_ip.empty() || listen_port_ == 0 ||
+      ip_addr1_.empty() || ip_addr2_.empty()) {
     return false;
   }
 
-  client_port_ = static_cast<uint16_t>(config_file.GetUint32Value("ClientPort", 0));
-  msg_server_port_ = static_cast<uint16_t>(config_file.GetUint32Value("MsgServerPort", 0));
-  http_port_ = static_cast<uint16_t>(config_file.GetUint32Value("HttpPort", 0));
+  if (aes_key_.empty() || aes_key_.length() != 32) {
+    return false;
+  }
 
-  split_by_semicolon(client_listen_ip_, &client_listen_addrs_);
-  split_by_semicolon(msg_server_listen_ip_, &msg_server_listen_addrs_);
-  split_by_semicolon(http_listen_ip_, &http_listen_addrs_);
-
-  if (msg_server_listen_addrs_.empty() || http_listen_addrs_.empty()) {
+  if (db_servers_.size() < 2) {
     return false;
   }
 
   return true;
 }
 
-}  // namespace teamtalk::login_server::common::server_config
+}  // namespace teamtalk::msg_server::common::server_config

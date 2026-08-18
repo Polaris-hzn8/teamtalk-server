@@ -9,14 +9,33 @@
 #include <teamtalk/sbase/version.h>
 #include <teamtalk/sbase/global_define.h>
 #include <teamtalk/imcore/netlib/core/netlib.h>
-#include <teamtalk/imcore/config_reader/config_reader.h>
 
-#include <connection/msg_conn.h>
-#include <connection/db_serv_conn.h>
-#include <connection/file_serv_conn.h>
-#include <connection/push_serv_conn.h>
-#include <connection/login_serv_conn.h>
-#include <connection/route_serv_conn.h>
+#include "common/server_config/server_config.h"
+#include "connection/msg_conn.h"
+#include "connection/db_serv_conn.h"
+#include "connection/file_serv_conn.h"
+#include "connection/push_serv_conn.h"
+#include "connection/login_serv_conn.h"
+#include "connection/route_serv_conn.h"
+
+namespace {
+
+using teamtalk::msg_server::common::server_config::ServerConfig;
+using teamtalk::msg_server::common::server_config::ServerEndpoint;
+
+serv_info_t* to_serv_info_array(const std::vector<ServerEndpoint>& endpoints) {
+  if (endpoints.empty()) {
+    return nullptr;
+  }
+  serv_info_t* arr = new serv_info_t[endpoints.size()];
+  for (size_t i = 0; i < endpoints.size(); i++) {
+    arr[i].server_ip = endpoints[i].first;
+    arr[i].server_port = endpoints[i].second;
+  }
+  return arr;
+}
+
+}  // namespace
 
 // for client connect in
 void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
@@ -40,91 +59,46 @@ int main(int argc, char* argv[]) {
 
   log_info("MsgServer max files can open: %d ", getdtablesize());
 
-  CConfigFileReader config_file("msg_server.conf");
-
-  std::string listen_ip = config_file.GetConfigValue("ListenIP");
-  std::string str_listen_port = config_file.GetConfigValue("ListenPort");
-  std::string ip_addr1 = config_file.GetConfigValue("IpAddr1");  // 电信IP
-  std::string ip_addr2 = config_file.GetConfigValue("IpAddr2");  // 网通IP
-  std::string str_aes_key = config_file.GetConfigValue("aesKey");
-
-  uint32_t db_server_count = 0;
-  serv_info_t* db_server_list = read_server_config(&config_file, "DBServerIP", "DBServerPort", db_server_count);
-
-  uint32_t login_server_count = 0;
-  serv_info_t* login_server_list =
-    read_server_config(&config_file, "LoginServerIP", "LoginServerPort", login_server_count);
-
-  uint32_t route_server_count = 0;
-  serv_info_t* route_server_list =
-    read_server_config(&config_file, "RouteServerIP", "RouteServerPort", route_server_count);
-
-  uint32_t push_server_count = 0;
-  serv_info_t* push_server_list = read_server_config(&config_file, "PushServerIP", "PushServerPort", push_server_count);
-
-  uint32_t file_server_count = 0;
-  serv_info_t* file_server_list = read_server_config(&config_file, "FileServerIP", "FileServerPort", file_server_count);
-
-  // 必须至少配置2个BusinessServer实例, 一个用于用户登录业务，一个用于其他业务
-  // 这样当其他业务量非常繁忙时，也不会影响客服端的登录验证
-  // 建议配置4个实例，这样更新BusinessServer时，不会影响业务
-  if (db_server_count < 2) {
-    log_info("DBServerIP need 2 instance at lest ");
+  auto& cfg = ServerConfig::Instance();
+  if (!cfg.LoadFromFile("msg_server.conf")) {
+    log_info("config file load failed, exit... ");
     return 1;
   }
-
-  // 到BusinessServer的开多个并发的连接
-  uint32_t concurrent_db_conn_cnt = config_file.GetUint32Value("ConcurrentDBConnCnt", DEFAULT_CONCURRENT_DB_CONN_CNT);
-  uint32_t db_server_count2 = db_server_count * concurrent_db_conn_cnt;
-
-  serv_info_t* db_server_list2 = new serv_info_t[db_server_count2];
-  for (uint32_t i = 0; i < db_server_count2; i++) {
-    db_server_list2[i].server_ip = db_server_list[i / concurrent_db_conn_cnt].server_ip;
-    db_server_list2[i].server_port = db_server_list[i / concurrent_db_conn_cnt].server_port;
-  }
-
-  if (str_aes_key.empty() || str_aes_key.length() != 32) {
-    log_info("aes key is invalied");
-    return -1;
-  }
-
-  if (listen_ip.empty() || str_listen_port.empty() || ip_addr1.empty()) {
-    log_info("config file miss, exit... ");
-    return -1;
-  }
-
-  // 没有IP2，就用第一个IP
-  if (ip_addr2.empty()) {
-    ip_addr2 = ip_addr1;
-  }
-
-  uint16_t listen_port = config_file.GetUint32Value("ListenPort", 0);
-  uint32_t max_conn_cnt = config_file.GetUint32Value("MaxConnCnt", 0);
 
   int ret = netlib_init();
   if (ret == NETLIB_ERROR)
     return ret;
 
-  CStrExplode listen_ip_list(listen_ip.c_str(), ';');
-  for (uint32_t i = 0; i < listen_ip_list.GetItemCnt(); i++) {
-    ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, msg_serv_callback, NULL);
+  for (const auto& addr : cfg.listen_addresses()) {
+    ret = netlib_listen(addr.c_str(), cfg.listen_port(), msg_serv_callback, NULL);
     if (ret == NETLIB_ERROR)
       return ret;
   }
 
-  printf("server start listen on: %s:%d\n", listen_ip.c_str(), listen_port);
+  printf("server start listen on: %s:%d\n", cfg.listen_addresses().front().c_str(), cfg.listen_port());
 
   init_msg_conn();
 
-  init_file_serv_conn(file_server_list, file_server_count);
+  uint32_t file_cnt = cfg.file_servers().size();
+  serv_info_t* file_list = to_serv_info_array(cfg.file_servers());
+  init_file_serv_conn(file_list, file_cnt);
 
-  init_db_serv_conn(db_server_list2, db_server_count2, concurrent_db_conn_cnt);
+  uint32_t db_cnt = cfg.expanded_db_servers().size();
+  serv_info_t* db_list = to_serv_info_array(cfg.expanded_db_servers());
+  init_db_serv_conn(db_list, db_cnt, cfg.concurrent_db_conn_cnt());
 
-  init_login_serv_conn(login_server_list, login_server_count, ip_addr1, ip_addr2, listen_port, max_conn_cnt);
+  uint32_t login_cnt = cfg.login_servers().size();
+  serv_info_t* login_list = to_serv_info_array(cfg.login_servers());
+  init_login_serv_conn(login_list, login_cnt, cfg.ip_addr1().c_str(), cfg.ip_addr2().c_str(), cfg.listen_port(), cfg.max_conn_cnt());
 
-  init_route_serv_conn(route_server_list, route_server_count);
+  uint32_t route_cnt = cfg.route_servers().size();
+  serv_info_t* route_list = to_serv_info_array(cfg.route_servers());
+  init_route_serv_conn(route_list, route_cnt);
 
-  init_push_serv_conn(push_server_list, push_server_count);
+  uint32_t push_cnt = cfg.push_servers().size();
+  serv_info_t* push_list = to_serv_info_array(cfg.push_servers());
+  init_push_serv_conn(push_list, push_cnt);
+
   printf("now enter the event loop...\n");
 
   writePid();

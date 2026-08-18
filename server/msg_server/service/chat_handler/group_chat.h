@@ -11,7 +11,7 @@
 
 #include <map>
 #include <set>
-#include "im_pdu_base.h"
+#include <teamtalk/imcore/netlib/core/im_pdu.h>
 
 typedef std::set<uint32_t> group_member_t;
 typedef std::unordered_map<uint32_t, group_member_t*> group_map_t;

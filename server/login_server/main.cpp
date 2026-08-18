@@ -13,10 +13,10 @@
 #include <teamtalk/imcore/common/tools.h>
 #include <teamtalk/imcore/netlib/core/netlib.h>
 
-#include <common/ip_parser/ip_parser.h>
-#include <common/server_config/server_config.h>
-#include <connection/http_conn.h>
-#include <connection/login_conn.h>
+#include "common/ip_parser/ip_parser.h"
+#include "common/server_config/server_config.h"
+#include "connection/http_conn.h"
+#include "connection/login_conn.h"
 
 namespace ttcommon = teamtalk::imcore::common;
 namespace ttnetlib = teamtalk::imcore::netlib;
