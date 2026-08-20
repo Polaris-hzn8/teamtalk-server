@@ -30,7 +30,7 @@ target_include_directories(msg_server PRIVATE
 )
 
 target_compile_options(msg_server PRIVATE -g -W -Wall)
-target_compile_definitions(login_server PRIVATE
+target_compile_definitions(msg_server PRIVATE
     _REENTRANT
     _FILE_OFFSET_BITS=64
     AC_HAS_INFO
@@ -42,7 +42,7 @@ target_compile_definitions(login_server PRIVATE
     LINUX_DAEMON
 )
 
-target_link_libraries(login_server PRIVATE
+target_link_libraries(msg_server PRIVATE
     teamtalk-sbase
     teamtalk-imcore
     protobuf-lite

@@ -8,9 +8,11 @@
 
 #include "attach_data.h"
 
+namespace teamtalk::msg_server::connection {
+
 CDbAttachData::CDbAttachData(uint32_t type, uint32_t handle, uint32_t service_type /* = 0 */)  // 序列化
 {
-  CByteStream os(&m_buf, 0);
+  ttnetlib::CByteStream os(&m_buf, 0);
 
   os << type;
   os << handle;
@@ -20,7 +22,7 @@ CDbAttachData::CDbAttachData(uint32_t type, uint32_t handle, uint32_t service_ty
 CDbAttachData::CDbAttachData(uchar_t* attach_data,
                              uint32_t attach_len)  // 反序列化
 {
-  CByteStream is(attach_data, attach_len);
+  ttnetlib::CByteStream is(attach_data, attach_len);
 
   is >> m_type;
   is >> m_handle;
@@ -33,7 +35,7 @@ CPduAttachData::CPduAttachData(uint32_t type,
                                uchar_t* pdu,
                                uint32_t service_type)  // 序列化
 {
-  CByteStream os(&m_buf, 0);
+  ttnetlib::CByteStream os(&m_buf, 0);
 
   os << type;
   os << handle;
@@ -44,10 +46,12 @@ CPduAttachData::CPduAttachData(uint32_t type,
 CPduAttachData::CPduAttachData(uchar_t* attach_data,
                                uint32_t attach_len)  // 反序列化
 {
-  CByteStream is(attach_data, attach_len);
+  ttnetlib::CByteStream is(attach_data, attach_len);
 
   is >> m_type;
   is >> m_handle;
   is >> m_service_type;
   m_pdu = is.ReadData(m_pduLength);
 }
+
+}  // namespace teamtalk::msg_server::connection

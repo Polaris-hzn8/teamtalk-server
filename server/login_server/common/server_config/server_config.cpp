@@ -5,13 +5,15 @@
  * @brief: 读取 login_server.conf 配置文件
 */
 
+#include <teamtalk/imcore/string/string.h>
 #include <teamtalk/imcore/config_reader/config_reader.h>
 
 #include "server_config.h"
 
 namespace teamtalk::login_server::common::server_config {
 
-using ttconfig = teamtalk::imcore::config_reader::CConfigReader;
+namespace ttconfig = teamtalk::imcore::config_reader;
+namespace ttstring = teamtalk::imcore::string;
 
 ServerConfig& ServerConfig::Instance() {
   static ServerConfig inst;
@@ -19,7 +21,7 @@ ServerConfig& ServerConfig::Instance() {
 }
 
 bool ServerConfig::LoadFromFile(const std::string& path) {
-  ttconfig config_file(path.c_str());
+  ttconfig::CConfigReader config_file(path.c_str());
 
   msfs_url_ = config_file.GetConfigValue("msfs");
   discovery_ = config_file.GetConfigValue("discovery");
@@ -28,11 +30,18 @@ bool ServerConfig::LoadFromFile(const std::string& path) {
     return false;
   }
 
-  client_listen_eps_ = config_file.ReadNumberedEndpoints("ClientListenIP", "ClientListenPort");
-  msg_server_listen_eps_ = config_file.ReadNumberedEndpoints("MsgServerListenIP", "MsgServerListenPort");
-  http_listen_eps_ = config_file.ReadNumberedEndpoints("HttpListenIP", "HttpListenPort");
+  ttstring::str_explode(config_file.GetConfigValue("ClientListenIP"), ';', client_listen_addrs_);
+  client_listen_port_ = static_cast<uint16_t>(config_file.GetUint32Value("ClientListenPort", 0));
 
-  if (client_listen_eps_.empty() || msg_server_listen_eps_.empty() || http_listen_eps_.empty()) {
+  ttstring::str_explode(config_file.GetConfigValue("MsgServerListenIP"), ';', msg_server_listen_addrs_);
+  msg_server_listen_port_ = static_cast<uint16_t>(config_file.GetUint32Value("MsgServerListenPort", 0));
+
+  ttstring::str_explode(config_file.GetConfigValue("HttpListenIP"), ';', http_listen_addrs_);
+  http_listen_port_ = static_cast<uint16_t>(config_file.GetUint32Value("HttpListenPort", 0));
+
+  if (client_listen_addrs_.empty() || client_listen_port_ == 0 ||
+      msg_server_listen_addrs_.empty() || msg_server_listen_port_ == 0 ||
+      http_listen_addrs_.empty() || http_listen_port_ == 0) {
     return false;
   }
 

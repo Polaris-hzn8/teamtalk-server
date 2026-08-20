@@ -6,15 +6,22 @@
  brief:
 */
 
-#ifndef IMUSER_H_
-#define IMUSER_H_
+#ifndef TEAMTALK_MSG_SERVER_DOMAIN_USER_IM_USER_H_
+#define TEAMTALK_MSG_SERVER_DOMAIN_USER_IM_USER_H_
 
-#include "im_conn.h"
-#include "public_define.h"
+#include <teamtalk/sbase/global_define.h>
+#include <teamtalk/imcore/netlib/core/im_conn.h>
 
-#define MAX_ONLINE_FRIEND_CNT 100  // 通知好友状态通知的最多个数
+#include "connection/msg_conn.h"
 
-class CMsgConn;
+// 最大在线好友数量
+#define MAX_ONLINE_FRIEND_CNT 100
+
+namespace teamtalk::msg_server::domain::user {
+
+namespace ttconnection = teamtalk::msg_server::connection;
+namespace ttnetlib = teamtalk::imcore::netlib;
+
 class CImUser {
  public:
   CImUser(std::string user_name);
@@ -33,26 +40,26 @@ class CImUser {
   user_conn_t GetUserConn();
 
   bool IsMsgConnEmpty() { return m_conn_map.empty(); }
-  void AddMsgConn(uint32_t handle, CMsgConn* pMsgConn) { m_conn_map[handle] = pMsgConn; }
+  void AddMsgConn(uint32_t handle, ttconnection::CMsgConn* pMsgConn) { m_conn_map[handle] = pMsgConn; }
   void DelMsgConn(uint32_t handle) { m_conn_map.erase(handle); }
-  CMsgConn* GetMsgConn(uint32_t handle);
-  void ValidateMsgConn(uint32_t handle, CMsgConn* pMsgConn);
+  ttconnection::CMsgConn* GetMsgConn(uint32_t handle);
+  void ValidateMsgConn(uint32_t handle, ttconnection::CMsgConn* pMsgConn);
 
-  void AddUnValidateMsgConn(CMsgConn* pMsgConn) { m_unvalidate_conn_set.insert(pMsgConn); }
-  void DelUnValidateMsgConn(CMsgConn* pMsgConn) { m_unvalidate_conn_set.erase(pMsgConn); }
-  CMsgConn* GetUnValidateMsgConn(uint32_t handle);
+  void AddUnValidateMsgConn(ttconnection::CMsgConn* pMsgConn) { m_unvalidate_conn_set.insert(pMsgConn); }
+  void DelUnValidateMsgConn(ttconnection::CMsgConn* pMsgConn) { m_unvalidate_conn_set.erase(pMsgConn); }
+  ttconnection::CMsgConn* GetUnValidateMsgConn(uint32_t handle);
 
-  std::map<uint32_t, CMsgConn*>& GetMsgConnMap() { return m_conn_map; }
+  std::map<uint32_t, ttconnection::CMsgConn*>& GetMsgConnMap() { return m_conn_map; }
 
-  void BroadcastPdu(CImPdu* pPdu, CMsgConn* pFromConn = NULL);
-  void BroadcastPduWithOutMobile(CImPdu* pPdu, CMsgConn* pFromConn = NULL);
-  void BroadcastPduToMobile(CImPdu* pPdu, CMsgConn* pFromConn = NULL);
-  void BroadcastClientMsgData(CImPdu* pPdu, uint32_t msg_id, CMsgConn* pFromConn = NULL, uint32_t from_id = 0);
-  void BroadcastData(void* buff, uint32_t len, CMsgConn* pFromConn = NULL);
+  void BroadcastPdu(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn = NULL);
+  void BroadcastPduWithOutMobile(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn = NULL);
+  void BroadcastPduToMobile(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn = NULL);
+  void BroadcastClientMsgData(ttnetlib::CImPdu* pPdu, uint32_t msg_id, ttconnection::CMsgConn* pFromConn = NULL, uint32_t from_id = 0);
+  void BroadcastData(void* buff, uint32_t len, ttconnection::CMsgConn* pFromConn = NULL);
 
-  void HandleKickUser(CMsgConn* pConn, uint32_t reason);
+  void HandleKickUser(ttconnection::CMsgConn* pConn, uint32_t reason);
 
-  bool KickOutSameClientType(uint32_t client_type, uint32_t reason, CMsgConn* pFromConn = NULL);
+  bool KickOutSameClientType(uint32_t client_type, uint32_t reason, ttconnection::CMsgConn* pFromConn = NULL);
 
   uint32_t GetClientTypeFlag();
 
@@ -65,8 +72,8 @@ class CImUser {
 
   bool m_bValidate;
 
-  std::map<uint32_t, CMsgConn*> m_conn_map;
-  std::set<CMsgConn*> m_unvalidate_conn_set;
+  std::map<uint32_t, ttconnection::CMsgConn*> m_conn_map;
+  std::set<ttconnection::CMsgConn*> m_unvalidate_conn_set;
 };
 
 typedef std::map<uint32_t /* user_id */, CImUser*> ImUserMap_t;
@@ -81,7 +88,7 @@ class CImUserManager {
   CImUser* GetImUserById(uint32_t user_id);
   CImUser* GetImUserByLoginName(std::string login_name);
 
-  CMsgConn* GetMsgConnByHandle(uint32_t user_id, uint32_t handle);
+  ttconnection::CMsgConn* GetMsgConnByHandle(uint32_t user_id, uint32_t handle);
   bool AddImUserByLoginName(std::string login_name, CImUser* pUser);
   void RemoveImUserByLoginName(std::string login_name);
 
@@ -94,7 +101,7 @@ class CImUserManager {
   void GetOnlineUserInfo(std::list<user_stat_t>* online_user_info);
   void GetUserConnCnt(std::list<user_conn_t>* user_conn_list, uint32_t& total_conn_cnt);
 
-  void BroadcastPdu(CImPdu* pdu, uint32_t client_type_flag);
+  void BroadcastPdu(ttnetlib::CImPdu* pdu, uint32_t client_type_flag);
 
  private:
   ImUserMap_t m_im_user_map;
@@ -103,4 +110,6 @@ class CImUserManager {
 
 void get_online_user_info(std::list<user_stat_t>* online_user_info);
 
-#endif /* IMUSER_H_ */
+}  // namespace teamtalk::msg_server::domain::user
+
+#endif  // TEAMTALK_MSG_SERVER_DOMAIN_USER_IM_USER_H_

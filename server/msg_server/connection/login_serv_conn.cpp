@@ -6,21 +6,25 @@
  brief:
 */
 
-#include "login_serv_conn.h"
-#include "im_pdu_base.h"
-#include "im_user.h"
-#include "msg_conn.h"
-#include "public_define.h"
+#include <teamtalk/sbase/global_define.h>
+#include <teamtalk/imcore/netlib/core/im_pdu.h>
 
-#include "IM.Other.pb.h"
-#include "IM.Server.pb.h"
+#include <teamtalk/imcore/ttidl/ohter.pb.h>
+#include <teamtalk/imcore/ttidl/service.pb.h>
 
-using namespace IM::BaseDefine;
+#include "domain/user/im_user.h"
+#include "connection/msg_conn.h"
+#include "connection/login_serv_conn.h"
+
+namespace teamtalk::msg_server::connection {
+
 using namespace std;
 
-static ConnMap_t g_login_server_conn_map;
+namespace ttuser = teamtalk::msg_server::domain::user;
 
-static serv_info_t* g_login_server_list;
+static ttnetlib::ConnMap_t g_login_server_conn_map;
+
+static ttserverinfo::serv_info_t* g_login_server_list;
 static uint32_t g_login_server_count;
 
 static string g_msg_server_ip_addr1;
@@ -29,11 +33,11 @@ static uint16_t g_msg_server_port;
 static uint32_t g_max_conn_cnt;
 
 void login_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
-  ConnMap_t::iterator it_old;
+  ttnetlib::ConnMap_t::iterator it_old;
   CLoginServConn* pConn = NULL;
   uint64_t cur_time = get_tick_count();
 
-  for (ConnMap_t::iterator it = g_login_server_conn_map.begin(); it != g_login_server_conn_map.end();) {
+  for (ttnetlib::ConnMap_t::iterator it = g_login_server_conn_map.begin(); it != g_login_server_conn_map.end();) {
     it_old = it;
     it++;
 
@@ -42,10 +46,10 @@ void login_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t
   }
 
   // reconnect LoginServer
-  serv_check_reconnect<CLoginServConn>(g_login_server_list, g_login_server_count);
+  ttserverinfo::serv_check_reconnect<CLoginServConn>(g_login_server_list, g_login_server_count);
 }
 
-void init_login_serv_conn(serv_info_t* server_list,
+void init_login_serv_conn(ttserverinfo::serv_info_t* server_list,
                           uint32_t server_count,
                           const char* msg_server_ip_addr1,
                           const char* msg_server_ip_addr2,
@@ -54,7 +58,7 @@ void init_login_serv_conn(serv_info_t* server_list,
   g_login_server_list = server_list;
   g_login_server_count = server_count;
 
-  serv_init<CLoginServConn>(g_login_server_list, g_login_server_count);
+  ttserverinfo::serv_init<CLoginServConn>(g_login_server_list, g_login_server_count);
 
   g_msg_server_ip_addr1 = msg_server_ip_addr1;
   g_msg_server_ip_addr2 = msg_server_ip_addr2;
@@ -78,7 +82,7 @@ bool is_login_server_available() {
   return false;
 }
 
-void send_to_all_login_server(CImPdu* pPdu) {
+void send_to_all_login_server(ttnetlib::CImPdu* pPdu) {
   CLoginServConn* pConn = NULL;
 
   for (uint32_t i = 0; i < g_login_server_count; i++) {
@@ -106,7 +110,7 @@ void CLoginServConn::Connect(const char* server_ip, uint16_t server_port, uint32
 }
 
 void CLoginServConn::Close() {
-  serv_reset<CLoginServConn>(g_login_server_list, g_login_server_count, m_serv_idx);
+  ttserverinfo::serv_reset<CLoginServConn>(g_login_server_list, g_login_server_count, m_serv_idx);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     netlib_close(m_handle);
@@ -125,7 +129,7 @@ void CLoginServConn::OnConfirm() {
   uint32_t shop_user_cnt = 0;
 
   list<user_conn_t> user_conn_list;
-  CImUserManager::GetInstance()->GetUserConnCnt(&user_conn_list, cur_conn_cnt);
+  ttuser::CImUserManager::GetInstance()->GetUserConnCnt(&user_conn_list, cur_conn_cnt);
   char hostname[256] = {0};
   gethostname(hostname, 256);
   IM::Server::IMMsgServInfo msg;
@@ -135,7 +139,7 @@ void CLoginServConn::OnConfirm() {
   msg.set_max_conn_cnt(g_max_conn_cnt);
   msg.set_cur_conn_cnt(cur_conn_cnt);
   msg.set_host_name(hostname);
-  CImPdu pdu;
+  ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg);
   pdu.SetServiceId(SID_OTHER);
   pdu.SetCommandId(CID_OTHER_MSG_SERV_INFO);
@@ -150,7 +154,7 @@ void CLoginServConn::OnClose() {
 void CLoginServConn::OnTimer(uint64_t curr_tick) {
   if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
     IM::Other::IMHeartBeat msg;
-    CImPdu pdu;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
     pdu.SetServiceId(SID_OTHER);
     pdu.SetCommandId(CID_OTHER_HEARTBEAT);
@@ -163,6 +167,8 @@ void CLoginServConn::OnTimer(uint64_t curr_tick) {
   }
 }
 
-void CLoginServConn::HandlePdu(CImPdu* pPdu) {
+void CLoginServConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
   // printf("recv pdu_type=%d ", pPdu->GetPduType());
 }
+
+}  // namespace teamtalk::msg_server::connection

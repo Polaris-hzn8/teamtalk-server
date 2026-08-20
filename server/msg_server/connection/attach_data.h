@@ -6,10 +6,14 @@
  brief:
 */
 
-#ifndef ATTACHDATA_H_
-#define ATTACHDATA_H_
+#ifndef TEAMTALK_MSG_SERVER_CONNECTION_ATTACH_DATA_H_
+#define TEAMTALK_MSG_SERVER_CONNECTION_ATTACH_DATA_H_
 
-#include "util.h"
+#include <teamtalk/imcore/netlib/core/simple_buffer.h>
+
+namespace teamtalk::msg_server::connection {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
 
 enum {
   ATTACH_TYPE_HANDLE = 1,
@@ -33,7 +37,7 @@ class CDbAttachData {
   uint32_t GetServiceType() { return m_service_type; }
 
  private:
-  CSimpleBuffer m_buf;
+  ttnetlib::CSimpleBuffer m_buf;
   uint32_t m_type;
   uint32_t m_handle;
   uint32_t m_service_type;
@@ -55,7 +59,7 @@ class CPduAttachData {
   uchar_t* GetPdu() { return m_pdu; }
 
  private:
-  CSimpleBuffer m_buf;
+  ttnetlib::CSimpleBuffer m_buf;
   uint32_t m_type;
   uint32_t m_handle;
   uint32_t m_service_type;
@@ -63,4 +67,6 @@ class CPduAttachData {
   uchar_t* m_pdu;
 };
 
-#endif /* ATTACHDATA_H_ */
+}  // namespace teamtalk::msg_server::connection
+
+#endif  // TEAMTALK_MSG_SERVER_CONNECTION_ATTACH_DATA_H_

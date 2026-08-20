@@ -5,8 +5,8 @@
  * @brief: 服务器版本号
 */
 
-#ifndef TEAMTALK_SBASE_VERSION_H
-#define TEAMTALK_SBASE_VERSION_H
+#ifndef TEAMTALK_SBASE_VERSION_H_
+#define TEAMTALK_SBASE_VERSION_H_
 
 namespace teamtalk::sbase {
 
@@ -14,4 +14,4 @@ namespace teamtalk::sbase {
 
 }  // namespace teamtalk::sbase
 
-#endif  // TEAMTALK_SBASE_VERSION_H
+#endif  // TEAMTALK_SBASE_VERSION_H_

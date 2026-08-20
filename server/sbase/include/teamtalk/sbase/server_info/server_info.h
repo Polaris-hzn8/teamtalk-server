@@ -9,8 +9,8 @@
     3.重置服务器连接
 */
 
-#ifndef TEAMTALK_SBASERVER_INFO_SERVER_INFO_H
-#define TEAMTALK_SBASERVER_INFO_SERVER_INFO_H
+#ifndef TEAMTALK_SBASE_SERVER_INFO_SERVER_INFO_H_
+#define TEAMTALK_SBASE_SERVER_INFO_SERVER_INFO_H_
 
 #include <string>
 #include <teamtalk/imcore/netlib/core/im_conn.h>
@@ -84,4 +84,4 @@ serv_info_t* read_server_config(ttconfig::CConfigReader* config_file,
 
 }  // namespace teamtalk::sbase::server_info
 
-#endif  // TEAMTALK_SBASERVER_INFO_SERVER_INFO_H
+#endif  // TEAMTALK_SBASE_SERVER_INFO_SERVER_INFO_H_

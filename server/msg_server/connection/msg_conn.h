@@ -6,10 +6,18 @@
  brief:
 */
 
-#ifndef MSGCONN_H_
-#define MSGCONN_H_
+#ifndef TEAMTALK_MSG_SERVER_CONNECTION_MSG_CONN_H_
+#define TEAMTALK_MSG_SERVER_CONNECTION_MSG_CONN_H_
 
-#include "im_conn.h"
+#include <cstdint>
+#include <list>
+#include <string>
+#include <teamtalk/imcore/netlib/core/im_conn.h>
+#include <teamtalk/imcore/netlib/core/im_pdu.h>
+
+namespace teamtalk::msg_server::connection {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
 
 #define KICK_FROM_ROUTE_SERVER 1
 #define MAX_ONLINE_FRIEND_CNT 100  // 通知好友状态通知的最多个数
@@ -20,8 +28,7 @@ typedef struct {
   uint64_t timestamp;  //消息的时间戳
 } msg_ack_t;
 
-class CImUser;
-class CMsgConn : public CImConn {
+class CMsgConn : public ttnetlib::CImConn {
  public:
   CMsgConn();
   virtual ~CMsgConn();
@@ -55,7 +62,7 @@ class CMsgConn : public CImConn {
   virtual inline void OnTimer(uint64_t curr_tick);
 
   //处理收到的PDU 根据PDU的命令ID，将其分派给相应的处理函数
-  virtual void HandlePdu(CImPdu* pPdu);
+  virtual void HandlePdu(ttnetlib::CImPdu* pPdu);
 
   //将消息ID和发送者ID添加到发送列表中
   void AddToSendList(uint32_t msg_id, uint32_t from_id);
@@ -64,33 +71,33 @@ class CMsgConn : public CImConn {
 
  private:
   //私有函数 用于处理不同类型的PDU 根据PDU的命令ID来执行相应的逻辑
-  void _HandleHeartBeat(CImPdu* pPdu);
-  void _HandleLoginRequest(CImPdu* pPdu);
-  void _HandleLoginOutRequest(CImPdu* pPdu);
-  void _HandleClientRecentContactSessionRequest(CImPdu* pPdu);
-  void _HandleClientMsgData(CImPdu* pPdu);
-  void _HandleClientMsgDataAck(CImPdu* pPdu);
-  void _HandleClientTimeRequest(CImPdu* pPdu);
-  void _HandleClientGetMsgListRequest(CImPdu* pPdu);
-  void _HandleClientGetMsgByMsgIdRequest(CImPdu* pPdu);
-  void _HandleClientUnreadMsgCntRequest(CImPdu* pPdu);
-  void _HandleClientMsgReadAck(CImPdu* pPdu);
-  void _HandleClientGetLatestMsgIDReq(CImPdu* pPdu);
-  void _HandleClientP2PCmdMsg(CImPdu* pPdu);
-  void _HandleClientUserInfoRequest(CImPdu* pPdu);
-  void _HandleClientUsersStatusRequest(CImPdu* pPdu);
-  void _HandleClientRemoveSessionRequest(CImPdu* pPdu);
-  void _HandleClientAllUserRequest(CImPdu* pPdu);
-  void _HandleChangeAvatarRequest(CImPdu* pPdu);
-  void _HandleChangeSignInfoRequest(CImPdu* pPdu);
+  void _HandleHeartBeat(ttnetlib::CImPdu* pPdu);
+  void _HandleLoginRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleLoginOutRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientRecentContactSessionRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientMsgData(ttnetlib::CImPdu* pPdu);
+  void _HandleClientMsgDataAck(ttnetlib::CImPdu* pPdu);
+  void _HandleClientTimeRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientGetMsgListRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientGetMsgByMsgIdRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientUnreadMsgCntRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientMsgReadAck(ttnetlib::CImPdu* pPdu);
+  void _HandleClientGetLatestMsgIDReq(ttnetlib::CImPdu* pPdu);
+  void _HandleClientP2PCmdMsg(ttnetlib::CImPdu* pPdu);
+  void _HandleClientUserInfoRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientUsersStatusRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientRemoveSessionRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleClientAllUserRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleChangeAvatarRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleChangeSignInfoRequest(ttnetlib::CImPdu* pPdu);
 
-  void _HandleClientDeviceToken(CImPdu* pPdu);
-  void _HandleKickPCClient(CImPdu* pPdu);
-  void _HandleClientDepartmentRequest(CImPdu* pPdu);
+  void _HandleClientDeviceToken(ttnetlib::CImPdu* pPdu);
+  void _HandleKickPCClient(ttnetlib::CImPdu* pPdu);
+  void _HandleClientDepartmentRequest(ttnetlib::CImPdu* pPdu);
   void _SendFriendStatusNotify(uint32_t status);
-  void _HandlePushShieldRequest(CImPdu* pPdu);
-  void _HandleQueryPushShieldRequest(CImPdu* pPdu);
-  void _HandleRegistRequest(CImPdu* pPdu);
+  void _HandlePushShieldRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleQueryPushShieldRequest(ttnetlib::CImPdu* pPdu);
+  void _HandleRegistRequest(ttnetlib::CImPdu* pPdu);
 
  private:
   std::string m_login_name;  //登录名拼音，用于存储用户的登录名
@@ -111,4 +118,6 @@ class CMsgConn : public CImConn {
 
 void init_msg_conn();
 
-#endif
+}  // namespace teamtalk::msg_server::connection
+
+#endif  // TEAMTALK_MSG_SERVER_CONNECTION_MSG_CONN_H_

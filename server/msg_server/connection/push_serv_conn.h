@@ -6,15 +6,18 @@
  brief:
 */
 
-#ifndef _PUSH_SERVCONN_H_
-#define _PUSH_SERVCONN_H_
+#ifndef TEAMTALK_MSG_SERVER_CONNECTION_PUSH_SERV_CONN_H_
+#define TEAMTALK_MSG_SERVER_CONNECTION_PUSH_SERV_CONN_H_
 
-#include <iostream>
+#include <teamtalk/imcore/netlib/core/im_conn.h>
+#include <teamtalk/sbase/server_info/server_info.h>
 
-#include "im_conn.h"
-#include "serv_info.h"
+namespace teamtalk::msg_server::connection {
 
-class CPushServConn : public CImConn {
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttserverinfo = teamtalk::sbase::server_info;
+
+class CPushServConn : public ttnetlib::CImConn {
  public:
   CPushServConn();
   virtual ~CPushServConn();
@@ -28,10 +31,10 @@ class CPushServConn : public CImConn {
   virtual void OnClose();
   virtual void OnTimer(uint64_t curr_tick);
 
-  virtual void HandlePdu(CImPdu* pPdu);
+  virtual void HandlePdu(ttnetlib::CImPdu* pPdu);
 
  private:
-  void _HandlePushToUserResponse(CImPdu* pPdu);
+  void _HandlePushToUserResponse(ttnetlib::CImPdu* pPdu);
 
  private:
   bool m_bOpen;
@@ -39,7 +42,9 @@ class CPushServConn : public CImConn {
 };
 
 CPushServConn* get_push_serv_conn();
-void init_push_serv_conn(serv_info_t* server_list, uint32_t server_count);
+void init_push_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_count);
 void build_ios_push_flash(std::string& flash, uint32_t msg_type, uint32_t from_id);
 
-#endif  // _PUSH_SERVCONN_H_
+}  // namespace teamtalk::msg_server::connection
+
+#endif  // TEAMTALK_MSG_SERVER_CONNECTION_PUSH_SERV_CONN_H_

@@ -6,8 +6,8 @@
  brief:
 */
 
-#ifndef TEAMTALK_SBASE_PUBLIC_DEFINE_H
-#define TEAMTALK_SBASE_PUBLIC_DEFINE_H
+#ifndef TEAMTALK_SBASE_GLOBAL_DEFINE_H_
+#define TEAMTALK_SBASE_GLOBAL_DEFINE_H_
 
 #include <set>
 #include <string>
@@ -93,22 +93,22 @@ enum {
   })
 
 ///////////////////////////////////////////////CHECK_MSG_TYPE_SINGLE//////////////////////////////////////////////////
-#define CHECK_MSG_TYPE_SINGLE(type)                                                                          \
-  ({                                                                                                         \
-    bool bRet = false;                                                                                       \
-    if ((IM::BaseDefine::MSG_TYPE_SINGLE_TEXT == type) || (IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO == type)) { \
-      bRet = true;                                                                                           \
-    }                                                                                                        \
-    bRet;                                                                                                    \
+#define CHECK_MSG_TYPE_SINGLE(type)                                                                                                              \
+  ({                                                                                                                                             \
+    bool bRet = false;                                                                                                                           \
+    if ((teamtalk::imcore::ttidl::base_define::MSG_TYPE_SINGLE_TEXT == type) || (teamtalk::imcore::ttidl::base_define::MSG_TYPE_SINGLE_AUDIO == type)) { \
+      bRet = true;                                                                                                                               \
+    }                                                                                                                                            \
+    bRet;                                                                                                                                        \
   })
 
-#define CHECK_MSG_TYPE_GROUP(type)                                                                         \
-  ({                                                                                                       \
-    bool bRet = false;                                                                                     \
-    if ((IM::BaseDefine::MSG_TYPE_GROUP_TEXT == type) || (IM::BaseDefine::MSG_TYPE_GROUP_AUDIO == type)) { \
-      bRet = true;                                                                                         \
-    }                                                                                                      \
-    bRet;                                                                                                  \
+#define CHECK_MSG_TYPE_GROUP(type)                                                                                                          \
+  ({                                                                                                                                        \
+    bool bRet = false;                                                                                                                      \
+    if ((teamtalk::imcore::ttidl::base_define::MSG_TYPE_GROUP_TEXT == type) || (teamtalk::imcore::ttidl::base_define::MSG_TYPE_GROUP_AUDIO == type)) { \
+      bRet = true;                                                                                                                          \
+    }                                                                                                                                       \
+    bRet;                                                                                                                                   \
   })
 
 ////////////////////////////////////////定义结构体//////////////////////////////////////////////
@@ -195,4 +195,4 @@ typedef struct {
   std::set<std::string> authed_interfaces;  //已授权的接口名称集合
 } auth_struct;
 
-#endif  // TEAMTALK_SBASE_PUBLIC_DEFINE_H
+#endif  // TEAMTALK_SBASE_GLOBAL_DEFINE_H_

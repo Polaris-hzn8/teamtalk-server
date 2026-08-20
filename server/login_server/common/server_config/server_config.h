@@ -12,13 +12,10 @@
 #define TEAMTALK_LOGIN_SERVER_COMMON_SERVER_CONFIG_SERVER_CONFIG_H_
 
 #include <string>
-#include <utility>
 #include <vector>
 #include <cstdint>
 
 namespace teamtalk::login_server::common::server_config {
-
-using Endpoint = std::pair<std::string, uint16_t>;
 
 class ServerConfig {
  public:
@@ -26,9 +23,14 @@ class ServerConfig {
 
   bool LoadFromFile(const std::string& path);
 
-  const std::vector<Endpoint>& client_listen_endpoints() const { return client_listen_eps_; }
-  const std::vector<Endpoint>& msg_server_listen_endpoints() const { return msg_server_listen_eps_; }
-  const std::vector<Endpoint>& http_listen_endpoints() const { return http_listen_eps_; }
+  const std::vector<std::string>& client_listen_addresses() const { return client_listen_addrs_; }
+  uint16_t client_listen_port() const { return client_listen_port_; }
+
+  const std::vector<std::string>& msg_server_listen_addresses() const { return msg_server_listen_addrs_; }
+  uint16_t msg_server_listen_port() const { return msg_server_listen_port_; }
+
+  const std::vector<std::string>& http_listen_addresses() const { return http_listen_addrs_; }
+  uint16_t http_listen_port() const { return http_listen_port_; }
 
   const std::string& msfs_url() const { return msfs_url_; }
   const std::string& discovery() const { return discovery_; }
@@ -41,9 +43,14 @@ class ServerConfig {
   std::string msfs_url_;
   std::string discovery_;
 
-  std::vector<Endpoint> client_listen_eps_;
-  std::vector<Endpoint> msg_server_listen_eps_;
-  std::vector<Endpoint> http_listen_eps_;
+  std::vector<std::string> client_listen_addrs_;
+  uint16_t client_listen_port_ = 0;
+
+  std::vector<std::string> msg_server_listen_addrs_;
+  uint16_t msg_server_listen_port_ = 0;
+
+  std::vector<std::string> http_listen_addrs_;
+  uint16_t http_listen_port_ = 0;
 };
 
 }  // namespace teamtalk::login_server::common::server_config

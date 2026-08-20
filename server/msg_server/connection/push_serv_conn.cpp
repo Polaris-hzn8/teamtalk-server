@@ -6,29 +6,33 @@
  brief:
 */
 
-#include "push_serv_conn.h"
-#include "IM.BaseDefine.pb.h"
-#include "IM.Other.pb.h"
-#include "IM.Server.pb.h"
-#include "im_user.h"
+#include <teamtalk/imcore/ttidl/ohter.pb.h>
+#include <teamtalk/imcore/ttidl/base_define.pb.h>
 
-using namespace IM::BaseDefine;
+#include "domain/user/im_user.h"
+#include "connection/push_serv_conn.h"
+
+namespace teamtalk::msg_server::connection {
+
 using namespace std;
+
+namespace ttuser = teamtalk::msg_server::domain::user;
+namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
 
 #define IOS_PUSH_FLASH_MAX_LENGTH 40
 
-static ConnMap_t g_push_server_conn_map;
+static ttnetlib::ConnMap_t g_push_server_conn_map;
 static CPushServConn* g_master_push_conn = NULL;
 
-static serv_info_t* g_push_server_list = NULL;
+static ttserverinfo::serv_info_t* g_push_server_list = NULL;
 static uint32_t g_push_server_count = 0;  // 到PushServer的总连接数
 
 static void push_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
-  ConnMap_t::iterator it_old;
+  ttnetlib::ConnMap_t::iterator it_old;
   CPushServConn* pConn = NULL;
   uint64_t cur_time = get_tick_count();
 
-  for (ConnMap_t::iterator it = g_push_server_conn_map.begin(); it != g_push_server_conn_map.end();) {
+  for (ttnetlib::ConnMap_t::iterator it = g_push_server_conn_map.begin(); it != g_push_server_conn_map.end();) {
     it_old = it;
     it++;
 
@@ -40,14 +44,14 @@ static void push_server_conn_timer_callback(void* callback_data, uint8_t msg, ui
 
   // reconnect Push Server
   // will reconnect in 4s, 8s, 16s, 32s, 64s, 4s 8s ...
-  serv_check_reconnect<CPushServConn>(g_push_server_list, g_push_server_count);
+  ttserverinfo::serv_check_reconnect<CPushServConn>(g_push_server_list, g_push_server_count);
 }
 
-void init_push_serv_conn(serv_info_t* server_list, uint32_t server_count) {
+void init_push_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_count) {
   g_push_server_list = server_list;
   g_push_server_count = server_count;
 
-  serv_init<CPushServConn>(g_push_server_list, g_push_server_count);
+  ttserverinfo::serv_init<CPushServConn>(g_push_server_list, g_push_server_count);
 
   netlib_register_timer(push_server_conn_timer_callback, NULL, 1000);
 }
@@ -63,14 +67,14 @@ void build_ios_push_flash(string& flash, uint32_t msg_type, uint32_t from_id) {
   if (pos_prefix != string::npos && pos_suffix != string::npos && pos_prefix < pos_suffix) {
     flash = comm_flash;
   } else {
-    CImUser* pImUser = CImUserManager::GetInstance()->GetImUserById(from_id);
+    ttuser::CImUser* pImUser = ttuser::CImUserManager::GetInstance()->GetImUserById(from_id);
     if (pImUser) {
       string nick_name = pImUser->GetNickName();
       string msg_tmp;
-      if (msg_type == IM::BaseDefine::MSG_TYPE_GROUP_AUDIO) {
+      if (msg_type == ttidlbase::MSG_TYPE_GROUP_AUDIO) {
         msg_tmp.append(nick_name);
         msg_tmp.append("在群聊中发送了一条语音消息");
-      } else if (msg_type == IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO) {
+      } else if (msg_type == ttidlbase::MSG_TYPE_SINGLE_AUDIO) {
         msg_tmp.append(nick_name);
         msg_tmp.append("给您发送了一条语音消息");
       } else {
@@ -117,7 +121,7 @@ void CPushServConn::Connect(const char* server_ip, uint16_t server_port, uint32_
 
 void CPushServConn::Close() {
   // reset server information for the next connect
-  serv_reset<CPushServConn>(g_push_server_list, g_push_server_count, m_serv_idx);
+  ttserverinfo::serv_reset<CPushServConn>(g_push_server_list, g_push_server_count, m_serv_idx);
 
   m_bOpen = false;
   g_master_push_conn = NULL;
@@ -144,7 +148,7 @@ void CPushServConn::OnClose() {
 void CPushServConn::OnTimer(uint64_t curr_tick) {
   if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
     IM::Other::IMHeartBeat msg;
-    CImPdu pdu;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
     pdu.SetServiceId(SID_OTHER);
     pdu.SetCommandId(CID_OTHER_HEARTBEAT);
@@ -157,7 +161,7 @@ void CPushServConn::OnTimer(uint64_t curr_tick) {
   }
 }
 
-void CPushServConn::HandlePdu(CImPdu* pPdu) {
+void CPushServConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
   switch (pPdu->GetCommandId()) {
     case CID_OTHER_HEARTBEAT:
       // log_info("push server heart beat. ");
@@ -170,8 +174,10 @@ void CPushServConn::HandlePdu(CImPdu* pPdu) {
   }
 }
 
-void CPushServConn::_HandlePushToUserResponse(CImPdu* pPdu) {
+void CPushServConn::_HandlePushToUserResponse(ttnetlib::CImPdu* pPdu) {
   // uint32_t result_cnt = pPdu->GetUserCnt();
   // push_result_t* push_result_list = pPdu->GetUserTokenList();
   log_info("HandlePushToUserResponse ");
 }
+
+}  // namespace teamtalk::msg_server::connection

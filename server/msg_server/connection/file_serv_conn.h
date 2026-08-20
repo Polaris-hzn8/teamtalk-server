@@ -6,16 +6,22 @@
  brief:
 */
 
-#ifndef _FILE_SERVCONN_
-#define _FILE_SERVCONN_
+#ifndef TEAMTALK_MSG_SERVER_CONNECTION_FILE_SERV_CONN_H_
+#define TEAMTALK_MSG_SERVER_CONNECTION_FILE_SERV_CONN_H_
 
 #include <iostream>
-#include "IM.BaseDefine.pb.h"
-#include "base_socket.h"
-#include "im_conn.h"
-#include "serv_info.h"
+#include <teamtalk/imcore/ttidl/base_define.pb.h>
+#include <teamtalk/imcore/netlib/core/base_socket.h>
+#include <teamtalk/imcore/netlib/core/im_conn.h>
+#include <teamtalk/sbase/server_info/server_info.h>
 
-class CFileServConn : public CImConn {
+namespace teamtalk::msg_server::connection {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttserverinfo = teamtalk::sbase::server_info;
+namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+
+class CFileServConn : public ttnetlib::CImConn {
  public:
   CFileServConn();
   virtual ~CFileServConn();
@@ -29,23 +35,25 @@ class CFileServConn : public CImConn {
   virtual void OnClose();
   virtual void OnTimer(uint64_t curr_tick);
 
-  virtual void HandlePdu(CImPdu* pPdu);
+  virtual void HandlePdu(ttnetlib::CImPdu* pPdu);
 
-  const std::list<IM::BaseDefine::IpAddr>* GetFileServerIPList() { return &m_ip_list; }
+  const std::list<ttidlbase::IpAddr>* GetFileServerIPList() { return &m_ip_list; }
 
  private:
-  void _HandleFileMsgTransRsp(CImPdu* pPdu);
-  void _HandleFileServerIPRsp(CImPdu* pPdu);
+  void _HandleFileMsgTransRsp(ttnetlib::CImPdu* pPdu);
+  void _HandleFileServerIPRsp(ttnetlib::CImPdu* pPdu);
 
  private:
   bool m_bOpen;
   uint32_t m_serv_idx;
   uint64_t m_connect_time;
-  std::list<IM::BaseDefine::IpAddr> m_ip_list;
+  std::list<ttidlbase::IpAddr> m_ip_list;
 };
 
 CFileServConn* get_random_file_serv_conn();
-void init_file_serv_conn(serv_info_t* server_list, uint32_t server_count);
+void init_file_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_count);
 bool is_file_server_available();
 
-#endif  // _FILE_SERVCONN_
+}  // namespace teamtalk::msg_server::connection
+
+#endif  // TEAMTALK_MSG_SERVER_CONNECTION_FILE_SERV_CONN_H_

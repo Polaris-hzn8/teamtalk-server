@@ -6,24 +6,30 @@
  brief:
 */
 
-#ifndef FILEHANDLER_H_
-#define FILEHANDLER_H_
+#ifndef TEAMTALK_MSG_SERVER_SERVICE_FILE_HANDLER_FILE_HANDLER_H_
+#define TEAMTALK_MSG_SERVER_SERVICE_FILE_HANDLER_FILE_HANDLER_H_
 
-#include "im_pdu_base.h"
+#include <teamtalk/imcore/netlib/core/im_pdu.h>
 
-class CMsgConn;
+#include "connection/msg_conn.h"
+
+namespace teamtalk::msg_server::service::file_handler {
+
+namespace ttconnection = teamtalk::msg_server::connection;
+namespace ttnetlib = teamtalk::imcore::netlib;
+
 class CFileHandler {
  public:
   virtual ~CFileHandler() {}
 
   static CFileHandler* getInstance();
 
-  void HandleClientFileRequest(CMsgConn* pMsgConn, CImPdu* pPdu);
-  void HandleClientFileHasOfflineReq(CMsgConn* pMsgConn, CImPdu* pPdu);
-  void HandleClientFileAddOfflineReq(CMsgConn* pMsgConn, CImPdu* pPdu);
-  void HandleClientFileDelOfflineReq(CMsgConn* pMsgConn, CImPdu* pPdu);
-  void HandleFileHasOfflineRes(CImPdu* pPdu);
-  void HandleFileNotify(CImPdu* pPdu);
+  void HandleClientFileRequest(ttconnection::CMsgConn* pMsgConn, ttnetlib::CImPdu* pPdu);
+  void HandleClientFileHasOfflineReq(ttconnection::CMsgConn* pMsgConn, ttnetlib::CImPdu* pPdu);
+  void HandleClientFileAddOfflineReq(ttconnection::CMsgConn* pMsgConn, ttnetlib::CImPdu* pPdu);
+  void HandleClientFileDelOfflineReq(ttconnection::CMsgConn* pMsgConn, ttnetlib::CImPdu* pPdu);
+  void HandleFileHasOfflineRes(ttnetlib::CImPdu* pPdu);
+  void HandleFileNotify(ttnetlib::CImPdu* pPdu);
 
  private:
   CFileHandler() {}
@@ -32,4 +38,6 @@ class CFileHandler {
   static CFileHandler* s_handler_instance;
 };
 
-#endif /* FILEHANDLER_H_ */
+}  // namespace teamtalk::msg_server::service::file_handler
+
+#endif  // TEAMTALK_MSG_SERVER_SERVICE_FILE_HANDLER_FILE_HANDLER_H_

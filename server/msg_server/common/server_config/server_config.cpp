@@ -5,17 +5,16 @@
  * @brief: 读取 msg_server.conf 配置文件
  */
 
-#include <teamtalk/imcore/config_reader/config_reader.h>
-#include <teamtalk/imcore/string/string.h>
 #include <teamtalk/sbase/global_define.h>
+#include <teamtalk/imcore/string/string.h>
+#include <teamtalk/imcore/config_reader/config_reader.h>
 
 #include "server_config.h"
 
 namespace teamtalk::msg_server::common::server_config {
 
-
-using ttconfig = teamtalk::imcore::config_reader::CConfigReader;
-using ttstring = teamtalk::imcore::string;
+namespace ttconfig = teamtalk::imcore::config_reader;
+namespace ttstring = teamtalk::imcore::string;
 
 ServerConfig& ServerConfig::Instance() {
   static ServerConfig inst;
@@ -23,10 +22,9 @@ ServerConfig& ServerConfig::Instance() {
 }
 
 bool ServerConfig::LoadFromFile(const std::string& path) {
-  ttconfig config_file(path.c_str());
+  ttconfig::CConfigReader config_file(path.c_str());
 
-  std::string listen_ip = config_file.GetConfigValue("ListenIP");
-  ttstring::str_explode(listen_ip, ';', listen_addrs_);
+  ttstring::str_explode(config_file.GetConfigValue("ListenIP"), ';', listen_addrs_);
 
   listen_port_ = static_cast<uint16_t>(config_file.GetUint32Value("ListenPort", 0));
 
@@ -53,7 +51,7 @@ bool ServerConfig::LoadFromFile(const std::string& path) {
     }
   }
 
-  if (listen_ip.empty() || listen_port_ == 0 ||
+  if (listen_addrs_.empty() || listen_port_ == 0 ||
       ip_addr1_.empty() || ip_addr2_.empty()) {
     return false;
   }

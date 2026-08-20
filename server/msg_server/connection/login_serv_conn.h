@@ -6,13 +6,18 @@
  brief:
 */
 
-#ifndef _LOGINSERVCONN_H_
-#define _LOGINSERVCONN_H_
+#ifndef TEAMTALK_MSG_SERVER_CONNECTION_LOGIN_SERV_CONN_H_
+#define TEAMTALK_MSG_SERVER_CONNECTION_LOGIN_SERV_CONN_H_
 
-#include "im_conn.h"
-#include "serv_info.h"
+#include <teamtalk/imcore/netlib/core/im_conn.h>
+#include <teamtalk/sbase/server_info/server_info.h>
 
-class CLoginServConn : public CImConn {
+namespace teamtalk::msg_server::connection {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttserverinfo = teamtalk::sbase::server_info;
+
+class CLoginServConn : public ttnetlib::CImConn {
  public:
   CLoginServConn();
   virtual ~CLoginServConn();
@@ -26,14 +31,14 @@ class CLoginServConn : public CImConn {
   virtual void OnClose();
   virtual void OnTimer(uint64_t curr_tick);
 
-  virtual void HandlePdu(CImPdu* pPdu);
+  virtual void HandlePdu(ttnetlib::CImPdu* pPdu);
 
  private:
   bool m_bOpen;
   uint32_t m_serv_idx;
 };
 
-void init_login_serv_conn(serv_info_t* server_list,
+void init_login_serv_conn(ttserverinfo::serv_info_t* server_list,
                           uint32_t server_count,
                           const char* msg_server_ip_addr1,
                           const char* msg_server_ip_addr2,
@@ -41,6 +46,8 @@ void init_login_serv_conn(serv_info_t* server_list,
                           uint32_t max_conn_cnt);
 
 bool is_login_server_available();
-void send_to_all_login_server(CImPdu* pPdu);
+void send_to_all_login_server(ttnetlib::CImPdu* pPdu);
 
-#endif  // _LOGINSERVCONN_H_
+}  // namespace teamtalk::msg_server::connection
+
+#endif  // TEAMTALK_MSG_SERVER_CONNECTION_LOGIN_SERV_CONN_H_

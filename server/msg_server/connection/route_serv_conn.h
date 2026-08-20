@@ -6,13 +6,18 @@
  brief:
 */
 
-#ifndef ROUTESERVCONN_H_
-#define ROUTESERVCONN_H_
+#ifndef TEAMTALK_MSG_SERVER_CONNECTION_ROUTE_SERV_CONN_H_
+#define TEAMTALK_MSG_SERVER_CONNECTION_ROUTE_SERV_CONN_H_
 
-#include "im_conn.h"
-#include "serv_info.h"
+#include <teamtalk/imcore/netlib/core/im_conn.h>
+#include <teamtalk/sbase/server_info/server_info.h>
 
-class CRouteServConn : public CImConn {
+namespace teamtalk::msg_server::connection {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttserverinfo = teamtalk::sbase::server_info;
+
+class CRouteServConn : public ttnetlib::CImConn {
  public:
   CRouteServConn();
   virtual ~CRouteServConn();
@@ -27,18 +32,18 @@ class CRouteServConn : public CImConn {
   virtual void OnClose();
   virtual void OnTimer(uint64_t curr_tick);
 
-  virtual void HandlePdu(CImPdu* pPdu);
+  virtual void HandlePdu(ttnetlib::CImPdu* pPdu);
 
  private:
-  void _HandleKickUser(CImPdu* pPdu);
-  void _HandleStatusNotify(CImPdu* pPdu);
-  void _HandleMsgReadNotify(CImPdu* pPdu);
-  void _HandleMsgData(CImPdu* pPdu);
-  void _HandleP2PMsg(CImPdu* pPdu);
-  void _HandleUsersStatusResponse(CImPdu* pPdu);
-  void _HandlePCLoginStatusNotify(CImPdu* pPdu);
-  void _HandleRemoveSessionNotify(CImPdu* pPdu);
-  void _HandleSignInfoChangedNotify(CImPdu* pPdu);
+  void _HandleKickUser(ttnetlib::CImPdu* pPdu);
+  void _HandleStatusNotify(ttnetlib::CImPdu* pPdu);
+  void _HandleMsgReadNotify(ttnetlib::CImPdu* pPdu);
+  void _HandleMsgData(ttnetlib::CImPdu* pPdu);
+  void _HandleP2PMsg(ttnetlib::CImPdu* pPdu);
+  void _HandleUsersStatusResponse(ttnetlib::CImPdu* pPdu);
+  void _HandlePCLoginStatusNotify(ttnetlib::CImPdu* pPdu);
+  void _HandleRemoveSessionNotify(ttnetlib::CImPdu* pPdu);
+  void _HandleSignInfoChangedNotify(ttnetlib::CImPdu* pPdu);
 
  private:
   bool m_bOpen;
@@ -46,9 +51,11 @@ class CRouteServConn : public CImConn {
   uint64_t m_connect_time;
 };
 
-void init_route_serv_conn(serv_info_t* server_list, uint32_t server_count);
+void init_route_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_count);
 bool is_route_server_available();
-void send_to_all_route_server(CImPdu* pPdu);
+void send_to_all_route_server(ttnetlib::CImPdu* pPdu);
 CRouteServConn* get_route_serv_conn();
 
-#endif /* ROUTESERVCONN_H_ */
+}  // namespace teamtalk::msg_server::connection
+
+#endif  // TEAMTALK_MSG_SERVER_CONNECTION_ROUTE_SERV_CONN_H_

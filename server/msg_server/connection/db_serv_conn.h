@@ -6,14 +6,20 @@
  brief:
 */
 
-#ifndef DBSERVCONN_H_
-#define DBSERVCONN_H_
+#ifndef TEAMTALK_MSG_SERVER_CONNECTION_DB_SERV_CONN_H_
+#define TEAMTALK_MSG_SERVER_CONNECTION_DB_SERV_CONN_H_
 
-#include "im_conn.h"
-#include "route_serv_conn.h"
-#include "serv_info.h"
+#include <teamtalk/imcore/netlib/core/im_conn.h>
+#include <teamtalk/sbase/server_info/server_info.h>
 
-class CDBServConn : public CImConn {
+#include "connection/route_serv_conn.h"
+
+namespace teamtalk::msg_server::connection {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttserverinfo = teamtalk::sbase::server_info;
+
+class CDBServConn : public ttnetlib::CImConn {
  public:
   CDBServConn();
   virtual ~CDBServConn();
@@ -27,37 +33,39 @@ class CDBServConn : public CImConn {
   virtual void OnClose();
   virtual void OnTimer(uint64_t curr_tick);
 
-  virtual void HandlePdu(CImPdu* pPdu);
+  virtual void HandlePdu(ttnetlib::CImPdu* pPdu);
 
  private:
-  void _HandleValidateResponse(CImPdu* pPdu);
-  void _HandleRecentSessionResponse(CImPdu* pPdu);
-  void _HandleAllUserResponse(CImPdu* pPdu);
-  void _HandleGetMsgListResponse(CImPdu* pPdu);
-  void _HandleGetMsgByIdResponse(CImPdu* pPdu);
-  void _HandleMsgData(CImPdu* pPdu);
-  void _HandleUnreadMsgCountResponse(CImPdu* pPdu);
-  void _HandleGetLatestMsgIDRsp(CImPdu* pPdu);
-  void _HandleDBWriteResponse(CImPdu* pPdu);
-  void _HandleUsersInfoResponse(CImPdu* pPdu);
-  void _HandleStopReceivePacket(CImPdu* pPdu);
-  void _HandleRemoveSessionResponse(CImPdu* pPdu);
-  void _HandleChangeAvatarResponse(CImPdu* pPdu);
-  void _HandleChangeSignInfoResponse(CImPdu* pPdu);
-  void _HandleSetDeviceTokenResponse(CImPdu* pPdu);
-  void _HandleGetDeviceTokenResponse(CImPdu* pPdu);
-  void _HandleDepartmentResponse(CImPdu* pPdu);
+  void _HandleValidateResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleRecentSessionResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleAllUserResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleGetMsgListResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleGetMsgByIdResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleMsgData(ttnetlib::CImPdu* pPdu);
+  void _HandleUnreadMsgCountResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleGetLatestMsgIDRsp(ttnetlib::CImPdu* pPdu);
+  void _HandleDBWriteResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleUsersInfoResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleStopReceivePacket(ttnetlib::CImPdu* pPdu);
+  void _HandleRemoveSessionResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleChangeAvatarResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleChangeSignInfoResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleSetDeviceTokenResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleGetDeviceTokenResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleDepartmentResponse(ttnetlib::CImPdu* pPdu);
 
-  void _HandlePushShieldResponse(CImPdu* pPdu);
-  void _HandleQueryPushShieldResponse(CImPdu* pPdu);
+  void _HandlePushShieldResponse(ttnetlib::CImPdu* pPdu);
+  void _HandleQueryPushShieldResponse(ttnetlib::CImPdu* pPdu);
 
  private:
   bool m_bOpen;
   uint32_t m_serv_idx;
 };
 
-void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count, uint32_t concur_conn_cnt);
+void init_db_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_count, uint32_t concur_conn_cnt);
 CDBServConn* get_db_serv_conn_for_login();
 CDBServConn* get_db_serv_conn();
 
-#endif
+}  // namespace teamtalk::msg_server::connection
+
+#endif  // TEAMTALK_MSG_SERVER_CONNECTION_DB_SERV_CONN_H_

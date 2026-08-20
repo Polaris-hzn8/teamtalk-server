@@ -91,31 +91,31 @@ int main(int argc, char* argv[]) {
   }
 
   // 监听客户端连接
-  for (const auto& ep : cfg.client_listen_endpoints()) {
-    ret = ttnetlib::netlib_listen(ep.first.c_str(), ep.second, client_callback, nullptr);
+  for (const auto& ip : cfg.client_listen_addresses()) {
+    ret = ttnetlib::netlib_listen(ip.c_str(), cfg.client_listen_port(), client_callback, nullptr);
     if (ret == ttnetlib::NETLIB_ERROR)
       return ret;
   }
 
   // 监听 msg_server
-  for (const auto& ep : cfg.msg_server_listen_endpoints()) {
-    ret = ttnetlib::netlib_listen(ep.first.c_str(), ep.second, msg_serv_callback, nullptr);
+  for (const auto& ip : cfg.msg_server_listen_addresses()) {
+    ret = ttnetlib::netlib_listen(ip.c_str(), cfg.msg_server_listen_port(), msg_serv_callback, nullptr);
     if (ret == ttnetlib::NETLIB_ERROR)
       return ret;
   }
 
   // 监听 HTTP连接
-  for (const auto& ep : cfg.http_listen_endpoints()) {
-    ret = ttnetlib::netlib_listen(ep.first.c_str(), ep.second, http_callback, nullptr);
+  for (const auto& ip : cfg.http_listen_addresses()) {
+    ret = ttnetlib::netlib_listen(ip.c_str(), cfg.http_listen_port(), http_callback, nullptr);
     if (ret == ttnetlib::NETLIB_ERROR)
       return ret;
   }
 
   log_info(
     "server start listen on:\nFor client %s:%d\nFor MsgServer: %s:%d\nFor http:%s:%d\n",
-    cfg.client_listen_endpoints().front().first.c_str(), cfg.client_listen_endpoints().front().second,
-    cfg.msg_server_listen_endpoints().front().first.c_str(), cfg.msg_server_listen_endpoints().front().second,
-    cfg.http_listen_endpoints().front().first.c_str(), cfg.http_listen_endpoints().front().second);
+    cfg.client_listen_addresses().front().c_str(), cfg.client_listen_port(),
+    cfg.msg_server_listen_addresses().front().c_str(), cfg.msg_server_listen_port(),
+    cfg.http_listen_addresses().front().c_str(), cfg.http_listen_port());
 
   // 初始化登录连接
   teamtalk::login_server::connection::init_login_conn();
