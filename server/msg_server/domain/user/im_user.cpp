@@ -7,6 +7,7 @@
 */
 
 #include <teamtalk/imcore/ttidl/login.pb.h>
+#include <teamtalk/imcore/slog/slog.h>
 
 #include "domain/user/im_user.h"
 #include "connection/msg_conn.h"
@@ -18,6 +19,7 @@ namespace teamtalk::msg_server::domain::user {
 
 namespace ttconnection = teamtalk::msg_server::connection;
 namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+namespace ttidllogin = teamtalk::imcore::ttidl::login;
 
 CImUser::CImUser(string user_name) {
   // log_info("ImUser, userId=%u\n", user_id);
@@ -127,13 +129,13 @@ void CImUser::HandleKickUser(ttconnection::CMsgConn* pConn, uint32_t reason) {
     ttconnection::CMsgConn* pConn = it->second;
     if (pConn) {
       log_info("kick service user, user_id=%u.", m_user_id);
-      IM::Login::IMKickUser msg;
+      ttidllogin::IMKickUser msg;
       msg.set_user_id(m_user_id);
       msg.set_kick_reason((ttidlbase::KickReasonType)reason);
       ttnetlib::CImPdu pdu;
       pdu.SetPBMsg(&msg);
-      pdu.SetServiceId(SID_LOGIN);
-      pdu.SetCommandId(CID_LOGIN_KICK_USER);
+      pdu.SetServiceId(ttidlbase::SID_LOGIN);
+      pdu.SetCommandId(ttidlbase::CID_LOGIN_KICK_USER);
       pConn->SendPdu(&pdu);
       pConn->SetKickOff();
       // pConn->Close();

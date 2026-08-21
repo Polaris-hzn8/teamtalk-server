@@ -6,9 +6,11 @@
  brief:
 */
 
+#include <teamtalk/imcore/common/tools.h>
 #include <teamtalk/sbase/version.h>
 #include <teamtalk/sbase/global_define.h>
 #include <teamtalk/imcore/netlib/core/netlib.h>
+#include <teamtalk/imcore/slog/slog.h>
 
 #include "common/server_config/server_config.h"
 #include "connection/msg_conn.h"
@@ -32,6 +34,8 @@ using teamtalk::msg_server::connection::init_route_serv_conn;
 using teamtalk::msg_server::connection::init_push_serv_conn;
 
 namespace ttserverinfo = teamtalk::sbase::server_info;
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttcommon = teamtalk::imcore::common;
 
 ttserverinfo::serv_info_t* to_serv_info_array(const std::vector<ServerEndpoint>& endpoints) {
   if (endpoints.empty()) {
@@ -47,9 +51,8 @@ ttserverinfo::serv_info_t* to_serv_info_array(const std::vector<ServerEndpoint>&
 
 }  // namespace
 
-// for client connect in
 void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
-  if (msg == NETLIB_MSG_CONNECT) {
+  if (msg == ttnetlib::NETLIB_MSG_CONNECT) {
     CMsgConn* pConn = new CMsgConn();
     pConn->OnConnect(handle);
   } else {
@@ -75,14 +78,13 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  int ret = netlib_init();
-  if (ret == NETLIB_ERROR)
+  int ret = ttnetlib::netlib_init();
+  if (ret == ttnetlib::NETLIB_ERROR)
     return ret;
 
-  // listen on all addresses
   for (const auto& addr : cfg.listen_addresses()) {
-    ret = netlib_listen(addr.c_str(), cfg.listen_port(), msg_serv_callback, NULL);
-    if (ret == NETLIB_ERROR)
+    ret = ttnetlib::netlib_listen(addr.c_str(), cfg.listen_port(), msg_serv_callback, NULL);
+    if (ret == ttnetlib::NETLIB_ERROR)
       return ret;
   }
 
@@ -118,8 +120,8 @@ int main(int argc, char* argv[]) {
 
   log_info("now enter the event loop...\n");
 
-  writePid();
-  netlib_eventloop();
+  ttcommon::write_pid();
+  ttnetlib::netlib_eventloop();
 
   return 0;
 }

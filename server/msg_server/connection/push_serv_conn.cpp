@@ -6,7 +6,9 @@
  brief:
 */
 
-#include <teamtalk/imcore/ttidl/ohter.pb.h>
+#include <teamtalk/imcore/common/tools.h>
+#include <teamtalk/imcore/slog/slog.h>
+#include <teamtalk/imcore/ttidl/other.pb.h>
 #include <teamtalk/imcore/ttidl/base_define.pb.h>
 
 #include "domain/user/im_user.h"
@@ -18,6 +20,8 @@ using namespace std;
 
 namespace ttuser = teamtalk::msg_server::domain::user;
 namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+namespace ttidlother = teamtalk::imcore::ttidl::other;
+namespace ttcommon = teamtalk::imcore::common;
 
 #define IOS_PUSH_FLASH_MAX_LENGTH 40
 
@@ -30,7 +34,7 @@ static uint32_t g_push_server_count = 0;  // 到PushServer的总连接数
 static void push_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
   CPushServConn* pConn = NULL;
-  uint64_t cur_time = get_tick_count();
+  uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_push_server_conn_map.begin(); it != g_push_server_conn_map.end();) {
     it_old = it;
@@ -53,7 +57,7 @@ void init_push_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server
 
   ttserverinfo::serv_init<CPushServConn>(g_push_server_list, g_push_server_count);
 
-  netlib_register_timer(push_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(push_server_conn_timer_callback, NULL, 1000);
 }
 
 void build_ios_push_flash(string& flash, uint32_t msg_type, uint32_t from_id) {
@@ -112,7 +116,7 @@ void CPushServConn::Connect(const char* server_ip, uint16_t server_port, uint32_
   // log_info("Connecting to Push Server %s:%d ", server_ip, server_port);
 
   m_serv_idx = serv_idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_push_server_conn_map);
+  m_handle = ttnetlib::netlib_connect(server_ip, server_port, ttnetlib::imconn_callback, (void*)&g_push_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_push_server_conn_map.insert(make_pair(m_handle, this));
@@ -126,7 +130,7 @@ void CPushServConn::Close() {
   m_bOpen = false;
   g_master_push_conn = NULL;
   if (m_handle != NETLIB_INVALID_HANDLE) {
-    netlib_close(m_handle);
+    ttnetlib::netlib_close(m_handle);
     g_push_server_conn_map.erase(m_handle);
   }
 
@@ -147,11 +151,11 @@ void CPushServConn::OnClose() {
 
 void CPushServConn::OnTimer(uint64_t curr_tick) {
   if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
-    IM::Other::IMHeartBeat msg;
+    ttidlother::IMHeartBeat msg;
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_HEARTBEAT);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_HEARTBEAT);
     SendPdu(&pdu);
   }
 
@@ -163,10 +167,10 @@ void CPushServConn::OnTimer(uint64_t curr_tick) {
 
 void CPushServConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
   switch (pPdu->GetCommandId()) {
-    case CID_OTHER_HEARTBEAT:
+    case ttidlbase::CID_OTHER_HEARTBEAT:
       // log_info("push server heart beat. ");
       break;
-    case CID_OTHER_PUSH_TO_USER_RSP:
+    case ttidlbase::CID_OTHER_PUSH_TO_USER_RSP:
       _HandlePushToUserResponse(pPdu);
       break;
     default:

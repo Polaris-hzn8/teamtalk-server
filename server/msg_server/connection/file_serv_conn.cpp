@@ -7,8 +7,9 @@
 */
 
 #include <teamtalk/imcore/common/tools.h>
+#include <teamtalk/imcore/slog/slog.h>
 #include <teamtalk/imcore/ttidl/file.pb.h>
-#include <teamtalk/imcore/ttidl/ohter.pb.h>
+#include <teamtalk/imcore/ttidl/other.pb.h>
 #include <teamtalk/imcore/ttidl/service.pb.h>
 
 #include "connection/msg_conn.h"
@@ -26,6 +27,10 @@ using namespace std;
 namespace ttuser = teamtalk::msg_server::domain::user;
 namespace ttfile_handler = teamtalk::msg_server::service::file_handler;
 namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+namespace ttidlserver = teamtalk::imcore::ttidl::service;
+namespace ttidlother = teamtalk::imcore::ttidl::other;
+namespace ttidlfile = teamtalk::imcore::ttidl::file;
+namespace ttcommon = teamtalk::imcore::common;
 
 static ttnetlib::ConnMap_t g_file_server_conn_map;
 
@@ -36,7 +41,7 @@ static ttfile_handler::CFileHandler* s_file_handler = NULL;
 void file_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
   CFileServConn* pConn = NULL;
-  uint64_t cur_time = get_tick_count();
+  uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_file_server_conn_map.begin(); it != g_file_server_conn_map.end();) {
     it_old = it;
@@ -55,7 +60,7 @@ void init_file_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server
 
   ttserverinfo::serv_init<CFileServConn>(g_file_server_list, g_file_server_count);
 
-  netlib_register_timer(file_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(file_server_conn_timer_callback, NULL, 1000);
   s_file_handler = ttfile_handler::CFileHandler::getInstance();
 }
 
@@ -105,7 +110,7 @@ void CFileServConn::Connect(const char* server_ip, uint16_t server_port, uint32_
   log_info("Connecting to FileServer %s:%d ", server_ip, server_port);
 
   m_serv_idx = idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_file_server_conn_map);
+  m_handle = ttnetlib::netlib_connect(server_ip, server_port, ttnetlib::imconn_callback, (void*)&g_file_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_file_server_conn_map.insert(make_pair(m_handle, this));
@@ -117,7 +122,7 @@ void CFileServConn::Close() {
 
   m_bOpen = false;
   if (m_handle != NETLIB_INVALID_HANDLE) {
-    netlib_close(m_handle);
+    ttnetlib::netlib_close(m_handle);
     g_file_server_conn_map.erase(m_handle);
   }
 
@@ -127,14 +132,14 @@ void CFileServConn::Close() {
 void CFileServConn::OnConfirm() {
   log_info("connect to file server success ");
   m_bOpen = true;
-  m_connect_time = get_tick_count();
+  m_connect_time = ttcommon::get_tick_count();
   g_file_server_list[m_serv_idx].reconnect_cnt = MIN_RECONNECT_CNT / 2;
 
-  IM::Server::IMFileServerIPReq msg;
+  ttidlserver::IMFileServerIPReq msg;
   ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg);
-  pdu.SetServiceId(SID_OTHER);
-  pdu.SetCommandId(CID_OTHER_FILE_SERVER_IP_REQ);
+  pdu.SetServiceId(ttidlbase::SID_OTHER);
+  pdu.SetCommandId(ttidlbase::CID_OTHER_FILE_SERVER_IP_REQ);
   SendPdu(&pdu);
 }
 
@@ -145,11 +150,11 @@ void CFileServConn::OnClose() {
 
 void CFileServConn::OnTimer(uint64_t curr_tick) {
   if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
-    IM::Other::IMHeartBeat msg;
+    ttidlother::IMHeartBeat msg;
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_HEARTBEAT);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_HEARTBEAT);
     SendPdu(&pdu);
   }
 
@@ -161,12 +166,12 @@ void CFileServConn::OnTimer(uint64_t curr_tick) {
 
 void CFileServConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
   switch (pPdu->GetCommandId()) {
-    case CID_OTHER_HEARTBEAT:
+    case ttidlbase::CID_OTHER_HEARTBEAT:
       break;
-    case CID_OTHER_FILE_TRANSFER_RSP:
+    case ttidlbase::CID_OTHER_FILE_TRANSFER_RSP:
       _HandleFileMsgTransRsp(pPdu);
       break;
-    case CID_OTHER_FILE_SERVER_IP_RSP:
+    case ttidlbase::CID_OTHER_FILE_SERVER_IP_RSP:
       _HandleFileServerIPRsp(pPdu);
       break;
     default:
@@ -176,7 +181,7 @@ void CFileServConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
 }
 
 void CFileServConn::_HandleFileMsgTransRsp(ttnetlib::CImPdu* pPdu) {
-  IM::Server::IMFileTransferRsp msg;
+  ttidlserver::IMFileTransferRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t result = msg.result_code();
@@ -199,7 +204,7 @@ void CFileServConn::_HandleFileMsgTransRsp(ttnetlib::CImPdu* pPdu) {
 
   const list<ttidlbase::IpAddr>* ip_addr_list = GetFileServerIPList();
 
-  IM::File::IMFileRsp msg2;
+  ttidlfile::IMFileRsp msg2;
   msg2.set_result_code(result);
   msg2.set_from_user_id(from_id);
   msg2.set_to_user_id(to_id);
@@ -214,8 +219,8 @@ void CFileServConn::_HandleFileMsgTransRsp(ttnetlib::CImPdu* pPdu) {
   }
   ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg2);
-  pdu.SetServiceId(SID_FILE);
-  pdu.SetCommandId(CID_FILE_RESPONSE);
+  pdu.SetServiceId(ttidlbase::SID_FILE);
+  pdu.SetCommandId(ttidlbase::CID_FILE_RESPONSE);
   pdu.SetSeqNum(pPdu->GetSeqNum());
   uint32_t handle = attach.GetHandle();
 
@@ -225,7 +230,7 @@ void CFileServConn::_HandleFileMsgTransRsp(ttnetlib::CImPdu* pPdu) {
   }
 
   if (result == 0) {
-    IM::File::IMFileNotify msg3;
+    ttidlfile::IMFileNotify msg3;
     msg3.set_from_user_id(from_id);
     msg3.set_to_user_id(to_id);
     msg3.set_file_name(file_name);
@@ -241,8 +246,8 @@ void CFileServConn::_HandleFileMsgTransRsp(ttnetlib::CImPdu* pPdu) {
     }
     ttnetlib::CImPdu pdu2;
     pdu2.SetPBMsg(&msg3);
-    pdu2.SetServiceId(SID_FILE);
-    pdu2.SetCommandId(CID_FILE_NOTIFY);
+    pdu2.SetServiceId(ttidlbase::SID_FILE);
+    pdu2.SetCommandId(ttidlbase::CID_FILE_NOTIFY);
 
     // send notify to target user
     ttuser::CImUser* pToUser = ttuser::CImUserManager::GetInstance()->GetImUserById(to_id);
@@ -259,7 +264,7 @@ void CFileServConn::_HandleFileMsgTransRsp(ttnetlib::CImPdu* pPdu) {
 }
 
 void CFileServConn::_HandleFileServerIPRsp(ttnetlib::CImPdu* pPdu) {
-  IM::Server::IMFileServerIPRsp msg;
+  ttidlserver::IMFileServerIPRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   uint32_t ip_addr_cnt = msg.ip_addr_list_size();
 

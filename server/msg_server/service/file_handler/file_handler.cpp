@@ -9,6 +9,7 @@
 #include <teamtalk/imcore/ttidl/file.pb.h>
 #include <teamtalk/imcore/ttidl/buddy.pb.h>
 #include <teamtalk/imcore/ttidl/service.pb.h>
+#include <teamtalk/imcore/slog/slog.h>
 
 #include "connection/msg_conn.h"
 #include "connection/attach_data.h"
@@ -26,6 +27,9 @@ namespace teamtalk::msg_server::service::file_handler {
 namespace ttconnection = teamtalk::msg_server::connection;
 namespace ttuser = teamtalk::msg_server::domain::user;
 namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+namespace ttidlfile = teamtalk::imcore::ttidl::file;
+namespace ttidlserver = teamtalk::imcore::ttidl::service;
+namespace ttidlbuddy = teamtalk::imcore::ttidl::buddy;
 
 CFileHandler* CFileHandler::s_handler_instance = NULL;
 
@@ -36,7 +40,7 @@ CFileHandler* CFileHandler::getInstance() {
 }
 
 void CFileHandler::HandleClientFileRequest(ttconnection::CMsgConn* pMsgConn, ttnetlib::CImPdu* pPdu) {
-  IM::File::IMFileReq msg;
+  ttidlfile::IMFileReq msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t from_id = pMsgConn->GetUserId();
@@ -47,10 +51,10 @@ void CFileHandler::HandleClientFileRequest(ttconnection::CMsgConn* pMsgConn, ttn
   log_info(
     "HandleClientFileRequest, %u->%u, fileName: %s, trans_mode: %u.", from_id, to_id, file_name.c_str(), trans_mode);
 
-  ttconnection::CDbAttachData attach(ATTACH_TYPE_HANDLE, pMsgConn->GetHandle());
+  ttconnection::CDbAttachData attach(ttconnection::ATTACH_TYPE_HANDLE, pMsgConn->GetHandle());
   ttconnection::CFileServConn* pFileConn = ttconnection::get_random_file_serv_conn();
   if (pFileConn) {
-    IM::Server::IMFileTransferReq msg2;
+    ttidlserver::IMFileTransferReq msg2;
     msg2.set_from_user_id(from_id);
     msg2.set_to_user_id(to_id);
     msg2.set_file_name(file_name);
@@ -59,31 +63,31 @@ void CFileHandler::HandleClientFileRequest(ttconnection::CMsgConn* pMsgConn, ttn
     msg2.set_attach_data(attach.GetBuffer(), attach.GetLength());
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_FILE_TRANSFER_REQ);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_FILE_TRANSFER_REQ);
     pdu.SetSeqNum(pPdu->GetSeqNum());
 
     if (ttidlbase::FILE_TYPE_OFFLINE == trans_mode) {
       pFileConn->SendPdu(&pdu);
-    } else  // ttidlbase::FILE_TYPE_ONLINE
-    {
+    } else {
+      // ttidlbase::FILE_TYPE_ONLINE
       ttuser::CImUser* pUser = ttuser::CImUserManager::GetInstance()->GetImUserById(to_id);
       if (pUser && pUser->GetPCLoginStatus())  // 已有对应的账号pc登录状态
       {
         pFileConn->SendPdu(&pdu);
-      } else  // 无对应用户的pc登录状态,向route_server查询状态
-      {
+      } else {
+        // 无对应用户的pc登录状态,向route_server查询状态
         // no pc_client in this msg_server, check it from route_server
         ttconnection::CPduAttachData attach_data(
           ATTACH_TYPE_HANDLE_AND_PDU_FOR_FILE, pMsgConn->GetHandle(), pdu.GetBodyLength(), pdu.GetBodyData());
-        IM::Buddy::IMUsersStatReq msg3;
+        ttidlbuddy::IMUsersStatReq msg3;
         msg3.set_user_id(from_id);
         msg3.add_user_id_list(to_id);
         msg3.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
         ttnetlib::CImPdu pdu2;
         pdu2.SetPBMsg(&msg3);
-        pdu2.SetServiceId(SID_BUDDY_LIST);
-        pdu2.SetCommandId(CID_BUDDY_LIST_USERS_STATUS_REQUEST);
+        pdu2.SetServiceId(ttidlbase::SID_BUDDY_LIST);
+        pdu2.SetCommandId(ttidlbase::CID_BUDDY_LIST_USERS_STATUS_REQUEST);
         pdu2.SetSeqNum(pPdu->GetSeqNum());
         ttconnection::CRouteServConn* route_conn = ttconnection::get_route_serv_conn();
         if (route_conn) {
@@ -93,7 +97,7 @@ void CFileHandler::HandleClientFileRequest(ttconnection::CMsgConn* pMsgConn, ttn
     }
   } else {
     log_info("HandleClientFileRequest, no file server.   ");
-    IM::File::IMFileRsp msg2;
+    ttidlfile::IMFileRsp msg2;
     msg2.set_result_code(1);
     msg2.set_from_user_id(from_id);
     msg2.set_to_user_id(to_id);
@@ -102,8 +106,8 @@ void CFileHandler::HandleClientFileRequest(ttconnection::CMsgConn* pMsgConn, ttn
     msg2.set_trans_mode((ttidlbase::TransferFileType)trans_mode);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_FILE);
-    pdu.SetCommandId(CID_FILE_RESPONSE);
+    pdu.SetServiceId(ttidlbase::SID_FILE);
+    pdu.SetCommandId(ttidlbase::CID_FILE_RESPONSE);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pMsgConn->SendPdu(&pdu);
   }
@@ -113,10 +117,10 @@ void CFileHandler::HandleClientFileHasOfflineReq(ttconnection::CMsgConn* pMsgCon
   uint32_t req_user_id = pMsgConn->GetUserId();
   log_info("HandleClientFileHasOfflineReq, req_id=%u   ", req_user_id);
 
-  ttconnection::CDbAttachData attach_data(ATTACH_TYPE_HANDLE, pMsgConn->GetHandle(), 0);
+  ttconnection::CDbAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE, pMsgConn->GetHandle(), 0);
   ttconnection::CDBServConn* pDbConn = ttconnection::get_db_serv_conn();
   if (pDbConn) {
-    IM::File::IMFileHasOfflineReq msg;
+    ttidlfile::IMFileHasOfflineReq msg;
     CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
     msg.set_user_id(req_user_id);
     msg.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
@@ -124,19 +128,19 @@ void CFileHandler::HandleClientFileHasOfflineReq(ttconnection::CMsgConn* pMsgCon
     pDbConn->SendPdu(pPdu);
   } else {
     log_info("warning no DB connection available ");
-    IM::File::IMFileHasOfflineRsp msg;
+    ttidlfile::IMFileHasOfflineRsp msg;
     msg.set_user_id(req_user_id);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(SID_FILE);
-    pdu.SetCommandId(CID_FILE_HAS_OFFLINE_RES);
+    pdu.SetServiceId(ttidlbase::SID_FILE);
+    pdu.SetCommandId(ttidlbase::CID_FILE_HAS_OFFLINE_RES);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pMsgConn->SendPdu(&pdu);
   }
 }
 
 void CFileHandler::HandleClientFileAddOfflineReq(ttconnection::CMsgConn* pMsgConn, ttnetlib::CImPdu* pPdu) {
-  IM::File::IMFileAddOfflineReq msg;
+  ttidlfile::IMFileAddOfflineReq msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t from_id = pMsgConn->GetUserId();
@@ -164,7 +168,7 @@ void CFileHandler::HandleClientFileAddOfflineReq(ttconnection::CMsgConn* pMsgCon
   if (pFileConn) {
     const list<ttidlbase::IpAddr>* file_addr_list = pFileConn->GetFileServerIPList();
 
-    IM::File::IMFileNotify msg2;
+    ttidlfile::IMFileNotify msg2;
     msg2.set_from_user_id(from_id);
     msg2.set_to_user_id(to_id);
     msg2.set_file_name(file_name);
@@ -180,8 +184,8 @@ void CFileHandler::HandleClientFileAddOfflineReq(ttconnection::CMsgConn* pMsgCon
     }
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_FILE);
-    pdu.SetCommandId(CID_FILE_NOTIFY);
+    pdu.SetServiceId(ttidlbase::SID_FILE);
+    pdu.SetCommandId(ttidlbase::CID_FILE_NOTIFY);
 
     ttuser::CImUser* pUser = ttuser::CImUserManager::GetInstance()->GetImUserById(to_id);
     if (pUser) {
@@ -196,7 +200,7 @@ void CFileHandler::HandleClientFileAddOfflineReq(ttconnection::CMsgConn* pMsgCon
 }
 
 void CFileHandler::HandleClientFileDelOfflineReq(ttconnection::CMsgConn* pMsgConn, ttnetlib::CImPdu* pPdu) {
-  IM::File::IMFileDelOfflineReq msg;
+  ttidlfile::IMFileDelOfflineReq msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t from_id = msg.from_user_id();
@@ -213,7 +217,7 @@ void CFileHandler::HandleClientFileDelOfflineReq(ttconnection::CMsgConn* pMsgCon
 }
 
 void CFileHandler::HandleFileHasOfflineRes(ttnetlib::CImPdu* pPdu) {
-  IM::File::IMFileHasOfflineRsp msg;
+  ttidlfile::IMFileHasOfflineRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t req_user_id = msg.user_id();
@@ -242,7 +246,7 @@ void CFileHandler::HandleFileHasOfflineRes(ttnetlib::CImPdu* pPdu) {
 }
 
 void CFileHandler::HandleFileNotify(ttnetlib::CImPdu* pPdu) {
-  IM::File::IMFileNotify msg;
+  ttidlfile::IMFileNotify msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t from_user_id = msg.from_user_id();

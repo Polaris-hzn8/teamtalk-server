@@ -7,7 +7,9 @@
 */
 
 #include <json/json.h>
+#include <teamtalk/imcore/common/tools.h>
 #include <teamtalk/imcore/security/security.h>
+#include <teamtalk/imcore/slog/slog.h>
 #include <teamtalk/imcore/netlib/core/im_pdu.h>
 
 #include <teamtalk/imcore/ttidl/buddy.pb.h>
@@ -41,6 +43,8 @@ namespace ttidllogin = teamtalk::imcore::ttidl::login;
 namespace ttidlother = teamtalk::imcore::ttidl::other;
 namespace ttidlmessage = teamtalk::imcore::ttidl::message;
 namespace ttidlbuddy = teamtalk::imcore::ttidl::buddy;
+namespace ttsecurity = teamtalk::imcore::security;
+namespace ttcommon = teamtalk::imcore::common;
 
 static ttnetlib::ConnMap_t g_db_server_conn_map;
 
@@ -50,12 +54,10 @@ static uint32_t g_db_server_login_count = 0;  // 到进行登录处理的DBServe
 static ttchat_handler::CGroupChat* s_group_chat = NULL;
 static ttfile_handler::CFileHandler* s_file_handler = NULL;
 
-CAes* pAes = new CAes(str_aes_key);
-
 static void db_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
   CDBServConn* pConn = NULL;
-  uint64_t cur_time = get_tick_count();
+  uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_db_server_conn_map.begin(); it != g_db_server_conn_map.end();) {
     it_old = it;
@@ -87,7 +89,7 @@ void init_db_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_c
 
   ttserverinfo::serv_init<CDBServConn>(g_db_server_list, g_db_server_count);
 
-  netlib_register_timer(db_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(db_server_conn_timer_callback, NULL, 1000);
   s_group_chat = ttchat_handler::CGroupChat::GetInstance();
   s_file_handler = ttfile_handler::CFileHandler::getInstance();
 }
@@ -152,7 +154,7 @@ void CDBServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t 
   log_info("Connecting to DB Storage Server %s:%d ", server_ip, server_port);
 
   m_serv_idx = serv_idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_db_server_conn_map);
+  m_handle = ttnetlib::netlib_connect(server_ip, server_port, ttnetlib::imconn_callback, (void*)&g_db_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_db_server_conn_map.insert(make_pair(m_handle, this));
@@ -164,7 +166,7 @@ void CDBServConn::Close() {
   ttserverinfo::serv_reset<CDBServConn>(g_db_server_list, g_db_server_count, m_serv_idx);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
-    netlib_close(m_handle);
+    ttnetlib::netlib_close(m_handle);
     g_db_server_conn_map.erase(m_handle);
   }
 
@@ -187,8 +189,8 @@ void CDBServConn::OnTimer(uint64_t curr_tick) {
     ttidlother::IMHeartBeat msg;
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_HEARTBEAT);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_HEARTBEAT);
     SendPdu(&pdu);
   }
 
@@ -200,83 +202,83 @@ void CDBServConn::OnTimer(uint64_t curr_tick) {
 
 void CDBServConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
   switch (pPdu->GetCommandId()) {
-    case CID_OTHER_HEARTBEAT:
+    case ttidlbase::CID_OTHER_HEARTBEAT:
       break;
-    case CID_OTHER_VALIDATE_RSP:
+    case ttidlbase::CID_OTHER_VALIDATE_RSP:
       _HandleValidateResponse(pPdu);
       break;
-    case CID_LOGIN_RES_DEVICETOKEN:
+    case ttidlbase::CID_LOGIN_RES_DEVICETOKEN:
       _HandleSetDeviceTokenResponse(pPdu);
       break;
-    case CID_LOGIN_RES_PUSH_SHIELD:
+    case ttidlbase::CID_LOGIN_RES_PUSH_SHIELD:
       _HandlePushShieldResponse(pPdu);
       break;
-    case CID_LOGIN_RES_QUERY_PUSH_SHIELD:
+    case ttidlbase::CID_LOGIN_RES_QUERY_PUSH_SHIELD:
       _HandleQueryPushShieldResponse(pPdu);
       break;
-    case CID_MSG_UNREAD_CNT_RESPONSE:
+    case ttidlbase::CID_MSG_UNREAD_CNT_RESPONSE:
       _HandleUnreadMsgCountResponse(pPdu);
       break;
-    case CID_MSG_LIST_RESPONSE:
+    case ttidlbase::CID_MSG_LIST_RESPONSE:
       _HandleGetMsgListResponse(pPdu);
       break;
-    case CID_MSG_GET_BY_MSG_ID_RES:
+    case ttidlbase::CID_MSG_GET_BY_MSG_ID_RES:
       _HandleGetMsgByIdResponse(pPdu);
       break;
-    case CID_MSG_DATA:
+    case ttidlbase::CID_MSG_DATA:
       _HandleMsgData(pPdu);
       break;
-    case CID_MSG_GET_LATEST_MSG_ID_RSP:
+    case ttidlbase::CID_MSG_GET_LATEST_MSG_ID_RSP:
       _HandleGetLatestMsgIDRsp(pPdu);
       break;
-    case CID_BUDDY_LIST_RECENT_CONTACT_SESSION_RESPONSE:
+    case ttidlbase::CID_BUDDY_LIST_RECENT_CONTACT_SESSION_RESPONSE:
       _HandleRecentSessionResponse(pPdu);
       break;
-    case CID_BUDDY_LIST_ALL_USER_RESPONSE:
+    case ttidlbase::CID_BUDDY_LIST_ALL_USER_RESPONSE:
       _HandleAllUserResponse(pPdu);
       break;
-    case CID_BUDDY_LIST_USER_INFO_RESPONSE:
+    case ttidlbase::CID_BUDDY_LIST_USER_INFO_RESPONSE:
       _HandleUsersInfoResponse(pPdu);
       break;
-    case CID_BUDDY_LIST_REMOVE_SESSION_RES:
+    case ttidlbase::CID_BUDDY_LIST_REMOVE_SESSION_RES:
       _HandleRemoveSessionResponse(pPdu);
       break;
-    case CID_BUDDY_LIST_CHANGE_AVATAR_RESPONSE:
+    case ttidlbase::CID_BUDDY_LIST_CHANGE_AVATAR_RESPONSE:
       _HandleChangeAvatarResponse(pPdu);
       break;
-    case CID_BUDDY_LIST_CHANGE_SIGN_INFO_RESPONSE:
+    case ttidlbase::CID_BUDDY_LIST_CHANGE_SIGN_INFO_RESPONSE:
       _HandleChangeSignInfoResponse(pPdu);
       break;
-    case CID_BUDDY_LIST_DEPARTMENT_RESPONSE:
+    case ttidlbase::CID_BUDDY_LIST_DEPARTMENT_RESPONSE:
       _HandleDepartmentResponse(pPdu);
       break;
-    case CID_OTHER_GET_DEVICE_TOKEN_RSP:
+    case ttidlbase::CID_OTHER_GET_DEVICE_TOKEN_RSP:
       _HandleGetDeviceTokenResponse(pPdu);
       break;
-    case CID_OTHER_GET_SHIELD_RSP:
+    case ttidlbase::CID_OTHER_GET_SHIELD_RSP:
       s_group_chat->HandleGroupGetShieldByGroupResponse(pPdu);
       break;
-    case CID_OTHER_STOP_RECV_PACKET:
+    case ttidlbase::CID_OTHER_STOP_RECV_PACKET:
       _HandleStopReceivePacket(pPdu);
       break;
     // group
-    case CID_GROUP_NORMAL_LIST_RESPONSE:
+    case ttidlbase::CID_GROUP_NORMAL_LIST_RESPONSE:
       s_group_chat->HandleGroupNormalResponse(pPdu);
       break;
-    case CID_GROUP_INFO_RESPONSE:
+    case ttidlbase::CID_GROUP_INFO_RESPONSE:
       s_group_chat->HandleGroupInfoResponse(pPdu);
       break;
-    case CID_GROUP_CREATE_RESPONSE:
+    case ttidlbase::CID_GROUP_CREATE_RESPONSE:
       s_group_chat->HandleGroupCreateResponse(pPdu);
       break;
-    case CID_GROUP_CHANGE_MEMBER_RESPONSE:
+    case ttidlbase::CID_GROUP_CHANGE_MEMBER_RESPONSE:
       s_group_chat->HandleGroupChangeMemberResponse(pPdu);
       break;
-    case CID_GROUP_SHIELD_GROUP_RESPONSE:
+    case ttidlbase::CID_GROUP_SHIELD_GROUP_RESPONSE:
       s_group_chat->HandleGroupShieldGroupResponse(pPdu);
       break;
 
-    case CID_FILE_HAS_OFFLINE_RES:
+    case ttidlbase::CID_FILE_HAS_OFFLINE_RES:
       s_file_handler->HandleFileHasOfflineRes(pPdu);
       break;
 
@@ -357,12 +359,12 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
     if (pRouteConn) {
       ttidlserver::IMServerKickUser msg2;
       msg2.set_user_id(user_id);
-      msg2.set_client_type((::ttidlbase::ClientType)pMsgConn->GetClientType());
+      msg2.set_client_type((ttidlbase::ClientType)pMsgConn->GetClientType());
       msg2.set_reason(1);
       ttnetlib::CImPdu pdu;
       pdu.SetPBMsg(&msg2);
-      pdu.SetServiceId(SID_OTHER);
-      pdu.SetCommandId(CID_OTHER_SERVER_KICK_USER);  //踢出用户的消息
+      pdu.SetServiceId(ttidlbase::SID_OTHER);
+      pdu.SetCommandId(ttidlbase::CID_OTHER_SERVER_KICK_USER);  //踢出用户的消息
       pRouteConn->SendPdu(&pdu);
     }
     log_info("user_name: %s, uid: %d", login_name.c_str(), user_id);
@@ -395,8 +397,8 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
     // 5-6.构造登录响应消息Pdu pdu2，设置相关字段
     ttnetlib::CImPdu pdu2;
     pdu2.SetPBMsg(&msg3);                        //消息体
-    pdu2.SetServiceId(SID_LOGIN);                // service_id
-    pdu2.SetCommandId(CID_LOGIN_RES_USERLOGIN);  //新的command_id CID_LOGIN_RES_USERLOGIN
+    pdu2.SetServiceId(ttidlbase::SID_LOGIN);                // service_id
+    pdu2.SetCommandId(ttidlbase::CID_LOGIN_RES_USERLOGIN);  //新的command_id ttidlbase::CID_LOGIN_RES_USERLOGIN
     pdu2.SetSeqNum(pPdu->GetSeqNum());           //设置消息序号
 
     // 5-7.发送登录响应消息给客户端
@@ -412,8 +414,8 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
     // 6-2.构造登录响应消息Pdu pdu2，设置相关字段
     ttnetlib::CImPdu pdu3;
     pdu3.SetPBMsg(&msg4);                        //消息体
-    pdu3.SetServiceId(SID_LOGIN);                // service_id
-    pdu3.SetCommandId(CID_LOGIN_RES_USERLOGIN);  // command_id CID_LOGIN_RES_USERLOGIN
+    pdu3.SetServiceId(ttidlbase::SID_LOGIN);                // service_id
+    pdu3.SetCommandId(ttidlbase::CID_LOGIN_RES_USERLOGIN);  // command_id ttidlbase::CID_LOGIN_RES_USERLOGIN
     pdu3.SetSeqNum(pPdu->GetSeqNum());
     pMsgConn->SendPdu(&pdu3);
 
@@ -423,7 +425,7 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CDBServConn::_HandleRecentSessionResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Buddy::IMRecentContactSessionRsp msg;
+  ttidlbuddy::IMRecentContactSessionRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   uint32_t user_id = msg.user_id();
   uint32_t session_cnt = msg.contact_session_list_size();
@@ -442,7 +444,7 @@ void CDBServConn::_HandleRecentSessionResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CDBServConn::_HandleAllUserResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Buddy::IMAllUserRsp msg;
+  ttidlbuddy::IMAllUserRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
@@ -547,11 +549,11 @@ void CDBServConn::_HandleMsgData(ttnetlib::CImPdu* pPdu) {
     msg2.set_user_id(from_user_id);
     msg2.set_msg_id(msg_id);
     msg2.set_session_id(to_user_id);
-    msg2.set_session_type(::ttidlbase::SESSION_TYPE_SINGLE);
+    msg2.set_session_type(ttidlbase::SESSION_TYPE_SINGLE);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_MSG);
-    pdu.SetCommandId(CID_MSG_DATA_ACK);
+    pdu.SetServiceId(ttidlbase::SID_MSG);
+    pdu.SetCommandId(ttidlbase::CID_MSG_DATA_ACK);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pMsgConn->SendPdu(&pdu);
   }
@@ -579,8 +581,8 @@ void CDBServConn::_HandleMsgData(ttnetlib::CImPdu* pPdu) {
   msg3.set_attach_data(pPdu->GetBodyData(), pPdu->GetBodyLength());
   ttnetlib::CImPdu pdu2;
   pdu2.SetPBMsg(&msg3);
-  pdu2.SetServiceId(SID_OTHER);
-  pdu2.SetCommandId(CID_OTHER_GET_DEVICE_TOKEN_REQ);
+  pdu2.SetServiceId(ttidlbase::SID_OTHER);
+  pdu2.SetCommandId(ttidlbase::CID_OTHER_GET_DEVICE_TOKEN_REQ);
   SendPdu(&pdu2);
 }
 
@@ -633,7 +635,7 @@ void CDBServConn::_HandleUnreadMsgCountResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CDBServConn::_HandleUsersInfoResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Buddy::IMUsersInfoRsp msg;
+  ttidlbuddy::IMUsersInfoRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
@@ -660,7 +662,7 @@ void CDBServConn::_HandleStopReceivePacket(ttnetlib::CImPdu* pPdu) {
 }
 
 void CDBServConn::_HandleRemoveSessionResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Buddy::IMRemoveSessionRsp msg;
+  ttidlbuddy::IMRemoveSessionRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
@@ -684,7 +686,7 @@ void CDBServConn::_HandleRemoveSessionResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CDBServConn::_HandleChangeAvatarResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Buddy::IMChangeAvatarRsp msg;
+  ttidlbuddy::IMChangeAvatarRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
@@ -702,9 +704,9 @@ void CDBServConn::_HandleChangeAvatarResponse(ttnetlib::CImPdu* pPdu) {
 
 //处理部门信息的响应
 void CDBServConn::_HandleDepartmentResponse(ttnetlib::CImPdu* pPdu) {
-  // 1.解析收到的部门信息响应消息，将消息内容存储在 IM::Buddy::IMDepartmentRsp
+  // 1.解析收到的部门信息响应消息，将消息内容存储在 ttidlbuddy::IMDepartmentRsp
   // 类型的 msg 对象中
-  IM::Buddy::IMDepartmentRsp msg;
+  ttidlbuddy::IMDepartmentRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   // 2.获取用户ID、最新更新时间和部门数量等信息
@@ -758,7 +760,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(ttnetlib::CImPdu* pPdu) {
     // msg_data =
     char* msg_out = NULL;
     uint32_t msg_out_len = 0;
-    if (pAes->Decrypt(msg_data.c_str(), msg_data.length(), &msg_out, msg_out_len) == 0) {
+    if (ttsecurity::DecryptMsg(msg_data.c_str(), msg_data.length(), &msg_out, msg_out_len) == 0) {
       msg_data = string(msg_out, msg_out_len);
     } else {
       log_info(
@@ -769,7 +771,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(ttnetlib::CImPdu* pPdu) {
         msg_type);
       return;
     }
-    pAes->Free(msg_out);
+    ttsecurity::Free(msg_out);
   }
 
   build_ios_push_flash(msg_data, msg2.msg_type(), from_id);
@@ -841,18 +843,18 @@ void CDBServConn::_HandleGetDeviceTokenResponse(ttnetlib::CImPdu* pPdu) {
       user_token_tmp->set_push_type(IM_PUSH_TYPE_NORMAL);
       ttnetlib::CImPdu pdu;
       pdu.SetPBMsg(&msg4);
-      pdu.SetServiceId(SID_OTHER);
-      pdu.SetCommandId(CID_OTHER_PUSH_TO_USER_REQ);
+      pdu.SetServiceId(ttidlbase::SID_OTHER);
+      pdu.SetCommandId(ttidlbase::CID_OTHER_PUSH_TO_USER_REQ);
 
       CPduAttachData attach_data(ATTACH_TYPE_PDU_FOR_PUSH, 0, pdu.GetBodyLength(), pdu.GetBodyData());
-      IM::Buddy::IMUsersStatReq msg5;
+      ttidlbuddy::IMUsersStatReq msg5;
       msg5.set_user_id(0);
       msg5.add_user_id_list(user_id);
       msg5.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
       ttnetlib::CImPdu pdu2;
       pdu2.SetPBMsg(&msg5);
-      pdu2.SetServiceId(SID_BUDDY_LIST);
-      pdu2.SetCommandId(CID_BUDDY_LIST_USERS_STATUS_REQUEST);
+      pdu2.SetServiceId(ttidlbase::SID_BUDDY_LIST);
+      pdu2.SetCommandId(ttidlbase::CID_BUDDY_LIST_USERS_STATUS_REQUEST);
       CRouteServConn* route_conn = get_route_serv_conn();
       if (route_conn) {
         route_conn->SendPdu(&pdu2);
@@ -863,8 +865,8 @@ void CDBServConn::_HandleGetDeviceTokenResponse(ttnetlib::CImPdu* pPdu) {
   if (msg3.user_token_list_size() > 0) {
     ttnetlib::CImPdu pdu3;
     pdu3.SetPBMsg(&msg3);
-    pdu3.SetServiceId(SID_OTHER);
-    pdu3.SetCommandId(CID_OTHER_PUSH_TO_USER_REQ);
+    pdu3.SetServiceId(ttidlbase::SID_OTHER);
+    pdu3.SetCommandId(ttidlbase::CID_OTHER_PUSH_TO_USER_REQ);
 
     CPushServConn* PushConn = get_push_serv_conn();
     if (PushConn) {
@@ -874,7 +876,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CDBServConn::_HandleChangeSignInfoResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Buddy::IMChangeSignInfoRsp msg;
+  ttidlbuddy::IMChangeSignInfoRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
@@ -902,14 +904,14 @@ void CDBServConn::_HandleChangeSignInfoResponse(ttnetlib::CImPdu* pPdu) {
   if (!result) {
     CRouteServConn* route_conn = get_route_serv_conn();
     if (route_conn) {
-      IM::Buddy::IMSignInfoChangedNotify notify_msg;
+      ttidlbuddy::IMSignInfoChangedNotify notify_msg;
       notify_msg.set_changed_user_id(user_id);
       notify_msg.set_sign_info(msg.sign_info());
 
       ttnetlib::CImPdu notify_pdu;
       notify_pdu.SetPBMsg(&notify_msg);
-      notify_pdu.SetServiceId(SID_BUDDY_LIST);
-      notify_pdu.SetCommandId(CID_BUDDY_LIST_SIGN_INFO_CHANGED_NOTIFY);
+      notify_pdu.SetServiceId(ttidlbase::SID_BUDDY_LIST);
+      notify_pdu.SetCommandId(ttidlbase::CID_BUDDY_LIST_SIGN_INFO_CHANGED_NOTIFY);
 
       route_conn->SendPdu(&notify_pdu);
     } else {

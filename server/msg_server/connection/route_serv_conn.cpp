@@ -6,6 +6,8 @@
  brief:
 */
 
+#include <teamtalk/imcore/common/tools.h>
+#include <teamtalk/imcore/slog/slog.h>
 #include <teamtalk/imcore/ttidl/service.pb.h>
 #include <teamtalk/imcore/ttidl/buddy.pb.h>
 #include <teamtalk/imcore/ttidl/file.pb.h>
@@ -39,6 +41,7 @@ namespace ttidlmessage = teamtalk::imcore::ttidl::message;
 namespace ttidlbuddy = teamtalk::imcore::ttidl::buddy;
 namespace ttidlfile = teamtalk::imcore::ttidl::file;
 namespace ttidlswitchservice = teamtalk::imcore::ttidl::switch_service;
+namespace ttcommon = teamtalk::imcore::common;
 
 static ttnetlib::ConnMap_t g_route_server_conn_map;
 
@@ -51,7 +54,7 @@ static ttchat_handler::CGroupChat* s_group_chat = NULL;
 void route_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
   CRouteServConn* pConn = NULL;
-  uint64_t cur_time = get_tick_count();
+  uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_route_server_conn_map.begin(); it != g_route_server_conn_map.end();) {
     it_old = it;
@@ -71,7 +74,7 @@ void init_route_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t serve
 
   ttserverinfo::serv_init<CRouteServConn>(g_route_server_list, g_route_server_count);
 
-  netlib_register_timer(route_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(route_server_conn_timer_callback, NULL, 1000);
   s_file_handler = ttfile_handler::CFileHandler::getInstance();
   s_group_chat = ttchat_handler::CGroupChat::GetInstance();
 }
@@ -126,8 +129,8 @@ void update_master_route_serv_conn() {
     msg.set_master(1);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_ROLE_SET);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_ROLE_SET);
     g_master_rs_conn->SendPdu(&pdu);
   }
 }
@@ -143,7 +146,7 @@ void CRouteServConn::Connect(const char* server_ip, uint16_t server_port, uint32
   log_info("Connecting to RouteServer %s:%d ", server_ip, server_port);
 
   m_serv_idx = idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_route_server_conn_map);
+  m_handle = ttnetlib::netlib_connect(server_ip, server_port, ttnetlib::imconn_callback, (void*)&g_route_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_route_server_conn_map.insert(make_pair(m_handle, this));
@@ -155,7 +158,7 @@ void CRouteServConn::Close() {
 
   m_bOpen = false;
   if (m_handle != NETLIB_INVALID_HANDLE) {
-    netlib_close(m_handle);
+    ttnetlib::netlib_close(m_handle);
     g_route_server_conn_map.erase(m_handle);
   }
 
@@ -169,7 +172,7 @@ void CRouteServConn::Close() {
 void CRouteServConn::OnConfirm() {
   log_info("connect to route server success ");
   m_bOpen = true;
-  m_connect_time = get_tick_count();
+  m_connect_time = ttcommon::get_tick_count();
   g_route_server_list[m_serv_idx].reconnect_cnt = MIN_RECONNECT_CNT / 2;
 
   if (g_master_rs_conn == NULL) {
@@ -183,13 +186,13 @@ void CRouteServConn::OnConfirm() {
     user_stat_t user_stat = *it;
     ttidlbase::ServerUserStat* server_user_stat = msg.add_user_stat_list();
     server_user_stat->set_user_id(user_stat.user_id);
-    server_user_stat->set_status((::ttidlbase::UserStatType)user_stat.status);
-    server_user_stat->set_client_type((::ttidlbase::ClientType)user_stat.client_type);
+    server_user_stat->set_status((ttidlbase::UserStatType)user_stat.status);
+    server_user_stat->set_client_type((ttidlbase::ClientType)user_stat.client_type);
   }
   ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg);
-  pdu.SetServiceId(SID_OTHER);
-  pdu.SetCommandId(CID_OTHER_ONLINE_USER_INFO);
+  pdu.SetServiceId(ttidlbase::SID_OTHER);
+  pdu.SetCommandId(ttidlbase::CID_OTHER_ONLINE_USER_INFO);
   SendPdu(&pdu);
 }
 
@@ -203,8 +206,8 @@ void CRouteServConn::OnTimer(uint64_t curr_tick) {
     ttidlother::IMHeartBeat msg;
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_HEARTBEAT);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_HEARTBEAT);
     SendPdu(&pdu);
   }
 
@@ -216,40 +219,40 @@ void CRouteServConn::OnTimer(uint64_t curr_tick) {
 
 void CRouteServConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
   switch (pPdu->GetCommandId()) {
-    case CID_OTHER_HEARTBEAT:
+    case ttidlbase::CID_OTHER_HEARTBEAT:
       break;
-    case CID_OTHER_SERVER_KICK_USER:
+    case ttidlbase::CID_OTHER_SERVER_KICK_USER:
       _HandleKickUser(pPdu);
       break;
-    case CID_BUDDY_LIST_STATUS_NOTIFY:
+    case ttidlbase::CID_BUDDY_LIST_STATUS_NOTIFY:
       _HandleStatusNotify(pPdu);
       break;
-    case CID_BUDDY_LIST_USERS_STATUS_RESPONSE:
+    case ttidlbase::CID_BUDDY_LIST_USERS_STATUS_RESPONSE:
       _HandleUsersStatusResponse(pPdu);
       break;
-    case CID_MSG_READ_NOTIFY:
+    case ttidlbase::CID_MSG_READ_NOTIFY:
       _HandleMsgReadNotify(pPdu);
       break;
-    case CID_MSG_DATA:
+    case ttidlbase::CID_MSG_DATA:
       _HandleMsgData(pPdu);
       break;
-    case CID_SWITCH_P2P_CMD:
+    case ttidlbase::CID_SWITCH_P2P_CMD:
       _HandleP2PMsg(pPdu);
       break;
-    case CID_OTHER_LOGIN_STATUS_NOTIFY:
+    case ttidlbase::CID_OTHER_LOGIN_STATUS_NOTIFY:
       _HandlePCLoginStatusNotify(pPdu);
       break;
-    case CID_BUDDY_LIST_REMOVE_SESSION_NOTIFY:
+    case ttidlbase::CID_BUDDY_LIST_REMOVE_SESSION_NOTIFY:
       _HandleRemoveSessionNotify(pPdu);
       break;
-    case CID_BUDDY_LIST_SIGN_INFO_CHANGED_NOTIFY:
+    case ttidlbase::CID_BUDDY_LIST_SIGN_INFO_CHANGED_NOTIFY:
       _HandleSignInfoChangedNotify(pPdu);
-    case CID_GROUP_CHANGE_MEMBER_NOTIFY:
+      break;
+    case ttidlbase::CID_GROUP_CHANGE_MEMBER_NOTIFY:
       s_group_chat->HandleGroupChangeMemberBroadcast(pPdu);
       break;
-    case CID_FILE_NOTIFY:
+    case ttidlbase::CID_FILE_NOTIFY:
       s_file_handler->HandleFileNotify(pPdu);
-      break;
       break;
     default:
       log_info("unknown cmd id=%d ", pPdu->GetCommandId());
@@ -384,8 +387,8 @@ void CRouteServConn::_HandleUsersStatusResponse(ttnetlib::CImPdu* pPdu) {
     }
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_PUSH_TO_USER_REQ);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_PUSH_TO_USER_REQ);
 
     CPushServConn* PushConn = get_push_serv_conn();
     if (PushConn) {
@@ -404,8 +407,8 @@ void CRouteServConn::_HandleUsersStatusResponse(ttnetlib::CImPdu* pPdu) {
     msg3.set_trans_mode(trans_mode);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg3);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_FILE_TRANSFER_REQ);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_FILE_TRANSFER_REQ);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     CFileServConn* pConn = get_random_file_serv_conn();
     if (pConn) {
@@ -421,8 +424,8 @@ void CRouteServConn::_HandleUsersStatusResponse(ttnetlib::CImPdu* pPdu) {
       msg4.set_trans_mode(msg3.trans_mode());
       ttnetlib::CImPdu pdu2;
       pdu2.SetPBMsg(&msg4);
-      pdu2.SetServiceId(SID_FILE);
-      pdu2.SetCommandId(CID_FILE_RESPONSE);
+      pdu2.SetServiceId(ttidlbase::SID_FILE);
+      pdu2.SetCommandId(ttidlbase::CID_FILE_RESPONSE);
       pdu2.SetSeqNum(pPdu->GetSeqNum());
       CMsgConn* pMsgConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(msg3.from_user_id(), handle);
       if (pMsgConn) {
@@ -459,9 +462,9 @@ void CRouteServConn::_HandlePCLoginStatusNotify(ttnetlib::CImPdu* pPdu) {
     ttidlbuddy::IMPCLoginStatusNotify msg2;
     msg2.set_user_id(user_id);
     if (IM_PC_LOGIN_STATUS_ON == login_status) {
-      msg2.set_login_stat(::ttidlbase::USER_STATUS_ONLINE);
+      msg2.set_login_stat(ttidlbase::USER_STATUS_ONLINE);
     } else {
-      msg2.set_login_stat(::ttidlbase::USER_STATUS_OFFLINE);
+      msg2.set_login_stat(ttidlbase::USER_STATUS_OFFLINE);
     }
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);

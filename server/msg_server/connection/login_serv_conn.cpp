@@ -6,10 +6,13 @@
  brief:
 */
 
+#include <teamtalk/imcore/common/tools.h>
+#include <teamtalk/imcore/slog/slog.h>
 #include <teamtalk/sbase/global_define.h>
 #include <teamtalk/imcore/netlib/core/im_pdu.h>
 
-#include <teamtalk/imcore/ttidl/ohter.pb.h>
+#include <teamtalk/imcore/ttidl/base_define.pb.h>
+#include <teamtalk/imcore/ttidl/other.pb.h>
 #include <teamtalk/imcore/ttidl/service.pb.h>
 
 #include "domain/user/im_user.h"
@@ -21,6 +24,10 @@ namespace teamtalk::msg_server::connection {
 using namespace std;
 
 namespace ttuser = teamtalk::msg_server::domain::user;
+namespace ttcommon = teamtalk::imcore::common;
+namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+namespace ttidlserver = teamtalk::imcore::ttidl::service;
+namespace ttidlother = teamtalk::imcore::ttidl::other;
 
 static ttnetlib::ConnMap_t g_login_server_conn_map;
 
@@ -35,7 +42,7 @@ static uint32_t g_max_conn_cnt;
 void login_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
   CLoginServConn* pConn = NULL;
-  uint64_t cur_time = get_tick_count();
+  uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_login_server_conn_map.begin(); it != g_login_server_conn_map.end();) {
     it_old = it;
@@ -65,7 +72,7 @@ void init_login_serv_conn(ttserverinfo::serv_info_t* server_list,
   g_msg_server_port = msg_server_port;
   g_max_conn_cnt = max_conn_cnt;
 
-  netlib_register_timer(login_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(login_server_conn_timer_callback, NULL, 1000);
 }
 
 // if there is one LoginServer available, return true
@@ -102,7 +109,7 @@ CLoginServConn::~CLoginServConn() {}
 void CLoginServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t serv_idx) {
   log_info("Connecting to LoginServer %s:%d ", server_ip, server_port);
   m_serv_idx = serv_idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_login_server_conn_map);
+  m_handle = ttnetlib::netlib_connect(server_ip, server_port, ttnetlib::imconn_callback, (void*)&g_login_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_login_server_conn_map.insert(make_pair(m_handle, this));
@@ -113,7 +120,7 @@ void CLoginServConn::Close() {
   ttserverinfo::serv_reset<CLoginServConn>(g_login_server_list, g_login_server_count, m_serv_idx);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
-    netlib_close(m_handle);
+    ttnetlib::netlib_close(m_handle);
     g_login_server_conn_map.erase(m_handle);
   }
 
@@ -132,7 +139,7 @@ void CLoginServConn::OnConfirm() {
   ttuser::CImUserManager::GetInstance()->GetUserConnCnt(&user_conn_list, cur_conn_cnt);
   char hostname[256] = {0};
   gethostname(hostname, 256);
-  IM::Server::IMMsgServInfo msg;
+  ttidlserver::IMMsgServInfo msg;
   msg.set_ip1(g_msg_server_ip_addr1);
   msg.set_ip2(g_msg_server_ip_addr2);
   msg.set_port(g_msg_server_port);
@@ -141,8 +148,8 @@ void CLoginServConn::OnConfirm() {
   msg.set_host_name(hostname);
   ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg);
-  pdu.SetServiceId(SID_OTHER);
-  pdu.SetCommandId(CID_OTHER_MSG_SERV_INFO);
+  pdu.SetServiceId(ttidlbase::SID_OTHER);
+  pdu.SetCommandId(ttidlbase::CID_OTHER_MSG_SERV_INFO);
   SendPdu(&pdu);
 }
 
@@ -153,11 +160,11 @@ void CLoginServConn::OnClose() {
 
 void CLoginServConn::OnTimer(uint64_t curr_tick) {
   if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
-    IM::Other::IMHeartBeat msg;
+    ttidlother::IMHeartBeat msg;
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(SID_OTHER);
-    pdu.SetCommandId(CID_OTHER_HEARTBEAT);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_HEARTBEAT);
     SendPdu(&pdu);
   }
 

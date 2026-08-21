@@ -9,6 +9,7 @@
 #include <teamtalk/imcore/ttidl/group.pb.h>
 #include <teamtalk/imcore/ttidl/message.pb.h>
 #include <teamtalk/imcore/ttidl/service.pb.h>
+#include <teamtalk/imcore/slog/slog.h>
 
 #include "domain/user/im_user.h"
 #include "service/chat_handler/group_chat.h"
@@ -25,6 +26,9 @@ namespace teamtalk::msg_server::service::chat_handler {
 namespace ttconnection = teamtalk::msg_server::connection;
 namespace ttuser = teamtalk::msg_server::domain::user;
 namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+namespace ttidlgroup = teamtalk::imcore::ttidl::group;
+namespace ttidlmessage = teamtalk::imcore::ttidl::message;
+namespace ttidlserver = teamtalk::imcore::ttidl::service;
 
 CGroupChat* CGroupChat::s_group_chat_instance = NULL;
 
@@ -37,11 +41,11 @@ CGroupChat* CGroupChat::GetInstance() {
 }
 
 void CGroupChat::HandleClientGroupNormalRequest(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn) {
-  IM::Group::IMNormalGroupListReq msg;
+  ttidlgroup::IMNormalGroupListReq msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   uint32_t user_id = pFromConn->GetUserId();
   log_info("HandleClientGroupNormalRequest, user_id=%u. ", user_id);
-  ttconnection::CDbAttachData attach_data(ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0);
+  ttconnection::CDbAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0);
 
   ttconnection::CDBServConn* pDBConn = ttconnection::get_db_serv_conn();
   if (pDBConn) {
@@ -51,19 +55,19 @@ void CGroupChat::HandleClientGroupNormalRequest(ttnetlib::CImPdu* pPdu, ttconnec
     pDBConn->SendPdu(pPdu);
   } else {
     log_info("no db connection. ");
-    IM::Group::IMNormalGroupListRsp msg2;
+    ttidlgroup::IMNormalGroupListRsp msg2;
     msg.set_user_id(user_id);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_GROUP);
-    pdu.SetCommandId(CID_GROUP_NORMAL_LIST_RESPONSE);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_NORMAL_LIST_RESPONSE);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pFromConn->SendPdu(&pdu);
   }
 }
 
 void CGroupChat::HandleGroupNormalResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Group::IMNormalGroupListRsp msg;
+  ttidlgroup::IMNormalGroupListRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
@@ -81,12 +85,12 @@ void CGroupChat::HandleGroupNormalResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CGroupChat::HandleClientGroupInfoRequest(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn) {
-  IM::Group::IMGroupInfoListReq msg;
+  ttidlgroup::IMGroupInfoListReq msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   uint32_t user_id = pFromConn->GetUserId();
   uint32_t group_cnt = msg.group_version_list_size();
   log_info("HandleClientGroupInfoRequest, user_id=%u, group_cnt=%u. ", user_id, group_cnt);
-  ttconnection::CPduAttachData attach_data(ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0, NULL);
+  ttconnection::CPduAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0, NULL);
 
   ttconnection::CDBServConn* pDBConn = ttconnection::get_db_serv_conn();
   if (pDBConn) {
@@ -96,19 +100,19 @@ void CGroupChat::HandleClientGroupInfoRequest(ttnetlib::CImPdu* pPdu, ttconnecti
     pDBConn->SendPdu(pPdu);
   } else {
     log_info("no db connection. ");
-    IM::Group::IMGroupInfoListRsp msg2;
+    ttidlgroup::IMGroupInfoListRsp msg2;
     msg2.set_user_id(user_id);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_GROUP);
-    pdu.SetCommandId(CID_GROUP_INFO_RESPONSE);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_INFO_RESPONSE);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pFromConn->SendPdu(&pdu);
   }
 }
 
 void CGroupChat::HandleGroupInfoResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Group::IMGroupInfoListRsp msg;
+  ttidlgroup::IMGroupInfoListRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
@@ -134,15 +138,15 @@ void CGroupChat::HandleGroupInfoResponse(ttnetlib::CImPdu* pPdu) {
       return;
     }
 
-    IM::Message::IMMsgData msg2;
+    ttidlmessage::IMMsgData msg2;
     CHECK_PB_PARSE_MSG(msg2.ParseFromArray(pduAttachData.GetPdu(), pduAttachData.GetPduLength()));
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_MSG);
-    pdu.SetCommandId(CID_MSG_DATA);
+    pdu.SetServiceId(ttidlbase::SID_MSG);
+    pdu.SetCommandId(ttidlbase::CID_MSG_DATA);
 
     // Push相关
-    IM::Server::IMGroupGetShieldReq msg3;
+    ttidlserver::IMGroupGetShieldReq msg3;
     msg3.set_group_id(group_id);
     msg3.set_attach_data(pdu.GetBodyData(), pdu.GetBodyLength());
     for (uint32_t i = 0; i < group_info.group_member_list_size(); i++) {
@@ -165,8 +169,8 @@ void CGroupChat::HandleGroupInfoResponse(ttnetlib::CImPdu* pPdu) {
 
     ttnetlib::CImPdu pdu2;
     pdu2.SetPBMsg(&msg3);
-    pdu2.SetServiceId(SID_OTHER);
-    pdu2.SetCommandId(CID_OTHER_GET_SHIELD_REQ);
+    pdu2.SetServiceId(ttidlbase::SID_OTHER);
+    pdu2.SetCommandId(ttidlbase::CID_OTHER_GET_SHIELD_REQ);
     ttconnection::CDBServConn* pDbConn = ttconnection::get_db_serv_conn();
     if (pDbConn) {
       pDbConn->SendPdu(&pdu2);
@@ -183,7 +187,7 @@ void CGroupChat::HandleGroupInfoResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CGroupChat::HandleGroupMessage(ttnetlib::CImPdu* pPdu) {
-  IM::Message::IMMsgData msg;
+  ttidlmessage::IMMsgData msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   uint32_t from_user_id = msg.from_user_id();
   uint32_t to_group_id = msg.to_session_id();
@@ -201,15 +205,15 @@ void CGroupChat::HandleGroupMessage(ttnetlib::CImPdu* pPdu) {
   ttconnection::CMsgConn* pFromConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(from_user_id, attach_data.GetHandle());
   if (pFromConn) {
     // 接收反馈
-    IM::Message::IMMsgDataAck msg2;
+    ttidlmessage::IMMsgDataAck msg2;
     msg2.set_user_id(from_user_id);
     msg2.set_session_id(to_group_id);
     msg2.set_msg_id(msg_id);
     msg2.set_session_type(ttidlbase::SESSION_TYPE_GROUP);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_MSG);
-    pdu.SetCommandId(CID_MSG_DATA_ACK);
+    pdu.SetServiceId(ttidlbase::SID_MSG);
+    pdu.SetCommandId(ttidlbase::CID_MSG_DATA_ACK);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pFromConn->SendPdu(&pdu);
   }
@@ -222,9 +226,9 @@ void CGroupChat::HandleGroupMessage(ttnetlib::CImPdu* pPdu) {
   // 服务器没有群的信息，向DB服务器请求群信息，并带上消息作为附件，返回时在发送该消息给其他群成员
   // ttidlbase::GroupVersionInfo group_version_info;
   ttconnection::CPduAttachData pduAttachData(
-    ATTACH_TYPE_HANDLE_AND_PDU, attach_data.GetHandle(), pPdu->GetBodyLength(), pPdu->GetBodyData());
+    ttconnection::ATTACH_TYPE_HANDLE_AND_PDU, attach_data.GetHandle(), pPdu->GetBodyLength(), pPdu->GetBodyData());
 
-  IM::Group::IMGroupInfoListReq msg3;
+  ttidlgroup::IMGroupInfoListReq msg3;
   msg3.set_user_id(from_user_id);
   ttidlbase::GroupVersionInfo* group_version_info = msg3.add_group_version_list();
   group_version_info->set_group_id(to_group_id);
@@ -232,8 +236,8 @@ void CGroupChat::HandleGroupMessage(ttnetlib::CImPdu* pPdu) {
   msg3.set_attach_data(pduAttachData.GetBuffer(), pduAttachData.GetLength());
   ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg3);
-  pdu.SetServiceId(SID_GROUP);
-  pdu.SetCommandId(CID_GROUP_INFO_REQUEST);
+  pdu.SetServiceId(ttidlbase::SID_GROUP);
+  pdu.SetCommandId(ttidlbase::CID_GROUP_INFO_REQUEST);
   ttconnection::CDBServConn* pDbConn = ttconnection::get_db_serv_conn();
   if (pDbConn) {
     pDbConn->SendPdu(&pdu);
@@ -241,7 +245,7 @@ void CGroupChat::HandleGroupMessage(ttnetlib::CImPdu* pPdu) {
 }
 
 void CGroupChat::HandleGroupMessageBroadcast(ttnetlib::CImPdu* pPdu) {
-  IM::Message::IMMsgData msg;
+  ttidlmessage::IMMsgData msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t from_user_id = msg.from_user_id();
@@ -252,9 +256,9 @@ void CGroupChat::HandleGroupMessageBroadcast(ttnetlib::CImPdu* pPdu) {
 
   // 服务器没有群的信息，向DB服务器请求群信息，并带上消息作为附件，返回时在发送该消息给其他群成员
   // ttidlbase::GroupVersionInfo group_version_info;
-  ttconnection::CPduAttachData pduAttachData(ATTACH_TYPE_HANDLE_AND_PDU, 0, pPdu->GetBodyLength(), pPdu->GetBodyData());
+  ttconnection::CPduAttachData pduAttachData(ttconnection::ATTACH_TYPE_HANDLE_AND_PDU, 0, pPdu->GetBodyLength(), pPdu->GetBodyData());
 
-  IM::Group::IMGroupInfoListReq msg2;
+  ttidlgroup::IMGroupInfoListReq msg2;
   msg2.set_user_id(from_user_id);
   ttidlbase::GroupVersionInfo* group_version_info = msg2.add_group_version_list();
   group_version_info->set_group_id(to_group_id);
@@ -262,8 +266,8 @@ void CGroupChat::HandleGroupMessageBroadcast(ttnetlib::CImPdu* pPdu) {
   msg2.set_attach_data(pduAttachData.GetBuffer(), pduAttachData.GetLength());
   ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg2);
-  pdu.SetServiceId(SID_GROUP);
-  pdu.SetCommandId(CID_GROUP_INFO_REQUEST);
+  pdu.SetServiceId(ttidlbase::SID_GROUP);
+  pdu.SetCommandId(ttidlbase::CID_GROUP_INFO_REQUEST);
   ttconnection::CDBServConn* pDbConn = ttconnection::get_db_serv_conn();
   if (pDbConn) {
     pDbConn->SendPdu(&pdu);
@@ -271,7 +275,7 @@ void CGroupChat::HandleGroupMessageBroadcast(ttnetlib::CImPdu* pPdu) {
 }
 
 void CGroupChat::HandleClientGroupCreateRequest(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn) {
-  IM::Group::IMGroupCreateReq msg;
+  ttidlgroup::IMGroupCreateReq msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t req_user_id = pFromConn->GetUserId();
@@ -297,28 +301,28 @@ void CGroupChat::HandleClientGroupCreateRequest(ttnetlib::CImPdu* pPdu, ttconnec
 
   ttconnection::CDBServConn* pDbConn = ttconnection::get_db_serv_conn();
   if (pDbConn) {
-    ttconnection::CDbAttachData attach_data(ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0);
+    ttconnection::CDbAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0);
     msg.set_user_id(req_user_id);
     msg.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
     pPdu->SetPBMsg(&msg);
     pDbConn->SendPdu(pPdu);
   } else {
     log_info("no DB connection ");
-    IM::Group::IMGroupCreateRsp msg2;
+    ttidlgroup::IMGroupCreateRsp msg2;
     msg2.set_user_id(req_user_id);
     msg2.set_result_code(1);
     msg2.set_group_name(group_name);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_GROUP);
-    pdu.SetCommandId(CID_GROUP_CREATE_RESPONSE);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_CREATE_RESPONSE);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pFromConn->SendPdu(&pdu);
   }
 }
 
 void CGroupChat::HandleGroupCreateResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Group::IMGroupCreateRsp msg;
+  ttidlgroup::IMGroupCreateRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t user_id = msg.user_id();
@@ -347,7 +351,7 @@ void CGroupChat::HandleGroupCreateResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CGroupChat::HandleClientGroupChangeMemberRequest(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn) {
-  IM::Group::IMGroupChangeMemberReq msg;
+  ttidlgroup::IMGroupChangeMemberReq msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t change_type = msg.change_type();
@@ -364,29 +368,29 @@ void CGroupChat::HandleClientGroupChangeMemberRequest(ttnetlib::CImPdu* pPdu, tt
 
   ttconnection::CDBServConn* pDbConn = ttconnection::get_db_serv_conn();
   if (pDbConn) {
-    ttconnection::CDbAttachData attach_data(ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0);
+    ttconnection::CDbAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0);
     msg.set_user_id(req_user_id);
     msg.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
     pPdu->SetPBMsg(&msg);
     pDbConn->SendPdu(pPdu);
   } else {
     log_info("no DB connection ");
-    IM::Group::IMGroupChangeMemberRsp msg2;
+    ttidlgroup::IMGroupChangeMemberRsp msg2;
     msg2.set_user_id(req_user_id);
     msg2.set_change_type((ttidlbase::GroupModifyType)change_type);
     msg2.set_result_code(1);
     msg2.set_group_id(group_id);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_GROUP);
-    pdu.SetCommandId(CID_GROUP_CHANGE_MEMBER_RESPONSE);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_CHANGE_MEMBER_RESPONSE);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pFromConn->SendPdu(&pdu);
   }
 }
 
 void CGroupChat::HandleGroupChangeMemberResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Group::IMGroupChangeMemberRsp msg;
+  ttidlgroup::IMGroupChangeMemberRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t change_type = msg.change_type();
@@ -414,7 +418,7 @@ void CGroupChat::HandleGroupChangeMemberResponse(ttnetlib::CImPdu* pPdu) {
   }
 
   if (!result) {
-    IM::Group::IMGroupChangeMemberNotify msg2;
+    ttidlgroup::IMGroupChangeMemberNotify msg2;
     msg2.set_user_id(user_id);
     msg2.set_change_type((ttidlbase::GroupModifyType)change_type);
     msg2.set_group_id(group_id);
@@ -426,8 +430,8 @@ void CGroupChat::HandleGroupChangeMemberResponse(ttnetlib::CImPdu* pPdu) {
     }
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_GROUP);
-    pdu.SetCommandId(CID_GROUP_CHANGE_MEMBER_NOTIFY);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_CHANGE_MEMBER_NOTIFY);
     ttconnection::CRouteServConn* pRouteConn = ttconnection::get_route_serv_conn();
     if (pRouteConn) {
       pRouteConn->SendPdu(&pdu);
@@ -445,7 +449,7 @@ void CGroupChat::HandleGroupChangeMemberResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CGroupChat::HandleGroupChangeMemberBroadcast(ttnetlib::CImPdu* pPdu) {
-  IM::Group::IMGroupChangeMemberNotify msg;
+  ttidlgroup::IMGroupChangeMemberNotify msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t change_type = msg.change_type();
@@ -471,7 +475,7 @@ void CGroupChat::HandleGroupChangeMemberBroadcast(ttnetlib::CImPdu* pPdu) {
 }
 
 void CGroupChat::HandleClientGroupShieldGroupRequest(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn) {
-  IM::Group::IMGroupShieldReq msg;
+  ttidlgroup::IMGroupShieldReq msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t shield_status = msg.shield_status();
@@ -486,7 +490,7 @@ void CGroupChat::HandleClientGroupShieldGroupRequest(ttnetlib::CImPdu* pPdu, ttc
 
   ttconnection::CDBServConn* pDbConn = ttconnection::get_db_serv_conn();
   if (pDbConn) {
-    ttconnection::CDbAttachData attach_data(ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0);
+    ttconnection::CDbAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0);
     msg.set_user_id(user_id);
     msg.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
     pPdu->SetPBMsg(&msg);
@@ -494,20 +498,20 @@ void CGroupChat::HandleClientGroupShieldGroupRequest(ttnetlib::CImPdu* pPdu, ttc
 
   } else {
     log_info("no DB connection ");
-    IM::Group::IMGroupShieldRsp msg2;
+    ttidlgroup::IMGroupShieldRsp msg2;
     msg2.set_user_id(user_id);
     msg2.set_result_code(1);
     ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_GROUP);
-    pdu.SetCommandId(CID_GROUP_SHIELD_GROUP_RESPONSE);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_SHIELD_GROUP_RESPONSE);
     pdu.SetSeqNum(pPdu->GetSeqNum());
     pFromConn->SendPdu(&pdu);
   }
 }
 
 void CGroupChat::HandleGroupShieldGroupResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Group::IMGroupShieldRsp msg;
+  ttidlgroup::IMGroupShieldRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t result = msg.result_code();
@@ -525,14 +529,14 @@ void CGroupChat::HandleGroupShieldGroupResponse(ttnetlib::CImPdu* pPdu) {
 }
 
 void CGroupChat::HandleGroupGetShieldByGroupResponse(ttnetlib::CImPdu* pPdu) {
-  IM::Server::IMGroupGetShieldRsp msg;
+  ttidlserver::IMGroupGetShieldRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t shield_status_list_cnt = msg.shield_status_list_size();
 
   log_info("HandleGroupGetShieldByGroupResponse, shield_status_list_cnt: %u. ", shield_status_list_cnt);
 
-  IM::Server::IMGetDeviceTokenReq msg2;
+  ttidlserver::IMGetDeviceTokenReq msg2;
   msg2.set_attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   for (uint32_t i = 0; i < shield_status_list_cnt; i++) {
     ttidlbase::ShieldStatus shield_status = msg.shield_status_list(i);
@@ -544,8 +548,8 @@ void CGroupChat::HandleGroupGetShieldByGroupResponse(ttnetlib::CImPdu* pPdu) {
   }
   ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg2);
-  pdu.SetServiceId(SID_OTHER);
-  pdu.SetCommandId(CID_OTHER_GET_DEVICE_TOKEN_REQ);
+  pdu.SetServiceId(ttidlbase::SID_OTHER);
+  pdu.SetCommandId(ttidlbase::CID_OTHER_GET_DEVICE_TOKEN_REQ);
   ttconnection::CDBServConn* pDbConn = ttconnection::get_db_serv_conn();
   if (pDbConn) {
     pDbConn->SendPdu(&pdu);
