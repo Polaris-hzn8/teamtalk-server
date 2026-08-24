@@ -35,7 +35,8 @@ CImUser::~CImUser() {
 }
 
 ttconnection::CMsgConn* CImUser::GetUnValidateMsgConn(uint32_t handle) {
-  for (set<ttconnection::CMsgConn*>::iterator it = m_unvalidate_conn_set.begin(); it != m_unvalidate_conn_set.end(); it++) {
+  for (set<ttconnection::CMsgConn*>::iterator it = m_unvalidate_conn_set.begin(); it != m_unvalidate_conn_set.end();
+       it++) {
     ttconnection::CMsgConn* pConn = *it;
     if (pConn->GetHandle() == handle) {
       return pConn;
@@ -98,7 +99,10 @@ void CImUser::BroadcastPduToMobile(ttnetlib::CImPdu* pPdu, ttconnection::CMsgCon
   }
 }
 
-void CImUser::BroadcastClientMsgData(ttnetlib::CImPdu* pPdu, uint32_t msg_id, ttconnection::CMsgConn* pFromConn, uint32_t from_id) {
+void CImUser::BroadcastClientMsgData(ttnetlib::CImPdu* pPdu,
+                                     uint32_t msg_id,
+                                     ttconnection::CMsgConn* pFromConn,
+                                     uint32_t from_id) {
   for (map<uint32_t, ttconnection::CMsgConn*>::iterator it = m_conn_map.begin(); it != m_conn_map.end(); it++) {
     ttconnection::CMsgConn* pConn = it->second;
     if (pConn != pFromConn) {

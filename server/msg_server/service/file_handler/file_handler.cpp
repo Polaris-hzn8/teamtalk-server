@@ -20,8 +20,6 @@
 #include "domain/user/im_user.h"
 #include "service/file_handler/file_handler.h"
 
-using namespace std;
-
 namespace teamtalk::msg_server::service::file_handler {
 
 namespace ttconnection = teamtalk::msg_server::connection;
@@ -31,11 +29,14 @@ namespace ttidlfile = teamtalk::imcore::ttidl::file;
 namespace ttidlserver = teamtalk::imcore::ttidl::service;
 namespace ttidlbuddy = teamtalk::imcore::ttidl::buddy;
 
-CFileHandler* CFileHandler::s_handler_instance = NULL;
+using namespace std;
+
+CFileHandler* CFileHandler::s_handler_instance = nullptr;
 
 CFileHandler* CFileHandler::getInstance() {
-  if (!s_handler_instance)
+  if (!s_handler_instance) {
     s_handler_instance = new CFileHandler();
+  }
   return s_handler_instance;
 }
 
@@ -78,8 +79,10 @@ void CFileHandler::HandleClientFileRequest(ttconnection::CMsgConn* pMsgConn, ttn
       } else {
         // 无对应用户的pc登录状态,向route_server查询状态
         // no pc_client in this msg_server, check it from route_server
-        ttconnection::CPduAttachData attach_data(
-          ATTACH_TYPE_HANDLE_AND_PDU_FOR_FILE, pMsgConn->GetHandle(), pdu.GetBodyLength(), pdu.GetBodyData());
+        ttconnection::CPduAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE_AND_PDU_FOR_FILE,
+                                                 pMsgConn->GetHandle(),
+                                                 pdu.GetBodyLength(),
+                                                 pdu.GetBodyData());
         ttidlbuddy::IMUsersStatReq msg3;
         msg3.set_user_id(from_id);
         msg3.add_user_id_list(to_id);
@@ -225,7 +228,8 @@ void CFileHandler::HandleFileHasOfflineRes(ttnetlib::CImPdu* pPdu) {
   ttconnection::CDbAttachData attach((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   log_info("HandleFileHasOfflineRes, req_id=%u, file_cnt=%u ", req_user_id, file_cnt);
 
-  ttconnection::CMsgConn* pConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(req_user_id, attach.GetHandle());
+  ttconnection::CMsgConn* pConn =
+    ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(req_user_id, attach.GetHandle());
   ttconnection::CFileServConn* pFileConn = ttconnection::get_random_file_serv_conn();
   const list<ttidlbase::IpAddr>* ip_list = NULL;
   if (pFileConn) {

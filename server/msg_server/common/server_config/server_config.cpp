@@ -51,8 +51,7 @@ bool ServerConfig::LoadFromFile(const std::string& path) {
     }
   }
 
-  if (listen_addrs_.empty() || listen_port_ == 0 ||
-      ip_addr1_.empty() || ip_addr2_.empty()) {
+  if (listen_addrs_.empty() || listen_port_ == 0 || ip_addr1_.empty() || ip_addr2_.empty()) {
     return false;
   }
 

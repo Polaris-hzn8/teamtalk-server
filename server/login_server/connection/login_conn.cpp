@@ -3,7 +3,7 @@
  * @email: lch2022fox@163.com
  * @time: Mon 04 May 2026 19:31:25 CST
  * @brief: 登录服务tcp连接管理
-*/
+ */
 
 #include <memory>
 
@@ -104,7 +104,8 @@ void CLoginConn::Close() {
       g_msg_serv_conn_map.erase(m_handle);
 
       // 4.移除该连接句柄对应的消息服务器信息
-      std::unique_ptr<ttmsgregistry::msg_serv_info_t> pMsgServInfo = ttmsgregistry::MsgServerRegistry::Instance().RemoveByHandle(m_handle);
+      std::unique_ptr<ttmsgregistry::msg_serv_info_t> pMsgServInfo =
+        ttmsgregistry::MsgServerRegistry::Instance().RemoveByHandle(m_handle);
       if (pMsgServInfo) {
         // 4-2.从总在线用户数 g_total_online_users
         // 中减去该消息服务器的当前连接数

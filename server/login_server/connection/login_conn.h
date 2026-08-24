@@ -13,10 +13,7 @@
 
 namespace teamtalk::login_server::connection {
 
-enum {
-  LOGIN_CONN_TYPE_CLIENT = 1,
-  LOGIN_CONN_TYPE_MSG_SERV = 2
-};
+enum { LOGIN_CONN_TYPE_CLIENT = 1, LOGIN_CONN_TYPE_MSG_SERV = 2 };
 
 class CLoginConn : public teamtalk::imcore::netlib::CImConn {
  public:

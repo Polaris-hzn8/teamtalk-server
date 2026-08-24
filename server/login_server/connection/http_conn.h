@@ -64,7 +64,7 @@ class CHttpConn : public teamtalk::imcore::common::CRefObject {
   uint32_t m_state;
   std::string m_peer_ip;
   uint16_t m_peer_port;
-  
+
   uint64_t m_last_send_tick;
   uint64_t m_last_recv_tick;
 

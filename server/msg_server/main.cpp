@@ -26,12 +26,12 @@ using teamtalk::msg_server::common::server_config::ServerConfig;
 using teamtalk::msg_server::common::server_config::ServerEndpoint;
 
 using teamtalk::msg_server::connection::CMsgConn;
-using teamtalk::msg_server::connection::init_msg_conn;
-using teamtalk::msg_server::connection::init_file_serv_conn;
 using teamtalk::msg_server::connection::init_db_serv_conn;
+using teamtalk::msg_server::connection::init_file_serv_conn;
 using teamtalk::msg_server::connection::init_login_serv_conn;
-using teamtalk::msg_server::connection::init_route_serv_conn;
+using teamtalk::msg_server::connection::init_msg_conn;
 using teamtalk::msg_server::connection::init_push_serv_conn;
+using teamtalk::msg_server::connection::init_route_serv_conn;
 
 namespace ttserverinfo = teamtalk::sbase::server_info;
 namespace ttnetlib = teamtalk::imcore::netlib;
@@ -106,7 +106,8 @@ int main(int argc, char* argv[]) {
   // init login serv conn
   uint32_t login_cnt = cfg.login_servers().size();
   ttserverinfo::serv_info_t* login_list = to_serv_info_array(cfg.login_servers());
-  init_login_serv_conn(login_list, login_cnt, cfg.ip_addr1().c_str(), cfg.ip_addr2().c_str(), cfg.listen_port(), cfg.max_conn_cnt());
+  init_login_serv_conn(
+    login_list, login_cnt, cfg.ip_addr1().c_str(), cfg.ip_addr2().c_str(), cfg.listen_port(), cfg.max_conn_cnt());
 
   // init route serv conn
   uint32_t route_cnt = cfg.route_servers().size();

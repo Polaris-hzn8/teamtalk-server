@@ -93,22 +93,24 @@ enum {
   })
 
 ///////////////////////////////////////////////CHECK_MSG_TYPE_SINGLE//////////////////////////////////////////////////
-#define CHECK_MSG_TYPE_SINGLE(type)                                                                                                              \
-  ({                                                                                                                                             \
-    bool bRet = false;                                                                                                                           \
-    if ((teamtalk::imcore::ttidl::base_define::MSG_TYPE_SINGLE_TEXT == type) || (teamtalk::imcore::ttidl::base_define::MSG_TYPE_SINGLE_AUDIO == type)) { \
-      bRet = true;                                                                                                                               \
-    }                                                                                                                                            \
-    bRet;                                                                                                                                        \
+#define CHECK_MSG_TYPE_SINGLE(type)                                              \
+  ({                                                                             \
+    bool bRet = false;                                                           \
+    if ((teamtalk::imcore::ttidl::base_define::MSG_TYPE_SINGLE_TEXT == type) ||  \
+        (teamtalk::imcore::ttidl::base_define::MSG_TYPE_SINGLE_AUDIO == type)) { \
+      bRet = true;                                                               \
+    }                                                                            \
+    bRet;                                                                        \
   })
 
-#define CHECK_MSG_TYPE_GROUP(type)                                                                                                          \
-  ({                                                                                                                                        \
-    bool bRet = false;                                                                                                                      \
-    if ((teamtalk::imcore::ttidl::base_define::MSG_TYPE_GROUP_TEXT == type) || (teamtalk::imcore::ttidl::base_define::MSG_TYPE_GROUP_AUDIO == type)) { \
-      bRet = true;                                                                                                                          \
-    }                                                                                                                                       \
-    bRet;                                                                                                                                   \
+#define CHECK_MSG_TYPE_GROUP(type)                                              \
+  ({                                                                            \
+    bool bRet = false;                                                          \
+    if ((teamtalk::imcore::ttidl::base_define::MSG_TYPE_GROUP_TEXT == type) ||  \
+        (teamtalk::imcore::ttidl::base_define::MSG_TYPE_GROUP_AUDIO == type)) { \
+      bRet = true;                                                              \
+    }                                                                           \
+    bRet;                                                                       \
   })
 
 ////////////////////////////////////////定义结构体//////////////////////////////////////////////

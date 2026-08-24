@@ -110,7 +110,8 @@ void CFileServConn::Connect(const char* server_ip, uint16_t server_port, uint32_
   log_info("Connecting to FileServer %s:%d ", server_ip, server_port);
 
   m_serv_idx = idx;
-  m_handle = ttnetlib::netlib_connect(server_ip, server_port, ttnetlib::imconn_callback, (void*)&g_file_server_conn_map);
+  m_handle =
+    ttnetlib::netlib_connect(server_ip, server_port, ttnetlib::imconn_callback, (void*)&g_file_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
     g_file_server_conn_map.insert(make_pair(m_handle, this));

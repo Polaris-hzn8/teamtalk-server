@@ -54,7 +54,10 @@ class CImUser {
   void BroadcastPdu(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn = NULL);
   void BroadcastPduWithOutMobile(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn = NULL);
   void BroadcastPduToMobile(ttnetlib::CImPdu* pPdu, ttconnection::CMsgConn* pFromConn = NULL);
-  void BroadcastClientMsgData(ttnetlib::CImPdu* pPdu, uint32_t msg_id, ttconnection::CMsgConn* pFromConn = NULL, uint32_t from_id = 0);
+  void BroadcastClientMsgData(ttnetlib::CImPdu* pPdu,
+                              uint32_t msg_id,
+                              ttconnection::CMsgConn* pFromConn = NULL,
+                              uint32_t from_id = 0);
   void BroadcastData(void* buff, uint32_t len, ttconnection::CMsgConn* pFromConn = NULL);
 
   void HandleKickUser(ttconnection::CMsgConn* pConn, uint32_t reason);

@@ -260,7 +260,7 @@ void CHttpConn::_HandleMsgServRequest(std::string& url, std::string& post_data) 
     Send((void*)szContent, strlen(szContent));
     delete[] szContent;
     return;
-  } else { 
+  } else {
     // 返回合适的消息服务器地址
     Json::Value value;
     value["code"] = 0;

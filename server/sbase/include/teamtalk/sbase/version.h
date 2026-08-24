@@ -3,7 +3,7 @@
  * @email: lch2022fox@163.com
  * @time: Wed 06 May 2026 08:34:35 CST
  * @brief: 服务器版本号
-*/
+ */
 
 #ifndef TEAMTALK_SBASE_VERSION_H_
 #define TEAMTALK_SBASE_VERSION_H_

@@ -78,7 +78,8 @@ void CGroupChat::HandleGroupNormalResponse(ttnetlib::CImPdu* pPdu) {
 
   msg.clear_attach_data();
   pPdu->SetPBMsg(&msg);
-  ttconnection::CMsgConn* pConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, attach_data.GetHandle());
+  ttconnection::CMsgConn* pConn =
+    ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, attach_data.GetHandle());
   if (pConn) {
     pConn->SendPdu(pPdu);
   }
@@ -177,7 +178,8 @@ void CGroupChat::HandleGroupInfoResponse(ttnetlib::CImPdu* pPdu) {
     }
   } else if (pduAttachData.GetPduLength() == 0) {
     // 正常获取群信息的返回
-    ttconnection::CMsgConn* pConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, pduAttachData.GetHandle());
+    ttconnection::CMsgConn* pConn =
+      ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, pduAttachData.GetHandle());
     if (pConn) {
       msg.clear_attach_data();
       pPdu->SetPBMsg(&msg);
@@ -202,7 +204,8 @@ void CGroupChat::HandleGroupMessage(ttnetlib::CImPdu* pPdu) {
 
   log_info("HandleGroupMsg, %u->%u, msg id=%u. ", from_user_id, to_group_id, msg_id);
 
-  ttconnection::CMsgConn* pFromConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(from_user_id, attach_data.GetHandle());
+  ttconnection::CMsgConn* pFromConn =
+    ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(from_user_id, attach_data.GetHandle());
   if (pFromConn) {
     // 接收反馈
     ttidlmessage::IMMsgDataAck msg2;
@@ -256,7 +259,8 @@ void CGroupChat::HandleGroupMessageBroadcast(ttnetlib::CImPdu* pPdu) {
 
   // 服务器没有群的信息，向DB服务器请求群信息，并带上消息作为附件，返回时在发送该消息给其他群成员
   // ttidlbase::GroupVersionInfo group_version_info;
-  ttconnection::CPduAttachData pduAttachData(ttconnection::ATTACH_TYPE_HANDLE_AND_PDU, 0, pPdu->GetBodyLength(), pPdu->GetBodyData());
+  ttconnection::CPduAttachData pduAttachData(
+    ttconnection::ATTACH_TYPE_HANDLE_AND_PDU, 0, pPdu->GetBodyLength(), pPdu->GetBodyData());
 
   ttidlgroup::IMGroupInfoListReq msg2;
   msg2.set_user_id(from_user_id);
@@ -341,7 +345,8 @@ void CGroupChat::HandleGroupCreateResponse(ttnetlib::CImPdu* pPdu) {
 
   ttconnection::CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
 
-  ttconnection::CMsgConn* pFromConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, attach_data.GetHandle());
+  ttconnection::CMsgConn* pFromConn =
+    ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, attach_data.GetHandle());
   if (pFromConn) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);
@@ -410,7 +415,8 @@ void CGroupChat::HandleGroupChangeMemberResponse(ttnetlib::CImPdu* pPdu) {
     cur_user_cnt);
 
   ttconnection::CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
-  ttconnection::CMsgConn* pFromConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, attach_data.GetHandle());
+  ttconnection::CMsgConn* pFromConn =
+    ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, attach_data.GetHandle());
   if (pFromConn) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);
@@ -520,7 +526,8 @@ void CGroupChat::HandleGroupShieldGroupResponse(ttnetlib::CImPdu* pPdu) {
   log_info("HandleGroupShieldGroupResponse, result: %u, user_id: %u, group_id: %u. ", result, user_id, group_id);
 
   ttconnection::CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
-  ttconnection::CMsgConn* pMsgConn = ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, attach_data.GetHandle());
+  ttconnection::CMsgConn* pMsgConn =
+    ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(user_id, attach_data.GetHandle());
   if (pMsgConn) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);

@@ -396,10 +396,10 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
 
     // 5-6.构造登录响应消息Pdu pdu2，设置相关字段
     ttnetlib::CImPdu pdu2;
-    pdu2.SetPBMsg(&msg3);                        //消息体
+    pdu2.SetPBMsg(&msg3);                                   //消息体
     pdu2.SetServiceId(ttidlbase::SID_LOGIN);                // service_id
     pdu2.SetCommandId(ttidlbase::CID_LOGIN_RES_USERLOGIN);  //新的command_id ttidlbase::CID_LOGIN_RES_USERLOGIN
-    pdu2.SetSeqNum(pPdu->GetSeqNum());           //设置消息序号
+    pdu2.SetSeqNum(pPdu->GetSeqNum());                      //设置消息序号
 
     // 5-7.发送登录响应消息给客户端
     pMsgConn->SendPdu(&pdu2);
@@ -413,7 +413,7 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
 
     // 6-2.构造登录响应消息Pdu pdu2，设置相关字段
     ttnetlib::CImPdu pdu3;
-    pdu3.SetPBMsg(&msg4);                        //消息体
+    pdu3.SetPBMsg(&msg4);                                   //消息体
     pdu3.SetServiceId(ttidlbase::SID_LOGIN);                // service_id
     pdu3.SetCommandId(ttidlbase::CID_LOGIN_RES_USERLOGIN);  // command_id ttidlbase::CID_LOGIN_RES_USERLOGIN
     pdu3.SetSeqNum(pPdu->GetSeqNum());

@@ -6,7 +6,7 @@
  * @brief: 进程级配置单例：由 LoadFromFile 从 login_server.conf 加载
  *    其它模块通过 Instance() 只读访问
  *    后续新增配置项：加成员、在 LoadFromFile 里赋值、提供 getter 方法
-*/
+ */
 
 #ifndef TEAMTALK_LOGIN_SERVER_COMMON_SERVER_CONFIG_SERVER_CONFIG_H_
 #define TEAMTALK_LOGIN_SERVER_COMMON_SERVER_CONFIG_SERVER_CONFIG_H_

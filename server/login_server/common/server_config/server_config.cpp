@@ -3,7 +3,7 @@
  * @email: lch2022fox@163.com
  * @time: Mon 04 May 2026 19:20:53 CST
  * @brief: 读取 login_server.conf 配置文件
-*/
+ */
 
 #include <teamtalk/imcore/string/string.h>
 #include <teamtalk/imcore/config_reader/config_reader.h>
@@ -39,9 +39,8 @@ bool ServerConfig::LoadFromFile(const std::string& path) {
   ttstring::str_explode(config_file.GetConfigValue("HttpListenIP"), ';', http_listen_addrs_);
   http_listen_port_ = static_cast<uint16_t>(config_file.GetUint32Value("HttpListenPort", 0));
 
-  if (client_listen_addrs_.empty() || client_listen_port_ == 0 ||
-      msg_server_listen_addrs_.empty() || msg_server_listen_port_ == 0 ||
-      http_listen_addrs_.empty() || http_listen_port_ == 0) {
+  if (client_listen_addrs_.empty() || client_listen_port_ == 0 || msg_server_listen_addrs_.empty() ||
+      msg_server_listen_port_ == 0 || http_listen_addrs_.empty() || http_listen_port_ == 0) {
     return false;
   }
 

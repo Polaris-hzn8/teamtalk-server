@@ -3,7 +3,7 @@
  * @email: lch2022fox@163.com
  * @time: Mon 04 May 2026 19:37:54 CST
  * @brief: 登录服务主函数
-*/
+ */
 
 #include <string>
 #include <cstring>
@@ -111,15 +111,17 @@ int main(int argc, char* argv[]) {
       return ret;
   }
 
-  log_info(
-    "server start listen on:\nFor client %s:%d\nFor MsgServer: %s:%d\nFor http:%s:%d\n",
-    cfg.client_listen_addresses().front().c_str(), cfg.client_listen_port(),
-    cfg.msg_server_listen_addresses().front().c_str(), cfg.msg_server_listen_port(),
-    cfg.http_listen_addresses().front().c_str(), cfg.http_listen_port());
+  log_info("server start listen on:\nFor client %s:%d\nFor MsgServer: %s:%d\nFor http:%s:%d\n",
+           cfg.client_listen_addresses().front().c_str(),
+           cfg.client_listen_port(),
+           cfg.msg_server_listen_addresses().front().c_str(),
+           cfg.msg_server_listen_port(),
+           cfg.http_listen_addresses().front().c_str(),
+           cfg.http_listen_port());
 
   // 初始化登录连接
   teamtalk::login_server::connection::init_login_conn();
-  
+
   // 初始化HTTP连接
   teamtalk::login_server::connection::init_http_conn();
 
