@@ -32,11 +32,7 @@ int FileManager::initDir() {
   if (!isExist) {
     u64 ret = File::mkdirNoRecursion(m_disk);
     if (ret) {
-      log_info(
-        "The dir[%s] set error for code[%d], \
-				    its parent dir may no exists",
-        m_disk,
-        ret);
+      log_info("The dir[%s] set error for code[%d], its parent dir may no exists", m_disk, ret);
       return -1;
     }
   }
