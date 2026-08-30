@@ -17,7 +17,7 @@
 #include "connection/file_serv_conn.h"
 #include "connection/route_serv_conn.h"
 
-#include "domain/user/im_user.h"
+#include "domain/user/im_user_manager.h"
 #include "service/file_handler/file_handler.h"
 
 namespace teamtalk::msg_server::connection {
@@ -36,11 +36,11 @@ static ttnetlib::ConnMap_t g_file_server_conn_map;
 
 static ttserverinfo::serv_info_t* g_file_server_list;
 static uint32_t g_file_server_count;
-static ttfile_handler::CFileHandler* s_file_handler = NULL;
+static ttfile_handler::CFileHandler* s_file_handler = nullptr;
 
 void file_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
-  CFileServConn* pConn = NULL;
+  CFileServConn* pConn = nullptr;
   uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_file_server_conn_map.begin(); it != g_file_server_conn_map.end();) {
@@ -60,12 +60,12 @@ void init_file_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server
 
   ttserverinfo::serv_init<CFileServConn>(g_file_server_list, g_file_server_count);
 
-  ttnetlib::netlib_register_timer(file_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(file_server_conn_timer_callback, nullptr, 1000);
   s_file_handler = ttfile_handler::CFileHandler::getInstance();
 }
 
 bool is_file_server_available() {
-  CFileServConn* pConn = NULL;
+  CFileServConn* pConn = nullptr;
   for (uint32_t i = 0; i < g_file_server_count; i++) {
     pConn = (CFileServConn*)g_file_server_list[i].serv_conn;
     if (pConn && pConn->IsOpen()) {
@@ -77,8 +77,8 @@ bool is_file_server_available() {
 
 //
 CFileServConn* get_random_file_serv_conn() {
-  CFileServConn* pConn = NULL;
-  CFileServConn* pConnTmp = NULL;
+  CFileServConn* pConn = nullptr;
+  CFileServConn* pConnTmp = nullptr;
   if (0 == g_file_server_count) {
     return pConn;
   }

@@ -26,7 +26,7 @@
 #include "connection/push_serv_conn.h"
 #include "connection/route_serv_conn.h"
 
-#include "domain/user/im_user.h"
+#include "domain/user/im_user_manager.h"
 #include "service/chat_handler/group_chat.h"
 #include "service/file_handler/file_handler.h"
 
@@ -48,16 +48,15 @@ namespace ttcommon = teamtalk::imcore::common;
 
 static ttnetlib::ConnMap_t g_db_server_conn_map;
 
-static ttserverinfo::serv_info_t* g_db_server_list = NULL;
+static ttserverinfo::serv_info_t* g_db_server_list = nullptr;
 static uint32_t g_db_server_count = 0;        // 到DBServer的总连接数
 static uint32_t g_db_server_login_count = 0;  // 到进行登录处理的DBServer的总连接数
-static ttchat_handler::CGroupChat* s_group_chat = NULL;
-static ttfile_handler::CFileHandler* s_file_handler = NULL;
+static ttchat_handler::CGroupChat* s_group_chat = nullptr;
+static ttfile_handler::CFileHandler* s_file_handler = nullptr;
 
 static void db_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
-  CDBServConn* pConn = NULL;
-  uint64_t cur_time = ttcommon::get_tick_count();
+  CDBServConn* pConn = nullptr;
 
   for (ttnetlib::ConnMap_t::iterator it = g_db_server_conn_map.begin(); it != g_db_server_conn_map.end();) {
     it_old = it;
@@ -89,7 +88,7 @@ void init_db_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_c
 
   ttserverinfo::serv_init<CDBServConn>(g_db_server_list, g_db_server_count);
 
-  ttnetlib::netlib_register_timer(db_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(db_server_conn_timer_callback, nullptr, 1000);
   s_group_chat = ttchat_handler::CGroupChat::GetInstance();
   s_file_handler = ttfile_handler::CFileHandler::getInstance();
 }
@@ -97,7 +96,7 @@ void init_db_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_c
 // get a random db server connection in the range [start_pos, stop_pos)
 static CDBServConn* get_db_server_conn_in_range(uint32_t start_pos, uint32_t stop_pos) {
   uint32_t i = 0;
-  CDBServConn* pDbConn = NULL;
+  CDBServConn* pDbConn = nullptr;
 
   // determine if there is a valid DB server connection
   for (i = start_pos; i < stop_pos; i++) {
@@ -109,7 +108,7 @@ static CDBServConn* get_db_server_conn_in_range(uint32_t start_pos, uint32_t sto
 
   // no valid DB server connection
   if (i == stop_pos) {
-    return NULL;
+    return nullptr;
   }
 
   // return a random valid DB server connection
@@ -303,7 +302,7 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
 
   // 3.根据登录名获取用户对象 pImUser 记录日志
   ttuser::CImUser* pImUser = ttuser::CImUserManager::GetInstance()->GetImUserByLoginName(login_name);
-  CMsgConn* pMsgConn = NULL;
+  CMsgConn* pMsgConn = nullptr;
   if (!pImUser) {
     // 如果用户对象存在，则根据附加数据的句柄获取未验证的消息连接对象 pMsgConn
     log_info("ImUser for user_name=%s not exist", login_name.c_str());
@@ -377,7 +376,7 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
 
     // 5-6.构造登录响应消息 msg3，设置相关字段
     ttidllogin::IMLoginRes msg3;
-    msg3.set_server_time(time(NULL));
+    msg3.set_server_time(time(nullptr));
     msg3.set_result_code(ttidlbase::REFUSE_REASON_NONE);
     msg3.set_result_string(result_string);
     msg3.set_online_status((ttidlbase::UserStatType)pMsgConn->GetOnlineStatus());
@@ -407,7 +406,7 @@ void CDBServConn::_HandleValidateResponse(ttnetlib::CImPdu* pPdu) {
     // 6.如果结果码不为零，表示验证失败，继续处理验证失败的逻辑
     // 6-1.构造登录响应消息 msg4，设置相关字段
     ttidllogin::IMLoginRes msg4;
-    msg4.set_server_time(time(NULL));
+    msg4.set_server_time(time(nullptr));
     msg4.set_result_code((ttidlbase::ResultType)result);
     msg4.set_result_string(result_string);
 
@@ -573,7 +572,7 @@ void CDBServConn::_HandleMsgData(ttnetlib::CImPdu* pPdu) {
   }
 
   if (pToImUser) {
-    pToImUser->BroadcastClientMsgData(pPdu, msg_id, NULL, from_user_id);
+    pToImUser->BroadcastClientMsgData(pPdu, msg_id, nullptr, from_user_id);
   }
 
   ttidlserver::IMGetDeviceTokenReq msg3;
@@ -695,7 +694,7 @@ void CDBServConn::_HandleChangeAvatarResponse(ttnetlib::CImPdu* pPdu) {
   log_info("HandleChangeAvatarResp, user_id=%u, result=%u.", user_id, result);
 
   ttuser::CImUser* pUser = ttuser::CImUserManager::GetInstance()->GetImUserById(user_id);
-  if (NULL != pUser) {
+  if (nullptr != pUser) {
     msg.clear_attach_data();
     pPdu->SetPBMsg(&msg);
     pUser->BroadcastPdu(pPdu);
@@ -758,7 +757,7 @@ void CDBServConn::_HandleGetDeviceTokenResponse(ttnetlib::CImPdu* pPdu) {
   uint32_t to_id = msg2.to_session_id();
   if (msg_type == ttidlbase::MSG_TYPE_SINGLE_TEXT || msg_type == ttidlbase::MSG_TYPE_GROUP_TEXT) {
     // msg_data =
-    char* msg_out = NULL;
+    char* msg_out = nullptr;
     uint32_t msg_out_len = 0;
     if (ttsecurity::DecryptMsg(msg_data.c_str(), msg_data.length(), &msg_out, msg_out_len) == 0) {
       msg_data = string(msg_out, msg_out_len);

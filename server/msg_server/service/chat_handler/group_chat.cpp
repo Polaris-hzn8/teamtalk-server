@@ -11,7 +11,7 @@
 #include <teamtalk/imcore/ttidl/service.pb.h>
 #include <teamtalk/imcore/slog/slog.h>
 
-#include "domain/user/im_user.h"
+#include "domain/user/im_user_manager.h"
 #include "service/chat_handler/group_chat.h"
 
 #include "connection/msg_conn.h"
@@ -30,7 +30,7 @@ namespace ttidlgroup = teamtalk::imcore::ttidl::group;
 namespace ttidlmessage = teamtalk::imcore::ttidl::message;
 namespace ttidlserver = teamtalk::imcore::ttidl::service;
 
-CGroupChat* CGroupChat::s_group_chat_instance = NULL;
+CGroupChat* CGroupChat::s_group_chat_instance = nullptr;
 
 CGroupChat* CGroupChat::GetInstance() {
   if (!s_group_chat_instance) {
@@ -91,7 +91,7 @@ void CGroupChat::HandleClientGroupInfoRequest(ttnetlib::CImPdu* pPdu, ttconnecti
   uint32_t user_id = pFromConn->GetUserId();
   uint32_t group_cnt = msg.group_version_list_size();
   log_info("HandleClientGroupInfoRequest, user_id=%u, group_cnt=%u. ", user_id, group_cnt);
-  ttconnection::CPduAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0, NULL);
+  ttconnection::CPduAttachData attach_data(ttconnection::ATTACH_TYPE_HANDLE, pFromConn->GetHandle(), 0, nullptr);
 
   ttconnection::CDBServConn* pDBConn = ttconnection::get_db_serv_conn();
   if (pDBConn) {
@@ -157,7 +157,7 @@ void CGroupChat::HandleGroupInfoResponse(ttnetlib::CImPdu* pPdu) {
 
       ttuser::CImUser* pToImUser = ttuser::CImUserManager::GetInstance()->GetImUserById(member_user_id);
       if (pToImUser) {
-        ttconnection::CMsgConn* pFromConn = NULL;
+        ttconnection::CMsgConn* pFromConn = nullptr;
         if (member_user_id == user_id) {
           uint32_t reqHandle = pduAttachData.GetHandle();
           if (reqHandle != 0)

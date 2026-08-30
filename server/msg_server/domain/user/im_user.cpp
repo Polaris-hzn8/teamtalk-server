@@ -3,7 +3,7 @@
  Email: 3453851623@qq.com
  filename: ImUser.cpp
  Update Time: Thu 15 Jun 2023 00:55:22 CST
- brief: a map from user_id to userInfo and connection list
+ brief:
 */
 
 #include <teamtalk/imcore/ttidl/login.pb.h>
@@ -42,11 +42,11 @@ ttconnection::CMsgConn* CImUser::GetUnValidateMsgConn(uint32_t handle) {
       return pConn;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 ttconnection::CMsgConn* CImUser::GetMsgConn(uint32_t handle) {
-  ttconnection::CMsgConn* pMsgConn = NULL;
+  ttconnection::CMsgConn* pMsgConn = nullptr;
   map<uint32_t, ttconnection::CMsgConn*>::iterator it = m_conn_map.find(handle);
   if (it != m_conn_map.end()) {
     pMsgConn = it->second;
@@ -118,7 +118,7 @@ void CImUser::BroadcastData(void* buff, uint32_t len, ttconnection::CMsgConn* pF
   for (map<uint32_t, ttconnection::CMsgConn*>::iterator it = m_conn_map.begin(); it != m_conn_map.end(); it++) {
     ttconnection::CMsgConn* pConn = it->second;
 
-    if (pConn == NULL)
+    if (pConn == nullptr)
       continue;
 
     if (pConn != pFromConn) {
@@ -174,144 +174,6 @@ uint32_t CImUser::GetClientTypeFlag() {
     }
   }
   return client_type_flag;
-}
-
-CImUserManager::~CImUserManager() {
-  RemoveAll();
-}
-
-CImUserManager* CImUserManager::GetInstance() {
-  static CImUserManager s_manager;
-  return &s_manager;
-}
-
-CImUser* CImUserManager::GetImUserByLoginName(string login_name) {
-  CImUser* pUser = NULL;
-  ImUserMapByName_t::iterator it = m_im_user_map_by_name.find(login_name);
-  if (it != m_im_user_map_by_name.end()) {
-    pUser = it->second;
-  }
-  return pUser;
-}
-
-CImUser* CImUserManager::GetImUserById(uint32_t user_id) {
-  CImUser* pUser = NULL;
-  ImUserMap_t::iterator it = m_im_user_map.find(user_id);
-  if (it != m_im_user_map.end()) {
-    pUser = it->second;
-  }
-  return pUser;
-}
-
-ttconnection::CMsgConn* CImUserManager::GetMsgConnByHandle(uint32_t user_id, uint32_t handle) {
-  ttconnection::CMsgConn* pMsgConn = NULL;
-  CImUser* pImUser = GetImUserById(user_id);
-  if (pImUser) {
-    pMsgConn = pImUser->GetMsgConn(handle);
-  }
-  return pMsgConn;
-}
-
-bool CImUserManager::AddImUserByLoginName(string login_name, CImUser* pUser) {
-  bool bRet = false;
-  if (GetImUserByLoginName(login_name) == NULL) {
-    m_im_user_map_by_name[login_name] = pUser;
-    bRet = true;
-  }
-  return bRet;
-}
-
-void CImUserManager::RemoveImUserByLoginName(string login_name) {
-  m_im_user_map_by_name.erase(login_name);
-}
-
-bool CImUserManager::AddImUserById(uint32_t user_id, CImUser* pUser) {
-  bool bRet = false;
-  if (GetImUserById(user_id) == NULL) {
-    m_im_user_map[user_id] = pUser;
-    bRet = true;
-  }
-  return bRet;
-}
-
-void CImUserManager::RemoveImUserById(uint32_t user_id) {
-  m_im_user_map.erase(user_id);
-}
-
-void CImUserManager::RemoveImUser(CImUser* pUser) {
-  if (pUser != NULL) {
-    RemoveImUserById(pUser->GetUserId());
-    RemoveImUserByLoginName(pUser->GetLoginName());
-    delete pUser;
-    pUser = NULL;
-  }
-}
-
-void CImUserManager::RemoveAll() {
-  for (ImUserMapByName_t::iterator it = m_im_user_map_by_name.begin(); it != m_im_user_map_by_name.end(); it++) {
-    CImUser* pUser = it->second;
-    if (pUser != NULL) {
-      delete pUser;
-      pUser = NULL;
-    }
-  }
-  m_im_user_map_by_name.clear();
-  m_im_user_map.clear();
-}
-
-void CImUserManager::GetOnlineUserInfo(list<user_stat_t>* online_user_info) {
-  user_stat_t status;
-  CImUser* pImUser = NULL;
-  for (ImUserMap_t::iterator it = m_im_user_map.begin(); it != m_im_user_map.end(); it++) {
-    pImUser = (CImUser*)it->second;
-    if (pImUser->IsValidate()) {
-      map<uint32_t, ttconnection::CMsgConn*>& ConnMap = pImUser->GetMsgConnMap();
-      for (map<uint32_t, ttconnection::CMsgConn*>::iterator it = ConnMap.begin(); it != ConnMap.end(); it++) {
-        ttconnection::CMsgConn* pConn = it->second;
-        if (pConn->IsOpen()) {
-          status.user_id = pImUser->GetUserId();
-          status.client_type = pConn->GetClientType();
-          status.status = pConn->GetOnlineStatus();
-          online_user_info->push_back(status);
-        }
-      }
-    }
-  }
-}
-
-void CImUserManager::GetUserConnCnt(list<user_conn_t>* user_conn_list, uint32_t& total_conn_cnt) {
-  total_conn_cnt = 0;
-  CImUser* pImUser = NULL;
-  for (ImUserMap_t::iterator it = m_im_user_map.begin(); it != m_im_user_map.end(); it++) {
-    pImUser = (CImUser*)it->second;
-    if (pImUser->IsValidate()) {
-      user_conn_t user_conn_cnt = pImUser->GetUserConn();
-      user_conn_list->push_back(user_conn_cnt);
-      total_conn_cnt += user_conn_cnt.conn_cnt;
-    }
-  }
-}
-
-void CImUserManager::BroadcastPdu(ttnetlib::CImPdu* pdu, uint32_t client_type_flag) {
-  CImUser* pImUser = NULL;
-  for (ImUserMap_t::iterator it = m_im_user_map.begin(); it != m_im_user_map.end(); it++) {
-    pImUser = (CImUser*)it->second;
-    if (pImUser->IsValidate()) {
-      switch (client_type_flag) {
-        case CLIENT_TYPE_FLAG_PC:
-          pImUser->BroadcastPduWithOutMobile(pdu);
-          break;
-        case CLIENT_TYPE_FLAG_MOBILE:
-          pImUser->BroadcastPduToMobile(pdu);
-          break;
-        case CLIENT_TYPE_FLAG_BOTH:
-          pImUser->BroadcastPdu(pdu);
-          break;
-        default:
-          break;
-      }
-    }
-  }
 }
 
 }  // namespace teamtalk::msg_server::domain::user

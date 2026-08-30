@@ -54,7 +54,7 @@ class CGroupChat {
  private:
   CGroupChat() {}  // for singleton;
 
-  void _SendPduToUser(ttnetlib::CImPdu* pPdu, uint32_t user_id, ttconnection::CMsgConn* pReqConn = NULL);
+  void _SendPduToUser(ttnetlib::CImPdu* pPdu, uint32_t user_id, ttconnection::CMsgConn* pReqConn = nullptr);
 
  private:
   static CGroupChat* s_group_chat_instance;

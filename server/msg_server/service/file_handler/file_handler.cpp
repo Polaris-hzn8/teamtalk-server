@@ -17,7 +17,7 @@
 #include "connection/file_serv_conn.h"
 #include "connection/route_serv_conn.h"
 
-#include "domain/user/im_user.h"
+#include "domain/user/im_user_manager.h"
 #include "service/file_handler/file_handler.h"
 
 namespace teamtalk::msg_server::service::file_handler {
@@ -231,7 +231,7 @@ void CFileHandler::HandleFileHasOfflineRes(ttnetlib::CImPdu* pPdu) {
   ttconnection::CMsgConn* pConn =
     ttuser::CImUserManager::GetInstance()->GetMsgConnByHandle(req_user_id, attach.GetHandle());
   ttconnection::CFileServConn* pFileConn = ttconnection::get_random_file_serv_conn();
-  const list<ttidlbase::IpAddr>* ip_list = NULL;
+  const list<ttidlbase::IpAddr>* ip_list = nullptr;
   if (pFileConn) {
     ip_list = pFileConn->GetFileServerIPList();
     for (list<ttidlbase::IpAddr>::const_iterator it = ip_list->begin(); it != ip_list->end(); it++) {

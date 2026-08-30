@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
   }
 
   signal(SIGPIPE, SIG_IGN);
-  srand(time(NULL));
+  srand(time(nullptr));
 
   log_info("MsgServer max files can open: %d ", getdtablesize());
 
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
     return ret;
 
   for (const auto& addr : cfg.listen_addresses()) {
-    ret = ttnetlib::netlib_listen(addr.c_str(), cfg.listen_port(), msg_serv_callback, NULL);
+    ret = ttnetlib::netlib_listen(addr.c_str(), cfg.listen_port(), msg_serv_callback, nullptr);
     if (ret == ttnetlib::NETLIB_ERROR)
       return ret;
   }

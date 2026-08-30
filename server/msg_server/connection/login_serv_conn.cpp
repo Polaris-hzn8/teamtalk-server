@@ -15,7 +15,7 @@
 #include <teamtalk/imcore/ttidl/other.pb.h>
 #include <teamtalk/imcore/ttidl/service.pb.h>
 
-#include "domain/user/im_user.h"
+#include "domain/user/im_user_manager.h"
 #include "connection/msg_conn.h"
 #include "connection/login_serv_conn.h"
 
@@ -41,7 +41,7 @@ static uint32_t g_max_conn_cnt;
 
 void login_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
-  CLoginServConn* pConn = NULL;
+  CLoginServConn* pConn = nullptr;
   uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_login_server_conn_map.begin(); it != g_login_server_conn_map.end();) {
@@ -72,12 +72,12 @@ void init_login_serv_conn(ttserverinfo::serv_info_t* server_list,
   g_msg_server_port = msg_server_port;
   g_max_conn_cnt = max_conn_cnt;
 
-  ttnetlib::netlib_register_timer(login_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(login_server_conn_timer_callback, nullptr, 1000);
 }
 
 // if there is one LoginServer available, return true
 bool is_login_server_available() {
-  CLoginServConn* pConn = NULL;
+  CLoginServConn* pConn = nullptr;
 
   for (uint32_t i = 0; i < g_login_server_count; i++) {
     pConn = (CLoginServConn*)g_login_server_list[i].serv_conn;
@@ -85,12 +85,11 @@ bool is_login_server_available() {
       return true;
     }
   }
-
   return false;
 }
 
 void send_to_all_login_server(ttnetlib::CImPdu* pPdu) {
-  CLoginServConn* pConn = NULL;
+  CLoginServConn* pConn = nullptr;
 
   for (uint32_t i = 0; i < g_login_server_count; i++) {
     pConn = (CLoginServConn*)g_login_server_list[i].serv_conn;

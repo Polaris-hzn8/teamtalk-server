@@ -24,7 +24,7 @@
 #include "connection/login_serv_conn.h"
 #include "connection/route_serv_conn.h"
 
-#include "domain/user/im_user.h"
+#include "domain/user/im_user_manager.h"
 #include "service/chat_handler/group_chat.h"
 #include "service/file_handler/file_handler.h"
 
@@ -59,12 +59,12 @@ static uint32_t g_down_msg_miss_cnt = 0;   // 下行消息丢包数
 
 static bool g_log_msg_toggle = true;  // 是否把收到的MsgData写入Log的开关，通过kill -SIGUSR2 pid 打开/关闭
 
-static ttfile_handler::CFileHandler* s_file_handler = NULL;
-static ttchat_handler::CGroupChat* s_group_chat = NULL;
+static ttfile_handler::CFileHandler* s_file_handler = nullptr;
+static ttchat_handler::CGroupChat* s_group_chat = nullptr;
 
 void msg_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
-  CMsgConn* pConn = NULL;
+  CMsgConn* pConn = nullptr;
   uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_msg_conn_map.begin(); it != g_msg_conn_map.end();) {
@@ -116,7 +116,7 @@ void init_msg_conn() {
   signal(SIGUSR1, signal_handler_usr1);
   signal(SIGUSR2, signal_handler_usr2);
   signal(SIGHUP, signal_handler_hup);
-  ttnetlib::netlib_register_timer(msg_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(msg_conn_timer_callback, nullptr, 1000);
   s_file_handler = ttfile_handler::CFileHandler::getInstance();
   s_group_chat = ttchat_handler::CGroupChat::GetInstance();
 }
@@ -440,7 +440,7 @@ void CMsgConn::_HandleLoginRequest(ttnetlib::CImPdu* pPdu) {
     // 3-1.创建一个ttidllogin::IMLoginRes对象msg 并设置该对象的字段值
     ttidllogin::IMLoginRes msg;
     // 3-2.设置相关响应消息
-    msg.set_server_time(time(NULL));                     //设置为当前时间
+    msg.set_server_time(time(nullptr));                     //设置为当前时间
     msg.set_result_code((ttidlbase::ResultType)result);  //设置为result的值，表示拒绝原因
     msg.set_result_string(result_string);                //设置为result_string的值，表示结果说明
     // 3-3.创建一个ttnetlib::CImPdu对象pdu，并将msg对象设置为其消息体
@@ -648,7 +648,7 @@ void CMsgConn::_HandleClientMsgData(ttnetlib::CImPdu* pPdu) {
     log_info("HandleClientMsgData, %d->%d, msg_type=%u, msg_id=%u. ", GetUserId(), to_session_id, msg_type, msg_id);
 
   // 6.获取当前时间作为消息的创建时间
-  uint32_t cur_time = time(NULL);
+  uint32_t cur_time = time(nullptr);
 
   // 7.创建 CDbAttachData 对象，将其类型设置为
   // ATTACH_TYPE_HANDLE，并存储句柄（handle）信息
@@ -683,7 +683,7 @@ void CMsgConn::_HandleClientMsgDataAck(ttnetlib::CImPdu* pPdu) {
 
 void CMsgConn::_HandleClientTimeRequest(ttnetlib::CImPdu* pPdu) {
   ttidlmessage::IMClientTimeRsp msg;
-  msg.set_server_time((uint32_t)time(NULL));
+  msg.set_server_time((uint32_t)time(nullptr));
   ttnetlib::CImPdu pdu;
   pdu.SetPBMsg(&msg);
   pdu.SetServiceId(ttidlbase::SID_MSG);
@@ -837,7 +837,7 @@ void CMsgConn::_HandleClientP2PCmdMsg(ttnetlib::CImPdu* pPdu) {
   }
 
   if (pToImUser) {
-    pToImUser->BroadcastPdu(pPdu, NULL);
+    pToImUser->BroadcastPdu(pPdu, nullptr);
   }
 
   CRouteServConn* pRouteConn = get_route_serv_conn();
@@ -934,7 +934,7 @@ void CMsgConn::_HandleClientUsersStatusRequest(ttnetlib::CImPdu* pPdu) {
   CRouteServConn* pRouteConn = get_route_serv_conn();
   if (pRouteConn) {
     msg.set_user_id(GetUserId());
-    CPduAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0, NULL);
+    CPduAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0, nullptr);
     msg.set_attach_data(attach.GetBuffer(), attach.GetLength());
     pPdu->SetPBMsg(&msg);
     pRouteConn->SendPdu(pPdu);
@@ -1034,7 +1034,7 @@ void CMsgConn::_HandleChangeSignInfoRequest(ttnetlib::CImPdu* pPdu) {
   CDBServConn* pDBConn = get_db_serv_conn();
   if (pDBConn) {
     msg.set_user_id(GetUserId());
-    CPduAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0, NULL);
+    CPduAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0, nullptr);
     msg.set_attach_data(attach.GetBuffer(), attach.GetLength());
 
     pPdu->SetPBMsg(&msg);
@@ -1048,7 +1048,7 @@ void CMsgConn::_HandlePushShieldRequest(ttnetlib::CImPdu* pPdu) {
   CDBServConn* pDBConn = get_db_serv_conn();
   if (pDBConn) {
     msg.set_user_id(GetUserId());
-    CPduAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0, NULL);
+    CPduAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0, nullptr);
     msg.set_attach_data(attach.GetBuffer(), attach.GetLength());
 
     pPdu->SetPBMsg(&msg);
@@ -1063,7 +1063,7 @@ void CMsgConn::_HandleQueryPushShieldRequest(ttnetlib::CImPdu* pPdu) {
   CDBServConn* pDBConn = get_db_serv_conn();
   if (pDBConn) {
     msg.set_user_id(GetUserId());
-    CPduAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0, NULL);
+    CPduAttachData attach(ATTACH_TYPE_HANDLE, m_handle, 0, nullptr);
     msg.set_attach_data(attach.GetBuffer(), attach.GetLength());
 
     pPdu->SetPBMsg(&msg);
