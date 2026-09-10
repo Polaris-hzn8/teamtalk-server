@@ -440,7 +440,7 @@ void CMsgConn::_HandleLoginRequest(ttnetlib::CImPdu* pPdu) {
     // 3-1.创建一个ttidllogin::IMLoginRes对象msg 并设置该对象的字段值
     ttidllogin::IMLoginRes msg;
     // 3-2.设置相关响应消息
-    msg.set_server_time(time(nullptr));                     //设置为当前时间
+    msg.set_server_time(time(nullptr));                  //设置为当前时间
     msg.set_result_code((ttidlbase::ResultType)result);  //设置为result的值，表示拒绝原因
     msg.set_result_string(result_string);                //设置为result_string的值，表示结果说明
     // 3-3.创建一个ttnetlib::CImPdu对象pdu，并将msg对象设置为其消息体

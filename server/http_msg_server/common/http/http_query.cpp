@@ -7,20 +7,27 @@
 */
 
 #include <sstream>
+#include <unordered_map>
 
-#include "attach_data.h"
-#include "db_serv_conn.h"
-#include "http_pdu.h"
-#include "http_query.h"
-#include "public_define.h"
-#include "route_serv_conn.h"
+#include <teamtalk/imcore/common/tools.h>
+#include <teamtalk/imcore/slog/slog.h>
+#include <teamtalk/imcore/netlib/core/im_pdu.h>
 
-#include "IM.Buddy.pb.h"
-#include "IM.Group.pb.h"
-#include "IM.Message.pb.h"
-#include "IM.SwitchService.pb.h"
+#include <teamtalk/imcore/ttidl/base_define.pb.h>
+#include <teamtalk/imcore/ttidl/group.pb.h>
 
-using namespace std;
+#include "common/http/http_query.h"
+#include "common/http/http_pdu.h"
+#include "connection/attach_data.h"
+#include "connection/db_serv_conn.h"
+#include "connection/route_serv_conn.h"
+
+namespace teamtalk::http_server::common::http {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttconn = teamtalk::http_server::connection;
+namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+namespace ttidlgroup = teamtalk::imcore::ttidl::group;
 
 static uint32_t g_total_query = 0;
 static uint32_t g_last_year = 0;
@@ -54,7 +61,7 @@ void http_query_timer_callback(void* callback_data, uint8_t msg, uint32_t handle
 CHttpQuery* CHttpQuery::GetInstance() {
   if (!m_query_instance) {
     m_query_instance = new CHttpQuery();
-    netlib_register_timer(http_query_timer_callback, NULL, 1000);
+    ttnetlib::netlib_register_timer(http_query_timer_callback, NULL, 1000);
   }
 
   return m_query_instance;
@@ -80,13 +87,13 @@ void CHttpQuery::DispatchQuery(std::string& url, std::string& post_data, CHttpCo
     return;
   }
 
-  string strErrorMsg;
-  string strAppKey;
+  std::string strErrorMsg;
+  std::string strAppKey;
   HTTP_ERROR_CODE nRet = HTTP_ERROR_SUCCESS;
   try {
-    string strInterface(url.c_str() + strlen("/query/"));
+    std::string strInterface(url.c_str() + strlen("/query/"));
     strAppKey = value["app_key"].asString();
-    string strIp = pHttpConn->GetPeerIP();
+    std::string strIp = pHttpConn->GetPeerIP();
     uint32_t nUserId = value["req_user_id"].asUInt();
     nRet = _CheckAuth(strAppKey, nUserId, strInterface, strIp);
   } catch (std::runtime_error msg) {
@@ -101,11 +108,11 @@ void CHttpQuery::DispatchQuery(std::string& url, std::string& post_data, CHttpCo
       root["error_code"] = -1;
       root["error_msg"] = "未知错误";
     }
-    string strResponse = root.toStyledString();
+    std::string strResponse = root.toStyledString();
     pHttpConn->Send((void*)strResponse.c_str(), strResponse.length());
     return;
   }
-
+  
   // process post request with post content
   if (strcmp(url.c_str(), "/query/CreateGroup") == 0) {
     _QueryCreateGroup(strAppKey, value, pHttpConn);
@@ -118,8 +125,8 @@ void CHttpQuery::DispatchQuery(std::string& url, std::string& post_data, CHttpCo
   }
 }
 
-void CHttpQuery::_QueryCreateGroup(const string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn) {
-  HTTP::CDBServConn* pConn = HTTP::get_db_serv_conn();
+void CHttpQuery::_QueryCreateGroup(const std::string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn) {
+  ttconn::CDBServConn* pConn = ttconn::get_db_serv_conn();
   if (!pConn) {
     log_info("no connection to DBProxy ");
     char* response_buf = PackSendResult(HTTP_ERROR_SERVER_EXCEPTION, HTTP_ERROR_MSG[9].c_str());
@@ -170,9 +177,9 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey, Json::Value& post_js
 
   try {
     uint32_t user_id = post_json_obj["req_user_id"].asUInt();
-    string group_name = post_json_obj["group_name"].asString();
+    std::string group_name = post_json_obj["group_name"].asString();
     uint32_t group_type = post_json_obj["group_type"].asUInt();
-    string group_avatar = post_json_obj["group_avatar"].asString();
+    std::string group_avatar = post_json_obj["group_avatar"].asString();
     uint32_t user_cnt = post_json_obj["user_id_list"].size();
     log_info(
       "QueryCreateGroup, user_id: %u, group_name: %s, group_type: %u, "
@@ -181,7 +188,7 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey, Json::Value& post_js
       group_name.c_str(),
       group_type,
       user_cnt);
-    if (!IM::BaseDefine::GroupType_IsValid(group_type)) {
+    if (!ttidlbase::GroupType_IsValid(group_type)) {
       log_info("QueryCreateGroup, unvalid group_type");
       char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
       pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
@@ -189,22 +196,22 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey, Json::Value& post_js
       return;
     }
 
-    CDbAttachData attach_data(ATTACH_TYPE_HANDLE, pHttpConn->GetConnHandle());
-    IM::Group::IMGroupCreateReq msg;
+    ttconn::CDbAttachData attach_data(ttconn::ATTACH_TYPE_HANDLE, pHttpConn->GetConnHandle());
+    ttidlgroup::IMGroupCreateReq msg;
     msg.set_user_id(0);
     msg.set_group_name(group_name);
     msg.set_group_avatar(group_avatar);
-    msg.set_group_type((::IM::BaseDefine::GroupType)group_type);
+    msg.set_group_type((ttidlbase::GroupType)group_type);
     for (uint32_t i = 0; i < user_cnt; i++) {
       uint32_t member_id = post_json_obj["user_id_list"][i].asUInt();
       msg.add_member_id_list(member_id);
     }
     msg.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
 
-    CImPdu pdu;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(IM::BaseDefine::SID_GROUP);
-    pdu.SetCommandId(IM::BaseDefine::CID_GROUP_CREATE_REQUEST);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_CREATE_REQUEST);
     pConn->SendPdu(&pdu);
 
   } catch (std::runtime_error msg) {
@@ -215,8 +222,8 @@ void CHttpQuery::_QueryCreateGroup(const string& strAppKey, Json::Value& post_js
   }
 }
 
-void CHttpQuery::_QueryChangeMember(const string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn) {
-  HTTP::CDBServConn* pConn = HTTP::get_db_serv_conn();
+void CHttpQuery::_QueryChangeMember(const std::string& strAppKey, Json::Value& post_json_obj, CHttpConn* pHttpConn) {
+  ttconn::CDBServConn* pConn = ttconn::get_db_serv_conn();
   if (!pConn) {
     log_info("no connection to RouteServConn ");
     char* response_buf = PackSendResult(HTTP_ERROR_SERVER_EXCEPTION, HTTP_ERROR_MSG[9].c_str());
@@ -268,27 +275,27 @@ void CHttpQuery::_QueryChangeMember(const string& strAppKey, Json::Value& post_j
       group_id,
       modify_type,
       user_cnt);
-    if (!IM::BaseDefine::GroupModifyType_IsValid(modify_type)) {
+    if (!ttidlbase::GroupModifyType_IsValid(modify_type)) {
       log_info("QueryChangeMember, unvalid modify_type");
       char* response_buf = PackSendResult(HTTP_ERROR_PARMENT, HTTP_ERROR_MSG[1].c_str());
       pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
       pHttpConn->Close();
       return;
     }
-    CDbAttachData attach_data(ATTACH_TYPE_HANDLE, pHttpConn->GetConnHandle());
-    IM::Group::IMGroupChangeMemberReq msg;
+    ttconn::CDbAttachData attach_data(ttconn::ATTACH_TYPE_HANDLE, pHttpConn->GetConnHandle());
+    ttidlgroup::IMGroupChangeMemberReq msg;
     msg.set_user_id(0);
-    msg.set_change_type((::IM::BaseDefine::GroupModifyType)modify_type);
+    msg.set_change_type((ttidlbase::GroupModifyType)modify_type);
     msg.set_group_id(group_id);
     for (uint32_t i = 0; i < user_cnt; i++) {
       uint32_t member_id = post_json_obj["user_id_list"][i].asUInt();
       msg.add_member_id_list(member_id);
     }
     msg.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
-    CImPdu pdu;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(IM::BaseDefine::SID_GROUP);
-    pdu.SetCommandId(IM::BaseDefine::CID_GROUP_CHANGE_MEMBER_REQUEST);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_CHANGE_MEMBER_REQUEST);
     pConn->SendPdu(&pdu);
   } catch (std::runtime_error msg) {
     log_info("parse json data failed.");
@@ -298,17 +305,19 @@ void CHttpQuery::_QueryChangeMember(const string& strAppKey, Json::Value& post_j
   }
 }
 
-HTTP_ERROR_CODE CHttpQuery::_CheckAuth(const string& strAppKey,
+HTTP_ERROR_CODE CHttpQuery::_CheckAuth(const std::string& strAppKey,
                                        const uint32_t userId,
-                                       const string& strInterface,
-                                       const string& strIp) {
+                                       const std::string& strInterface,
+                                       const std::string& strIp) {
   return HTTP_ERROR_SUCCESS;
 }
 
-HTTP_ERROR_CODE CHttpQuery::_CheckPermission(const string& strAppKey,
+HTTP_ERROR_CODE CHttpQuery::_CheckPermission(const std::string& strAppKey,
                                              uint8_t nType,
-                                             const list<uint32_t>& lsToId,
-                                             string strMsg) {
+                                             const std::list<uint32_t>& lsToId,
+                                             std::string strMsg) {
   strMsg.clear();
   return HTTP_ERROR_SUCCESS;
 }
+
+}  // namespace teamtalk::http_server::common::http

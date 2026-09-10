@@ -8,23 +8,37 @@
 
 #include <list>
 
-#include "attach_data.h"
-#include "db_serv_conn.h"
-#include "http_conn.h"
-#include "http_pdu.h"
-#include "http_query.h"
-#include "public_define.h"
-#include "route_serv_conn.h"
+#include <teamtalk/imcore/common/tools.h>
+#include <teamtalk/imcore/slog/slog.h>
+#include <teamtalk/imcore/netlib/core/im_pdu.h>
 
-#include "IM.Buddy.pb.h"
-#include "IM.Group.pb.h"
-#include "IM.Message.pb.h"
-#include "IM.Other.pb.h"
-#include "IM.Server.pb.h"
-#include "IM.SwitchService.pb.h"
+#include <teamtalk/imcore/ttidl/base_define.pb.h>
+#include <teamtalk/imcore/ttidl/buddy.pb.h>
+#include <teamtalk/imcore/ttidl/group.pb.h>
+#include <teamtalk/imcore/ttidl/message.pb.h>
+#include <teamtalk/imcore/ttidl/other.pb.h>
+#include <teamtalk/imcore/ttidl/service.pb.h>
+#include <teamtalk/imcore/ttidl/switch_service.pb.h>
 
-using namespace std;
-using namespace IM::BaseDefine;
+#include <teamtalk/sbase/global_define.h>
+
+#include "connection/db_serv_conn.h"
+#include "connection/attach_data.h"
+#include "connection/route_serv_conn.h"
+#include "common/http/http_conn.h"
+#include "common/http/http_pdu.h"
+#include "common/http/http_query.h"
+
+namespace teamtalk::http_server::connection {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttcommon = teamtalk::imcore::common;
+namespace ttserverinfo = teamtalk::sbase::server_info;
+namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+namespace ttidlgroup = teamtalk::imcore::ttidl::group;
+namespace ttidlother = teamtalk::imcore::ttidl::other;
+namespace ttidlserver = teamtalk::imcore::ttidl::service;
+namespace tthttp = teamtalk::http_server::common::http;
 
 extern std::unordered_map<std::string, auth_struct*> g_hm_http_auth;
 
@@ -33,22 +47,18 @@ bool g_bOnSync = false;
 uint64_t g_last_recv_auth = 0;
 uint32_t g_latest_auth = 0;
 
-namespace HTTP {
+static ttnetlib::ConnMap_t g_db_server_conn_map;
 
-#define SERVER_TIMEOUT 30000
-
-static ConnMap_t g_db_server_conn_map;
-
-static serv_info_t* g_db_server_list = NULL;
+static ttserverinfo::serv_info_t* g_db_server_list = NULL;
 static uint32_t g_db_server_count = 0;
 static uint32_t g_db_server_login_count = 0;  // 到进行登录处理的DBServer的总连接数
 
 static void db_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
-  ConnMap_t::iterator it_old;
+  ttnetlib::ConnMap_t::iterator it_old;
   CDBServConn* pConn = NULL;
-  uint64_t cur_time = get_tick_count();
+  uint64_t cur_time = ttcommon::get_tick_count();
 
-  for (ConnMap_t::iterator it = g_db_server_conn_map.begin(); it != g_db_server_conn_map.end();) {
+  for (ttnetlib::ConnMap_t::iterator it = g_db_server_conn_map.begin(); it != g_db_server_conn_map.end();) {
     it_old = it;
     it++;
 
@@ -57,13 +67,13 @@ static void db_server_conn_timer_callback(void* callback_data, uint8_t msg, uint
       pConn->OnTimer(cur_time);
     }
   }
-
+  
   // reconnect DB Storage Server
   // will reconnect in 4s, 8s, 16s, 32s, 64s, 4s 8s ...
-  serv_check_reconnect<CDBServConn>(g_db_server_list, g_db_server_count);
+  ttserverinfo::serv_check_reconnect<CDBServConn>(g_db_server_list, g_db_server_count);
 }
 
-void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count, uint32_t concur_conn_cnt) {
+void init_db_serv_conn(ttserverinfo::serv_info_t* server_list, uint32_t server_count, uint32_t concur_conn_cnt) {
   g_db_server_list = server_list;
   g_db_server_count = server_count;
 
@@ -85,9 +95,9 @@ void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count, uint32_t
     g_db_server_login_count,
     g_db_server_count);
 
-  serv_init<CDBServConn>(g_db_server_list, g_db_server_count);
+  ttserverinfo::serv_init<CDBServConn>(g_db_server_list, g_db_server_count);
 
-  netlib_register_timer(db_server_conn_timer_callback, NULL, 1000);
+  ttnetlib::netlib_register_timer(db_server_conn_timer_callback, NULL, 1000);
 }
 
 // get a random db server connection in the range [start_pos, stop_pos)
@@ -150,19 +160,19 @@ void CDBServConn::Connect(const char* server_ip, uint16_t server_port, uint32_t 
   log_info("Connecting to DB Storage Server %s:%d", server_ip, server_port);
 
   m_serv_idx = serv_idx;
-  m_handle = netlib_connect(server_ip, server_port, imconn_callback, (void*)&g_db_server_conn_map);
+  m_handle = ttnetlib::netlib_connect(server_ip, server_port, ttnetlib::imconn_callback, (void*)&g_db_server_conn_map);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
-    g_db_server_conn_map.insert(make_pair(m_handle, this));
+    g_db_server_conn_map.insert(std::make_pair(m_handle, this));
   }
 }
 
 void CDBServConn::Close() {
   // reset server information for the next connect
-  serv_reset<CDBServConn>(g_db_server_list, g_db_server_count, m_serv_idx);
+  ttserverinfo::serv_reset<CDBServConn>(g_db_server_list, g_db_server_count, m_serv_idx);
 
   if (m_handle != NETLIB_INVALID_HANDLE) {
-    netlib_close(m_handle);
+    ttnetlib::netlib_close(m_handle);
     g_db_server_conn_map.erase(m_handle);
   }
 
@@ -182,11 +192,11 @@ void CDBServConn::OnClose() {
 
 void CDBServConn::OnTimer(uint64_t curr_tick) {
   if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
-    IM::Other::IMHeartBeat msg;
-    CImPdu pdu;
+    ttidlother::IMHeartBeat msg;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg);
-    pdu.SetServiceId(IM::BaseDefine::SID_OTHER);
-    pdu.SetCommandId(IM::BaseDefine::CID_OTHER_HEARTBEAT);
+    pdu.SetServiceId(ttidlbase::SID_OTHER);
+    pdu.SetCommandId(ttidlbase::CID_OTHER_HEARTBEAT);
     SendPdu(&pdu);
   }
   if (curr_tick > m_last_recv_tick + SERVER_TIMEOUT) {
@@ -195,17 +205,17 @@ void CDBServConn::OnTimer(uint64_t curr_tick) {
   }
 }
 
-void CDBServConn::HandlePdu(CImPdu* pPdu) {
+void CDBServConn::HandlePdu(ttnetlib::CImPdu* pPdu) {
   switch (pPdu->GetCommandId()) {
-    case CID_OTHER_HEARTBEAT:
+    case ttidlbase::CID_OTHER_HEARTBEAT:
       break;
-    case CID_OTHER_STOP_RECV_PACKET:
+    case ttidlbase::CID_OTHER_STOP_RECV_PACKET:
       _HandleStopReceivePacket(pPdu);
       break;
-    case CID_GROUP_CREATE_RESPONSE:
+    case ttidlbase::CID_GROUP_CREATE_RESPONSE:
       _HandleCreateGroupRsp(pPdu);
       break;
-    case CID_GROUP_CHANGE_MEMBER_RESPONSE:
+    case ttidlbase::CID_GROUP_CHANGE_MEMBER_RESPONSE:
       _HandleChangeMemberRsp(pPdu);
       break;
     default:
@@ -213,7 +223,7 @@ void CDBServConn::HandlePdu(CImPdu* pPdu) {
   }
 }
 
-void CDBServConn::_HandleStopReceivePacket(CImPdu* pPdu) {
+void CDBServConn::_HandleStopReceivePacket(ttnetlib::CImPdu* pPdu) {
   log_info("HandleStopReceivePacket, from %s:%d",
            g_db_server_list[m_serv_idx].server_ip.c_str(),
            g_db_server_list[m_serv_idx].server_port);
@@ -221,11 +231,11 @@ void CDBServConn::_HandleStopReceivePacket(CImPdu* pPdu) {
   m_bOpen = false;
 }
 
-void CDBServConn::_HandleCreateGroupRsp(CImPdu* pPdu) {
-  IM::Group::IMGroupCreateRsp msg;
+void CDBServConn::_HandleCreateGroupRsp(ttnetlib::CImPdu* pPdu) {
+  ttidlgroup::IMGroupCreateRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
   uint32_t user_id = msg.user_id();
-  string group_name = msg.group_name();
+  std::string group_name = msg.group_name();
   uint32_t result_code = msg.result_code();
   uint32_t group_id = 0;
   if (msg.has_group_id()) {
@@ -233,7 +243,7 @@ void CDBServConn::_HandleCreateGroupRsp(CImPdu* pPdu) {
   }
   CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t http_handle = attach_data.GetHandle();
-  CHttpConn* pHttpConn = FindHttpConnByHandle(http_handle);
+  tthttp::CHttpConn* pHttpConn = tthttp::FindHttpConnByHandle(http_handle);
   if (!pHttpConn) {
     log_info("no http connection");
     return;
@@ -242,16 +252,16 @@ void CDBServConn::_HandleCreateGroupRsp(CImPdu* pPdu) {
 
   char* response_buf = NULL;
   if (result_code != 0) {
-    response_buf = PackSendCreateGroupResult(HTTP_ERROR_CREATE_GROUP, HTTP_ERROR_MSG[10].c_str(), group_id);
+    response_buf = tthttp::PackSendCreateGroupResult(tthttp::HTTP_ERROR_CREATE_GROUP, tthttp::HTTP_ERROR_MSG[10].c_str(), group_id);
   } else {
-    response_buf = PackSendCreateGroupResult(HTTP_ERROR_SUCCESS, HTTP_ERROR_MSG[0].c_str(), group_id);
+    response_buf = tthttp::PackSendCreateGroupResult(tthttp::HTTP_ERROR_SUCCESS, tthttp::HTTP_ERROR_MSG[0].c_str(), group_id);
   }
   pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
   pHttpConn->Close();
 }
 
-void CDBServConn::_HandleChangeMemberRsp(CImPdu* pPdu) {
-  IM::Group::IMGroupChangeMemberRsp msg;
+void CDBServConn::_HandleChangeMemberRsp(ttnetlib::CImPdu* pPdu) {
+  ttidlgroup::IMGroupChangeMemberRsp msg;
   CHECK_PB_PARSE_MSG(msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength()));
 
   uint32_t change_type = msg.change_type();
@@ -271,24 +281,24 @@ void CDBServConn::_HandleChangeMemberRsp(CImPdu* pPdu) {
     cur_user_cnt);
   CDbAttachData attach_data((uchar_t*)msg.attach_data().c_str(), msg.attach_data().length());
   uint32_t http_handle = attach_data.GetHandle();
-  CHttpConn* pHttpConn = FindHttpConnByHandle(http_handle);
+  tthttp::CHttpConn* pHttpConn = tthttp::FindHttpConnByHandle(http_handle);
   if (!pHttpConn) {
     log_info("no http connection.");
     return;
   }
   char* response_buf = NULL;
   if (result != 0) {
-    response_buf = PackSendResult(HTTP_ERROR_CHANGE_MEMBER, HTTP_ERROR_MSG[11].c_str());
+    response_buf = tthttp::PackSendResult(tthttp::HTTP_ERROR_CHANGE_MEMBER, tthttp::HTTP_ERROR_MSG[11].c_str());
   } else {
-    response_buf = PackSendResult(HTTP_ERROR_SUCCESS, HTTP_ERROR_MSG[0].c_str());
+    response_buf = tthttp::PackSendResult(tthttp::HTTP_ERROR_SUCCESS, tthttp::HTTP_ERROR_MSG[0].c_str());
   }
   pHttpConn->Send(response_buf, (uint32_t)strlen(response_buf));
   pHttpConn->Close();
 
   if (!result) {
-    IM::Group::IMGroupChangeMemberNotify msg2;
+    ttidlgroup::IMGroupChangeMemberNotify msg2;
     msg2.set_user_id(user_id);
-    msg2.set_change_type((::IM::BaseDefine::GroupModifyType)change_type);
+    msg2.set_change_type((ttidlbase::GroupModifyType)change_type);
     msg2.set_group_id(group_id);
     for (uint32_t i = 0; i < chg_user_cnt; i++) {
       msg2.add_chg_user_id_list(msg.chg_user_id_list(i));
@@ -296,10 +306,10 @@ void CDBServConn::_HandleChangeMemberRsp(CImPdu* pPdu) {
     for (uint32_t i = 0; i < cur_user_cnt; i++) {
       msg2.add_cur_user_id_list(msg.cur_user_id_list(i));
     }
-    CImPdu pdu;
+    ttnetlib::CImPdu pdu;
     pdu.SetPBMsg(&msg2);
-    pdu.SetServiceId(SID_GROUP);
-    pdu.SetCommandId(CID_GROUP_CHANGE_MEMBER_NOTIFY);
+    pdu.SetServiceId(ttidlbase::SID_GROUP);
+    pdu.SetCommandId(ttidlbase::CID_GROUP_CHANGE_MEMBER_NOTIFY);
     CRouteServConn* pRouteConn = get_route_serv_conn();
     if (pRouteConn) {
       pRouteConn->SendPdu(&pdu);
@@ -307,4 +317,4 @@ void CDBServConn::_HandleChangeMemberRsp(CImPdu* pPdu) {
   }
 }
 
-};  // namespace HTTP
+}  // namespace teamtalk::http_server::connection

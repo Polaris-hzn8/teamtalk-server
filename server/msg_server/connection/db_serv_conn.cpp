@@ -57,6 +57,7 @@ static ttfile_handler::CFileHandler* s_file_handler = nullptr;
 static void db_server_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
   ttnetlib::ConnMap_t::iterator it_old;
   CDBServConn* pConn = nullptr;
+  uint64_t cur_time = ttcommon::get_tick_count();
 
   for (ttnetlib::ConnMap_t::iterator it = g_db_server_conn_map.begin(); it != g_db_server_conn_map.end();) {
     it_old = it;

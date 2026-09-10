@@ -6,9 +6,11 @@
  brief:
 */
 
+#include <json/json.h>
+
 #include "http_pdu.h"
-#include "json/json.h"
-#include "util.h"
+
+namespace teamtalk::http_server::common::http {
 
 #define HTTP_HEADER            \
   "HTTP/1.1 200 OK\r\n"        \
@@ -69,8 +71,7 @@ bool CPostDataParser::Parse(const char* content) {
     }
 
     std::string value(value_start, value_end - value_start);
-    // printf("post data: %s:%s\n", key.c_str(), value.c_str());
-    m_post_map.insert(make_pair(key, value));
+    m_post_map.insert(std::make_pair(key, value));
 
     key_start = value_end + 1;
   }
@@ -121,7 +122,7 @@ char* PackSendCreateGroupResult(uint32_t error_code, const char* error_msg, uint
   return g_response_buf;
 }
 
-char* PackGetUserIdByNickNameResult(uint32_t result, std::list<IM::BaseDefine::UserInfo> user_list) {
+char* PackGetUserIdByNickNameResult(uint32_t result, std::list<ttidlbase::UserInfo> user_list) {
   Json::Value json_obj;
   Json::Value user_info_array;
   json_obj["error_code"] = result;
@@ -141,3 +142,5 @@ char* PackGetUserIdByNickNameResult(uint32_t result, std::list<IM::BaseDefine::U
   snprintf(g_response_buf, MAX_BUF_SIZE, HTTP_QUEYR_HEADER, content_len, json_str.c_str());
   return g_response_buf;
 }
+
+}  // namespace teamtalk::http_server::common::http

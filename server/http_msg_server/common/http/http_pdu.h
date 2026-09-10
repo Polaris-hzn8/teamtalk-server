@@ -6,15 +6,17 @@
  brief:
 */
 
-#ifndef HTTPPDU_H_
-#define HTTPPDU_H_
+#ifndef TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_PDU_H_
+#define TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_PDU_H_
 
 #include <list>
-#include "IM.BaseDefine.pb.h"
-#include "im_pdu_base.h"
-#include "util.h"
 
-// jsonp parameter parser
+#include <teamtalk/imcore/ttidl/base_define.pb.h>
+
+namespace teamtalk::http_server::common::http {
+
+namespace ttidlbase = teamtalk::imcore::ttidl::base_define;
+
 class CPostDataParser {
  public:
   CPostDataParser() {}
@@ -30,5 +32,8 @@ class CPostDataParser {
 
 char* PackSendResult(uint32_t error_code, const char* error_msg = "");
 char* PackSendCreateGroupResult(uint32_t error_code, const char* error_msg, uint32_t group_id);
-char* PackGetUserIdByNickNameResult(uint32_t result, std::list<IM::BaseDefine::UserInfo> user_list);
-#endif /* HTTPPDU_H_ */
+char* PackGetUserIdByNickNameResult(uint32_t result, std::list<ttidlbase::UserInfo> user_list);
+
+}  // namespace teamtalk::http_server::common::http
+
+#endif  // TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_PDU_H_

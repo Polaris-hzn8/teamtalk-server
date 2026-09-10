@@ -6,22 +6,48 @@
  brief:
 */
 
-#include "config_file_reader.h"
-#include "netlib.h"
-#include "serv_info.h"
-#include "util.h"
-#include "version.h"
-
-#include "db_serv_conn.h"
-#include "http_conn.h"
-#include "http_query.h"
-#include "route_serv_conn.h"
-
+#include <teamtalk/imcore/common/tools.h>
+#include <teamtalk/sbase/version.h>
 #include <teamtalk/sbase/global_define.h>
+#include <teamtalk/imcore/netlib/core/netlib.h>
+#include <teamtalk/imcore/slog/slog.h>
 
-// for client connect in
+#include "common/server_config/server_config.h"
+#include "connection/db_serv_conn.h"
+#include "connection/route_serv_conn.h"
+#include "common/http/http_conn.h"
+#include "common/http/http_query.h"
+
+namespace {
+
+using teamtalk::http_server::common::server_config::ServerConfig;
+using teamtalk::http_server::common::server_config::ServerEndpoint;
+
+using teamtalk::http_server::connection::init_db_serv_conn;
+using teamtalk::http_server::connection::init_route_serv_conn;
+using teamtalk::http_server::common::http::CHttpConn;
+using teamtalk::http_server::common::http::init_http_conn;
+
+namespace ttserverinfo = teamtalk::sbase::server_info;
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttcommon = teamtalk::imcore::common;
+
+ttserverinfo::serv_info_t* to_serv_info_array(const std::vector<ServerEndpoint>& endpoints) {
+  if (endpoints.empty()) {
+    return nullptr;
+  }
+  ttserverinfo::serv_info_t* arr = new ttserverinfo::serv_info_t[endpoints.size()];
+  for (size_t i = 0; i < endpoints.size(); i++) {
+    arr[i].server_ip = endpoints[i].first;
+    arr[i].server_port = endpoints[i].second;
+  }
+  return arr;
+}
+
+}  // namespace
+
 void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam) {
-  if (msg == NETLIB_MSG_CONNECT) {
+  if (msg == ttnetlib::NETLIB_MSG_CONNECT) {
     CHttpConn* pConn = new CHttpConn();
     pConn->OnConnect(handle);
   } else {
@@ -41,84 +67,48 @@ int main(int argc, char* argv[]) {
 
   log_info("MsgServer max files can open: %d ", getdtablesize());
 
-  CConfigFileReader config_file("http_msg_server.conf");
-
-  // http服务监听ip端口
-  std::string listen_ip = config_file.GetConfigValue("ListenIP");
-  std::string str_listen_port = config_file.GetConfigValue("ListenPort");
-
-  // DBServer
-  // 读取数据库服务连接设置
-  uint32_t db_server_count = 0;
-  serv_info_t* db_server_list = read_server_config(&config_file, "DBServerIP", "DBServerPort", db_server_count);
-
-  // RouteServer
-  // 读取路由服务连接设置
-  uint32_t route_server_count = 0;
-  serv_info_t* route_server_list =
-    read_server_config(&config_file, "RouteServerIP", "RouteServerPort", route_server_count);
-
-  // 读取并发连接设置
-  uint32_t concurrent_db_conn_cnt = config_file.GetUint32Value("ConcurrentDBConnCnt", DEFAULT_CONCURRENT_DB_CONN_CNT);
-
-  // 计算总连接数量(用于日志与调试)
-  uint32_t expanded_db_conn_cnt = 0;
-  if (db_server_count > 0) {
-    expanded_db_conn_cnt = db_server_count * concurrent_db_conn_cnt;
-    log_info(
-      "DB db_server_count: %u concurrent_db_conn_cnt: %u "
-      "expanded_db_conn_cnt: %u.\n",
-      db_server_count,
-      concurrent_db_conn_cnt,
-      expanded_db_conn_cnt);
-  }
-
-  // 创建扩展的服务器列表
-  serv_info_t* db_server_list_expanded = nullptr;
-  if (expanded_db_conn_cnt > 0) {
-    db_server_list_expanded = new serv_info_t[expanded_db_conn_cnt];
-    for (uint32_t i = 0; i < expanded_db_conn_cnt; i++) {
-      uint32_t server_index = i / concurrent_db_conn_cnt;
-      db_server_list_expanded[i].server_ip = db_server_list[server_index].server_ip;
-      db_server_list_expanded[i].server_port = db_server_list[server_index].server_port;
-    }
-  }
-
-  if (listen_ip.empty() || str_listen_port.empty()) {
-    log_info("config file miss, exit... ");
+  auto& cfg = ServerConfig::Instance();
+  if (!cfg.LoadFromFile("http_msg_server.conf")) {
+    log_info("config file load failed, exit... ");
     return -1;
   }
 
-  uint16_t listen_port = config_file.GetUint32Value("ListenPort", 0);
+  if (!cfg.db_servers().empty()) {
+    log_info("DB db_server_count: %zu concurrent_db_conn_cnt: %u expanded_db_conn_cnt: %zu.",
+      cfg.db_servers().size(), cfg.concurrent_db_conn_cnt(), cfg.expanded_db_servers().size());
+  }
 
-  int ret = netlib_init();
-  if (ret == NETLIB_ERROR)
+  int ret = ttnetlib::netlib_init();
+  if (ret == ttnetlib::NETLIB_ERROR)
     return ret;
 
-  CStrExplode listen_ip_list(listen_ip.c_str(), ';');
-  for (uint32_t i = 0; i < listen_ip_list.GetItemCnt(); i++) {
-    ret = netlib_listen(listen_ip_list.GetItem(i), listen_port, http_callback, NULL);
-    if (ret == NETLIB_ERROR)
+  for (const auto& addr : cfg.listen_addresses()) {
+    ret = ttnetlib::netlib_listen(addr.c_str(), cfg.listen_port(), http_callback, NULL);
+    if (ret == ttnetlib::NETLIB_ERROR)
       return ret;
   }
 
-  printf("server start listen on: %s:%d\n", listen_ip.c_str(), listen_port);
+  printf("server start listen on: %s:%d\n", cfg.listen_addresses().front().c_str(), cfg.listen_port());
 
   init_http_conn();
 
-  if (db_server_count > 0) {
-    HTTP::init_db_serv_conn(db_server_list_expanded, expanded_db_conn_cnt, concurrent_db_conn_cnt);
+  if (!cfg.expanded_db_servers().empty()) {
+    uint32_t expanded_cnt = static_cast<uint32_t>(cfg.expanded_db_servers().size());
+    ttserverinfo::serv_info_t* db_list = to_serv_info_array(cfg.expanded_db_servers());
+    init_db_serv_conn(db_list, expanded_cnt, cfg.concurrent_db_conn_cnt());
   }
 
-  if (route_server_count > 0) {
-    HTTP::init_route_serv_conn(route_server_list, route_server_count);
+  if (!cfg.route_servers().empty()) {
+    uint32_t route_cnt = static_cast<uint32_t>(cfg.route_servers().size());
+    ttserverinfo::serv_info_t* route_list = to_serv_info_array(cfg.route_servers());
+    init_route_serv_conn(route_list, route_cnt);
   }
 
   printf("now enter the event loop...\n");
 
-  writePid();
+  ttcommon::write_pid();
 
-  netlib_eventloop();
+  ttnetlib::netlib_eventloop();
 
   return 0;
 }

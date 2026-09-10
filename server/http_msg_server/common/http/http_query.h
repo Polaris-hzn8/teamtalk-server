@@ -6,12 +6,18 @@
  brief:
 */
 
-#ifndef HTTPQUERY_H_
-#define HTTPQUERY_H_
+#ifndef TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_QUERY_H_
+#define TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_QUERY_H_
+
+#include <list>
+
+#include <teamtalk/sbase/global_define.h>
+
+#include <json/json.h>
 
 #include "http_conn.h"
-#include "json/json.h"
-#include "public_define.h"
+
+namespace teamtalk::http_server::common::http {
 
 typedef enum {
   HTTP_ERROR_SUCCESS = 0,
@@ -76,4 +82,6 @@ class CHttpQuery {
   static CHttpQuery* m_query_instance;
 };
 
-#endif /* HTTPQUERY_H_ */
+}  // namespace teamtalk::http_server::common::http
+
+#endif  // TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_QUERY_H_

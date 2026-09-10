@@ -6,13 +6,21 @@
  brief:
 */
 
-#ifndef _HTTP_CONN_H_
-#define _HTTP_CONN_H_
+#ifndef TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_CONN_H_
+#define TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_CONN_H_
 
 #include <unordered_map>
-#include "http_parser_wrapper.h"
-#include "netlib.h"
-#include "util.h"
+
+#include <teamtalk/imcore/common/ref_object.h>
+#include <teamtalk/imcore/http_client/http_parser_wrapper.h>
+#include <teamtalk/imcore/netlib/core/netlib.h>
+#include <teamtalk/imcore/netlib/core/simple_buffer.h>
+
+namespace teamtalk::http_server::common::http {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
+namespace ttcommon = teamtalk::imcore::common;
+namespace tthttpclient = teamtalk::imcore::http_client;
 
 #define HTTP_CONN_TIMEOUT 60000
 
@@ -25,7 +33,7 @@ enum {
   CONN_STATE_CLOSED,
 };
 
-class CHttpConn : public CRefObject {
+class CHttpConn : public ttcommon::CRefObject {
  public:
   CHttpConn();
   virtual ~CHttpConn();
@@ -52,13 +60,13 @@ class CHttpConn : public CRefObject {
   uint32_t m_state;
   std::string m_peer_ip;
   uint16_t m_peer_port;
-  CSimpleBuffer m_in_buf;
-  CSimpleBuffer m_out_buf;
+  ttnetlib::CSimpleBuffer m_in_buf;
+  ttnetlib::CSimpleBuffer m_out_buf;
 
   uint64_t m_last_send_tick;
   uint64_t m_last_recv_tick;
 
-  CHttpParserWrapper m_HttpParser;
+  tthttpclient::CHttpParserWrapper m_HttpParser;
 };
 
 typedef std::unordered_map<uint32_t, CHttpConn*> HttpConnMap_t;
@@ -66,4 +74,6 @@ typedef std::unordered_map<uint32_t, CHttpConn*> HttpConnMap_t;
 CHttpConn* FindHttpConnByHandle(uint32_t handle);
 void init_http_conn();
 
-#endif  // _HTTP_CONN_H_
+}  // namespace teamtalk::http_server::common::http
+
+#endif  // TEAMTALK_HTTP_SERVER_COMMON_HTTP_HTTP_CONN_H_

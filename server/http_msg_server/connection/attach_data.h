@@ -6,22 +6,28 @@
  brief:
 */
 
-#ifndef ATTACHDATA_H_
-#define ATTACHDATA_H_
+#ifndef TEAMTALK_HTTP_SERVER_CONNECTION_ATTACH_DATA_H_
+#define TEAMTALK_HTTP_SERVER_CONNECTION_ATTACH_DATA_H_
 
-#include "util.h"
+#include <teamtalk/imcore/netlib/core/simple_buffer.h>
+
+namespace teamtalk::http_server::connection {
+
+namespace ttnetlib = teamtalk::imcore::netlib;
 
 enum {
-  ATTACH_TYPE_PDU_FOR_XIAOT = 1,
-  ATTACH_TYPE_PDU_FOR_INTERNAL = 2,
-  ATTACH_TYPE_HANDLE = 3,
+  ATTACH_TYPE_HANDLE = 1,
+  ATTACH_TYPE_PDU = 2,
+  ATTACH_TYPE_HANDLE_AND_PDU = 3,
+  ATTACH_TYPE_PDU_FOR_PUSH = 4,
+  ATTACH_TYPE_HANDLE_AND_PDU_FOR_FILE = 5,
 };
 
 class CDbAttachData {
  public:
   CDbAttachData(uint32_t type, uint32_t handle,
-                uint32_t service_type = 0);                  // 序列化
-  CDbAttachData(uchar_t* attach_data, uint32_t attach_len);  // 反序列化
+                uint32_t service_type = 0);
+  CDbAttachData(uchar_t* attach_data, uint32_t attach_len);
   virtual ~CDbAttachData() {}
 
   uchar_t* GetBuffer() { return m_buf.GetBuffer(); }
@@ -31,7 +37,7 @@ class CDbAttachData {
   uint32_t GetServiceType() { return m_service_type; }
 
  private:
-  CSimpleBuffer m_buf;
+  ttnetlib::CSimpleBuffer m_buf;
   uint32_t m_type;
   uint32_t m_handle;
   uint32_t m_service_type;
@@ -40,8 +46,8 @@ class CDbAttachData {
 class CPduAttachData {
  public:
   CPduAttachData(
-    uint32_t type, uint32_t handle, uint32_t pduLength, uchar_t* pdu, uint32_t service_type = 0);  // 序列化
-  CPduAttachData(uchar_t* attach_data, uint32_t attach_len);                                       // 反序列化
+    uint32_t type, uint32_t handle, uint32_t pduLength, uchar_t* pdu, uint32_t service_type = 0);
+  CPduAttachData(uchar_t* attach_data, uint32_t attach_len);
   virtual ~CPduAttachData() {}
 
   uchar_t* GetBuffer() { return m_buf.GetBuffer(); }
@@ -53,7 +59,7 @@ class CPduAttachData {
   uchar_t* GetPdu() { return m_pdu; }
 
  private:
-  CSimpleBuffer m_buf;
+  ttnetlib::CSimpleBuffer m_buf;
   uint32_t m_type;
   uint32_t m_handle;
   uint32_t m_service_type;
@@ -61,4 +67,6 @@ class CPduAttachData {
   uchar_t* m_pdu;
 };
 
-#endif /* ATTACHDATA_H_ */
+}  // namespace teamtalk::http_server::connection
+
+#endif  // TEAMTALK_HTTP_SERVER_CONNECTION_ATTACH_DATA_H_
